@@ -1,21 +1,4 @@
-<?PHP
-$date1 = $_GET['date1'];
-$date2 = $_GET['date2'];
-
-$string='select kt_yetki_firsatlar from TF_USERS where kullanici=\'' . $cryp . '\'';
-//echo $string;
-$stmt = $conn2->prepare($string);
-$stmt->execute();
-$izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
-//echo "-------------------------------------------";
-//echo $izin;
-//echo "<br /><br />";
-//echo YetkiVarmi($izin,'FI-104');
-//echo "-------------------------------------------";
-
-?>
 <script>
-
     function TeklifAc(teklif) {
         FileMaker.PerformScriptWithOption("Teklif", "Ac" + "|" + teklif);
     }
@@ -25,12 +8,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
     function FirsatAc(teklif) {
         FileMaker.PerformScriptWithOption("Firsat", "Ac" + "|" + teklif);
     }
-    
-
     var grid;
-    
-
-
     $(function () {
         function pqDatePicker(ui) {
             var $this = $(this);
@@ -51,7 +29,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "<?php echo __('durum','komtera'); ?>", hidden: false,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "Durum", hidden: false,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
@@ -68,7 +46,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 //                            });
 //                }
 //            },
-            {title: "<?php echo __('firsat','komtera'); ?>",render: function (ui) {
+            {title: "Fırsat",render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
                     }
@@ -78,7 +56,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 
 
 
-            {title: "<?php echo __('ka_teklif','komtera'); ?>",render: function (ui) {
+            {title: "Kazanılan Teklif",render: function (ui) {
                     if (ui.rowData.TEKLIF_NO) {
                         return "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>"+ui.rowData.TEKLIF_NO+"</a>";
                     }
@@ -95,24 +73,24 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "REGISTER", align: "center", editable: false, minWidth: 35, sortable: false,filter: {
                     crules: [{condition: 'range'}]
                 }},
-            {title: "<?php echo __('satis_tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
+            {title: "Satış Tipi", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
             // {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
 
-            {title: "<?php echo __('tarih','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "Tarih", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
            // {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "<?php echo __('marka','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
+            {title: "Marka", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+            {title: "Bayi", editable: false, minWidth: 300, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('musteri','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+            {title: "Müşteri", editable: false, minWidth: 300, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
@@ -131,9 +109,9 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 //                    crules: [{condition: 'range'}],
 //                }
 //            },
-            {title: "<?php echo __('musteri_temsilcisi','komtera'); ?>",
+            {title: "Müşteri Temsilcisi",
                 render: function (ui) {
-                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+                    if (false) { // Removed user check
                         return {style: {"background": "yellow"}};
                     }
                 },
@@ -203,7 +181,6 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             // },
             toolbar: {
                 items: [
-                    <?PHP if (YetkiVarmi($izin,'FI-104')==1) { ?>
                     {
                         type: 'button',
                         label: "Export",
@@ -212,7 +189,6 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                             ExcelKaydet();
                         }
                     },
-                    <?PHP } ?>
                     {
                         type: 'checkbox',
                         value: false,
@@ -332,9 +308,9 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 rPPOptions: [100, 1000, 10000]
             },
             sortable: true,
-            wrap: false, hwrap: false,
+            wrap: true, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<?php echo __('kazanilan_firsatlar','komtera'); ?>',
+            title: '<span style=\"font-size: 18px;\"><b>Kazanılan Fırsatlar</b></span>',
             resizable: true,
             summaryTitle: "",
             //rowHt: 23,

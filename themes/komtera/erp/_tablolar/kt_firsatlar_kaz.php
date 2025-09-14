@@ -1,6 +1,6 @@
 <?PHP
 error_reporting(E_ALL);
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 
 // WordPress integration for user data
 include '../../_conn.php';
@@ -62,9 +62,10 @@ f.MARKA,
 f.BAYI_ADI,
 f.BAYI_YETKILI_ISIM,
 f.MUSTERI_ADI
-FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE f.DURUM='1' AND f.SIL='0' AND CHARINDEX(MARKA, '" . implode(',', get_user_meta(get_current_user_id(), 'my_brands', true) ?: []) . "')>0 and $dates
+FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE f.DURUM='1' AND f.SIL='0' and $dates
 AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
 ";
+
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $response = "{\"data\":" . json_encode($data) . "}";
