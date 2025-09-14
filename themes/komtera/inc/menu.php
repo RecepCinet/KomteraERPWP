@@ -54,22 +54,19 @@ function firsatlar_cb()
         <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
             <label for="date1" style="margin-right: 10px;"><?php echo __('tarih', 'komtera'); ?>:</label>
             <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>"
-                   style="margin-right: 20px; padding: 5px;">
+                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
             
-            <label for="date2" style="margin-right: 10px;">-</label>
+            <label for="date2" style="margin-right: 10px; line-height: 34px; vertical-align: top;">-</label>
             <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>"
-                   style="margin-right: 20px; padding: 5px;">
-            
-            <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo __('getir', 'komtera'); ?></button>
+                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
             
             <!-- Fırsat Türü Butonları -->
-            <span style="margin-left: 20px; font-weight: bold; color: #333; margin-right: 8px;">|</span>
-            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; padding: 6px 10px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('acik_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('kazanilan', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('tum_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('yan_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-unlock" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-media-document" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-yes-alt" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kazanilan', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-dismiss" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-list-view" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('tum_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-networking" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('yan_firsatlar', 'komtera'); ?></button>
         </div>
         <div style="position: relative; height: calc(100vh - 200px);">
         <iframe id="erp_iframe"
@@ -159,8 +156,6 @@ function firsatlar_cb()
             }
             // İlk yüklemede otomatik getir
             loadIframe();
-            // Buton
-            document.getElementById('btnGetir').addEventListener('click', loadIframe);
             // Enter ile tetikleme (tarih kutularındayken)
             [input1, input2].forEach(el => {
                 el.addEventListener('keydown', function (e) {

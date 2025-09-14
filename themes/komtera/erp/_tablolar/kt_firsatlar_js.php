@@ -391,7 +391,7 @@
             sortable: true,
             wrap: true, hwrap: false, autoRow: true,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<span style="font-size: 18px;"><b><?php echo __('firsatlar','komtera'); ?></b></span>',
+            title: '<span style="font-size: 18px;"><b>Açık Fırsatlar</b></span>',
             resizable: true,
             summaryTitle: "",
             groupModel: {
