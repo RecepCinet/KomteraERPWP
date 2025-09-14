@@ -47,21 +47,17 @@ add_action('admin_menu', 'my_custom_admin_menus_for_roles');
 function firsatlar_cb()
 {
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=firsatlar';
-    $locale = get_locale(); // WordPress locale (tr_TR, en_US, etc.)
+    $locale = get_user_locale(); // Kullanıcının seçtiği locale (tr_TR, en_US, etc.)
     $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
     <div class="wrap">
         <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <label for="date1" style="margin-right: 10px;"><?php echo __('baslangic_tarihi', 'komtera'); ?>:</label>
-            <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>" 
-                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
-                   title="<?php echo __('tarih_formati', 'komtera'); ?>"
+            <label for="date1" style="margin-right: 10px;"><?php echo __('tarih', 'komtera'); ?>:</label>
+            <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>"
                    style="margin-right: 20px; padding: 5px;">
             
-            <label for="date2" style="margin-right: 10px;"><?php echo __('bitis_tarihi', 'komtera'); ?>:</label>
-            <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>" 
-                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
-                   title="<?php echo __('tarih_formati', 'komtera'); ?>"
+            <label for="date2" style="margin-right: 10px;">-</label>
+            <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>"
                    style="margin-right: 20px; padding: 5px;">
             
             <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo __('getir', 'komtera'); ?></button>
@@ -74,8 +70,7 @@ function firsatlar_cb()
                     style="border:1px solid #ccc; position:absolute; top:0; left:0;">
             </iframe>
         </div>
-    </div>LOCO
-
+    </div>
     <script>
         (function () {
             const input1 = document.getElementById('date1');
@@ -84,16 +79,13 @@ function firsatlar_cb()
             const base = "<?php echo esc_js($src); ?>";
             const locale = "<?php echo esc_js($locale); ?>"; // WordPress locale
             const lang = "<?php echo esc_js($lang); ?>"; // Dil kodu
-            
             // Sayfanın dilini ayarla (takvim için)
             if (document.documentElement.lang !== locale) {
                 document.documentElement.lang = locale;
             }
-            
             // Input'lara da dil ayarını uygula ve format ayarla
             input1.setAttribute('lang', locale);
             input2.setAttribute('lang', locale);
-            
             // CSS ile date input'larının formatını ayarla
             const style = document.createElement('style');
             style.textContent = `
@@ -107,7 +99,6 @@ function firsatlar_cb()
                 }
             `;
             document.head.appendChild(style);
-
             // YYYY-MM-DD format helper (local time)
             function fmt(d) {
                 const y = d.getFullYear();
@@ -115,29 +106,24 @@ function firsatlar_cb()
                 const a = String(d.getDate()).padStart(2, '0');
                 return `${y}-${m}-${a}`;
             }
-
             // İlk gelişte: bugün ve 1 ay öncesi (daha önce seçilmemişse)
             const today = new Date();
             const oneMonthAgo = new Date(today);
             oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // 1 ay öncesi
-            
             // Tarihleri localStorage'dan al (eğer daha önce seçilmişse)
             const savedDate1 = localStorage.getItem('firsatlar_date1');
             const savedDate2 = localStorage.getItem('firsatlar_date2');
-            
             // Sadece boşsa veya geçersizse varsayılan değerleri ata
             if (!input1.value && !savedDate1) {
                 input1.value = fmt(oneMonthAgo);
             } else if (savedDate1) {
                 input1.value = savedDate1;
             }
-            
             if (!input2.value && !savedDate2) {
                 input2.value = fmt(today);
             } else if (savedDate2) {
                 input2.value = savedDate2;
             }
-
             function loadIframe() {
                 const v1 = input1.value;
                 const v2 = input2.value;
@@ -151,21 +137,16 @@ function firsatlar_cb()
                     alert(msg);
                     return;
                 }
-                
                 // Seçilen tarihleri localStorage'a kaydet
                 localStorage.setItem('firsatlar_date1', v1);
                 localStorage.setItem('firsatlar_date2', v2);
-                
                 const url = `${base}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
                 iframe.src = url;
             }
-
             // İlk yüklemede otomatik getir
             loadIframe();
-
             // Buton
             document.getElementById('btnGetir').addEventListener('click', loadIframe);
-
             // Enter ile tetikleme (tarih kutularındayken)
             [input1, input2].forEach(el => {
                 el.addEventListener('keydown', function (e) {
