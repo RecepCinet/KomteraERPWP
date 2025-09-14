@@ -1,19 +1,3 @@
-<?PHP
-$date1 = $_GET['date1'];
-$date2 = $_GET['date2'];
-
-$string='select kt_yetki_firsatlar from TF_USERS where kullanici=\'' . $cryp . '\'';
-//echo $string;
-$stmt = $conn2->prepare($string);
-$stmt->execute();
-$izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
-//echo "-------------------------------------------";
-//echo $izin;
-//echo "<br /><br />";
-//echo YetkiVarmi($izin,'FI-104');
-//echo "-------------------------------------------";
-
-?>
 <script>
 
     function TeklifAc(teklif) {
@@ -51,7 +35,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "<?php echo __('status','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "Durum", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
                     if (ui.cellData === 'Açık') {
@@ -76,7 +60,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 //                            });
 //                }
 //            },
-            {title: "<?php echo __('opportunity','komtera'); ?>",render: function (ui) {
+            {title: "Fırsat",render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
                     }
@@ -93,7 +77,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 }},
                     
                     
-            {title: "<?php echo __('offers','komtera'); ?>",exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "Teklifler", align: "left", editable: false, minWidth: 90, sortable: false,
+            {title: "Teklifler",exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "Teklifler", align: "left", editable: false, minWidth: 90, sortable: false,
                 render: function (ui) {
                     var out = "";
                     var data = ui.rowData.Teklifler;
@@ -154,7 +138,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             },
             {title: "Kayıdı Açan",
                 render: function (ui) {
-                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+                    if (false) {
                         return {style: {"background": "yellow"}};
                     }
                 },
@@ -164,7 +148,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             },
             {title: "Müşteri Temsilcisi",
                 render: function (ui) {
-                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+                    if (false) {
                         return {style: {"background": "yellow"}};
                     }
                 },
@@ -297,7 +281,6 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             // },
             toolbar: {
                 items: [
-                    <?PHP if (YetkiVarmi($izin,'FI-104')==1) { ?>
                     {
                         type: 'button',
                         label: "Export",
@@ -306,7 +289,6 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                             ExcelKaydet();
                         }
                     },
-                    <?PHP } ?>
                     {
                         type: 'checkbox',
                         value: false,
@@ -445,7 +427,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: 'Fırsatlar',
+            title: '<span style="font-size: 18px;"><b>Tüm Fırsatlar</b></span>',
             resizable: true,
             summaryTitle: "",
             groupModel: {
