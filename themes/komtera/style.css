@@ -1,0 +1,45 @@
+/*
+Theme Name: Komtera ERP WP Theme
+Text Domain: komtera
+Theme URI: https://example.com/my-custom-theme
+Author: Recep Cinet
+Author URI: https://recepcinet.com
+Description: Komtera ERP 2026 kod adi: WP
+Version: 1.0
+License: GNU General Public License v2 or later
+*/
+
+body {
+    font-family: Monospaced, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+#my_dashboard_widget {
+    width:100% !important;
+    min-width:100% !important;
+}
+.pq-grid {
+    box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
+    margin-bottom: 12px;
+    font-family: Arial;
+    font-size: 12px;
+}
+.pq-toolbar button {
+    margin: 0px 5px;
+}
+button.delete_btn {
+    margin: -3px 0px;
+    height: 30px;
+}
+.pq-grid-row {
+    height: 30px !important;
+}
+.pq-grid .pq-grid-cell {
+    line-height: 30px !important;
+}
+pq-row-delete > .pq-grid-cell {
+    background-color: pink;
+}
+pq-grid-number-col {
+    padding: 5px 5px;
+}

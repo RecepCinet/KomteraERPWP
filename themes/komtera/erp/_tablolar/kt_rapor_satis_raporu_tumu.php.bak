@@ -1,0 +1,28 @@
+<?PHP
+
+error_reporting(E_ALL);
+ini_set('display_erros', true);
+
+include '../../_conn.php';
+
+$sql = "select te.TEKLIF_NO,
+(te.t_maliyet - ISNULL(te.KOMISYON_H,0)) as TEKLIF_MALIYET,
+(te.t_satis - (ISNULL(te.KOMISYON_F1,0) + ISNULL(te.KOMISYON_F2,0))) AS TEKLIF_TUTAR,
+((t_satis - (ISNULL(KOMISYON_F1,0) + ISNULL(KOMISYON_F2,0)))-(t_maliyet - ISNULL(KOMISYON_H,0))) as KAR,
+sa.*,f.MUSTERI_ADI,f.BAYI_YETKILI_ISIM,f.MARKA_MANAGER,f.ETKINLIK,te.Kampanya,si.SIPARIS_NO,
+(select top 1 seviye from aa_erp_kt_bayiler_markaseviyeleri ms where ms.CH_KODU=f.BAYI_CHKODU) as BayiSeviye
+from ERP_SATIS_ANALIZ_20XX sa
+LEFT JOIN aa_erp_kt_siparisler si on si.SIPARIS_NO = sa.Siparis_No
+LEFT JOIN aa_erp_kt_teklifler te on si.X_TEKLIF_NO  = te.TEKLIF_NO
+LEFT JOIN aa_erp_kt_firsatlar f on f.FIRSAT_NO = te.X_FIRSAT_NO
+where Yil='2022' and te.TEKLIF_NO is not NULL
+";
+$stmt = $conn->query($sql);
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$response = "{\"data\":" . json_encode($data) . "}";
+if (isset($_GET['callback'])) {
+    echo $_GET['callback'] . '(' . $response . ')';
+} else {
+    echo $response;
+}
+?>

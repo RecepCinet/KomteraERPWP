@@ -1,0 +1,38 @@
+<?PHP
+
+error_reporting(E_ALL);
+ini_set('display_erros', true);
+// Deneme!
+include '../../_conn.php';
+
+$sql = "select
+t.id,
+f.MARKA, 
+(select TOP 1 FATURA_ISLEM_TARIHI FAT_NO FROM ARYD_FIS_AKTARIM ak where ak.[NO]=(select top 1 SIPARIS_NO from aa_erp_kt_siparisler s2 where t.TEKLIF_NO=s2.X_TEKLIF_NO)) as CD,
+t.TEKLIF_NO,
+    t.KOMISYON_ODENDI,
+    t.KOMISYON_ODENDI_ACIKLAMA,
+f.BAYI_ADI,
+f.PARA_BIRIMI,
+(select sum(ADET*BIRIM_FIYAT) from aa_erp_kt_siparisler_urunler su where su.X_SIPARIS_NO like TEKLIF_NO+'-%') AS TOPTUT,
+(ISNULL(KOMISYON_F1,0) + ISNULL(KOMISYON_F2,0) + ISNULL(KOMISYON_H,0)) AS KOMISYON_TOPLAM,
+KOMISYON_F1,KOMISYON_F2,KOMISYON_H,
+KOMISYON_F1_ACIKLAMA,
+KOMISYON_F2_ACIKLAMA,
+KOMISYON_H_ACIKLAMA,
+f.BAYI_ADI,
+       (select TOP 1 trim(substring(MESAJ,20,18)) FAT_NO FROM ARYD_FIS_AKTARIM ak where ak.[NO]=(select top 1 SIPARIS_NO from aa_erp_kt_siparisler s3 where t.TEKLIF_NO=s3.X_TEKLIF_NO)) as FATURA_NO
+from aa_erp_kt_teklifler t
+LEFT JOIN aa_erp_kt_firsatlar f ON t.X_FIRSAT_NO=f.FIRSAT_NO
+where (t.KOMISYON_F1>0 or t.KOMISYON_F2>0) AND (select top 1 SIPARIS_DURUM from aa_erp_kt_siparisler s4 where t.TEKLIF_NO=s4.X_TEKLIF_NO) = '2'
+AND TEKLIF_NO IN (select TNO from aaaa_kapali_ve_tam_siparisler where PARCA=OLAN)
+";
+$stmt = $conn->query($sql);
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$response = "{\"data\":" . json_encode($data) . "}";
+if (isset($_GET['callback'])) {
+    echo $_GET['callback'] . '(' . $response . ')';
+} else {
+    echo $response;
+}
+?>

@@ -1,0 +1,19 @@
+2025.9
+-
+
+2025.8
+-Dil destegi eklendi
+-Kullanici Ekleme kullanici dostu sekle getirildi, yetki kopyalama
+
+2025.7
+-WP Plugini olarak tam guvenlikli yapi tercih edildi
+
+2025.5
+-CEO Raporu eklendi
+
+2025.04
+-Grid eklendi
+-Yeni Menu sistemi
+
+2025.03
+-Yeni UI Init

@@ -1,0 +1,227 @@
+<script>$(function () {
+
+//        function filterhandler() {
+//            var $toolbar = this.toolbar();
+//            deger = $toolbar.find(".marka_ne").val();
+//            
+//            this.filter({
+//                oper: 'replace',
+//                rules: [{ dataIndx: "marka", condition: "contain", value: deger}]
+//            });
+//            this.option( "pageModel", {  format: "#,###",
+//                type: "remote",
+//                rPP: 100000,
+//                strRpp: "{0}",
+//                rPPOptions: [1000, 10000, 100000] } );
+//        }
+        
+//        function filterRender(ui) {
+//            var val = ui.cellData,
+//                filter = ui.column.filter,
+//                crules = (filter || {}).crules;
+//            if (filter && filter.on && crules && crules[0].value) {
+//                var condition = crules[0].condition,
+//                    valUpper = val.toUpperCase(),
+//                    txt = crules[0].value,
+//                    txt = (txt == null) ? "" : txt.toString(),
+//                    txtUpper = txt.toUpperCase(),
+//                    indx = -1;
+//                if (condition == "end") {
+//                    indx = valUpper.lastIndexOf(txtUpper);
+//                    //if not at the end
+//                    if (indx + txtUpper.length != valUpper.length) {
+//                        indx = -1;
+//                    }
+//                }
+//                else if (condition == "contain") {
+//                    indx = valUpper.indexOf(txtUpper);
+//                }
+//                else if (condition == "begin") {
+//                    indx = valUpper.indexOf(txtUpper);
+//                    //if not at the beginning.
+//                    if (indx > 0) {
+//                        indx = -1;
+//                    }
+//                }
+//                if (indx >= 0) {
+//                    var txt1 = val.substring(0, indx);
+//                    var txt2 = val.substring(indx, indx + txt.length);
+//                    var txt3 = val.substring(indx + txt.length);
+//                    return txt1 + "<span style='background:yellow;color:#333;'>" + txt2 + "</span>" + txt3;
+//                }
+//                else {
+//                    return val;
+//                }
+//            }
+//            else {
+//                return val;
+//            }
+//        }
+
+        var colM = [
+            {title: "<?php echo __('sku','komtera'); ?>", width: 140, dataIndx: "sku",
+                filter: {
+                    crules: [{condition: 'begin'}],
+                    groupIndx: "SKU"
+                }
+            },
+            {title: "<?php echo __('product_description','komtera'); ?>", width: 490, dataIndx: "urunAciklama",
+                filter: {
+                    crules: [{condition: 'contain'}],
+                    groupIndx: "urunAciklama"
+                }
+            },
+            {title: "<?php echo __('brand','komtera'); ?>", width: 130, dataIndx: "marka",
+                filter: {
+                    crules: [{condition: 'range'}]
+                }
+            },
+            {title: "<?php echo __('type','komtera'); ?>", width: 130, dataIndx: "tur",
+                render: function (ui) {
+                    if (ui.cellData == 'Hardware') {
+                        return {style: {"background": "red"}};
+                    }
+                },
+                filter: {
+                    crules: [{condition: 'range'}],
+                }
+            },
+            {title: "<?php echo __('solution','komtera'); ?>", width: 130, dataIndx: "cozum",
+                filter: {
+                    crules: [{condition: 'range'}]
+                }
+            },
+            {title: "<?php echo __('license_duration','komtera'); ?>", align: 'center', width: 90, dataIndx: "lisansSuresi",
+                filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            },
+            {title: "<?php echo __('list_price','komtera'); ?>", align: 'right', width: 80, dataIndx: "listeFiyati"},
+            {title: "<?php echo __('list_price_uplift','komtera'); ?>", align: 'right', width: 80, dataIndx: "listeFiyatiUpLift"},
+            {title: "<?php echo __('currency','komtera'); ?>", align: 'center', width: 70, dataIndx: "paraBirimi",
+                filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            },
+            {title: "wgCategory", align: 'center', width: 90, dataIndx: "wgCategory",
+                filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            },
+            {title: "wgUpcCode", align: 'center', width: 90, dataIndx: "wgUpcCode",
+                filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            }
+        ];
+        var dataModel = {
+            location: "remote",
+            dataType: "JSON",
+            method: "GET",
+            url: "_tablolar/kt_fiyat_listesi.php",
+            getData: function (dataJSON) {
+                var data = dataJSON.data;
+                return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
+            }
+        };
+
+        var obj = {
+            trackModel: {on: true},
+            toolbar: {
+                items: [
+//                    { 
+//                        type: 'select',                         
+//                        cls: "marka_ne",
+//                        listener: filterhandler,
+//                        options: [
+//                            //<?PHP
+//                            $out="";
+//                            for ($t=0;$t<count($marka_hepsi);$t++) {
+//                                if ($t>0) {
+//                                    $out .= ",";
+//                                }
+//                                $out .= '{ "' . $marka_hepsi[$t]['marka'] . '": "' . $marka_hepsi[$t]['marka'] . '" }';
+//                            }
+//                            echo $out;                            
+//                            ?>//
+//                        ]
+//                    },
+                    {
+                       type: 'button',
+                       label: "<?php echo __('export','komtera'); ?>",
+                       icon: 'ui-icon-arrowthickstop-1-s',
+                       listener: function () {
+                           ExcelKaydet();
+                       }
+                   }
+                ]
+            },
+            menuIcon: true,
+            collapsible: {on: false, toggle: false},
+            reactive: false,
+            sortModel: {
+                type: 'remote',
+                single: true,
+                sorter: [{dataIndx: 'id', dir: 'up'}],
+                space: true,
+                multiKey: false
+            },
+            roundCorners: false,
+            rowBorders: true,
+            selectionModel: {type: 'cell'},
+            stripeRows: false,
+            scrollModel: {autoFit: false},
+            showHeader: true,
+            showTitle: true,
+            //groupModel: {on: true},
+            showToolbar: true,
+            showTop: true,
+            stripeRows: true,
+            width: 1200, height: 400,
+            dataModel: dataModel,
+            colModel: colM,
+            // ROW Komple:
+            rowInit: function (ui) {
+                if (ui.rowData.tur == 'Hardware') {
+                    return {
+                        style: {"background": "yellow"} //can also return attr (for attributes) and cls (for css classes) properties.
+                    };
+                }
+            },
+            freezeCols: 1,
+            filterModel: {
+                on: true,
+                header: true,
+                mode: "AND",
+                hideRows: false,
+                type: 'local',
+                menuIcon: false
+            },
+            editable: false,
+            pageModel: {
+                format: "#,###",
+                type: "local",
+                rPP: 100000,
+                strRpp: "{0}",
+                rPPOptions: [100000]
+            },
+            sortable: true,
+            wrap: false, hwrap: false,
+            numberCell: {resizable: true, width: 30, title: "#"},
+            title: '<?php echo __('logo_price_list','komtera'); ?>',
+            rowHt: 23,
+            resizable: true,
+//            create: function () {
+//                this.loadState({refresh: false});
+//            },
+        };
+        var grid = pq.grid("div#grid_paging", obj);
+        grid.toggle();
+        $(window).on('unload', function () {
+            grid.saveState();
+        });
+        grid.on("destroy", function () {
+            this.saveState();
+        })
+    });
+</script>

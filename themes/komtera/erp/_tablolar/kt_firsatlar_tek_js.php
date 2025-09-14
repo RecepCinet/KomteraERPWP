@@ -1,0 +1,362 @@
+<?PHP
+$date1 = $_GET['date1'];
+$date2 = $_GET['date2'];
+
+$string='select kt_yetki_firsatlar from TF_USERS where kullanici=\'' . $cryp . '\'';
+//echo $string;
+$stmt = $conn2->prepare($string);
+$stmt->execute();
+$izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
+//echo "-------------------------------------------";
+//echo $izin;
+//echo "<br /><br />";
+//echo YetkiVarmi($izin,'FI-104');
+//echo "-------------------------------------------";
+
+?>
+<script>
+
+    function TeklifAc(teklif) {
+        FileMaker.PerformScriptWithOption("Teklif", "Ac" + "|" + teklif);
+    }
+    function SiparisAc(teklif) {
+        FileMaker.PerformScriptWithOption("Siparis", "Ac" + "|" + teklif);
+    }
+    function FirsatAc(teklif) {
+        FileMaker.PerformScriptWithOption("Firsat", "Ac" + "|" + teklif);
+    }
+    
+
+    var grid;
+    
+
+
+    $(function () {
+        function pqDatePicker(ui) {
+            var $this = $(this);
+            $this
+                    //.css({ zIndex: 3, position: "relative" })
+                    .datepicker({
+                        yearRange: "-25:+0", //25 years prior to present.
+                        changeYear: true,
+                        changeMonth: true,
+                        showButtonPanel: true,
+                        onClose: function (evt, ui) {
+                            $(this).focus();
+                        }
+                    });
+            //default From date
+            $this.filter(".pq-from").datepicker("option", "defaultDate", new Date("01-01-2021"));
+            //default To date
+            $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
+        }
+        var colM = [
+            {title: "<?php echo __('status','komtera'); ?>", hidden: true,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+                    crules: [{condition: 'range'}]
+                },render: function (ui) {
+                    if (ui.cellData === '<?php echo __('open','komtera'); ?>') {
+                        return {style: {"background": "#ebebeb"}};
+                    } else if (ui.cellData === '<?php echo __('won','komtera'); ?>') {
+                        return {style: {"background": "#b2f4ac"}};
+                    } else if (ui.cellData === '<?php echo __('lost','komtera'); ?>') {
+                        return {style: {"background": "#f4acb8"}};
+                    }
+                }
+            },
+//            {title: "", export: false, editable: false, minWidth: 30, sortable: false, dataIndx: "FIRSAT_NO", filter: false,
+//                render: function (ui) {
+//                    return "<a href='#' class='demo_ac'><span class='ui-icon ui-icon-zoomin'></span></a>";
+//                },
+//                postRender: function (ui) {
+//                    var grid = this,
+//                            $cell = grid.getCell(ui);
+//                    $cell.find(".demo_ac")
+//                            .bind("click", function (evt) {
+//                                FileMaker.PerformScriptWithOption("Firsat", "Ac" + "\nF" + ui.rowData.id);
+//                            });
+//                }
+//            },
+
+
+
+            {title: "<?php echo __('opportunity','komtera'); ?>",render: function (ui) {
+                    if (ui.rowData.FIRSAT_NO) {
+                        return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
+                    }
+                },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "FIRSAT_NO", align: "center", editable: false, minWidth: 60, sortable: false,filter: {
+                    crules: [{condition: 'contain'}]
+                }},
+            
+            
+            
+            {title: "<?php echo __('r','komtera'); ?>",render: function (ui) {
+                    if (ui.rowData.REGISTER==='1') {
+                        return "<span class='ui-icon ui-icon-check'></span>";
+                    }
+                },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "REGISTER", align: "center", editable: false, minWidth: 35, sortable: false,filter: {
+                    crules: [{condition: 'range'}]
+                }},
+           
+           
+           
+            {title: "<?php echo __('proposal','komtera'); ?>",render: function (ui) {
+                    if (ui.rowData.TEKLIF_NO) {
+                        return "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>"+ui.rowData.TEKLIF_NO+"</a>";
+                    }
+                },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "TEKLIF_NO", align: "center", editable: false, minWidth: 60, sortable: false,filter: {
+                    crules: [{condition: 'contain'}]
+                }},
+
+
+
+            {title: "<?php echo __('sales_type','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
+                filter: {
+                    crules: [{condition: 'range'}]
+                }
+            },
+            {title: "<?php echo __('date','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+           // {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('brand','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
+                    crules: [{condition: 'range'}]
+                }
+            },
+            {title: "<?php echo __('dealer','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            },
+            {title: "<?php echo __('customer','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            },
+            {title: "ID", hidden: true, editable: false, minWidth: 110, sortable: true, dataIndx: "id", filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            },
+            
+//            {title: "Kayıdı Açan",
+//                render: function (ui) {
+//                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+//                        return {style: {"background": "yellow"}};
+//                    }
+//                },
+//                editable: false, minWidth: 120, sortable: true, dataIndx: "KAYIDI_ACAN", filter: {
+//                    crules: [{condition: 'range'}],
+//                }
+//            },
+            {title: "<?php echo __('customer_representative','komtera'); ?>",
+                render: function (ui) {
+                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+                        return {style: {"background": "yellow"}};
+                    }
+                },
+                editable: false, minWidth: 120, sortable: true, dataIndx: "MUSTERI_TEMSILCISI", filter: {
+                    crules: [{condition: 'range'}],
+                }
+            },
+//            {title: "SKU", editable: false, minWidth: 120, sortable: true, dataIndx: "SKU",filter: { 
+//                        crules: [{condition: 'contain'}],
+//                    }
+//            },
+//            {title: "Seri No", editable: false, minWidth: 140, sortable: true, dataIndx: "SERIAL_NO",filter: { 
+//                        crules: [{condition: 'contain'}]
+//                    }
+//            },
+//            {title: "Bitiş", align: "center",dataType: 'date', format: 'dd-mm-yy', editable: false, minWidth: 80, sortable: true, dataIndx: "BITIS_TARIHI",
+//            },
+	    {title: "USD",exportRender: true,dataType: "float",format: "#.###,0",render: function (ui) {
+                    if (ui.cellData === null) {
+                        return {style: {"background": "#FF8888"}};
+                    }
+                }, summary: {type: "sum", edit: true}, align: "right", editable: false, minWidth: 80, sortable: true, dataIndx: "DLR_TUTAR"},		
+          //  {title: "",editable: false, minWidth: 40, sortable: true, dataIndx: "PARA_BIRIMI"},
+//	{title: "Bayi Yetkili", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "BAYI_YETKILI_ISIM", filter: {
+//                    crules: [{condition: 'range'}]
+//                }
+//            },
+            //     {title: "Bayi Yetkili", editable: false, minWidth: 120, sortable: true, dataIndx: "BAYI_YETKILI_ISIM", filter: {
+            //         crules: [{condition: 'contain'}]
+            //     }
+            // },
+
+        ];
+        var dataModelSS = {
+            location: "remote",
+            dataType: "JSON",
+            method: "GET",
+            recIndx: "id",
+            url: "_tablolar/kt_firsatlar_tek.php?dbname=LKS&date1=<?PHP echo $date1; ?>&date2=<?PHP echo $date2; ?>",
+            getData: function (response) {
+                return {data: response.data};
+            }
+        };
+        var obj = {
+            menuIcon: false,
+            trackModel: {on: true},
+            collapsible: {on: false, toggle: false},
+            reactive: true,
+            scrollModel: {autoFit: true},
+            editor: {select: true},
+            // sortModel: {
+            //     type: 'local',
+            //     single: true,
+            //     sorter: [{dataIndx: 'id', dir: 'down'}],
+            //     space: true,
+            //     multiKey: false
+            // },
+            toolbar: {
+                items: [
+                    <?PHP if (YetkiVarmi($izin,'FI-104')==1) { ?>
+                    {
+                        type: 'button',
+                        label: "<?php echo __('export','komtera'); ?>",
+                        icon: 'ui-icon-arrowthickstop-1-s',
+                        listener: function () {
+                            ExcelKaydet();
+                        }
+                    },
+                    <?PHP } ?>
+                    {
+                        type: 'checkbox',
+                        value: false,
+                        label: '<?php echo __('wrap_rows','komtera'); ?>',
+                        listener: function (evt) {
+                            this.option('wrap', evt.target.checked);
+                            this.option('autoRow', evt.target.checked);
+                            this.refreshDataAndView();
+                        }
+                    },
+                    {
+                    type: 'button',
+                    icon: 'ui-icon-arrowreturn-1-s',
+                    label: '<?php echo __('undo','komtera'); ?>',                    
+                    options: { disabled: true },
+                    listener: function () {
+                        grid.history({ method: 'undo' });
+                    }
+                },
+                {
+                    type: 'button',
+                    icon: 'ui-icon-arrowrefresh-1-s',
+                    label: '<?php echo __('redo','komtera'); ?>',
+                    options: { disabled: true },
+                    listener: function () {
+                        grid.history({ method: 'redo' });
+                    }
+                },
+                {
+                            type:'button',
+                            label: '<?php echo __('clear_filter','komtera'); ?>',
+                            listener: function(){
+                                    this.reset({filter: true});
+                            }
+                    },
+                        {
+                            type:'button',
+                            label: '<?php echo __('save_layout','komtera'); ?>',
+                            listener: function(){
+                                    grid.saveState();
+                            }
+                    },
+                        {
+                            type:'button',
+                            label: '<?php echo __('load_layout','komtera'); ?>',
+                            listener: function(){
+                                    grid.loadState({refresh: false});
+                            }
+                    }
+                ]
+            },
+            history: function (evt, ui) {
+                var $tb = this.toolbar(),
+                        $undo = $tb.find("button:contains('Undo')"),
+                        $redo = $tb.find("button:contains('Redo')");
+
+                if (ui.canUndo != null) {
+                    $undo.button("option", {disabled: !ui.canUndo});
+                }
+                if (ui.canRedo != null) {
+                    $redo.button("option", "disabled", !ui.canRedo);
+                }
+                $undo.button("option", {label: '<?php echo __('undo','komtera'); ?>' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: '<?php echo __('redo','komtera'); ?>' + ' (' + ui.num_redo + ')'});
+            },
+            roundCorners: false,
+            rowBorders: true,
+            //selectionModel: { type: 'cell' },
+            stripeRows: true,
+            scrollModel: {autoFit: false},
+            showHeader: true,
+            showTitle: true, 
+            selectionModel: { type: '', native: true },
+            showToolbar: true,
+            showTop: true,
+            width: 1200, height: 400,
+            dataModel: dataModelSS,
+            colModel: colM,
+            postRenderInterval: -1,
+            change: function (evt, ui) {
+                //saveChanges can also be called from change event. 
+            },
+            destroy: function () {
+                //clear the interval upon destroy.
+                clearInterval(interval);
+            },
+            // ROW Komple:
+            rowInit: function (ui) {
+                if (ui.rowData.type == 'Bug') {
+                    return {
+                        style: {"background": "#FFEEEE"} //can also return attr (for attributes) and cls (for css classes) properties.
+                    };
+                }
+            },
+            load: function (evt, ui) {
+                var grid = this,
+                data = grid.option('dataModel').data;
+                grid.widget().pqTooltip(); //attach a tooltip.
+                //validate the whole data.
+                grid.isValid({data: data});
+            },
+            filterModel: {
+                on: true,
+                header: true,
+                mode: "AND",
+//                hideRows: false,
+//                type: 'local',
+                menuIcon: false
+            },
+          
+            editable: false,
+            pageModel: {
+                format: "#,###",
+                type: "local",
+                rPP: 1000,
+                strRpp: "{0}",
+                rPPOptions: [100, 1000, 10000]
+            },
+            sortable: true,
+            wrap: false, hwrap: false,
+            numberCell: {show: false, resizable: true, width: 30, title: "#"},
+            title: '<?php echo __('open_opportunities_main_proposals','komtera'); ?>',
+            resizable: true,
+            summaryTitle: "",
+            
+            //rowHt: 23,
+            freezeCols: 2,
+        create: function () {
+                   //this.loadState({refresh: false});
+        },
+        };
+        grid = pq.grid("div#grid_firsatlar_tek", obj);
+
+        grid.toggle();
+
+       $(window).on('unload', function () {
+           grid.saveState();
+       });
+        grid.on("destroy", function () {
+            this.saveState();
+        })
+    });
+</script>
+
+

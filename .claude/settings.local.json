@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"Unchanged: $file\")",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_close",
+      "WebFetch(domain:github.com)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(dir:*)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "Read(C:\\Users\\u\\Documents\\ShareX\\Screenshots\\2025-09/**)",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_evaluate",
+      "Read(//c/Users/u/.config/**)",
+      "Bash(ls:*)",
+      "Bash(export PLAYWRIGHT_BROWSER=chrome)",
+      "Bash(nslookup:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

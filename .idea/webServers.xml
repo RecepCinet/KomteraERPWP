@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2641acb7-bbf3-43ae-b030-b6527461419b" name="komtera-ftp" url="http://erp.komtera.com">
+        <fileTransfer rootFolder="/wp-content/" host="erp.komtera.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="c134c74f-97ce-470c-93f3-ff706fccdda9" name="test" url="http://erptest.komtera.com">
+        <fileTransfer rootFolder="/wp-content/" host="erptest.komtera.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
