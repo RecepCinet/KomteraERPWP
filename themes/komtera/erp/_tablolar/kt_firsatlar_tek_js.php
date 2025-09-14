@@ -87,7 +87,7 @@
                     if (ui.rowData.TEKLIF_NO) {
                         return "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>"+ui.rowData.TEKLIF_NO+"</a>";
                     }
-                },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "TEKLIF_NO", align: "center", editable: false, minWidth: 60, sortable: false,filter: {
+                },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "TEKLIF_NO", align: "center", editable: false, minWidth: 70, sortable: false,filter: {
                     crules: [{condition: 'contain'}]
                 }},
 
