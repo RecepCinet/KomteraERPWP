@@ -227,7 +227,7 @@ function siparisler_cb()
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -243,7 +243,7 @@ function demolar_cb()
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -258,7 +258,7 @@ function aktiviteler_cb()   {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -273,7 +273,7 @@ function poc_cb()           {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -292,7 +292,7 @@ function fiyat_listesi_cb() {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -312,7 +312,7 @@ function yenilemeler_cb() {
             <button type="button" onclick="changeIframe('60gun_liste')">60 Gün Liste</button>
         </p>
         <div style="position: relative; height: calc(100vh - 180px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($base_src . 'yenilemeler'); ?>"
                     width="100%"
                     height="100%"
@@ -333,7 +333,7 @@ function faturalar_cb()     {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -348,7 +348,7 @@ function stoklar_cb()       {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -363,7 +363,7 @@ function bayiler_cb()       {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -378,7 +378,7 @@ function musteriler_cb()    {
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe_other"
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
