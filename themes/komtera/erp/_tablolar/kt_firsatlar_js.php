@@ -1,5 +1,7 @@
 <script>
-    var grid;
+    console.log("<?php echo get_user_locale(); ?>");
+    console.log("<?php echo get_locale(); ?>");
+
     $(function () {
         function pqDatePicker(ui) {
             var $this = $(this);
@@ -20,7 +22,7 @@
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "<?php echo __('durum','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "<?php echo __('durum','komtera');?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
                     if (ui.cellData === 'Açık') {

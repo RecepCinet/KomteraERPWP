@@ -37,7 +37,8 @@ if (!$current_user_id) {
 //die();
 
 
-
+ $user_locale = get_user_locale();
+ switch_to_locale($user_locale);
 
 
 // $fresh,light,blue,coffee,ectoplasm,midnight,ocean,sunrise
@@ -98,7 +99,7 @@ $theme="gray";
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script src="pqgrid/pqgrid.min.js"></script>
-<script src="pqgrid/localize/pq-localize-tr.js"></script>
+<script src="pqgrid/localize/pq-localize-<?PHP echo substr(get_user_locale(),0,2); ?>.js"></script>
 <script src="pqgrid/pqTouch/pqtouch.min.js"></script>
 <script src="pqgrid/jsZip-2.5.0/jszip.min.js"></script>
 <script src="pqgrid/js/base64.min.js"></script>

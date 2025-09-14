@@ -1,4 +1,10 @@
 <?php
+// Load theme textdomain for translations
+function komtera_theme_setup() {
+    load_theme_textdomain('komtera', get_template_directory() . '/languages');
+}
+add_action('after_setup_theme', 'komtera_theme_setup');
+
 function theme_enqueue_scripts() {
     // Ana stil dosyaları varsa zaten burada çağrılır
 

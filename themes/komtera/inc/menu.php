@@ -62,7 +62,7 @@ function firsatlar_cb()
             <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>" 
                    placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
                    title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
-                   style="margin-right: 20px; padding: 5px;">
+                   style="margin-right: 20px; padyaptigini geri alding: 5px;">
             
             <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo ($lang == 'tr') ? 'Getir' : 'Get'; ?></button>
         </div>

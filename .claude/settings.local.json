@@ -26,7 +26,10 @@
       "Read(//c/Users/u/.config/**)",
       "Bash(ls:*)",
       "Bash(export PLAYWRIGHT_BROWSER=chrome)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Read(//c/Users/u/Documents/ShareX/Screenshots/2025-09/**)",
+      "Bash(git checkout:*)",
+      "Bash(msgfmt:*)"
     ],
     "deny": [],
     "ask": []
