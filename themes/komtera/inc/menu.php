@@ -34,8 +34,7 @@ function my_custom_admin_menus_for_roles()
     if (array_key_exists('_tools_',      $ana_yetkiler)) add_menu_page(__('araclar', 'komtera'), __('araclar', 'komtera'), 'read','araclar_slug',                   'araclar_cb','dashicons-admin-tools',2.07);
     if (array_key_exists('_pricelist_', $ana_yetkiler)) add_menu_page(__('fiyat listesi', 'komtera'), __('fiyat listesi', 'komtera'), 'read','fiyat_listesi_slug', 'fiyat_listesi_cb','dashicons-tag',2.08);
     if (array_key_exists('_renewals_',  $ana_yetkiler)) add_menu_page(__('yenilemeler', 'komtera'), __('yenilemeler', 'komtera'), 'read','yenilemeler_slug',       'yenilemeler_cb','dashicons-update',2.09);
-    if (array_key_exists('_invoices_',    $ana_yetkiler)) add_menu_page(__('faturalar', 'komtera'), __('faturalar', 'komtera'), 'read','faturalar_slug',             'faturalar_cb','dashicons-list-view
-',2.10);
+    if (array_key_exists('_invoices_',    $ana_yetkiler)) add_menu_page(__('faturalar', 'komtera'), __('faturalar', 'komtera'), 'read','faturalar_slug',             'faturalar_cb','dashicons-text',2.10);
     if (array_key_exists('_stocks_',      $ana_yetkiler)) add_menu_page(__('stoklar', 'komtera'), __('stoklar', 'komtera'), 'read','stoklar_slug',                   'stoklar_cb','dashicons-database-add',2.11);
     if (array_key_exists('_dealers_',      $ana_yetkiler)) add_menu_page(__('bayiler', 'komtera'), __('bayiler', 'komtera'), 'read','bayiler_slug',                   'bayiler_cb','dashicons-building',2.12);
     if (array_key_exists('_customers_',   $ana_yetkiler)) add_menu_page(__('musteriler', 'komtera'), __('musteriler', 'komtera'), 'read','musteriler_slug',          'musteriler_cb','dashicons-groups',2.13);
@@ -48,9 +47,26 @@ add_action('admin_menu', 'my_custom_admin_menus_for_roles');
 function firsatlar_cb()
 {
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=firsatlar';
+    $locale = get_locale(); // WordPress locale (tr_TR, en_US, etc.)
+    $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
     <div class="wrap">
-        <div style="position: relative; height: calc(100vh - 140px);">
+        <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
+            <label for="date1" style="margin-right: 10px;"><?php echo ($lang == 'tr') ? 'Başlangıç Tarihi:' : 'Start Date:'; ?></label>
+            <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>" 
+                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
+                   title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
+                   style="margin-right: 20px; padding: 5px;">
+            
+            <label for="date2" style="margin-right: 10px;"><?php echo ($lang == 'tr') ? 'Bitiş Tarihi:' : 'End Date:'; ?></label>
+            <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>" 
+                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
+                   title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
+                   style="margin-right: 20px; padding: 5px;">
+            
+            <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo ($lang == 'tr') ? 'Getir' : 'Get'; ?></button>
+        </div>
+        <div style="position: relative; height: calc(100vh - 200px);">
             <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
@@ -61,57 +77,104 @@ function firsatlar_cb()
     </div>
 
     <script>
-        //(function () {
-        //    const input1 = document.getElementById('date1');
-        //    const input2 = document.getElementById('date2');
-        //    const iframe = document.getElementById('erp_iframe');
-        //    const base = "<?php //echo esc_js($src); ?>//";
-        //
-        //    // YYYY-MM-DD format helper (local time)
-        //    function fmt(d) {
-        //        const y = d.getFullYear();
-        //        const m = String(d.getMonth() + 1).padStart(2, '0');
-        //        const a = String(d.getDate()).padStart(2, '0');
-        //        return `${y}-${m}-${a}`;
-        //    }
-        //
-        //    // İlk gelişte: bugün ve 30 gün öncesi
-        //    const today = new Date();
-        //    const d1 = new Date(today);
-        //    d1.setDate(d1.getDate() - 30); // son 1 ay (30 gün)
-        //    input1.value = fmt(d1);
-        //    input2.value = fmt(today);
-        //
-        //    function loadIframe() {
-        //        const v1 = input1.value;
-        //        const v2 = input2.value;
-        //        if (!v1 || !v2) {
-        //            alert('Lütfen iki tarihi de seçin.');
-        //            return;
-        //        }
-        //        if (v1 > v2) {
-        //            alert('Başlangıç tarihi, bitiş tarihinden büyük olamaz.');
-        //            return;
-        //        }
-        //        const url = `${base}?date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
-        //        iframe.src = url;
-        //    }
-        //
-        //    // İlk yüklemede otomatik getir
-        //    loadIframe();
-        //
-        //    // Buton
-        //    document.getElementById('btnGetir').addEventListener('click', loadIframe);
-        //
-        //    // Enter ile tetikleme (tarih kutularındayken)
-        //    [input1, input2].forEach(el => {
-        //        el.addEventListener('keydown', function (e) {
-        //            if (e.key === 'Enter') {
-        //                loadIframe();
-        //            }
-        //        });
-        //    });
-        //})();
+        (function () {
+            const input1 = document.getElementById('date1');
+            const input2 = document.getElementById('date2');
+            const iframe = document.getElementById('erp_iframe');
+            const base = "<?php echo esc_js($src); ?>";
+            const locale = "<?php echo esc_js($locale); ?>"; // WordPress locale
+            const lang = "<?php echo esc_js($lang); ?>"; // Dil kodu
+            
+            // Sayfanın dilini ayarla (takvim için)
+            if (document.documentElement.lang !== locale) {
+                document.documentElement.lang = locale;
+            }
+            
+            // Input'lara da dil ayarını uygula ve format ayarla
+            input1.setAttribute('lang', locale);
+            input2.setAttribute('lang', locale);
+            
+            // CSS ile date input'larının formatını ayarla
+            const style = document.createElement('style');
+            style.textContent = `
+                input[type="date"]::-webkit-calendar-picker-indicator {
+                    background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>') no-repeat;
+                    background-size: 16px;
+                }
+                input[type="date"] {
+                    font-family: inherit;
+                    direction: ${lang === 'tr' ? 'ltr' : 'ltr'};
+                }
+            `;
+            document.head.appendChild(style);
+
+            // YYYY-MM-DD format helper (local time)
+            function fmt(d) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const a = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${a}`;
+            }
+
+            // İlk gelişte: bugün ve 1 ay öncesi (daha önce seçilmemişse)
+            const today = new Date();
+            const oneMonthAgo = new Date(today);
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // 1 ay öncesi
+            
+            // Tarihleri localStorage'dan al (eğer daha önce seçilmişse)
+            const savedDate1 = localStorage.getItem('firsatlar_date1');
+            const savedDate2 = localStorage.getItem('firsatlar_date2');
+            
+            // Sadece boşsa veya geçersizse varsayılan değerleri ata
+            if (!input1.value && !savedDate1) {
+                input1.value = fmt(oneMonthAgo);
+            } else if (savedDate1) {
+                input1.value = savedDate1;
+            }
+            
+            if (!input2.value && !savedDate2) {
+                input2.value = fmt(today);
+            } else if (savedDate2) {
+                input2.value = savedDate2;
+            }
+
+            function loadIframe() {
+                const v1 = input1.value;
+                const v2 = input2.value;
+                if (!v1 || !v2) {
+                    const msg = lang === 'tr' ? 'Lütfen iki tarihi de seçin.' : 'Please select both dates.';
+                    alert(msg);
+                    return;
+                }
+                if (v1 > v2) {
+                    const msg = lang === 'tr' ? 'Başlangıç tarihi, bitiş tarihinden büyük olamaz.' : 'Start date cannot be greater than end date.';
+                    alert(msg);
+                    return;
+                }
+                
+                // Seçilen tarihleri localStorage'a kaydet
+                localStorage.setItem('firsatlar_date1', v1);
+                localStorage.setItem('firsatlar_date2', v2);
+                
+                const url = `${base}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
+                iframe.src = url;
+            }
+
+            // İlk yüklemede otomatik getir
+            loadIframe();
+
+            // Buton
+            document.getElementById('btnGetir').addEventListener('click', loadIframe);
+
+            // Enter ile tetikleme (tarih kutularındayken)
+            [input1, input2].forEach(el => {
+                el.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        loadIframe();
+                    }
+                });
+            });
+        })();
     </script>
     <?php
 }

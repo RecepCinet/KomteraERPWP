@@ -396,7 +396,7 @@
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<span style="font-size: 18px;"><b><?php echo __('siparisler','komtera'); ?></b></span>',
+            title: 'Siparişler',
             resizable: false,
             summaryTitle: "",
             freezeCols: 4,

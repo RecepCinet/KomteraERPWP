@@ -162,7 +162,7 @@ $(function () {
         rowHt: 21,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b>LOGO - <?php echo __('stoklar','komtera'); ?></b></span>',
+        title: 'LOGO - Satış Stokları',
         resizable: true,
 //        create: function () {                              
 //                        this.loadState({refresh: false});

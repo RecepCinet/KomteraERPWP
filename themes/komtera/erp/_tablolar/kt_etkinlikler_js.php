@@ -191,7 +191,7 @@ $(function () {
         rowHt: 19,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b>LOGO <?php echo __('etkinlikler','komtera'); ?></b></span>',
+        title: '<?php echo __('logo_etkinlikler','komtera'); ?>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

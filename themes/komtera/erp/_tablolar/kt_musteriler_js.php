@@ -124,7 +124,6 @@
             rowHt: 17,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<span style="font-size: 18px;"><b><?php echo __('musteriler','komtera'); ?></b></span>',
             resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

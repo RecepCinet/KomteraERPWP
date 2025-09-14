@@ -207,12 +207,22 @@
                 }
                 }
         ];
+        // URL parametrelerini al
+        const urlParams = new URLSearchParams(window.location.search);
+        const date1 = urlParams.get('date1') || '';
+        const date2 = urlParams.get('date2') || '';
+        
+        // URL'yi tarih parametreleriyle oluştur
+        let dataUrl = "_tablolar/kt_firsatlar.php?dbname=LKS";
+        if (date1) dataUrl += "&date1=" + encodeURIComponent(date1);
+        if (date2) dataUrl += "&date2=" + encodeURIComponent(date2);
+
         var dataModelSS = {
             location: "remote",
             dataType: "JSON",
             method: "GET",
             recIndx: "id",
-            url: "_tablolar/kt_firsatlar.php?dbname=LKS",
+            url: dataUrl,
             getData: function (response) {
                 return {data: response.data};
             }

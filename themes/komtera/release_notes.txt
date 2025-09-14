@@ -1,5 +1,6 @@
 2025.9
--
+-Kullanici guncelleme buttonu sag alta sabitlendi.
+-Firsatlar listesi icin tarih araligi eklendi.
 
 2025.8
 -Dil destegi eklendi

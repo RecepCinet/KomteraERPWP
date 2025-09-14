@@ -19,7 +19,7 @@ function kur_dashboard_widget() {
     <h1 align="center">$ <?php echo $usd; ?> &nbsp; € <?php echo $eur; ?></h1>
     <?php
 }
- 
+
 function add_kur_dashboard_widget() {
     $data  = aa_get_latest_kur();
     $tarih = $data['tarih'];

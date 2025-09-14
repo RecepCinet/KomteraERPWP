@@ -14,10 +14,12 @@ body {
     line-height: 1.6;
     color: #333;
 }
+
 #my_dashboard_widget {
     width:100% !important;
     min-width:100% !important;
 }
+
 .pq-grid {
     box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
     margin-bottom: 12px;

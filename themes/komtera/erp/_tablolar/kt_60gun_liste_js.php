@@ -268,7 +268,7 @@ $(function () {
         rowHt: 19,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b>60 <?php echo __('yenilemeler','komtera'); ?></b></span>',
+        title: '<?php echo __('renewals','komtera'); ?>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

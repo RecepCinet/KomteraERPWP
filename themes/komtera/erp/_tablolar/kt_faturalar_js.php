@@ -43,7 +43,10 @@
             } else {
                 alert("<?php echo __('no_logids_selected_for_invoice','komtera'); ?>");
             }
+
+
         }
+
     }
 
     function HatalilariSil() {
@@ -365,7 +368,7 @@ $(function () {
         rowHt: 21,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b><?php echo __('faturalar','komtera'); ?></b></span>',
+        title: '<?php echo __('logo_invoices','komtera'); ?>',
         resizable: true,
 //        create: function () {                              
 //                        this.loadState({refresh: false});

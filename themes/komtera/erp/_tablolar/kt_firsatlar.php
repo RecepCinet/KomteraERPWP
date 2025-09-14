@@ -2,10 +2,8 @@
 session_start();
 
 include '../../_conn.php';
-//$date1= $_GET['date1'];
-//$date2= $_GET['date2'];
-//$dates="  BASLANGIC_TARIHI>='$date1' AND BASLANGIC_TARIHI<='$date2'";
-// where SIL<>'1' AND $dates ORDER BY BASLANGIC_TARIHI
+$date1= $_GET['date1'];
+$date2= $_GET['date2'];
 $sql = <<<DATA
 SELECT f.id,
            (SELECT
@@ -72,6 +70,10 @@ f.FIRSAT_ACIKLAMA,
 FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE DURUM=0 AND SIL='0'
 AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
 DATA;
+
+if (!empty($date1) && !empty($date2)) {
+    $sql .= " AND f.BASLANGIC_TARIHI >= '$date1' AND f.BASLANGIC_TARIHI <= '$date2'";
+}
 
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

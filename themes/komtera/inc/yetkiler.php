@@ -3,12 +3,7 @@
 function my_profile_permissions_config() {
     // permission => [sub-permissions...]
     $perms = [
-        '_opportunities_'   => [
-            'OP-101_new',
-            'OP-102_detail',
-            'OP-103_export',
-            'OP-104_change_representative'
-        ],
+        '_opportunities_'   => [],
         '_orders_' => [
             'OR-101_edit',
             'OR-102_detail',
@@ -238,7 +233,7 @@ function my_render_custom_user_fields($user) {
             <td>
                 <div class="my-perm-grid">
                     <div class="my-perm">
-                        <strong><?php __('permission', 'komtera'); ?></strong>
+                        <strong><?php __('permision', 'komtera'); ?></strong>
                         <?php foreach ($perms as $permKey => $subs): ?>
                             <?php
                             // Skip entries with '-'

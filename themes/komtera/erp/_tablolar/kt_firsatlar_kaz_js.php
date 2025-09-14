@@ -324,7 +324,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<span style="font-size: 18px;"><b><?php echo __('kazanilan_firsatlar','komtera'); ?></b></span>',
+            title: '<?php echo __('kazanilan_firsatlar','komtera'); ?>',
             resizable: true,
             summaryTitle: "",
             //rowHt: 23,

@@ -1,0 +1,1191 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Komtera ERP WP Theme\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:41+0000\n"
+"PO-Revision-Date: 2025-08-30 15:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.3.24\n"
+"X-Domain: komtera"
+
+#: erp/_tablolar/tickets_js.php:218
+msgid "acan"
+msgstr "Creator"
+
+#: inc/pasif.php:21
+msgid "account_disabled"
+msgstr "Account Disabled"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:197
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:53
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:110
+#: erp/_tablolar/kt_demo_serial_js.php:51
+#: erp/_tablolar/kt_teklif_urunler_ozet_js.php:21
+#: erp/_tablolar/kt_siparis_urunler_js.php:70
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:11
+#: erp/_tablolar/kt_aktiviteler_js.php:74
+msgid "aciklama"
+msgstr "Description"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:164
+msgid "action"
+msgstr "Action"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:223
+msgid "activity"
+msgstr "Activity"
+
+#: erp/_tablolar/kt_stoklar_satis_js.php:49
+msgid "actual"
+msgstr "Actual"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:74
+msgid "add"
+msgstr "Add"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:263
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:125
+#: erp/_tablolar/kt_teklif_urunler_ozet_js.php:23
+#: erp/_tablolar/kt_siparis_urunler_js.php:86
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:15
+msgid "adet"
+msgstr "Quantity"
+
+#: erp/_tablolar/kt_bayiler_js.php:39
+msgid "adres_1"
+msgstr "Address1"
+
+#: erp/_tablolar/kt_bayiler_js.php:43
+msgid "adres_2"
+msgstr "Address2"
+
+#: inc/menu.php:30
+msgid "aktiviteler"
+msgstr "Activities"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:95
+msgid "alis_fiyati"
+msgstr "Cost Price"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:165
+#: erp/_tablolar/kt_gr_fon_js.php:102
+msgid "amount"
+msgstr "Amount"
+
+#: inc/yetkiler.php:203
+msgid "apply_permissions"
+msgstr "Apply Perrmissions"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:23
+msgid "approval"
+msgstr "Approval"
+
+#: inc/menu.php:34
+msgid "araclar"
+msgstr "Tools"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:23
+msgid "attention"
+msgstr "Attention"
+
+#: inc/menu.php:41
+msgid "ayarlar"
+msgstr "Settings"
+
+#: erp/_tablolar/kt_etkinlikler_js.php:33
+msgid "baslangic"
+msgstr "Start"
+
+#: erp/_tablolar/kt_etkinlikler_js.php:24
+msgid "baslik"
+msgstr "Title"
+
+#: erp/_tablolar/kt_siparisler_js.php:202
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:111
+#: erp/_tablolar/kt_edi_cari_js.php:18 erp/_tablolar/kt_firsatlar_js.php:155
+#: erp/_tablolar/kt_firsatlar_kay_js.php:107
+#: erp/_tablolar/kt_aktiviteler_js.php:61
+msgid "bayi"
+msgstr "Dealer"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:57
+msgid "bayi_ch_kodu"
+msgstr "Dealer ID"
+
+#: erp/_tablolar/kt_bayiler_js.php:30
+msgid "bayi_durum"
+msgstr "Dealer Status"
+
+#: erp/_tablolar/kt_aktiviteler_js.php:53
+msgid "bayi_tipi"
+msgstr "Dealer Type"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:140
+#: erp/_tablolar/kt_firsatlar_js.php:160
+msgid "bayi_yetkili"
+msgstr "Dealer Contact"
+
+#: inc/menu.php:39
+msgid "bayiler"
+msgstr "Dealers"
+
+#: erp/_tablolar/kt_sophos_siparisler_js.php:18
+msgid "belge_no"
+msgstr "Document No"
+
+#: erp/_tablolar/kt_teklif_urunler_ozet_js.php:22
+msgid "bir_fiyat"
+msgstr "Unit Price"
+
+#: erp/_tablolar/kt_etkinlikler_js.php:34
+msgid "bitis"
+msgstr "Dead"
+
+#: erp/_tablolar/kt_firsatlar_js.php:97
+msgid "bitis_tarihi"
+msgstr "Deadline"
+
+#: erp/_tablolar/kt_etkinlikler_js.php:159
+msgid "bitti"
+msgstr "End"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:15
+msgid "blacklist"
+msgstr "Blacklist"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:123
+#: erp/_tablolar/kt_firsatlar_tek_js.php:119 erp/_tablolar/kt_gr_fon_js.php:69
+#: erp/_tablolar/kt_poc_js.php:44 erp/_tablolar/kt_60gun_liste_js.php:103
+#: erp/_tablolar/kt_kampanyalar_js.php:21
+#: erp/_tablolar/ayarlar_onaylar_js.php:148
+#: erp/_tablolar/kt_stoklar_satis_js.php:25
+#: erp/_tablolar/kt_fiyat_listesi_js.php:79
+#: erp/_tablolar/kt_yenilemeler_js.php:43
+msgid "brand"
+msgstr "Brand"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:127
+msgid "brand_manager"
+msgstr "Brand Manager"
+
+#: inc/yetkiler.php:368
+msgid "brands"
+msgstr "Brands"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:16
+msgid "cancelled"
+msgstr "Canceled"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:13
+msgid "cash_sale"
+msgstr "Cash"
+
+#: erp/_tablolar/kt_sophos_siparisler_js.php:26
+msgid "cevap"
+msgstr "Answer"
+
+#: erp/_tablolar/kt_bayi_seviye_js.php:14
+msgid "ch_kodu"
+msgstr "Dealer Code"
+
+#: erp/_tablolar/kt_bayi_sec_js.php:30 erp/_tablolar/kt_bayisec2_js.php:53
+msgid "ch_title"
+msgstr "Title"
+
+#: erp/_tablolar/kt_bayiler_js.php:22
+msgid "ch_unvani"
+msgstr "Dealer Title"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:99
+msgid "cihaz_seri_no"
+msgstr "Serial No"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:319
+#: erp/_tablolar/kt_firsatlar_tek_js.php:248 erp/_tablolar/kt_gr_fon_js.php:223
+msgid "clear_filter"
+msgstr "Clear Filter"
+
+#: erp/_tablolar/kt_kampanyalar_js.php:29
+msgid "code"
+msgstr "Code"
+
+#: erp/_tablolar/kt_kampanyalar_js.php:5
+msgid "confirm_delete_product"
+msgstr "Confirm Delete Product"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:196
+msgid "confirm_delete_row"
+msgstr "Confirm Delete Row"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:12
+msgid "confirm_log_add_remove_order"
+msgstr "Confirm Log Remove"
+
+#: erp/_tablolar/kt_gr_fon_js.php:97
+msgid "cost"
+msgstr "Cost"
+
+#: erp/_tablolar/kt_firsatlar_js.php:86
+msgid "cozumler"
+msgstr "Solutions"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:189
+#: erp/_tablolar/kt_firsatlar_tek_js.php:127 erp/_tablolar/kt_gr_fon_js.php:131
+#: erp/_tablolar/kt_poc_js.php:46 erp/_tablolar/kt_yenilemeler_js.php:39
+#: erp/_tablolar/kt_musteri_sec_js.php:29
+msgid "customer"
+msgstr "Customer"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:99
+msgid "customer_name"
+msgstr "Customer Name"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:145
+#: erp/_tablolar/kt_firsatlar_tek_js.php:146 erp/_tablolar/kt_gr_fon_js.php:82
+#: erp/_tablolar/kt_60gun_liste_js.php:107
+msgid "customer_representative"
+msgstr "Customer Represantative"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:121
+#: erp/_tablolar/kt_firsatlar_tek_js.php:117 erp/_tablolar/kt_gr_fon_js.php:68
+#: erp/_tablolar/kt_poc_js.php:42
+msgid "date"
+msgstr "Date"
+
+#: erp/_tablolar/kt_demolar_js.php:34
+msgid "day"
+msgstr "Day"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:176
+#: erp/_tablolar/kt_firsatlar_tek_js.php:123 erp/_tablolar/kt_gr_fon_js.php:118
+#: erp/_tablolar/kt_poc_js.php:45
+msgid "dealer"
+msgstr "Dealer"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:181
+#: erp/_tablolar/kt_gr_fon_js.php:123
+msgid "dealer_authorized"
+msgstr "Dealer Authorized"
+
+#: erp/_tablolar/kt_yenilemeler_js.php:35
+msgid "dealer_name"
+msgstr "Dealer Name"
+
+#: erp/_tablolar/kt_bayi_sec_js.php:38
+msgid "dealer_status"
+msgstr "Dealer Status"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:12
+msgid "dealer_term_change"
+msgstr "Dealer Terms"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:183
+msgid "delete"
+msgstr "Delete"
+
+#: erp/_tablolar/kt_demo_serial_js.php:20
+msgid "demo_olustur"
+msgstr "Create Demo"
+
+#: inc/menu.php:29
+msgid "demolar"
+msgstr "Demos"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:113
+#: erp/_tablolar/kt_stoklar_satis_js.php:41
+#: erp/_tablolar/kt_fiyat_listesi_js.php:73
+msgid "description"
+msgstr "Description"
+
+#: erp/_tablolar/kt_musteriler_js.php:18
+msgid "detay"
+msgstr "Detail"
+
+#: erp/_tablolar/kt_firsatlar_js.php:297
+#: erp/_tablolar/kt_firsatlar_kay_js.php:242
+msgid "dizayni_kaydet"
+msgstr "Save Design"
+
+#: erp/_tablolar/kt_firsatlar_js.php:304
+#: erp/_tablolar/kt_firsatlar_kay_js.php:249
+msgid "dizayni_yukle"
+msgstr "Load Design"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:101
+#: erp/_tablolar/kt_fiyat_listesi_js.php:99
+msgid "duration"
+msgstr "Duration"
+
+#: erp/_tablolar/kt_siparisler_js.php:71
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:54
+#: erp/_tablolar/kt_firsatlar_js.php:23
+#: erp/_tablolar/kt_firsatlar_kay_js.php:54
+#: erp/_tablolar/kt_etkinlikler_js.php:53
+msgid "durum"
+msgstr "Status"
+
+#: erp/_tablolar/kt_edi_cari_js.php:22
+msgid "edi_no"
+msgstr "EDI ID"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:173
+msgid "email"
+msgstr "EMail"
+
+#: erp/_tablolar/kt_kampanyalar_js.php:35
+msgid "end"
+msgstr "End"
+
+#: inc/yetkiler.php:350
+msgid "error_loading_permissions"
+msgstr "Error Loading Permissons"
+
+#: erp/_tablolar/kt_firsatlar_js.php:195
+msgid "etkinlik"
+msgstr "Event"
+
+#: erp/_tablolar/kt_siparisler_js.php:243 erp/_tablolar/kt_firsatlar_js.php:238
+msgid "excel_kaydet"
+msgstr "Excel Export"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:267
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:178
+#: erp/_tablolar/kt_demo_serial_js.php:91
+#: erp/_tablolar/kt_firsatlar_tek_js.php:211 erp/_tablolar/kt_gr_fon_js.php:171
+#: erp/_tablolar/kt_firsatlar_kay_js.php:198
+msgid "export"
+msgstr "Export"
+
+#: erp/_tablolar/kt_siparisler_js.php:126
+msgid "fatura_tarihi"
+msgstr "Invoice Date"
+
+#: inc/menu.php:37
+msgid "faturalar"
+msgstr "Invoices"
+
+#: inc/yetkiler.php:559
+msgid "female"
+msgstr "Female"
+
+#: erp/_tablolar/kt_siparisler_js.php:295 erp/_tablolar/kt_firsatlar_js.php:289
+#: erp/_tablolar/kt_firsatlar_kay_js.php:235
+msgid "filtre_temizle"
+msgstr "Clear Filter"
+
+#: erp/_tablolar/kt_siparisler_js.php:151
+msgid "finans"
+msgstr "Finance"
+
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:71
+#: erp/_tablolar/kt_firsatlar_js.php:48
+#: erp/_tablolar/kt_firsatlar_kay_js.php:71
+msgid "firsat"
+msgstr "Oppurtunity"
+
+#: erp/_tablolar/kt_firsatlar_js.php:201
+msgid "firsat_aciklama"
+msgstr "Oppurtunity Desc"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:33
+msgid "firsat_no"
+msgstr "Oppurtunity No"
+
+#: inc/menu.php:27 erp/_tablolar/kt_firsatlar_js.php:382
+msgid "firsatlar"
+msgstr "Opportunities"
+
+#: inc/menu.php:35
+msgid "fiyat listesi"
+msgstr "Price List"
+
+#: erp/_tablolar/kt_firsatlar_js.php:191
+msgid "gelis_kanali"
+msgstr "Acquisition"
+
+#: inc/yetkiler.php:553
+msgid "gender"
+msgstr "Gender"
+
+#: erp/_tablolar/kt_aktiviteler_js.php:69
+msgid "gorusulen"
+msgstr "Contacted"
+
+#: erp/_tablolar/kt_stoklar_satis_js.php:45
+msgid "group"
+msgstr "Group"
+
+#: inc/pasif.php:18
+msgid "hesap_durumu"
+msgstr "Account Status"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:36
+msgid "how_many_pieces"
+msgstr "How many pieces"
+
+#. URI of the theme
+msgid "https://example.com/my-custom-theme"
+msgstr "https://example.com/my-custom-theme"
+
+#. Author URI of the theme
+msgid "https://recepcinet.com"
+msgstr "https://recepcinet.com"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:179
+msgid "id"
+msgstr "ID"
+
+#: erp/_tablolar/kt_sophos_siparisler_js.php:14
+msgid "in_out"
+msgstr "In/Out"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:23
+msgid "info"
+msgstr "Info"
+
+#: erp/_tablolar/kt_faturalar_js.php:29
+msgid "invoice_print_date"
+msgstr "Invoice Date"
+
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:81
+msgid "ka_teklif"
+msgstr ""
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:269
+msgid "kar_orani"
+msgstr "Profit Margin"
+
+#: erp/_tablolar/kt_siparisler_js.php:211
+msgid "kargo_durum"
+msgstr "Cargo Status"
+
+#: erp/_tablolar/kt_firsatlar_kay_js.php:96
+msgid "kaybedilme_nedeni"
+msgstr "Loss Reason"
+
+#: erp/_tablolar/kt_firsatlar_js.php:114
+msgid "kayidi_acan"
+msgstr "Created By"
+
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:327
+#: erp/_tablolar/kt_firsatlar_kay_js.php:326
+msgid "kazanilan_firsatlar"
+msgstr "Won Opportunities"
+
+#: erp/_tablolar/kt_aktiviteler_js.php:57
+msgid "kim_ile"
+msgstr "With"
+
+#: erp/_tablolar/kt_etkinlikler_js.php:28
+msgid "kodu"
+msgstr "Code"
+
+#. Description of the theme
+msgid "Komtera ERP 2026 kod adi: WP"
+msgstr "Komtera ERP 2026 code name: WP"
+
+#. Name of the theme
+msgid "Komtera ERP WP Theme"
+msgstr "Komtera ERP WP Theme"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:122
+msgid "last_modification"
+msgstr "Last Modification"
+
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:19
+msgid "ld"
+msgstr "ID"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:120
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:18
+msgid "lisans"
+msgstr "Licence"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:259
+msgid "liste_fiyati"
+msgstr "List Price"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:334
+#: erp/_tablolar/kt_firsatlar_tek_js.php:262 erp/_tablolar/kt_gr_fon_js.php:238
+msgid "load_layout"
+msgstr "Load Layout"
+
+#: inc/yetkiler.php:290
+msgid "loading"
+msgstr "Loading"
+
+#: erp/_tablolar/kt_bayi_seviye_js.php:166
+msgid "logo_bayi_listesi"
+msgstr "LOGO Customer List"
+
+#: erp/_tablolar/kt_demo_serial_js.php:175
+msgid "logo_demo_stoklari"
+msgstr "Logo Stock for Demos"
+
+#: erp/_tablolar/kt_edi_cari_js.php:169
+msgid "logo_edi_cari_eslesme"
+msgstr ""
+
+#: erp/_tablolar/kt_sophos_siparisler_js.php:150
+msgid "logo_edi_cari_eslestirme"
+msgstr ""
+
+#: erp/_tablolar/kt_etkinlikler_js.php:194
+msgid "logo_etkinlikler"
+msgstr "Logo Events"
+
+#: erp/_tablolar/kt_faturalar_js.php:9 erp/_tablolar/kt_faturalar_js.php:36
+msgid "logo_ids"
+msgstr "Logo ID"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:101
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:20
+msgid "logo_mesaj"
+msgstr "Logo Message"
+
+#: inc/yetkiler.php:545
+msgid "logo_username"
+msgstr "Logo Username"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:212
+msgid "loss_reason"
+msgstr "Loss Reason"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:220
+msgid "loss_reason_other"
+msgstr "Loss Reason Other"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:61
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:447
+#: erp/_tablolar/kt_firsatlar_tek_js.php:61 erp/_tablolar/kt_poc_js.php:35
+msgid "lost"
+msgstr "Lost"
+
+#: inc/yetkiler.php:558
+msgid "male"
+msgstr "Male"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:83
+msgid "maliyet"
+msgstr "Cost"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:61
+#: erp/_tablolar/kt_siparisler_js.php:182 erp/_tablolar/kt_demo_serial_js.php:6
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:107
+#: erp/_tablolar/kt_bayi_seviye_js.php:10 erp/_tablolar/kt_firsatlar_js.php:102
+#: erp/_tablolar/kt_firsatlar_kay_js.php:103
+#: erp/_tablolar/kt_etkinlikler_js.php:20
+msgid "marka"
+msgstr "Brand"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:144
+#: erp/_tablolar/kt_firsatlar_js.php:106
+msgid "marka_manager"
+msgstr "Brand Manager"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:216
+msgid "mevcut_lisans"
+msgstr "Current Licence"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:127
+msgid "module"
+msgstr "Module"
+
+#: erp/_tablolar/kt_siparisler_js.php:206
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:115
+#: erp/_tablolar/kt_firsatlar_js.php:168
+#: erp/_tablolar/kt_firsatlar_kay_js.php:111
+#: erp/_tablolar/kt_musteriler_js.php:12 erp/_tablolar/kt_aktiviteler_js.php:65
+msgid "musteri"
+msgstr "Customer"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:130
+msgid "musteri_adi"
+msgstr "Customer Name"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:65
+#: erp/_tablolar/kt_siparisler_js.php:192
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:134
+#: erp/_tablolar/kt_firsatlar_js.php:124
+#: erp/_tablolar/kt_firsatlar_kay_js.php:130
+#: erp/_tablolar/kt_aktiviteler_js.php:33
+msgid "musteri_temsilcisi"
+msgstr "Customer Representative"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:135
+msgid "musteri_yetkili"
+msgstr "Customer Contact"
+
+#: inc/menu.php:40
+msgid "musteriler"
+msgstr "Customers"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:241
+msgid "new_rule"
+msgstr "New Rule"
+
+#: erp/_tablolar/kt_faturalar_js.php:44
+msgid "no_logids_selected_for_invoice"
+msgstr ""
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:23
+msgid "note"
+msgstr "Note"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:233
+msgid "notes"
+msgstr "Notes"
+
+#: erp/_tablolar/kt_firsatlar_js.php:205
+msgid "notlar"
+msgstr "Notes"
+
+#: erp/_tablolar/kt_firsatlar2_js.php:96 erp/_tablolar/ayarlar_onaylar_js.php:6
+msgid "offers"
+msgstr "Offers"
+
+#: erp/_tablolar/kt_firsatlar_js.php:172
+msgid "olasilik"
+msgstr "Probability"
+
+#: erp/_tablolar/kt_poc_js.php:47
+msgid "on_site"
+msgstr "On Site"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:57
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:447
+#: erp/_tablolar/kt_firsatlar_tek_js.php:57
+msgid "open"
+msgstr "Open"
+
+#: erp/_tablolar/kt_firsatlar_tek_js.php:339
+msgid "open_opportunities_main_proposals"
+msgstr ""
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:412
+#: erp/_tablolar/kt_gr_fon_js.php:316
+msgid "opportunities"
+msgstr "Opportunities"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:79
+#: erp/_tablolar/kt_firsatlar2_js.php:79
+#: erp/_tablolar/kt_firsatlar_tek_js.php:82 erp/_tablolar/kt_gr_fon_js.php:54
+#: erp/_tablolar/kt_poc_js.php:19
+msgid "opportunity"
+msgstr "Opportunity"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:229
+msgid "opportunity_description"
+msgstr "Opportunity Desc"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:50
+#: erp/_tablolar/kt_yenilemeler_js.php:19
+msgid "opportunity_no"
+msgstr "Opportunity No"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:34
+msgid "order_no"
+msgstr "Order No"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:7
+msgid "orders"
+msgstr "Orders"
+
+#: inc/yetkiler.php:560
+msgid "other"
+msgstr "Otther"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:262
+msgid "ozel_alim_maliyeti"
+msgstr "Special Purchase Cost"
+
+#: erp/_tablolar/kt_siparisler_js.php:160
+#: erp/_tablolar/kt_siparisler_js.php:181
+msgid "ozel_kur"
+msgstr "Special Currency Rate"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:261
+msgid "ozel_satis_iskonto"
+msgstr "Sales Discount"
+
+#: erp/_tablolar/kt_siparisler_js.php:186
+msgid "para_birimi"
+msgstr "Currency"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:149
+msgid "parameter"
+msgstr "Parameter"
+
+#: inc/yetkiler.php:241
+msgid "permision"
+msgstr "Permisson"
+
+#: inc/yetkiler.php:212
+msgid "permission"
+msgstr "Permisson"
+
+#: inc/yetkiler.php:192
+msgid "permission_subpermission"
+msgstr "Permission & SubPer."
+
+#: inc/yetkiler.php:345
+msgid "permissions_applied_successfully"
+msgstr "Permissions Applied Successfully"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:160
+msgid "person"
+msgstr "Person"
+
+#: inc/yetkiler.php:565
+msgid "phone"
+msgstr "Phone"
+
+#: inc/yetkiler.php:285
+msgid "please_select_user"
+msgstr "Please Select user"
+
+#: inc/menu.php:31
+msgid "poc"
+msgstr "POC"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:119
+#: erp/_tablolar/kt_fiyat_listesi_js.php:104
+msgid "price"
+msgstr "Price"
+
+#: erp/_tablolar/kt_fiyat_listesi_js.php:226
+msgid "price_list"
+msgstr "Price List"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:193
+msgid "probability"
+msgstr "Probability"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:11
+msgid "profitability"
+msgstr "Profitability"
+
+#: erp/_tablolar/kt_firsatlar_js.php:198
+msgid "proje_adi"
+msgstr "Project Name"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:226
+msgid "project_name"
+msgstr "Project Name"
+
+#: erp/_tablolar/kt_firsatlar_tek_js.php:102 erp/_tablolar/kt_gr_fon_js.php:61
+msgid "proposal"
+msgstr "Quote "
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:96
+msgid "proposals"
+msgstr "Quotes"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:45
+msgid "quantity_cannot_be_zero"
+msgstr "Quantity cannot be zero"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:87
+#: erp/_tablolar/kt_firsatlar_tek_js.php:92
+msgid "r"
+msgstr ""
+
+#: inc/menu.php:32
+msgid "raporlar"
+msgstr "Reports"
+
+#: inc/menu.php:33
+msgid "raporlar yonetim"
+msgstr "Management Reports"
+
+#. Author of the theme
+msgid "Recep Cinet"
+msgstr "Recep Cinet"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:135
+#: erp/_tablolar/kt_gr_fon_js.php:77
+msgid "record_creator"
+msgstr "Created By"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:296
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:354
+#: erp/_tablolar/kt_firsatlar_tek_js.php:240
+#: erp/_tablolar/kt_firsatlar_tek_js.php:281 erp/_tablolar/kt_gr_fon_js.php:200
+#: erp/_tablolar/kt_gr_fon_js.php:258
+msgid "redo"
+msgstr "Redo"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:183
+#: erp/_tablolar/kt_yenilemeler_js.php:77
+msgid "refresh"
+msgstr "Refresh"
+
+#: erp/_tablolar/kt_poc_js.php:48
+msgid "remote"
+msgstr "Remote"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:66
+#: erp/_tablolar/kt_60gun_liste_js.php:70
+msgid "remove_from_list"
+msgstr "Remove From List"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:116
+msgid "renewal_date"
+msgstr "Renewal Date"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:271
+msgid "renewals"
+msgstr "Renewals"
+
+#: erp/_tablolar/kt_60gun_liste_js.php:26
+msgid "response"
+msgstr "Response"
+
+#: erp/_tablolar/kt_faturalar_js.php:101
+msgid "retry"
+msgstr "Retry"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:137
+msgid "rule"
+msgstr "Rule"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:14
+msgid "sales_total"
+msgstr "Sales Total"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:116
+#: erp/_tablolar/kt_firsatlar_tek_js.php:112
+msgid "sales_type"
+msgstr "Sales Type"
+
+#: erp/_tablolar/kt_demo_serial_js.php:127
+msgid "satildi"
+msgstr "Sold"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:199
+#: erp/_tablolar/kt_siparisler_js.php:253 erp/_tablolar/tickets_js.php:360
+#: erp/_tablolar/kt_edi_cari_js.php:88 erp/_tablolar/kt_bayi_seviye_js.php:85
+#: erp/_tablolar/kt_sophos_siparisler_js.php:69
+#: erp/_tablolar/kt_firsatlar_js.php:247
+#: erp/_tablolar/kt_firsatlar_kay_js.php:208
+#: erp/_tablolar/kt_etkinlikler_js.php:113 erp/_tablolar/kt_bayiler_js.php:87
+msgid "satir_kaydir"
+msgstr "Shift Row"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:100
+#: erp/_tablolar/kt_siparis_urunler_js.php:87
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:16
+msgid "satis_fiyati"
+msgstr "Sales Price"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:264
+msgid "satis_fiyati_birim"
+msgstr "Unit Sales Price"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:200
+#: erp/_tablolar/kt_teklif_urunler_js.php:228
+#: erp/_tablolar/kt_siparisler_js.php:121
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:98
+#: erp/_tablolar/kt_firsatlar_js.php:90
+#: erp/_tablolar/kt_firsatlar_kay_js.php:87
+msgid "satis_tipi"
+msgstr "Sales Type"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:88
+msgid "satis_toplam"
+msgstr "Sales Total"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:327
+#: erp/_tablolar/kt_firsatlar_tek_js.php:255 erp/_tablolar/kt_gr_fon_js.php:231
+msgid "save_layout"
+msgstr "Save Layout"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:112
+msgid "sec"
+msgstr "Select"
+
+#: erp/_tablolar/kt_bayiler_js.php:47 erp/_tablolar/kt_aktiviteler_js.php:49
+msgid "sehir"
+msgstr "City"
+
+#: inc/yetkiler.php:557 erp/_tablolar/kt_bayi_sec_js.php:15
+#: erp/_tablolar/kt_musteri_sec_js.php:13
+msgid "select"
+msgstr "Select"
+
+#: inc/yetkiler.php:256
+msgid "select_all"
+msgstr "Select All"
+
+#: inc/yetkiler.php:194
+msgid "select_user_to_copy"
+msgstr "Select User to Copy"
+
+#: erp/_tablolar/kt_demo_serial_js.php:47
+msgid "seri_no"
+msgstr "Serial No"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:115
+msgid "serial"
+msgstr "Serial"
+
+#: erp/_tablolar/kt_siparisler_js.php:132
+msgid "serialler"
+msgstr "Serial List"
+
+#: inc/yetkiler.php:357
+msgid "server_error"
+msgstr "Server Error"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:341
+msgid "settings_approvals"
+msgstr "Settings Approvals"
+
+#: erp/_tablolar/kt_edi_cari_js.php:32 erp/_tablolar/kt_bayi_seviye_js.php:29
+msgid "seviye"
+msgstr "Level"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:18
+#: erp/_tablolar/kt_siparisler_js.php:102
+msgid "siparis_no"
+msgstr "Order No"
+
+#: erp/_tablolar/kt_siparisler_js.php:201
+msgid "siparis_saati"
+msgstr "Order Time"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:69
+#: erp/_tablolar/kt_siparisler_js.php:200
+msgid "siparis_tarihi"
+msgstr "Order Date"
+
+#: inc/menu.php:28
+msgid "siparisler"
+msgstr "Orders"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:196
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:49
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:105
+#: erp/_tablolar/kt_teklif_urunler_ozet_js.php:20
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:10
+msgid "sku"
+msgstr "SKU"
+
+#: erp/_tablolar/kt_siparisler_js.php:129 erp/_tablolar/kt_firsatlar_js.php:83
+msgid "skular"
+msgstr "SKUs"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:195
+msgid "slot"
+msgstr "Slot"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:96
+#: erp/_tablolar/kt_fiyat_listesi_js.php:94
+msgid "solution"
+msgstr "Solution"
+
+#: erp/_tablolar/kt_firsatlar_js.php:96
+msgid "son_degisiklik"
+msgstr "Last Changed"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:216
+msgid "source_channel"
+msgstr "Source Channel"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:260
+msgid "standart_maliyet"
+msgstr "Standard Cost"
+
+#: erp/_tablolar/kt_kampanyalar_js.php:34
+msgid "start"
+msgstr "Start"
+
+#: erp/_tablolar/kt_siparisler_js.php:67
+msgid "statu"
+msgstr "Status"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:54
+#: erp/_tablolar/kt_demolar_js.php:29 erp/_tablolar/kt_firsatlar2_js.php:54
+#: erp/_tablolar/kt_firsatlar_tek_js.php:54 erp/_tablolar/kt_poc_js.php:33
+#: erp/_tablolar/kt_kampanyalar_js.php:54
+msgid "status"
+msgstr "Status"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:86
+msgid "stock"
+msgstr "Stock"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:166
+msgid "stock_available"
+msgstr "Stock Available"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:81
+msgid "stock_status"
+msgstr "Stock Status"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:82
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:14
+msgid "stok"
+msgstr "Stock"
+
+#: inc/menu.php:38
+msgid "stoklar"
+msgstr "Stocks"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:258
+#: erp/_tablolar/kt_siparis_urunler_js.php:73
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:13
+#: erp/_tablolar/kt_aktiviteler_js.php:45
+msgid "sure"
+msgstr "Period"
+
+#: erp/_tablolar/kt_firsatlar_kaz_js.php:105
+#: erp/_tablolar/kt_sophos_siparisler_js.php:10
+#: erp/_tablolar/kt_firsatlar_js.php:95
+#: erp/_tablolar/kt_firsatlar_kay_js.php:92
+#: erp/_tablolar/kt_aktiviteler_js.php:29
+msgid "tarih"
+msgstr "Date"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:83
+msgid "tarih_duzelt"
+msgstr "Edit Date"
+
+#: erp/_tablolar/kt_siparisler_js.php:83
+msgid "teklif_no"
+msgstr "Quote No"
+
+#: erp/_tablolar/kt_firsatlar_js.php:65
+msgid "teklifler"
+msgstr "Quotes"
+
+#: erp/_tablolar/kt_poc_js.php:43
+msgid "time"
+msgstr "Time"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:199
+#: erp/_tablolar/kt_aktiviteler_js.php:41
+msgid "tip"
+msgstr "Type"
+
+#: erp/_tablolar/kt_kampanyalar_js.php:25
+msgid "title"
+msgstr "Title"
+
+#: erp/_tablolar/kt_siparisler_js.php:185
+#: erp/_tablolar/kt_siparisler_js.php:187
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:17
+msgid "toplam"
+msgstr "Total"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:266
+#: erp/_tablolar/kt_siparis_urunler_js.php:84
+msgid "toplam_maliyet"
+msgstr "Total Cost"
+
+#: erp/_tablolar/kt_teklif_urunler_js.php:268
+#: erp/_tablolar/kt_teklif_urunler_ozet_js.php:24
+msgid "toplam_satis_fiyati"
+msgstr "Total Sales Price"
+
+#: erp/_tablolar/kt_poc_js.php:49
+msgid "total"
+msgstr "Total"
+
+#: erp/_tablolar/kt_siparis_urunler_js.php:72
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:12
+msgid "tur"
+msgstr "Type"
+
+#: erp/_tablolar/kt_firsatlar_js.php:144
+msgid "tutar"
+msgstr "Total"
+
+#: erp/_tablolar/kt_fiyat_lis_sec_js.php:91
+#: erp/_tablolar/kt_fiyat_listesi_js.php:84
+msgid "type"
+msgstr "Type"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:287
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:353
+#: erp/_tablolar/kt_firsatlar_tek_js.php:231
+#: erp/_tablolar/kt_firsatlar_tek_js.php:280 erp/_tablolar/kt_gr_fon_js.php:191
+#: erp/_tablolar/kt_gr_fon_js.php:257
+msgid "undo"
+msgstr "Undo"
+
+#: erp/_tablolar/kt_bayi_seviye_js.php:18
+msgid "unvan"
+msgstr "Title"
+
+#: erp/_tablolar/kt_etkinlikler_js.php:5
+msgid "urun_silmek_emin_misiniz"
+msgstr "Delete Product"
+
+#: erp/_tablolar/kt_teklif_urunler_ozet_js.php:100
+#: erp/_tablolar/kt_siparis_urun_prev_js.php:116
+msgid "urunler"
+msgstr "Products"
+
+#: erp/_tablolar/kt_siparisler_js.php:135 erp/_tablolar/kt_bayiler_js.php:35
+msgid "vade"
+msgstr "Term"
+
+#: erp/_tablolar/ayarlar_onaylar_js.php:159
+msgid "value"
+msgstr "Value"
+
+#: erp/_tablolar/kt_bayiler_js.php:49
+msgid "vergi_dairesi"
+msgstr "Tax Office"
+
+#: erp/_tablolar/kt_bayiler_js.php:48
+msgid "vergi_no"
+msgstr "Tax No"
+
+#: erp/_tablolar/kt_demolar_js.php:48
+msgid "waybill_no"
+msgstr "Waybill No"
+
+#: erp/_tablolar/kt_faturalar_js.php:9 erp/_tablolar/kt_faturalar_js.php:36
+msgid "will_be_invoiced"
+msgstr "Invoiced"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:59
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:447
+#: erp/_tablolar/kt_firsatlar_tek_js.php:59 erp/_tablolar/kt_poc_js.php:37
+msgid "won"
+msgstr "Won"
+
+#: erp/_tablolar/kt_firsatlar_yanfir_js.php:277
+#: erp/_tablolar/kt_firsatlar_tek_js.php:221 erp/_tablolar/kt_gr_fon_js.php:181
+#: erp/_tablolar/kt_60gun_liste_js.php:190
+#: erp/_tablolar/kt_yenilemeler_js.php:84
+msgid "wrap_rows"
+msgstr "Wrap Rows"
+
+#: erp/_tablolar/kt_sophos_siparisler_js.php:22
+msgid "xml"
+msgstr "XML"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:192
+#: erp/_tablolar/kt_edi_cari_js.php:81 erp/_tablolar/kt_bayi_seviye_js.php:78
+#: erp/_tablolar/kt_sophos_siparisler_js.php:62
+#: erp/_tablolar/kt_etkinlikler_js.php:106 erp/_tablolar/kt_bayiler_js.php:80
+msgid "yenile"
+msgstr "Refresh"
+
+#: erp/_tablolar/kt_yenilemeler_liste_js.php:74
+msgid "yenileme_tarihi"
+msgstr "Renewal Date"
+
+#: inc/menu.php:36 erp/_tablolar/kt_yenilemeler_liste_js.php:280
+msgid "yenilemeler"
+msgstr "Renewals"

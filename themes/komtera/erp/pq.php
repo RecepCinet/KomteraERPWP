@@ -18,7 +18,6 @@ if (!$found) {
 }
 $scheme = get_user_option('admin_color'); // örn: 'fresh', 'light', 'blue', ...
 
-$lang=substr(get_user_locale(),0,2);
 
 require_once '../inc/yetkiler.php';
 
@@ -73,7 +72,7 @@ switch ($scheme) {
     default:
         $theme="gray";
 }
-$theme="steelblue";
+$theme="gray";
 
 // bootstrap,brown,chocolate,cocoa,crimson,gray,green,indigo,office,purple,red,rosybrown,sandybrown,steelblue,tan,violet,yellow
 
@@ -99,13 +98,39 @@ $theme="steelblue";
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script src="pqgrid/pqgrid.min.js"></script>
-<script src="pqgrid/localize/pq-localize-<?PHP echo $lang; ?>.js"></script>
-
+<script src="pqgrid/localize/pq-localize-tr.js"></script>
 <script src="pqgrid/pqTouch/pqtouch.min.js"></script>
 <script src="pqgrid/jsZip-2.5.0/jszip.min.js"></script>
 <script src="pqgrid/js/base64.min.js"></script>
 <script src="pqgrid/js/FileSaver.js"></script>
 
+<style>
+    .pq-grid {
+        box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
+        margin-bottom: 12px;
+        font-family: Arial;
+        font-size: 12px;
+    }
+    .pq-toolbar button {
+        margin: 0px 5px;
+    }
+    button.delete_btn {
+        margin: -3px 0px;
+        height: 30px;
+    }
+    .pq-grid-row {
+        height: 30px !important;
+    }
+    .pq-grid .pq-grid-cell {
+        line-height: 30px !important;
+    }
+    pq-row-delete > .pq-grid-cell {
+        background-color: pink;
+    }
+    pq-grid-number-col {
+        padding: 5px 5px;
+    }
+</style>
 <script>
     function refreshDV() {
         grid.refreshDataAndView();
@@ -125,28 +150,3 @@ $theme="steelblue";
         saveAs(blob, new Date().toISOString() + ".xls");
     }
 </script>
-
-<style>
-    div.pq-grid{
-        /*box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);*/
-        margin-bottom: 11px;
-        font-family:Consolas;
-        font-size:12px;
-    }
-    div.pq-toolbar button
-    {
-        margin:0px 5px;
-    }
-    .demo_ac
-    {
-        color: blue;
-    }
-    .pq-row-delete
-    {
-        text-decoration:line-through;
-    }
-    .pq-row-delete > .pq-grid-cell
-    {
-        background-color:pink;
-    }
-</style>

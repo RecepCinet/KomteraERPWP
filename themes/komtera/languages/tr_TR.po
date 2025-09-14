@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Komtera ERP WP Theme\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-27 10:41+0000\n"
-"PO-Revision-Date: 2025-08-31 21:06+0000\n"
+"PO-Revision-Date: 2025-09-12 06:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: Türkçe\n"
 "Language: tr_TR\n"
@@ -32,7 +32,7 @@ msgstr "Hesabi Pasiflestir"
 #: erp/_tablolar/kt_siparis_urun_prev_js.php:11
 #: erp/_tablolar/kt_aktiviteler_js.php:74
 msgid "aciklama"
-msgstr "Açıklama"
+msgstr "Aciklama"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:164
 msgid "action"
@@ -72,7 +72,7 @@ msgstr "Aktiviteler"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:95
 msgid "alis_fiyati"
-msgstr "Alış Fiyatı"
+msgstr "Alis Fiyati"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:165
 #: erp/_tablolar/kt_gr_fon_js.php:102
@@ -101,11 +101,11 @@ msgstr "Ayarlar"
 
 #: erp/_tablolar/kt_etkinlikler_js.php:33
 msgid "baslangic"
-msgstr "Başlangıç"
+msgstr "Baslangic"
 
 #: erp/_tablolar/kt_etkinlikler_js.php:24
 msgid "baslik"
-msgstr "Başlık"
+msgstr "Baslik"
 
 #: erp/_tablolar/kt_siparisler_js.php:202
 #: erp/_tablolar/kt_firsatlar_kaz_js.php:111
@@ -146,11 +146,11 @@ msgstr "Birim Fiyat"
 
 #: erp/_tablolar/kt_etkinlikler_js.php:34
 msgid "bitis"
-msgstr "Bitiş"
+msgstr "Bitis"
 
 #: erp/_tablolar/kt_firsatlar_js.php:97
 msgid "bitis_tarihi"
-msgstr "Bitiş Tarihi"
+msgstr "Bitis Tarihi"
 
 #: erp/_tablolar/kt_etkinlikler_js.php:159
 msgid "bitti"
@@ -181,11 +181,11 @@ msgstr "Markalar"
 
 #: erp/_tablolar/kt_60gun_liste_js.php:16
 msgid "cancelled"
-msgstr "İptal edildi"
+msgstr "Iptal edildi"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:13
 msgid "cash_sale"
-msgstr "Peşin Satış"
+msgstr "Pesin Satis"
 
 #: erp/_tablolar/kt_sophos_siparisler_js.php:26
 msgid "cevap"
@@ -234,24 +234,24 @@ msgstr "Maliyet"
 
 #: erp/_tablolar/kt_firsatlar_js.php:86
 msgid "cozumler"
-msgstr "Çözümler"
+msgstr "Cozumler"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:189
 #: erp/_tablolar/kt_firsatlar_tek_js.php:127 erp/_tablolar/kt_gr_fon_js.php:131
 #: erp/_tablolar/kt_poc_js.php:46 erp/_tablolar/kt_yenilemeler_js.php:39
 #: erp/_tablolar/kt_musteri_sec_js.php:29
 msgid "customer"
-msgstr "Müşteri"
+msgstr "Musteri"
 
 #: erp/_tablolar/kt_60gun_liste_js.php:99
 msgid "customer_name"
-msgstr "Müşteri Adı"
+msgstr "Musteri Adi"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:145
 #: erp/_tablolar/kt_firsatlar_tek_js.php:146 erp/_tablolar/kt_gr_fon_js.php:82
 #: erp/_tablolar/kt_60gun_liste_js.php:107
 msgid "customer_representative"
-msgstr "Müşteri Temsilcisi"
+msgstr "Musteri Temsilcisi"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:121
 #: erp/_tablolar/kt_firsatlar_tek_js.php:117 erp/_tablolar/kt_gr_fon_js.php:68
@@ -261,7 +261,7 @@ msgstr "Tarih"
 
 #: erp/_tablolar/kt_demolar_js.php:34
 msgid "day"
-msgstr "Gün"
+msgstr "Gun"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:176
 #: erp/_tablolar/kt_firsatlar_tek_js.php:123 erp/_tablolar/kt_gr_fon_js.php:118
@@ -302,7 +302,7 @@ msgstr "Demolar"
 #: erp/_tablolar/kt_stoklar_satis_js.php:41
 #: erp/_tablolar/kt_fiyat_listesi_js.php:73
 msgid "description"
-msgstr "Açıklama"
+msgstr "Aciklama"
 
 #: erp/_tablolar/kt_musteriler_js.php:18
 msgid "detay"
@@ -311,12 +311,12 @@ msgstr "Detay"
 #: erp/_tablolar/kt_firsatlar_js.php:297
 #: erp/_tablolar/kt_firsatlar_kay_js.php:242
 msgid "dizayni_kaydet"
-msgstr "Dizaynı Kaydet"
+msgstr "Dizayni Kaydet"
 
 #: erp/_tablolar/kt_firsatlar_js.php:304
 #: erp/_tablolar/kt_firsatlar_kay_js.php:249
 msgid "dizayni_yukle"
-msgstr "Dizaynı Yükle"
+msgstr "Dizayni Yukle"
 
 #: erp/_tablolar/kt_fiyat_lis_sec_js.php:101
 #: erp/_tablolar/kt_fiyat_listesi_js.php:99
@@ -345,7 +345,7 @@ msgstr "Son"
 
 #: inc/yetkiler.php:350
 msgid "error_loading_permissions"
-msgstr "Yetkiler yüklenemedi"
+msgstr "Yetkiler yuklenemedi"
 
 #: erp/_tablolar/kt_firsatlar_js.php:195
 msgid "etkinlik"
@@ -388,15 +388,15 @@ msgstr "Finans"
 #: erp/_tablolar/kt_firsatlar_js.php:48
 #: erp/_tablolar/kt_firsatlar_kay_js.php:71
 msgid "firsat"
-msgstr "Fırsat"
+msgstr "Firsat"
 
 #: erp/_tablolar/kt_firsatlar_js.php:201
 msgid "firsat_aciklama"
-msgstr "Fırsat Açıklama"
+msgstr "Firsat Aciklama"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:33
 msgid "firsat_no"
-msgstr "Fırsat No"
+msgstr "Firsat No"
 
 #: inc/menu.php:27 erp/_tablolar/kt_firsatlar_js.php:382
 msgid "firsatlar"
@@ -408,7 +408,7 @@ msgstr "Fiyat Listesi"
 
 #: erp/_tablolar/kt_firsatlar_js.php:191
 msgid "gelis_kanali"
-msgstr "Geliş Kanalı"
+msgstr "Gelis Kanali"
 
 #: inc/yetkiler.php:553
 msgid "gender"
@@ -416,7 +416,7 @@ msgstr "Gender"
 
 #: erp/_tablolar/kt_aktiviteler_js.php:69
 msgid "gorusulen"
-msgstr "Görüşülen"
+msgstr "Gorusulen"
 
 #: erp/_tablolar/kt_stoklar_satis_js.php:45
 msgid "group"
@@ -428,7 +428,7 @@ msgstr "Hesap Durumu"
 
 #: erp/_tablolar/kt_fiyat_lis_sec_js.php:36
 msgid "how_many_pieces"
-msgstr "Kaç Parça"
+msgstr "Kac Parca"
 
 #. URI of the theme
 msgid "https://example.com/my-custom-theme"
@@ -444,7 +444,7 @@ msgstr "ID"
 
 #: erp/_tablolar/kt_sophos_siparisler_js.php:14
 msgid "in_out"
-msgstr "Giriş/Çıkış"
+msgstr "Giris/Cikis"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:23
 msgid "info"
@@ -456,11 +456,11 @@ msgstr "Fatura Basim Tarihi"
 
 #: erp/_tablolar/kt_firsatlar_kaz_js.php:81
 msgid "ka_teklif"
-msgstr "Kazanılan Teklif"
+msgstr "Kazanilan Teklif"
 
 #: erp/_tablolar/kt_teklif_urunler_js.php:269
 msgid "kar_orani"
-msgstr "Kâr Oranı"
+msgstr "Kar Orani"
 
 #: erp/_tablolar/kt_siparisler_js.php:211
 msgid "kargo_durum"
@@ -472,12 +472,12 @@ msgstr "Kaybedilme Nedeni"
 
 #: erp/_tablolar/kt_firsatlar_js.php:114
 msgid "kayidi_acan"
-msgstr "Kayıdı Açan"
+msgstr "Kayidi Acan"
 
 #: erp/_tablolar/kt_firsatlar_kaz_js.php:327
 #: erp/_tablolar/kt_firsatlar_kay_js.php:326
 msgid "kazanilan_firsatlar"
-msgstr "Kazanılan Fırsatlar"
+msgstr "Kazanilan Firsatlar"
 
 #: erp/_tablolar/kt_aktiviteler_js.php:57
 msgid "kim_ile"
@@ -510,16 +510,16 @@ msgstr "Lisans"
 
 #: erp/_tablolar/kt_teklif_urunler_js.php:259
 msgid "liste_fiyati"
-msgstr "Liste Fiyatı"
+msgstr "Liste Fiyati"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:334
 #: erp/_tablolar/kt_firsatlar_tek_js.php:262 erp/_tablolar/kt_gr_fon_js.php:238
 msgid "load_layout"
-msgstr "Dizayn Yükle"
+msgstr "Dizayn Yukle"
 
 #: inc/yetkiler.php:290
 msgid "loading"
-msgstr "Yüklüyor"
+msgstr "Yukleniyor"
 
 #: erp/_tablolar/kt_bayi_seviye_js.php:166
 msgid "logo_bayi_listesi"
@@ -527,7 +527,7 @@ msgstr "Logo Bayi Listesi"
 
 #: erp/_tablolar/kt_demo_serial_js.php:175
 msgid "logo_demo_stoklari"
-msgstr "Logo Demo Stokları"
+msgstr "Logo Demo Stoklari"
 
 #: erp/_tablolar/kt_edi_cari_js.php:169
 msgid "logo_edi_cari_eslesme"
@@ -552,7 +552,7 @@ msgstr "Logo Mesaj"
 
 #: inc/yetkiler.php:545
 msgid "logo_username"
-msgstr "Logo Kullanıcı Adı"
+msgstr "Logo Kullanici Adi"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:212
 msgid "loss_reason"
@@ -604,11 +604,11 @@ msgstr "Module"
 #: erp/_tablolar/kt_firsatlar_kay_js.php:111
 #: erp/_tablolar/kt_musteriler_js.php:12 erp/_tablolar/kt_aktiviteler_js.php:65
 msgid "musteri"
-msgstr "Müşteri"
+msgstr "Musteri"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:130
 msgid "musteri_adi"
-msgstr "Müşteri Adı"
+msgstr "Musteri Adi"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:65
 #: erp/_tablolar/kt_siparisler_js.php:192
@@ -617,7 +617,7 @@ msgstr "Müşteri Adı"
 #: erp/_tablolar/kt_firsatlar_kay_js.php:130
 #: erp/_tablolar/kt_aktiviteler_js.php:33
 msgid "musteri_temsilcisi"
-msgstr "Müşteri Temsilcisi"
+msgstr "Musteri Temsilcisi"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:135
 msgid "musteri_yetkili"
@@ -653,7 +653,7 @@ msgstr "Teklifler"
 
 #: erp/_tablolar/kt_firsatlar_js.php:172
 msgid "olasilik"
-msgstr "Olasılık"
+msgstr "Olasilik"
 
 #: erp/_tablolar/kt_poc_js.php:47
 msgid "on_site"
@@ -672,14 +672,14 @@ msgstr "Ana Teklifi Ac"
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:412
 #: erp/_tablolar/kt_gr_fon_js.php:316
 msgid "opportunities"
-msgstr "Fırsatlar"
+msgstr "Firsatlar"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:79
 #: erp/_tablolar/kt_firsatlar2_js.php:79
 #: erp/_tablolar/kt_firsatlar_tek_js.php:82 erp/_tablolar/kt_gr_fon_js.php:54
 #: erp/_tablolar/kt_poc_js.php:19
 msgid "opportunity"
-msgstr "Fırsat"
+msgstr "Firsat"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:229
 msgid "opportunity_description"
@@ -688,15 +688,15 @@ msgstr "Firsat Aciklamasi"
 #: erp/_tablolar/kt_60gun_liste_js.php:50
 #: erp/_tablolar/kt_yenilemeler_js.php:19
 msgid "opportunity_no"
-msgstr "Fırsat No"
+msgstr "Firsat No"
 
 #: erp/_tablolar/kt_60gun_liste_js.php:34
 msgid "order_no"
-msgstr "Sipariş No"
+msgstr "Siparis No"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:7
 msgid "orders"
-msgstr "Siparişler"
+msgstr "Siparisler"
 
 #: inc/yetkiler.php:560
 msgid "other"
@@ -749,7 +749,7 @@ msgstr "Telefon"
 
 #: inc/yetkiler.php:285
 msgid "please_select_user"
-msgstr "Kullanıcı seçiniz"
+msgstr "Kullanici seciniz"
 
 #: inc/menu.php:31
 msgid "poc"
@@ -766,19 +766,19 @@ msgstr "Fiyat Listesi"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:193
 msgid "probability"
-msgstr "Olasılık"
+msgstr "Olasilik"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:11
 msgid "profitability"
-msgstr "Olasılık"
+msgstr "Olasilik"
 
 #: erp/_tablolar/kt_firsatlar_js.php:198
 msgid "proje_adi"
-msgstr "Proje Adı"
+msgstr "Proje Adi"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:226
 msgid "project_name"
-msgstr "Proje Adı"
+msgstr "Proje Adi"
 
 #: erp/_tablolar/kt_firsatlar_tek_js.php:102 erp/_tablolar/kt_gr_fon_js.php:61
 msgid "proposal"
@@ -812,7 +812,7 @@ msgstr "Recep Cinet"
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:135
 #: erp/_tablolar/kt_gr_fon_js.php:77
 msgid "record_creator"
-msgstr "Oluşturan"
+msgstr "Olusturan"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:296
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:354
@@ -834,7 +834,7 @@ msgstr "Uzak"
 #: erp/_tablolar/kt_60gun_liste_js.php:66
 #: erp/_tablolar/kt_60gun_liste_js.php:70
 msgid "remove_from_list"
-msgstr "Listeden çıkar"
+msgstr "Listeden cikar"
 
 #: erp/_tablolar/kt_60gun_liste_js.php:116
 msgid "renewal_date"
@@ -858,7 +858,7 @@ msgstr "Kural"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:14
 msgid "sales_total"
-msgstr "Satış Toplamı"
+msgstr "Satis Toplami"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:116
 #: erp/_tablolar/kt_firsatlar_tek_js.php:112
@@ -867,7 +867,7 @@ msgstr "Satis Turu"
 
 #: erp/_tablolar/kt_demo_serial_js.php:127
 msgid "satildi"
-msgstr "Satıldı"
+msgstr "Satildi"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:199
 #: erp/_tablolar/kt_siparisler_js.php:253 erp/_tablolar/tickets_js.php:360
@@ -877,17 +877,17 @@ msgstr "Satıldı"
 #: erp/_tablolar/kt_firsatlar_kay_js.php:208
 #: erp/_tablolar/kt_etkinlikler_js.php:113 erp/_tablolar/kt_bayiler_js.php:87
 msgid "satir_kaydir"
-msgstr "Satır Kaydır"
+msgstr "Satir Kaydir"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:100
 #: erp/_tablolar/kt_siparis_urunler_js.php:87
 #: erp/_tablolar/kt_siparis_urun_prev_js.php:16
 msgid "satis_fiyati"
-msgstr "Satış Fiyatı"
+msgstr "Satis Fiyati"
 
 #: erp/_tablolar/kt_teklif_urunler_js.php:264
 msgid "satis_fiyati_birim"
-msgstr "Satış Birim Fiyatı"
+msgstr "Satis Birim Fiyati"
 
 #: erp/_tablolar/kt_teklif_urunler_js.php:200
 #: erp/_tablolar/kt_teklif_urunler_js.php:228
@@ -896,37 +896,37 @@ msgstr "Satış Birim Fiyatı"
 #: erp/_tablolar/kt_firsatlar_js.php:90
 #: erp/_tablolar/kt_firsatlar_kay_js.php:87
 msgid "satis_tipi"
-msgstr "Satış Tipi"
+msgstr "Satis Tipi"
 
 #: erp/_tablolar/kt_siparis_urunler_js.php:88
 msgid "satis_toplam"
-msgstr "Satış Toplam"
+msgstr "Satis Toplam"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:327
 #: erp/_tablolar/kt_firsatlar_tek_js.php:255 erp/_tablolar/kt_gr_fon_js.php:231
 msgid "save_layout"
-msgstr "Dizaynı Kaydet"
+msgstr "Dizayni Kaydet"
 
 #: erp/_tablolar/kt_siparis_urunler_js.php:112
 msgid "sec"
-msgstr "Seç"
+msgstr "Sec"
 
 #: erp/_tablolar/kt_bayiler_js.php:47 erp/_tablolar/kt_aktiviteler_js.php:49
 msgid "sehir"
-msgstr "Şehir"
+msgstr "Sehir"
 
 #: inc/yetkiler.php:557 erp/_tablolar/kt_bayi_sec_js.php:15
 #: erp/_tablolar/kt_musteri_sec_js.php:13
 msgid "select"
-msgstr "Seç"
+msgstr "Sec"
 
 #: inc/yetkiler.php:256
 msgid "select_all"
-msgstr "Hepsini Seç"
+msgstr "Hepsini Sec"
 
 #: inc/yetkiler.php:194
 msgid "select_user_to_copy"
-msgstr "Kullanıcıdan Kopyala"
+msgstr "Kullanicidan Kopyala"
 
 #: erp/_tablolar/kt_demo_serial_js.php:47
 msgid "seri_no"
@@ -942,11 +942,11 @@ msgstr "Serialler"
 
 #: inc/yetkiler.php:357
 msgid "server_error"
-msgstr "Sunucu Hatası"
+msgstr "Sunucu Hatasi"
 
 #: erp/_tablolar/ayarlar_onaylar_js.php:341
 msgid "settings_approvals"
-msgstr "Ayarları Onayla"
+msgstr "Ayarlari Onayla"
 
 #: erp/_tablolar/kt_edi_cari_js.php:32 erp/_tablolar/kt_bayi_seviye_js.php:29
 msgid "seviye"
@@ -955,16 +955,16 @@ msgstr "Seviye"
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:18
 #: erp/_tablolar/kt_siparisler_js.php:102
 msgid "siparis_no"
-msgstr "Sipariş No"
+msgstr "Siparis No"
 
 #: erp/_tablolar/kt_siparisler_js.php:201
 msgid "siparis_saati"
-msgstr "Sipariş Saati"
+msgstr "Siparis Saati"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:69
 #: erp/_tablolar/kt_siparisler_js.php:200
 msgid "siparis_tarihi"
-msgstr "Sipariş Tarihi"
+msgstr "Siparis Tarihi"
 
 #: inc/menu.php:28
 msgid "siparisler"
@@ -989,15 +989,15 @@ msgstr "Slot"
 #: erp/_tablolar/kt_fiyat_lis_sec_js.php:96
 #: erp/_tablolar/kt_fiyat_listesi_js.php:94
 msgid "solution"
-msgstr "Çözüm"
+msgstr "Cozum"
 
 #: erp/_tablolar/kt_firsatlar_js.php:96
 msgid "son_degisiklik"
-msgstr "Son değişiklik"
+msgstr "Son degisiklik"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:216
 msgid "source_channel"
-msgstr "Geliş Kanalı"
+msgstr "Gelis Kanali"
 
 #: erp/_tablolar/kt_teklif_urunler_js.php:260
 msgid "standart_maliyet"
@@ -1005,7 +1005,7 @@ msgstr "Standart Maliyet"
 
 #: erp/_tablolar/kt_kampanyalar_js.php:34
 msgid "start"
-msgstr "Başlangıç"
+msgstr "Baslangic"
 
 #: erp/_tablolar/kt_siparisler_js.php:67
 msgid "statu"
@@ -1044,7 +1044,7 @@ msgstr "Stoklar"
 #: erp/_tablolar/kt_siparis_urun_prev_js.php:13
 #: erp/_tablolar/kt_aktiviteler_js.php:45
 msgid "sure"
-msgstr "Süre"
+msgstr "Sure"
 
 #: erp/_tablolar/kt_firsatlar_kaz_js.php:105
 #: erp/_tablolar/kt_sophos_siparisler_js.php:10
@@ -1056,7 +1056,7 @@ msgstr "Tarih"
 
 #: erp/_tablolar/kt_yenilemeler_liste_js.php:83
 msgid "tarih_duzelt"
-msgstr "Tarih Düzelt"
+msgstr "Tarih Duzelt"
 
 #: erp/_tablolar/kt_siparisler_js.php:83
 msgid "teklif_no"
@@ -1077,7 +1077,7 @@ msgstr "Tip"
 
 #: erp/_tablolar/kt_kampanyalar_js.php:25
 msgid "title"
-msgstr "Başlık"
+msgstr "Baslik"
 
 #: erp/_tablolar/kt_siparisler_js.php:185
 #: erp/_tablolar/kt_siparisler_js.php:187
@@ -1093,7 +1093,7 @@ msgstr "Toplam Maliyet"
 #: erp/_tablolar/kt_teklif_urunler_js.php:268
 #: erp/_tablolar/kt_teklif_urunler_ozet_js.php:24
 msgid "toplam_satis_fiyati"
-msgstr "Toplam Satış Fiyatı"
+msgstr "Toplam Satis Fiyati"
 
 #: erp/_tablolar/kt_poc_js.php:49
 msgid "total"
@@ -1132,7 +1132,7 @@ msgstr "Silmek ister misiniz?"
 #: erp/_tablolar/kt_teklif_urunler_ozet_js.php:100
 #: erp/_tablolar/kt_siparis_urun_prev_js.php:116
 msgid "urunler"
-msgstr "Ürünler"
+msgstr "Urunler"
 
 #: erp/_tablolar/kt_siparisler_js.php:135 erp/_tablolar/kt_bayiler_js.php:35
 msgid "vade"
@@ -1152,11 +1152,11 @@ msgstr "Vergi No"
 
 #: erp/_tablolar/kt_demolar_js.php:48
 msgid "waybill_no"
-msgstr "İrsaliye No"
+msgstr "Irsaliye No"
 
 #: erp/_tablolar/kt_faturalar_js.php:9 erp/_tablolar/kt_faturalar_js.php:36
 msgid "will_be_invoiced"
-msgstr "Faturalanıdı"
+msgstr "Faturalandi"
 
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:59
 #: erp/_tablolar/kt_firsatlar_yanfir_js.php:447

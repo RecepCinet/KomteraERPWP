@@ -165,7 +165,7 @@ $(function () {
         rowHt: 23,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b>LOGO - <?php echo __('bayiler','komtera'); ?></b></span>',
+        title: 'LOGO - Bayi Listesi',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

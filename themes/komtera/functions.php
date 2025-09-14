@@ -32,6 +32,56 @@ require_once get_template_directory() . '/inc/users.php';
 
 
 
+// User edit sayfasında kaydet butonunu sağ üstte sabit göster
+function komtera_admin_styles() {
+    global $pagenow;
+    if ($pagenow == 'user-edit.php' || $pagenow == 'profile.php') {
+        ?>
+        <style>
+        /* Kaydet butonunu sağ altta sabit konumda göster */
+        #submit {
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            z-index: 9999 !important;
+            background: #0073aa !important;
+            border-color: #005a87 !important;
+            color: #fff !important;
+            padding: 8px 20px !important;
+            border-radius: 4px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            text-shadow: 0 -1px 1px #005a87 !important;
+            box-shadow: 0 1px 0 #005a87 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        #submit:hover {
+            background: #005a87 !important;
+            border-color: #004067 !important;
+            box-shadow: 0 1px 0 #004067 !important;
+        }
+        
+        #submit:active {
+            transform: translateY(1px) !important;
+        }
+        
+        /* Responsive design için */
+        @media (max-width: 782px) {
+            #submit {
+                bottom: 10px !important;
+                right: 10px !important;
+                padding: 6px 15px !important;
+                font-size: 12px !important;
+            }
+        }
+        </style>
+        <?php
+    }
+}
+add_action('admin_head', 'komtera_admin_styles');
+
 // JAdmin için Admin Bar'da + New → User öğesini gizle
 add_action('admin_bar_menu', function ($wp_admin_bar) {
     if (!is_user_logged_in()) return;

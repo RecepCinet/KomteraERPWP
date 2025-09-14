@@ -2,6 +2,53 @@
     function refreshDataAndView() {
         grid.refreshDataAndView( );
     }
+    
+    function updateGridData() {
+        var startDate = document.getElementById('start_date').value;
+        var endDate = document.getElementById('end_date').value;
+        
+        if (startDate && endDate) {
+            // Reload iframe with date parameters
+            var iframe = window.parent.document.getElementById('erp_iframe');
+            var baseUrl = iframe.src.split('?')[0];
+            var newUrl = baseUrl + '?t=firsatlar&date1=' + startDate + '&date2=' + endDate;
+            iframe.src = newUrl;
+        } else {
+            alert('Lütfen her iki tarihi de seçiniz.');
+        }
+    }
 </script>
-
+<style>
+div.pq-grid{
+	/*box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);*/
+	margin-bottom: 11px;
+	font-family:Consolas;
+	font-size:12px;
+}
+div.pq-toolbar button
+{
+    margin:0px 5px;
+}
+.demo_ac
+{
+    color: blue;
+}
+.pq-row-delete
+{
+    text-decoration:line-through;
+}
+.pq-row-delete > .pq-grid-cell
+{
+    background-color:pink;
+}
+</style>
+<div style="margin-bottom: 10px;">
+    <label for="start_date">Başlangıç Tarihi:</label>
+    <input type="date" id="start_date" name="start_date" style="margin-right: 15px;">
+    
+    <label for="end_date">Bitiş Tarihi:</label>
+    <input type="date" id="end_date" name="end_date" style="margin-right: 15px;">
+    
+    <button onclick="updateGridData()" style="padding: 5px 10px;">Filtrele</button>
+</div>
 <div id="grid_firsatlar"></div>

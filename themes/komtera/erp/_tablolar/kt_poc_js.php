@@ -147,7 +147,7 @@ $(function () {
         sortable: true,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b><?php echo __('poc','komtera'); ?></b></span>',
+        title: 'POC',
         resizable: true,
         rowHt: 23,
 //        create: function () {

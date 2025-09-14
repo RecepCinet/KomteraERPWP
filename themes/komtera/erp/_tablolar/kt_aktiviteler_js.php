@@ -173,7 +173,7 @@ $(function () {
         sortable: true,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b><?php echo __('aktiviteler','komtera'); ?></b></span>',
+        title: 'Aktiviteler',
         resizable: true,
         rowHt: 23,
 //        create: function () {
