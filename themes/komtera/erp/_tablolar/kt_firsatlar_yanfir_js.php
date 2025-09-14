@@ -235,12 +235,22 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 }
                 }
         ];
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const date1 = urlParams.get('date1') || '';
+        const date2 = urlParams.get('date2') || '';
+        
+        // URL'yi tarih parametreleriyle oluştur
+        let dataUrl = "_tablolar/kt_firsatlar_yanfir.php";
+        if (date1) dataUrl += "?date1=" + encodeURIComponent(date1);
+        if (date2) dataUrl += (date1 ? "&" : "?") + "date2=" + encodeURIComponent(date2);
+        
         var dataModelSS = {
             location: "remote",
             dataType: "JSON",
             method: "GET",
             recIndx: "id",
-            url: "_tablolar/kt_firsatlar_yanfir.php?dbname=LKS&date1=<?PHP echo $date1; ?>&date2=<?PHP echo $date2; ?>",
+            url: dataUrl,
             getData: function (response) {
                 return {data: response.data};
             }

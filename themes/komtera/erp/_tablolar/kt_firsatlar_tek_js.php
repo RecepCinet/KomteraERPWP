@@ -1,19 +1,3 @@
-<?PHP
-$date1 = $_GET['date1'];
-$date2 = $_GET['date2'];
-
-$string='select kt_yetki_firsatlar from TF_USERS where kullanici=\'' . $cryp . '\'';
-//echo $string;
-$stmt = $conn2->prepare($string);
-$stmt->execute();
-$izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
-//echo "-------------------------------------------";
-//echo $izin;
-//echo "<br /><br />";
-//echo YetkiVarmi($izin,'FI-104');
-//echo "-------------------------------------------";
-
-?>
 <script>
 
     function TeklifAc(teklif) {
@@ -51,14 +35,14 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "<?php echo __('status','komtera'); ?>", hidden: true,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "Status", hidden: true,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
-                    if (ui.cellData === '<?php echo __('open','komtera'); ?>') {
+                    if (ui.cellData === 'Open') {
                         return {style: {"background": "#ebebeb"}};
-                    } else if (ui.cellData === '<?php echo __('won','komtera'); ?>') {
+                    } else if (ui.cellData === 'Won') {
                         return {style: {"background": "#b2f4ac"}};
-                    } else if (ui.cellData === '<?php echo __('lost','komtera'); ?>') {
+                    } else if (ui.cellData === 'Lost') {
                         return {style: {"background": "#f4acb8"}};
                     }
                 }
@@ -79,7 +63,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 
 
 
-            {title: "<?php echo __('opportunity','komtera'); ?>",render: function (ui) {
+            {title: "Opportunity",render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
                     }
@@ -89,7 +73,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             
             
             
-            {title: "<?php echo __('r','komtera'); ?>",render: function (ui) {
+            {title: "R",render: function (ui) {
                     if (ui.rowData.REGISTER==='1') {
                         return "<span class='ui-icon ui-icon-check'></span>";
                     }
@@ -99,7 +83,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
            
            
            
-            {title: "<?php echo __('proposal','komtera'); ?>",render: function (ui) {
+            {title: "Proposal",render: function (ui) {
                     if (ui.rowData.TEKLIF_NO) {
                         return "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>"+ui.rowData.TEKLIF_NO+"</a>";
                     }
@@ -109,22 +93,22 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 
 
 
-            {title: "<?php echo __('sales_type','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
+            {title: "Sales Type", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('date','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "Date", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
            // {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "<?php echo __('brand','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
+            {title: "Brand", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('dealer','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+            {title: "Dealer", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('customer','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+            {title: "Customer", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
@@ -135,7 +119,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             
 //            {title: "Kayıdı Açan",
 //                render: function (ui) {
-//                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+//                    if (false) { // Removed user check
 //                        return {style: {"background": "yellow"}};
 //                    }
 //                },
@@ -143,9 +127,9 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 //                    crules: [{condition: 'range'}],
 //                }
 //            },
-            {title: "<?php echo __('customer_representative','komtera'); ?>",
+            {title: "Customer Representative",
                 render: function (ui) {
-                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+                    if (false) { // Removed user check
                         return {style: {"background": "yellow"}};
                     }
                 },
@@ -179,12 +163,22 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             // },
 
         ];
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const date1 = urlParams.get('date1') || '';
+        const date2 = urlParams.get('date2') || '';
+        
+        // URL'yi tarih parametreleriyle oluştur
+        let dataUrl = "_tablolar/kt_firsatlar_tek.php";
+        if (date1) dataUrl += "?date1=" + encodeURIComponent(date1);
+        if (date2) dataUrl += (date1 ? "&" : "?") + "date2=" + encodeURIComponent(date2);
+        
         var dataModelSS = {
             location: "remote",
             dataType: "JSON",
             method: "GET",
             recIndx: "id",
-            url: "_tablolar/kt_firsatlar_tek.php?dbname=LKS&date1=<?PHP echo $date1; ?>&date2=<?PHP echo $date2; ?>",
+            url: dataUrl,
             getData: function (response) {
                 return {data: response.data};
             }
@@ -205,20 +199,18 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             // },
             toolbar: {
                 items: [
-                    <?PHP if (YetkiVarmi($izin,'FI-104')==1) { ?>
                     {
                         type: 'button',
-                        label: "<?php echo __('export','komtera'); ?>",
+                        label: "Export",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             ExcelKaydet();
                         }
                     },
-                    <?PHP } ?>
                     {
                         type: 'checkbox',
                         value: false,
-                        label: '<?php echo __('wrap_rows','komtera'); ?>',
+                        label: 'Wrap Rows',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -228,7 +220,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     {
                     type: 'button',
                     icon: 'ui-icon-arrowreturn-1-s',
-                    label: '<?php echo __('undo','komtera'); ?>',                    
+                    label: 'Undo',                    
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'undo' });
@@ -237,7 +229,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowrefresh-1-s',
-                    label: '<?php echo __('redo','komtera'); ?>',
+                    label: 'Redo',
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'redo' });
@@ -245,21 +237,21 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 },
                 {
                             type:'button',
-                            label: '<?php echo __('clear_filter','komtera'); ?>',
+                            label: 'Clear Filter',
                             listener: function(){
                                     this.reset({filter: true});
                             }
                     },
                         {
                             type:'button',
-                            label: '<?php echo __('save_layout','komtera'); ?>',
+                            label: 'Save Layout',
                             listener: function(){
                                     grid.saveState();
                             }
                     },
                         {
                             type:'button',
-                            label: '<?php echo __('load_layout','komtera'); ?>',
+                            label: 'Load Layout',
                             listener: function(){
                                     grid.loadState({refresh: false});
                             }
@@ -277,8 +269,8 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", {label: '<?php echo __('undo','komtera'); ?>' + ' (' + ui.num_undo + ')'});
-                $redo.button("option", {label: '<?php echo __('redo','komtera'); ?>' + ' (' + ui.num_redo + ')'});
+                $undo.button("option", {label: 'Undo' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: 'Redo' + ' (' + ui.num_redo + ')'});
             },
             roundCorners: false,
             rowBorders: true,
@@ -336,7 +328,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<?php echo __('open_opportunities_main_proposals','komtera'); ?>',
+            title: 'Open Opportunities Main Proposals',
             resizable: true,
             summaryTitle: "",
             

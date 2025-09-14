@@ -2,9 +2,26 @@
 error_reporting(E_ALL);
 ini_set('display_erros', true);
 
-session_start();
-
+// WordPress integration for user data
 include '../../_conn.php';
+$dir = __DIR__;
+$found = false;
+for ($i = 0; $i < 10; $i++) {
+    if (file_exists($dir . '/wp-load.php')) {
+        require_once $dir . '/wp-load.php';
+        $found = true;
+        break;
+    }
+    $dir = dirname($dir);
+}
+
+if (!$found) {
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "wp-load.php bulunamadı.\n";
+    echo "Başlangıç dizini: " . __DIR__ . "\n";
+    exit;
+}
+
 $date1= $_GET['date1'];
 $date2= $_GET['date2'];
 $dates="  f.BASLANGIC_TARIHI>='$date1' AND f.BASLANGIC_TARIHI<='$date2'";
@@ -43,10 +60,11 @@ f.MUSTERI_ADI
 FROM aa_erp_kt_teklifler t LEFT OUTER JOIN LKS.dbo.aa_erp_kt_firsatlar f
 ON t.X_FIRSAT_NO = f.FIRSAT_NO
 WHERE f.DURUM='0' AND f.SIL='0'
-AND t.TEKLIF_TIPI = '1' AND CHARINDEX(f.MARKA, '" . $_SESSION['user']['markalar'] . "')>0 and $dates
+AND t.TEKLIF_TIPI = '1' AND CHARINDEX(f.MARKA, '" . implode(',', get_user_meta(get_current_user_id(), 'my_brands', true) ?: []) . "')>0 and $dates
 AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
 order by f.FIRSAT_NO,t.TEKLIF_NO
 ";
+
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $response = "{\"data\":" . json_encode($data) . "}";

@@ -65,11 +65,45 @@ function firsatlar_cb()
                    style="margin-right: 20px; padding: 5px; width: 120px;">
             
             <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo __('getir', 'komtera'); ?></button>
+            
+            <!-- Fırsat Türü Butonları -->
+            <span style="margin-left: 20px; font-weight: bold; color: #333; margin-right: 8px;">|</span>
+            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; padding: 6px 10px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('acik_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('kazanilan', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('tum_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('yan_firsatlar', 'komtera'); ?></button>
         </div>
         
         <!-- jQuery UI CSS -->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
         <script src="//code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        
+        <!-- Buton Stilleri -->
+        <style>
+            .table-btn {
+                transition: all 0.2s ease;
+                white-space: nowrap;
+            }
+            .table-btn:hover {
+                background-color: #0056b3 !important;
+                transform: translateY(-1px);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .table-btn.active {
+                background-color: #0073aa !important;
+                box-shadow: 0 2px 6px rgba(0,115,170,0.3);
+            }
+            @media (max-width: 768px) {
+                .table-btn {
+                    font-size: 10px !important;
+                    padding: 6px 8px !important;
+                    margin-right: 4px !important;
+                    margin-bottom: 4px;
+                }
+            }
+        </style>
         <div style="position: relative; height: calc(100vh - 200px);">
             <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
@@ -186,6 +220,39 @@ function firsatlar_cb()
                 if (e.key === 'Enter') {
                     loadIframe();
                 }
+            });
+            
+            // Tablo değiştirme butonları
+            $('.table-btn').click(function() {
+                const tableName = $(this).data('table');
+                const currentDate1 = $('#date1').val();
+                const currentDate2 = $('#date2').val();
+                
+                // Aktif buton stilini değiştir
+                $('.table-btn').removeClass('active').css('background', '#6c757d');
+                $(this).addClass('active').css('background', '#0073aa');
+                
+                // iframe src'sini güncelle
+                let newSrc = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php?t=" + tableName;
+                
+                // Tarih parametrelerini ekle
+                if (currentDate1 && currentDate2) {
+                    const date1 = $('#date1').datepicker('getDate');
+                    const date2 = $('#date2').datepicker('getDate');
+                    
+                    if (date1 && date2) {
+                        const urlDate1 = date1.getFullYear() + '-' + 
+                            String(date1.getMonth() + 1).padStart(2, '0') + '-' + 
+                            String(date1.getDate()).padStart(2, '0');
+                        const urlDate2 = date2.getFullYear() + '-' + 
+                            String(date2.getMonth() + 1).padStart(2, '0') + '-' + 
+                            String(date2.getDate()).padStart(2, '0');
+                        
+                        newSrc += `&date1=${encodeURIComponent(urlDate1)}&date2=${encodeURIComponent(urlDate2)}`;
+                    }
+                }
+                
+                iframe.src = newSrc;
             });
         });
     </script>

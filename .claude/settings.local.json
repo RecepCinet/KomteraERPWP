@@ -29,7 +29,8 @@
       "Bash(nslookup:*)",
       "Read(//c/Users/u/Documents/ShareX/Screenshots/2025-09/**)",
       "Bash(git checkout:*)",
-      "Bash(msgfmt:*)"
+      "Bash(msgfmt:*)",
+      "Bash(sort:*)"
     ],
     "deny": [],
     "ask": []

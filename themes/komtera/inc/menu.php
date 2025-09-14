@@ -61,9 +61,18 @@ function firsatlar_cb()
                    style="margin-right: 20px; padding: 5px;">
             
             <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo __('getir', 'komtera'); ?></button>
+            
+            <!-- Fırsat Türü Butonları -->
+            <span style="margin-left: 20px; font-weight: bold; color: #333; margin-right: 8px;">|</span>
+            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; padding: 6px 10px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('acik_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('kazanilan', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('tum_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px;"><?php echo __('yan_firsatlar', 'komtera'); ?></button>
         </div>
         <div style="position: relative; height: calc(100vh - 200px);">
-            <iframe id="erp_iframe"
+        <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -76,7 +85,8 @@ function firsatlar_cb()
             const input1 = document.getElementById('date1');
             const input2 = document.getElementById('date2');
             const iframe = document.getElementById('erp_iframe');
-            const base = "<?php echo esc_js($src); ?>";
+            const baseDir = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php";
+            const defaultTable = "firsatlar"; // Varsayılan tablo
             const locale = "<?php echo esc_js($locale); ?>"; // WordPress locale
             const lang = "<?php echo esc_js($lang); ?>"; // Dil kodu
             // Sayfanın dilini ayarla (takvim için)
@@ -140,7 +150,11 @@ function firsatlar_cb()
                 // Seçilen tarihleri localStorage'a kaydet
                 localStorage.setItem('firsatlar_date1', v1);
                 localStorage.setItem('firsatlar_date2', v2);
-                const url = `${base}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
+                // Aktif butondan tablo adını al
+                const activeBtn = document.querySelector('.table-btn.active');
+                const tableName = activeBtn ? activeBtn.getAttribute('data-table') : defaultTable;
+                
+                const url = `${baseDir}?t=${tableName}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
                 iframe.src = url;
             }
             // İlk yüklemede otomatik getir
@@ -155,8 +169,60 @@ function firsatlar_cb()
                     }
                 });
             });
+            
+            // Tablo değiştirme butonları
+            document.querySelectorAll('.table-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const tableName = this.getAttribute('data-table');
+                    const v1 = input1.value;
+                    const v2 = input2.value;
+                    
+                    // Aktif buton stilini değiştir
+                    document.querySelectorAll('.table-btn').forEach(function(b) {
+                        b.classList.remove('active');
+                        b.style.background = '#6c757d';
+                    });
+                    this.classList.add('active');
+                    this.style.background = '#0073aa';
+                    
+                    // iframe src'sini güncelle
+                    let newSrc = `${baseDir}?t=${tableName}`;
+                    
+                    // Tarih parametrelerini ekle
+                    if (v1 && v2) {
+                        newSrc += `&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
+                    }
+                    
+                    iframe.src = newSrc;
+                });
+            });
         })();
     </script>
+    
+    <!-- Buton Stilleri -->
+    <style>
+        .table-btn {
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .table-btn:hover {
+            background-color: #0056b3 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .table-btn.active {
+            background-color: #0073aa !important;
+            box-shadow: 0 2px 6px rgba(0,115,170,0.3);
+        }
+        @media (max-width: 768px) {
+            .table-btn {
+                font-size: 9px !important;
+                padding: 4px 6px !important;
+                margin-right: 4px !important;
+                margin-bottom: 4px;
+            }
+        }
+    </style>
     <?php
 }
 function siparisler_cb()
