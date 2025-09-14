@@ -84,10 +84,10 @@
                 }
             },{title: "<?php echo __('skular','komtera'); ?>",filter: {
                     crules: [{condition: 'contain'}]
-                }, editable: false, minWidth: 90, sortable: true, dataIndx: "skular"},
+                }, editable: false, minWidth: 180, sortable: true, dataIndx: "skular"},
             {title: "<?php echo __('cozumler','komtera'); ?>",filter: {
                     crules: [{condition: 'contain'}]
-                }, editable: false, minWidth: 90, sortable: true, dataIndx: "Cozumler"},
+                }, editable: false, minWidth: 405, sortable: true, dataIndx: "Cozumler"},
 
             {title: "<?php echo __('satis_tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
@@ -255,7 +255,7 @@
                     },
                     {
                         type: 'checkbox',
-                        value: false,
+                        value: true,
                         label: '<?php echo __('satir_kaydir','komtera'); ?>',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
@@ -389,7 +389,7 @@
                 rPPOptions: [100, 1000, 10000]
             },
             sortable: true,
-            wrap: false, hwrap: false,
+            wrap: true, hwrap: false, autoRow: true,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
             title: '<span style="font-size: 18px;"><b><?php echo __('firsatlar','komtera'); ?></b></span>',
             resizable: true,
@@ -401,6 +401,7 @@
                 showSummary: [true],
                 grandSummary: true,
                 collapsed: [false],
+                init: [false], // İlk yükleme için açık
                 title: [
                 "{0} ({1})",
                 "{0} - {1}"
@@ -429,6 +430,9 @@
                     { dataIndx: 'DURUM', value: ['Açık'] }
                 ]
             });
+            
+            // Tüm grupları açık olarak ayarla
+            grid.Group().expand();
         });
         grid.toggle();
 
