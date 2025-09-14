@@ -104,40 +104,11 @@ $theme="gray";
 <script src="pqgrid/jsZip-2.5.0/jszip.min.js"></script>
 <script src="pqgrid/js/base64.min.js"></script>
 <script src="pqgrid/js/FileSaver.js"></script>
-
-<style>
-    .pq-grid {
-        box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
-        margin-bottom: 12px;
-        font-family: Arial;
-        font-size: 12px;
-    }
-    .pq-toolbar button {
-        margin: 0px 5px;
-    }
-    button.delete_btn {
-        margin: -3px 0px;
-        height: 30px;
-    }
-    .pq-grid-row {
-        height: 30px !important;
-    }
-    .pq-grid .pq-grid-cell {
-        line-height: 30px !important;
-    }
-    pq-row-delete > .pq-grid-cell {
-        background-color: pink;
-    }
-    pq-grid-number-col {
-        padding: 5px 5px;
-    }
-</style>
 <script>
     function refreshDV() {
         grid.refreshDataAndView();
         //alert("yes");
     }
-
     function ExcelKaydet() {
         blob = grid.exportData({
             url: "export.php",
