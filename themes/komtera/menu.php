@@ -47,25 +47,29 @@ add_action('admin_menu', 'my_custom_admin_menus_for_roles');
 function firsatlar_cb()
 {
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=firsatlar';
-    $locale = get_locale(); // WordPress locale (tr_TR, en_US, etc.)
+    $locale = get_user_locale(); // Kullanıcının seçtiği locale (tr_TR, en_US, etc.)
     $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
     <div class="wrap">
         <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <label for="date1" style="margin-right: 10px;"><?php echo ($lang == 'tr') ? 'Başlangıç Tarihi:' : 'Start Date:'; ?></label>
-            <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>" 
-                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
-                   title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
-                   style="margin-right: 20px; padding: 5px;">
+            <label for="date1" style="margin-right: 10px;"><?php echo __('baslangic_tarihi', 'komtera'); ?>:</label>
+            <input type="text" id="date1" name="date1" class="datepicker"
+                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'mm/dd/yyyy'; ?>" 
+                   title="<?php echo __('tarih_formati', 'komtera'); ?>"
+                   style="margin-right: 20px; padding: 5px; width: 120px;">
             
-            <label for="date2" style="margin-right: 10px;"><?php echo ($lang == 'tr') ? 'Bitiş Tarihi:' : 'End Date:'; ?></label>
-            <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>" 
-                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
-                   title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
-                   style="margin-right: 20px; padding: 5px;">
+            <label for="date2" style="margin-right: 10px;"><?php echo __('bitis_tarihi', 'komtera'); ?>:</label>
+            <input type="text" id="date2" name="date2" class="datepicker"
+                   placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'mm/dd/yyyy'; ?>" 
+                   title="<?php echo __('tarih_formati', 'komtera'); ?>"
+                   style="margin-right: 20px; padding: 5px; width: 120px;">
             
-            <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo ($lang == 'tr') ? 'Getir' : 'Get'; ?></button>
+            <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo __('getir', 'komtera'); ?></button>
         </div>
+        
+        <!-- jQuery UI CSS -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
+        <script src="//code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
         <div style="position: relative; height: calc(100vh - 200px);">
             <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
@@ -77,120 +81,113 @@ function firsatlar_cb()
     </div>
 
     <script>
-        (function () {
-            const input1 = document.getElementById('date1');
-            const input2 = document.getElementById('date2');
+        jQuery(document).ready(function($) {
             const iframe = document.getElementById('erp_iframe');
             const base = "<?php echo esc_js($src); ?>";
             const locale = "<?php echo esc_js($locale); ?>"; // WordPress locale
             const lang = "<?php echo esc_js($lang); ?>"; // Dil kodu
-            
-            // Sayfanın HTML lang özelliğini WordPress locale'ine göre ayarla
-            document.documentElement.setAttribute('lang', locale);
-            
-            // Input'lara da WordPress locale'ini uygula
-            input1.setAttribute('lang', locale);
-            input2.setAttribute('lang', locale);
-            
-            // Date input'ların tarayıcı varsayılan formatını override et
             const isTurkish = locale.startsWith('tr');
+            
+            // jQuery UI Datepicker locale ayarları
             if (isTurkish) {
-                // Türkçe için gün.ay.yıl formatı
-                input1.setAttribute('data-format', 'dd.mm.yyyy');
-                input2.setAttribute('data-format', 'dd.mm.yyyy');
+                $.datepicker.regional['tr'] = {
+                    closeText: 'Kapat',
+                    prevText: '&#x3C;geri',
+                    nextText: 'ileri&#x3E;',
+                    currentText: 'bugün',
+                    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+                    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'],
+                    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+                    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+                    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+                    weekHeader: 'Hf',
+                    dateFormat: 'dd.mm.yy',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: ''
+                };
+                $.datepicker.setDefaults($.datepicker.regional['tr']);
             } else {
-                // İngilizce için ay/gün/yıl formatı
-                input1.setAttribute('data-format', 'mm/dd/yyyy');
-                input2.setAttribute('data-format', 'mm/dd/yyyy');
+                $.datepicker.setDefaults($.datepicker.regional['en']);
             }
             
-            // CSS ile date input'larının formatını ve görünümünü ayarla
-            const style = document.createElement('style');
-            style.textContent = `
-                input[type="date"]::-webkit-calendar-picker-indicator {
-                    background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>') no-repeat;
-                    background-size: 16px;
-                }
-                input[type="date"] {
-                    font-family: inherit;
-                    direction: ltr;
-                }
-                /* WordPress locale bazında format ayarları */
-                html[lang^="tr"] input[type="date"]::-webkit-datetime-edit-day-field:first-child,
-                html[lang^="tr"] input[type="date"]::-webkit-datetime-edit-month-field:nth-child(2),
-                html[lang^="tr"] input[type="date"]::-webkit-datetime-edit-year-field:last-child {
-                    /* Türkçe format: gün.ay.yıl */
-                }
-            `;
-            document.head.appendChild(style);
- 
-            // YYYY-MM-DD format helper (local time)
-            function fmt(d) {
-                const y = d.getFullYear();
-                const m = String(d.getMonth() + 1).padStart(2, '0');
-                const a = String(d.getDate()).padStart(2, '0');
-                return `${y}-${m}-${a}`;
-            }
-
-            // İlk gelişte: bugün ve 1 ay öncesi (daha önce seçilmemişse)
+            // Datepicker'ları başlat
+            $('#date1, #date2').datepicker({
+                dateFormat: isTurkish ? 'dd.mm.yy' : 'mm/dd/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: 'c-10:c+10'
+            });
+            
+            // Varsayılan tarihleri ayarla
             const today = new Date();
             const oneMonthAgo = new Date(today);
-            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // 1 ay öncesi
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
             
-            // Tarihleri localStorage'dan al (eğer daha önce seçilmişse)
-            const savedDate1 = localStorage.getItem('firsatlar_date1');
-            const savedDate2 = localStorage.getItem('firsatlar_date2');
+            // Kaydedilen tarihler varsa kullan
+            const savedDate1 = localStorage.getItem('firsatlar_date1_display');
+            const savedDate2 = localStorage.getItem('firsatlar_date2_display');
             
-            // Sadece boşsa veya geçersizse varsayılan değerleri ata
-            if (!input1.value && !savedDate1) {
-                input1.value = fmt(oneMonthAgo);
-            } else if (savedDate1) {
-                input1.value = savedDate1;
+            if (savedDate1) {
+                $('#date1').val(savedDate1);
+            } else {
+                $('#date1').datepicker('setDate', oneMonthAgo);
             }
             
-            if (!input2.value && !savedDate2) {
-                input2.value = fmt(today);
-            } else if (savedDate2) {
-                input2.value = savedDate2;
+            if (savedDate2) {
+                $('#date2').val(savedDate2);
+            } else {
+                $('#date2').datepicker('setDate', today);
             }
-
+            
             function loadIframe() {
-                const v1 = input1.value;
-                const v2 = input2.value;
-                if (!v1 || !v2) {
+                const date1Str = $('#date1').val();
+                const date2Str = $('#date2').val();
+                
+                if (!date1Str || !date2Str) {
                     const msg = lang === 'tr' ? 'Lütfen iki tarihi de seçin.' : 'Please select both dates.';
                     alert(msg);
                     return;
                 }
-                if (v1 > v2) {
+                
+                // Tarihleri Date objesine çevir
+                const date1 = $('#date1').datepicker('getDate');
+                const date2 = $('#date2').datepicker('getDate');
+                
+                if (date1 > date2) {
                     const msg = lang === 'tr' ? 'Başlangıç tarihi, bitiş tarihinden büyük olamaz.' : 'Start date cannot be greater than end date.';
                     alert(msg);
                     return;
                 }
                 
-                // Seçilen tarihleri localStorage'a kaydet
-                localStorage.setItem('firsatlar_date1', v1);
-                localStorage.setItem('firsatlar_date2', v2);
+                // Display formatını kaydet
+                localStorage.setItem('firsatlar_date1_display', date1Str);
+                localStorage.setItem('firsatlar_date2_display', date2Str);
                 
-                const url = `${base}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
+                // URL formatına çevir (YYYY-MM-DD)
+                const urlDate1 = date1.getFullYear() + '-' + 
+                    String(date1.getMonth() + 1).padStart(2, '0') + '-' + 
+                    String(date1.getDate()).padStart(2, '0');
+                const urlDate2 = date2.getFullYear() + '-' + 
+                    String(date2.getMonth() + 1).padStart(2, '0') + '-' + 
+                    String(date2.getDate()).padStart(2, '0');
+                
+                const url = `${base}&date1=${encodeURIComponent(urlDate1)}&date2=${encodeURIComponent(urlDate2)}`;
                 iframe.src = url;
             }
-
+            
             // İlk yüklemede otomatik getir
             loadIframe();
-
-            // Buton
-            document.getElementById('btnGetir').addEventListener('click', loadIframe);
-
-            // Enter ile tetikleme (tarih kutularındayken)
-            [input1, input2].forEach(el => {
-                el.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter') {
-                        loadIframe();
-                    }
-                });
+            
+            // Event listener'lar
+            $('#btnGetir').click(loadIframe);
+            $('#date1, #date2').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    loadIframe();
+                }
             });
-        })();
+        });
     </script>
     <?php
 }

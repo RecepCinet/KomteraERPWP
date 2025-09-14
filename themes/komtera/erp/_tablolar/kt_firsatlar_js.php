@@ -94,9 +94,9 @@
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('tarih','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "<?php echo __('son_degisiklik','komtera'); ?>", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "<?php echo __('bitis_tarihi','komtera'); ?>", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('tarih','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
+            {title: "<?php echo __('son_degisiklik','komtera'); ?>", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
+            {title: "<?php echo __('bitis_tarihi','komtera'); ?>", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
             {title: "BitisAY", hidden: false, editable: false, minWidth: 70, sortable: true, dataIndx: "BITIS_AY", filter: {
                     crules: [{condition: 'range'}]
                 }

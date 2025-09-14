@@ -52,19 +52,19 @@ function firsatlar_cb()
     ?>
     <div class="wrap">
         <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <label for="date1" style="margin-right: 10px;"><?php echo ($lang == 'tr') ? 'Başlangıç Tarihi:' : 'Start Date:'; ?></label>
+            <label for="date1" style="margin-right: 10px;"><?php echo __('baslangic_tarihi', 'komtera'); ?>:</label>
             <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>" 
                    placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
-                   title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
+                   title="<?php echo __('tarih_formati', 'komtera'); ?>"
                    style="margin-right: 20px; padding: 5px;">
             
-            <label for="date2" style="margin-right: 10px;"><?php echo ($lang == 'tr') ? 'Bitiş Tarihi:' : 'End Date:'; ?></label>
+            <label for="date2" style="margin-right: 10px;"><?php echo __('bitis_tarihi', 'komtera'); ?>:</label>
             <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>" 
                    placeholder="<?php echo ($lang == 'tr') ? 'gg.aa.yyyy' : 'dd.mm.yyyy'; ?>" 
-                   title="<?php echo ($lang == 'tr') ? 'Tarih formatı: gg.aa.yyyy' : 'Date format: dd.mm.yyyy'; ?>"
-                   style="margin-right: 20px; padyaptigini geri alding: 5px;">
+                   title="<?php echo __('tarih_formati', 'komtera'); ?>"
+                   style="margin-right: 20px; padding: 5px;">
             
-            <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo ($lang == 'tr') ? 'Getir' : 'Get'; ?></button>
+            <button id="btnGetir" style="padding: 6px 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer;"><?php echo __('getir', 'komtera'); ?></button>
         </div>
         <div style="position: relative; height: calc(100vh - 200px);">
             <iframe id="erp_iframe"
@@ -74,7 +74,7 @@ function firsatlar_cb()
                     style="border:1px solid #ccc; position:absolute; top:0; left:0;">
             </iframe>
         </div>
-    </div>
+    </div>LOCO
 
     <script>
         (function () {
