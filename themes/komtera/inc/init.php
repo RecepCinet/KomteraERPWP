@@ -66,39 +66,3 @@ add_filter('login_redirect', function ($redirect_to, $requested, $user) {
 add_filter('logout_redirect', function ($redirect_to, $requested, $user) {
     return wp_login_url(); // veya home_url('/')
 }, 10, 3);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
