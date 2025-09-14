@@ -21,8 +21,10 @@ if (!$found) {
 
 $date1= $_GET['date1'];
 $date2= $_GET['date2'];
-$sql = <<<DATA
-SELECT f.id,
+
+$brands = implode(',', get_user_meta(get_current_user_id(), 'my_brands', true) ?: []);
+
+$sql = "SELECT f.id,
            (SELECT
                top 1 CASE
                    WHEN t.SATIS_TIPI = '0' THEN 'İlk Satış'
@@ -37,14 +39,14 @@ f.BAYI_YETKILI_ISIM,
 f.FIRSAT_NO,
 stuff((
 select ','+convert(varchar(10),tu.SKU)
-from aa_erp_kt_teklifler_urunler tu LEFT JOIN aa_erp_kt_teklifler t ON tu.X_TEKLIF_NO = t.TEKLIF_NO where t.TEKLIF_TIPI = 1 AND f.FIRSAT_NO = t.X_FIRSAT_NO 
+from aa_erp_kt_teklifler_urunler tu LEFT JOIN aa_erp_kt_teklifler t ON tu.X_TEKLIF_NO = t.TEKLIF_NO where t.TEKLIF_TIPI = 1 AND f.FIRSAT_NO = t.X_FIRSAT_NO
 for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as skular,
     stuff((
     select ','+fl.cozum
-    from aa_erp_kt_teklifler_urunler tu 
-    LEFT JOIN aa_erp_kt_teklifler t ON tu.X_TEKLIF_NO = t.TEKLIF_NO 
+    from aa_erp_kt_teklifler_urunler tu
+    LEFT JOIN aa_erp_kt_teklifler t ON tu.X_TEKLIF_NO = t.TEKLIF_NO
     LEFT JOIN aa_erp_kt_fiyat_listesi fl ON tu.SKU = fl.SKU
-    where t.TEKLIF_TIPI = 1 AND f.FIRSAT_NO = t.X_FIRSAT_NO 
+    where t.TEKLIF_TIPI = 1 AND f.FIRSAT_NO = t.X_FIRSAT_NO
     for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as Cozumler,
 
 stuff((
@@ -85,13 +87,13 @@ f.PROJE_ADI,
 f.FIRSAT_ACIKLAMA,
 (select top 1 NOTLAR from aa_erp_kt_teklifler where X_FIRSAT_NO=f.FIRSAT_NO and TEKLIF_TIPI=1) as TNOTLAR
 FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE DURUM=0 AND SIL='0'
-AND CHARINDEX(f.MARKA, '" . implode(',', get_user_meta(get_current_user_id(), 'my_brands', true) ?: []) . "')>0
-AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
-DATA;
+AND CHARINDEX(f.MARKA, '$brands')>0
+AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)";
 
 if (!empty($date1) && !empty($date2)) {
     $sql .= " AND f.BASLANGIC_TARIHI >= '$date1' AND f.BASLANGIC_TARIHI <= '$date2'";
 }
+
 
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

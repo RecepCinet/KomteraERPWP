@@ -101,7 +101,7 @@
             
 //            {title: "Kayıdı Açan",
 //                render: function (ui) {
-//                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+//                    if (ui.cellData === '') {
 //                        return {style: {"background": "yellow"}};
 //                    }
 //                },

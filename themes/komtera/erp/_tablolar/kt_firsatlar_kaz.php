@@ -23,8 +23,7 @@ if (!$found) {
 }
 $date1= $_GET['date1'];
 $date2= $_GET['date2'];
-$dates="  BASLANGIC_TARIHI>='$date1' AND BASLANGIC_TARIHI<='$date2'";
-// where SIL<>'1' AND $dates ORDER BY BASLANGIC_TARIHI
+
 $sql = "SELECT f.id,
                        (SELECT
                top 1 CASE
@@ -62,9 +61,12 @@ f.MARKA,
 f.BAYI_ADI,
 f.BAYI_YETKILI_ISIM,
 f.MUSTERI_ADI
-FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE f.DURUM='1' AND f.SIL='0' and $dates
-AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
-";
+FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE f.DURUM='1' AND f.SIL='0'
+AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)";
+
+if (!empty($date1) && !empty($date2)) {
+    $sql .= " AND f.BASLANGIC_TARIHI >= '$date1' AND f.BASLANGIC_TARIHI <= '$date2'";
+}
 
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
