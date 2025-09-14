@@ -35,14 +35,14 @@
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "Status", hidden: true,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "Durum", hidden: true,editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
-                    if (ui.cellData === 'Open') {
+                    if (ui.cellData === 'Açık') {
                         return {style: {"background": "#ebebeb"}};
-                    } else if (ui.cellData === 'Won') {
+                    } else if (ui.cellData === 'Kazanıldı') {
                         return {style: {"background": "#b2f4ac"}};
-                    } else if (ui.cellData === 'Lost') {
+                    } else if (ui.cellData === 'Kaybedildi') {
                         return {style: {"background": "#f4acb8"}};
                     }
                 }
@@ -63,7 +63,7 @@
 
 
 
-            {title: "Opportunity",render: function (ui) {
+            {title: "Fırsat",render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
                     }
@@ -83,7 +83,7 @@
            
            
            
-            {title: "Proposal",render: function (ui) {
+            {title: "Teklif",render: function (ui) {
                     if (ui.rowData.TEKLIF_NO) {
                         return "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>"+ui.rowData.TEKLIF_NO+"</a>";
                     }
@@ -93,22 +93,22 @@
 
 
 
-            {title: "Sales Type", sortable: true, minWidth: 120, dataIndx: "SATIP",
+            {title: "Satış Tipi", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "Date", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "Tarih", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
            // {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "Brand", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
+            {title: "Marka", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "Dealer", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+            {title: "Bayi", editable: false, minWidth: 300, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "Customer", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+            {title: "Müşteri", editable: false, minWidth: 300, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
@@ -127,7 +127,7 @@
 //                    crules: [{condition: 'range'}],
 //                }
 //            },
-            {title: "Customer Representative",
+            {title: "Müşteri Temsilcisi",
                 render: function (ui) {
                     if (false) { // Removed user check
                         return {style: {"background": "yellow"}};
@@ -201,7 +201,7 @@
                 items: [
                     {
                         type: 'button',
-                        label: "Export",
+                        label: "Excel'e Aktar",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             ExcelKaydet();
@@ -210,7 +210,7 @@
                     {
                         type: 'checkbox',
                         value: false,
-                        label: 'Wrap Rows',
+                        label: 'Satır Kaydir',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -220,7 +220,7 @@
                     {
                     type: 'button',
                     icon: 'ui-icon-arrowreturn-1-s',
-                    label: 'Undo',                    
+                    label: 'Geri Al',                    
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'undo' });
@@ -229,7 +229,7 @@
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowrefresh-1-s',
-                    label: 'Redo',
+                    label: 'Yinele',
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'redo' });
@@ -237,21 +237,21 @@
                 },
                 {
                             type:'button',
-                            label: 'Clear Filter',
+                            label: 'Filtre Temizle',
                             listener: function(){
                                     this.reset({filter: true});
                             }
                     },
                         {
                             type:'button',
-                            label: 'Save Layout',
+                            label: 'Dizaynı Kaydet',
                             listener: function(){
                                     grid.saveState();
                             }
                     },
                         {
                             type:'button',
-                            label: 'Load Layout',
+                            label: 'Dizaynı Yükle',
                             listener: function(){
                                     grid.loadState({refresh: false});
                             }
@@ -269,8 +269,8 @@
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", {label: 'Undo' + ' (' + ui.num_undo + ')'});
-                $redo.button("option", {label: 'Redo' + ' (' + ui.num_redo + ')'});
+                $undo.button("option", {label: 'Geri Al' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: 'Yinele' + ' (' + ui.num_redo + ')'});
             },
             roundCorners: false,
             rowBorders: true,
@@ -328,7 +328,7 @@
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: 'Open Opportunities Main Proposals',
+            title: 'Açık Fırsatlar Ana Teklifler',
             resizable: true,
             summaryTitle: "",
             
