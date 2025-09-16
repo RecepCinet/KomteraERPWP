@@ -81,7 +81,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#d4edda'; this.style.borderColor='#28a745'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-plus-alt2" style="font-size: 28px; color: #28a745; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-plus-alt2" style="font-size: 24px; color: #28a745; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yeni_firsat', 'komtera'); ?></span>
                 </div>
 
@@ -118,7 +118,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         box-shadow: 0 2px 4px rgba(0,115,170,0.2);
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-unlock" style="font-size: 28px; color: white; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-unlock" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('acik_firsatlar', 'komtera'); ?></span>
                 </div>
 
@@ -134,7 +134,7 @@ function firsatlar_cb()
                         min-width: 90px;
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-media-document" style="font-size: 28px; color: #ff9800; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-media-document" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></span>
                 </div>
 
@@ -150,7 +150,7 @@ function firsatlar_cb()
                         min-width: 90px;
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-yes-alt" style="font-size: 28px; color: #4caf50; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-yes-alt" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kazanilan', 'komtera'); ?></span>
                 </div>
 
@@ -166,7 +166,7 @@ function firsatlar_cb()
                         min-width: 90px;
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-dismiss" style="font-size: 28px; color: #f44336; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-dismiss" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></span>
                 </div>
 
@@ -182,7 +182,7 @@ function firsatlar_cb()
                         min-width: 90px;
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-list-view" style="font-size: 28px; color: #9c27b0; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('tum_firsatlar', 'komtera'); ?></span>
                 </div>
 
@@ -198,7 +198,7 @@ function firsatlar_cb()
                         min-width: 90px;
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff5722'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-networking" style="font-size: 28px; color: #ff5722; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-networking" style="font-size: 24px; color: #ff5722; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yan_firsatlar', 'komtera'); ?></span>
                 </div>
             </div>
@@ -962,4 +962,362 @@ function musteriler_cb()    {
     </div>
     <?php
 }
-function ayarlar_cb()       { echo '<div class="wrap"><h1>Ayarlar</h1><p>Yapım aşamasında</p></div>'; }
+function ayarlar_cb()
+{
+    ?>
+    <div class="wrap">
+        <!-- Excel style toolbar -->
+        <div class="settings-toolbar" style="
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">
+            <!-- Settings Buttons -->
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+
+                <!-- Marka Bazlı Bayi Seviyeleri -->
+                <div class="settings-button" onclick="loadModule('marka_bazli_bayi_seviyeleri')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-building" style="font-size: 24px; color: #0073aa; margin-bottom: 10px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; height: 24px; line-height: 1.3; display: flex; align-items: center;">Marka Bazlı<br>Bayi Seviyeleri</span>
+                </div>
+
+                <!-- Etkinlikler -->
+                <div class="settings-button" onclick="loadModule('etkinlikler')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-calendar-alt" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Etkinlikler</span>
+                </div>
+
+                <!-- Kampanyalar -->
+                <div class="settings-button" onclick="loadModule('kampanyalar')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff9800';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-megaphone" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Kampanyalar</span>
+                </div>
+
+                <!-- Teklif Notu -->
+                <div class="settings-button" onclick="loadModule('teklif_notu')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-edit-page" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Teklif Notu</span>
+                </div>
+
+                <!-- Teklif Reklamı -->
+                <div class="settings-button" onclick="loadModule('teklif_reklami')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-format-image" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Teklif Reklamı</span>
+                </div>
+
+                <!-- Bankalar -->
+                <div class="settings-button" onclick="loadModule('bankalar')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e1f5fe'; this.style.borderColor='#2196f3';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-money-alt" style="font-size: 24px; color: #2196f3; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Bankalar</span>
+                </div>
+
+                <!-- Marka Satış Hedefleri -->
+                <div class="settings-button" onclick="loadModule('marka_satis_hedefleri')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#f1f8e9'; this.style.borderColor='#8bc34a';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-chart-line" style="font-size: 24px; color: #8bc34a; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Marka Satış<br>Hedefleri</span>
+                </div>
+
+                <!-- Onaylar (Kar Oranları) -->
+                <div class="settings-button" onclick="loadModule('onaylar_kar_oranlari')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#fce4ec'; this.style.borderColor='#e91e63';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-yes-alt" style="font-size: 24px; color: #e91e63; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Onaylar<br>(Kar Oranları)</span>
+                </div>
+
+                <!-- Onaylar (Diğer) -->
+                <div class="settings-button" onclick="loadModule('onaylar_diger')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-admin-generic" style="font-size: 24px; color: #795548; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Onaylar<br>(Diğer)</span>
+                </div>
+
+                <!-- Müşteri Temsilcisi Değiştir -->
+                <div class="settings-button" onclick="loadModule('musteri_temsilcisi_degistir')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#fff8e1'; this.style.borderColor='#ffc107';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-admin-users" style="font-size: 24px; color: #ffc107; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Müşteri Temsilcisi<br>Değiştir</span>
+                </div>
+
+                <!-- Sophos Cari Kod EDI Eşleşmesi -->
+                <div class="settings-button" onclick="loadModule('sophos_cari_kod_edi_eslesmesi')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-networking" style="font-size: 24px; color: #607d8b; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Sophos Cari Kod<br>EDI Eşleşmesi</span>
+                </div>
+
+                <!-- TL Faturalanmayacak Markalar -->
+                <div class="settings-button" onclick="loadModule('tl_faturalanmayacak_markalar')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-dismiss" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">TL Faturalanacak<br>Markalar</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area" style="position: relative; height: calc(100vh - 280px); padding: 40px; text-align: center; color: #666; font-size: 16px;">
+            Bir ayar modülü seçin
+        </div>
+    </div>
+
+    <script>
+        function loadModule(moduleName) {
+            var contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = '<div style="padding: 40px; text-align: center;"><div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #0073aa; border-radius: 50%; animation: spin 1s linear infinite;"></div><br><br>Yükleniyor...</div>';
+
+            // AJAX request to load module content
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', ajaxurl, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        contentArea.innerHTML = xhr.responseText;
+                    } else {
+                        contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;">Modül yüklenirken hata oluştu</div>';
+                    }
+                }
+            };
+
+            xhr.send('action=load_settings_module&module=' + encodeURIComponent(moduleName) + '&nonce=<?php echo wp_create_nonce("load_module_nonce"); ?>');
+        }
+    </script>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- Button Styles -->
+    <style>
+        .settings-button {
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            height: 60px; /* Sabit yükseklik */
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+        .settings-button:hover {
+            transform: translateY(-1px);
+        }
+        .settings-button .dashicons {
+            font-size: 24px !important;
+            margin-bottom: 10px !important;
+        }
+        .settings-button span:last-child {
+            font-size: 11px !important;
+            text-align: center !important;
+            font-weight: 500 !important;
+            color: #333 !important;
+            height: 24px !important;
+            line-height: 1.3 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        @media (max-width: 768px) {
+            .settings-button {
+                font-size: 9px !important;
+                padding: 8px !important;
+                margin-right: 8px !important;
+                margin-bottom: 8px;
+                height: 40px !important;
+            }
+            .settings-button .dashicons {
+                font-size: 20px !important;
+                margin-bottom: 8px !important;
+            }
+        }
+    </style>
+    <?php
+}
+
+// AJAX handler for loading settings modules
+add_action('wp_ajax_load_settings_module', 'handle_load_settings_module');
+add_action('wp_ajax_nopriv_load_settings_module', 'handle_load_settings_module');
+
+function handle_load_settings_module() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'load_module_nonce')) {
+        wp_die('Güvenlik hatası');
+    }
+
+    $module = sanitize_text_field($_POST['module']);
+    $allowed_mods = [
+        'marka_bazli_bayi_seviyeleri',
+        'etkinlikler',
+        'kampanyalar',
+        'teklif_notu',
+        'teklif_reklami',
+        'bankalar',
+        'marka_satis_hedefleri',
+        'onaylar_kar_oranlari',
+        'onaylar_diger',
+        'musteri_temsilcisi_degistir',
+        'sophos_cari_kod_edi_eslesmesi',
+        'tl_faturalanmayacak_markalar'
+    ];
+
+    if (in_array($module, $allowed_mods)) {
+        $file_path = get_stylesheet_directory() . '/erp/mod/' . $module . '.php';
+        if (file_exists($file_path)) {
+            ob_start();
+            include $file_path;
+            $content = ob_get_clean();
+            echo $content;
+        } else {
+            echo '<div style="padding: 40px; text-align: center; color: #666;">Modül bulunamadı: ' . esc_html($module) . '</div>';
+        }
+    } else {
+        echo '<div style="padding: 40px; text-align: center; color: #666;">Geçersiz modül</div>';
+    }
+
+    wp_die();
+}
