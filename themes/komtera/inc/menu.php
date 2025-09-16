@@ -422,11 +422,11 @@ function yenilemeler_cb() {
     $base_src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=';
     ?>
     <div class="wrap">
-        <p>
-            <button type="button" onclick="changeIframe('yenilemeler')">Yenilemeler</button>
-            <button type="button" onclick="changeIframe('yenilemeler_liste')">Yenilemeler Liste</button>
-            <button type="button" onclick="changeIframe('60gun_liste')">60 Gün Liste</button>
-        </p>
+        <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
+            <button class="table-btn active" data-table="yenilemeler" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-update" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span>Yenilemeler</button>
+            <button class="table-btn" data-table="yenilemeler_liste" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-list-view" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span>Yenilemeler Liste</button>
+            <button class="table-btn" data-table="60gun_liste" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-calendar-alt" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span>60 Gün Liste</button>
+        </div>
         <div style="position: relative; height: calc(100vh - 180px);">
             <iframe id="erp_iframe"
                     src="<?php echo esc_url($base_src . 'yenilemeler'); ?>"
@@ -437,10 +437,28 @@ function yenilemeler_cb() {
         </div>
     </div>
     <script>
-        function changeIframe(target) {
-            var iframe = document.getElementById('erp_iframe');
-            iframe.src = "<?php echo esc_url($base_src); ?>" + target;
-        }
+        (function() {
+            const iframe = document.getElementById('erp_iframe');
+            const baseDir = "<?php echo esc_js($base_src); ?>";
+            const buttons = document.querySelectorAll('.table-btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const table = this.getAttribute('data-table');
+
+                    // Update button states
+                    buttons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.style.background = '#6c757d';
+                    });
+                    this.classList.add('active');
+                    this.style.background = '#0073aa';
+
+                    // Update iframe source
+                    iframe.src = baseDir + table;
+                });
+            });
+        })();
     </script>
     <?php
 }

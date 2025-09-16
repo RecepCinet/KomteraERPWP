@@ -151,7 +151,7 @@ $(function () {
         stripeRows: true,
         scrollModel: {autoFit: false},            
         showHeader: true,
-        showTitle: false,
+        showTitle: true,
         //groupModel: {on: true}, // , dataIndx: ["BAYI"]
         //showToolbar: true,
         //showTop: true,        

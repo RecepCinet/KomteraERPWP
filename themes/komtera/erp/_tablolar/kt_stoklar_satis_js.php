@@ -22,7 +22,7 @@ $(function () {
 //                    });
 //            }
 //        },
-        {title: "<?php echo __('brand','komtera'); ?>", editable: false, minWidth: 140, sortable: true, dataIndx: "MARKA",filter: { 
+        {title: "Marka", editable: false, minWidth: 140, sortable: true, dataIndx: "MARKA",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
@@ -38,15 +38,15 @@ $(function () {
                     return "<a href='#' onclick='SerialGoster(\"" + ui.rowData.SKU + "\")'>" + ui.rowData.SN + "</a>";
             },
         },
-        {title: "<?php echo __('description','komtera'); ?>", editable: false, minWidth: 369, sortable: true, dataIndx: "ACIKLAMA",filter: { 
+        {title: "Açıklama", editable: false, minWidth: 369, sortable: true, dataIndx: "ACIKLAMA",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "<?php echo __('group','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "GRUP",filter: { 
+        {title: "Grup", editable: false, minWidth: 110, sortable: true, dataIndx: "GRUP",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-        {title: "<?php echo __('actual','komtera'); ?>",format: "#", dataType: "integer", align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "FIILI_STOK"},
+        {title: "Fiili Stok",format: "#", dataType: "integer", align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "FIILI_STOK"},
     ];
     var dataModelSS = {
         location: "remote",
@@ -78,7 +78,7 @@ $(function () {
                   
                     {
                        type: 'button',
-                       label: "Export",
+                       label: "Dışa Aktar",
                        icon: 'ui-icon-arrowthickstop-1-s',
                        listener: function () {
                            ExcelKaydet();
@@ -162,7 +162,7 @@ $(function () {
         rowHt: 21,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: 'LOGO - Satış Stokları',
+        title: '<span style="font-size: 18px;"><b>Stoklar</b></span>',
         resizable: true,
 //        create: function () {                              
 //                        this.loadState({refresh: false});
