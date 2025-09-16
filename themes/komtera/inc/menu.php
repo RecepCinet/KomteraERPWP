@@ -52,29 +52,143 @@ function firsatlar_cb()
     $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
     <div class="wrap">
-        <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <label for="date1" style="margin-right: 10px;"><?php echo __('firsat_baslangic_tarihi', 'komtera'); ?>:</label>
-            <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>"
-                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
-            
-            <label for="date2" style="margin-right: 10px; line-height: 34px; vertical-align: top;">-</label>
-            <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>"
-                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
-            
-            <!-- Fırsat Türü Butonları -->
-            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-unlock" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-media-document" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-yes-alt" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kazanilan', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-dismiss" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-list-view" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('tum_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-networking" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('yan_firsatlar', 'komtera'); ?></button>
+        <!-- Excel style toolbar -->
+        <div class="opportunities-toolbar" style="
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">
+            <!-- Tarih Seçimi ve Fırsat Türü Butonları - Excel toolbar tarzı -->
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <!-- Tarih Seçimi - Sol tarafta -->
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                ">
+                    <span class="dashicons dashicons-calendar-alt" style="font-size: 20px; color: #0073aa;"></span>
+                    <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>"
+                           style="padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; width: 130px;">
+                    <span style="color: #666; font-weight: bold;">-</span>
+                    <input type="date" id="date2" name="date2" lang="<?php echo esc_attr($lang); ?>"
+                           style="padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; width: 130px;">
+                </div>
+
+                <!-- Fırsat Türü Butonları -->
+                <div class="opportunity-button table-btn active" data-table="firsatlar" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: #0073aa;
+                    border: 2px solid #0073aa;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-unlock" style="font-size: 28px; color: white; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('acik_firsatlar', 'komtera'); ?></span>
+                </div>
+
+                <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-media-document" style="font-size: 28px; color: #ff9800; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></span>
+                </div>
+
+                <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-yes-alt" style="font-size: 28px; color: #4caf50; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kazanilan', 'komtera'); ?></span>
+                </div>
+
+                <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-dismiss" style="font-size: 28px; color: #f44336; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></span>
+                </div>
+
+                <div class="opportunity-button table-btn" data-table="firsatlar2" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-list-view" style="font-size: 28px; color: #9c27b0; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('tum_firsatlar', 'komtera'); ?></span>
+                </div>
+
+                <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff5722'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-networking" style="font-size: 28px; color: #ff5722; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yan_firsatlar', 'komtera'); ?></span>
+                </div>
+            </div>
         </div>
-        <div style="position: relative; height: calc(100vh - 180px);">
-        <iframe id="erp_iframe"
+
+        <!-- Iframe container -->
+        <div style="position: relative; height: calc(100vh - 280px);">
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
-                    style="border:1px solid #ccc; position:absolute; top:0; left:0;">
+                    style="border: 1px solid #ccc; border-radius: 4px; position: absolute; top: 0; left: 0;">
             </iframe>
         </div>
     </div>
@@ -172,14 +286,40 @@ function firsatlar_cb()
                     const tableName = this.getAttribute('data-table');
                     const v1 = input1.value;
                     const v2 = input2.value;
-                    
+
                     // Aktif buton stilini değiştir
                     document.querySelectorAll('.table-btn').forEach(function(b) {
                         b.classList.remove('active');
-                        b.style.background = '#6c757d';
+                        b.style.border = '1px solid #ccc';
+                        b.style.background = 'white';
+                        b.style.boxShadow = 'none';
+                        // İkon ve yazı rengini sıfırla - her butonun orijinal rengine döndür
+                        const spans = b.querySelectorAll('span');
+                        if (spans.length >= 2) {
+                            // İkonun orijinal rengini data attribute'tan al veya table'a göre belirle
+                            const tableName = b.getAttribute('data-table');
+                            let originalColor = '#333';
+                            if (tableName === 'firsatlar') originalColor = '#0073aa';
+                            else if (tableName === 'firsatlar_tek') originalColor = '#ff9800';
+                            else if (tableName === 'firsatlar_kaz') originalColor = '#4caf50';
+                            else if (tableName === 'firsatlar_kay') originalColor = '#f44336';
+                            else if (tableName === 'firsatlar2') originalColor = '#9c27b0';
+                            else if (tableName === 'firsatlar_yanfir') originalColor = '#ff5722';
+
+                            spans[0].style.color = originalColor; // İkon
+                            spans[1].style.color = '#333'; // Yazı
+                        }
                     });
                     this.classList.add('active');
+                    this.style.border = '2px solid #0073aa';
                     this.style.background = '#0073aa';
+                    this.style.boxShadow = '0 2px 4px rgba(0,115,170,0.2)';
+                    // İkon ve yazı rengini beyaz yap
+                    const spans = this.querySelectorAll('span');
+                    if (spans.length >= 2) {
+                        spans[0].style.color = 'white'; // İkon
+                        spans[1].style.color = 'white'; // Yazı
+                    }
                     
                     // iframe src'sini güncelle
                     let newSrc = `${baseDir}?t=${tableName}`;
@@ -399,8 +539,276 @@ function poc_cb()           {
     </div>
     <?php
 }
-function raporlar_cb()      { echo '<div class="wrap"><h1>Raporlar</h1><p>Yapım aşamasında</p></div>'; }
-function raporlar_yonetim_cb(){ echo '<div class="wrap"><h1>Raporlar Yönetim</h1><p>Yapım aşamasında</p></div>'; }
+function raporlar_cb() {
+    ?>
+    <div class="wrap">
+        <!-- Excel style toolbar -->
+        <div class="reports-toolbar" style="
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">
+            <div class="report-button" onclick="loadReport('satis-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-chart-bar" style="font-size: 24px; color: #0073aa; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Satış Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('musteri-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-groups" style="font-size: 24px; color: #28a745; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Müşteri Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('gelir-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-money-alt" style="font-size: 24px; color: #ffc107; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Gelir Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('performans-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-awards" style="font-size: 24px; color: #dc3545; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Performans Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('stok-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-admin-page" style="font-size: 24px; color: #6f42c1; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Stok Raporu</span>
+            </div>
+        </div>
+
+        <!-- Iframe container -->
+        <div style="position: relative; height: calc(100vh - 280px); margin-top: 20px;">
+            <iframe id="report_iframe"
+                    src=""
+                    width="100%"
+                    height="100%"
+                    style="border: 1px solid #ccc; border-radius: 4px; display: none;">
+            </iframe>
+            <div id="report-placeholder" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                background: #f8f9fa;
+                border: 2px dashed #dee2e6;
+                border-radius: 4px;
+                color: #6c757d;
+                font-size: 16px;
+            ">
+                Bir rapor seçin
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadReport(reportType) {
+            var iframe = document.getElementById('report_iframe');
+            var placeholder = document.getElementById('report-placeholder');
+
+            // Placeholder'ı gizle, iframe'i göster
+            placeholder.style.display = 'none';
+            iframe.style.display = 'block';
+
+            // URL'yi burada güncelleyeceğiz - şimdilik placeholder
+            iframe.src = 'data:text/html,<html><body style="font-family:Arial;padding:40px;text-align:center;"><h2>' + reportType + '</h2><p>Rapor yükleniyor...</p></body></html>';
+        }
+    </script>
+    <?php
+}
+function raporlar_yonetim_cb() {
+    ?>
+    <div class="wrap">
+        <!-- Excel style toolbar -->
+        <div class="reports-toolbar" style="
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">
+            <div class="report-button" onclick="loadReport('satis-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-chart-bar" style="font-size: 24px; color: #0073aa; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Satış Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('musteri-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-groups" style="font-size: 24px; color: #28a745; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Müşteri Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('gelir-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-money-alt" style="font-size: 24px; color: #ffc107; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Gelir Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('performans-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-awards" style="font-size: 24px; color: #dc3545; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Performans Raporu</span>
+            </div>
+
+            <div class="report-button" onclick="loadReport('stok-raporu')" style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                cursor: pointer;
+                min-width: 80px;
+                transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='white'">
+                <span class="dashicons dashicons-admin-page" style="font-size: 24px; color: #6f42c1; margin-bottom: 5px;"></span>
+                <span style="font-size: 11px; text-align: center; font-weight: 500;">Stok Raporu</span>
+            </div>
+        </div>
+
+        <!-- Iframe container -->
+        <div style="position: relative; height: calc(100vh - 280px); margin-top: 20px;">
+            <iframe id="report_iframe"
+                    src=""
+                    width="100%"
+                    height="100%"
+                    style="border: 1px solid #ccc; border-radius: 4px; display: none;">
+            </iframe>
+            <div id="report-placeholder" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                background: #f8f9fa;
+                border: 2px dashed #dee2e6;
+                border-radius: 4px;
+                color: #6c757d;
+                font-size: 16px;
+            ">
+                Bir rapor seçin
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadReport(reportType) {
+            var iframe = document.getElementById('report_iframe');
+            var placeholder = document.getElementById('report-placeholder');
+
+            // Placeholder'ı gizle, iframe'i göster
+            placeholder.style.display = 'none';
+            iframe.style.display = 'block';
+
+            // URL'yi burada güncelleyeceğiz - şimdilik placeholder
+            iframe.src = 'data:text/html,<html><body style="font-family:Arial;padding:40px;text-align:center;"><h2>' + reportType + '</h2><p>Rapor yükleniyor...</p></body></html>';
+        }
+    </script>
+    <?php
+}
 function araclar_cb()       { echo '<div class="wrap"><h1>Araçlar</h1><p>Yapım aşamasında</p></div>'; }
 function fiyat_listesi_cb() {
     //Ticket: Marka popup olacak, ve marka secilince o marka listesi gelecek!
