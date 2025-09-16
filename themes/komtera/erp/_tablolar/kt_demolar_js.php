@@ -1,7 +1,3 @@
-<?PHP
-$date1= $_GET['date1'];
-$date2= $_GET['date2'];
-?>
 <script>
 var grid;
 
@@ -26,12 +22,12 @@ $(function () {
         }
 
     var colM = [
-            {title: "<?php echo __('status','komtera'); ?>", editable: false, minWidth: 210, sortable: true, dataIndx: "DEMO_DURUM_TEXT",filter: { 
+            {title: "Durum", editable: false, minWidth: 210, sortable: true, dataIndx: "DEMO_DURUM_TEXT",filter: { 
                         crules: [{condition: 'range',value: ['Demo Sevk Bekleniyor','Demo Sevk Edildi','Irsaliye No Bekleniyor','Elden Teslim Bekleniyor','Elden Teslim Edildi','Demo Kontrol Edildi/Kapatıldı']}]
                     }
             },
             {title: "Durum", hidden: true, editable: false, minWidth: 50, sortable: true, dataIndx: "DEMO_DURUM"},
-            {title: "<?php echo __('day','komtera'); ?>",align: "center", editable: false, minWidth: 60, dataType:"float", sortable: true, dataIndx: "gun"},
+            {title: "Gün",align: "center", editable: false, minWidth: 60, dataType:"float", sortable: true, dataIndx: "gun"},
             {title: "Demo",style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 80, sortable: false,
                 render: function (ui) {
                         return "<a href='#' class='demo_ac'>#" + ui.rowData.id + "</a>";
@@ -45,7 +41,7 @@ $(function () {
                     });
                 }
             },
-            {title: "<?php echo __('waybill_no','komtera'); ?>",style: {'text-color': '#dd0000'},dataIndx: "IRSALIYE_NO", align: "center", editable: false, minWidth: 120, sortable: false
+            {title: "İrsaliye No",style: {'text-color': '#dd0000'},dataIndx: "IRSALIYE_NO", align: "center", editable: false, minWidth: 120, sortable: false
                 ,render: function (ui) {
                     if (ui.cellData=="!") {
                         return {style: {'background': '#FFCCCC'}, text: "Irsaliye No Bekleniyor"};
@@ -110,7 +106,7 @@ $(function () {
         dataType: "JSON",
         method: "GET",
         recIndx: "id",
-        url: "_tablolar/kt_demolar.php?dbname=LKS&date1=<?PHP echo $date1; ?>&date2=<?PHP echo $date2; ?>",
+        url: "_tablolar/kt_demolar.php?dbname=LKS",
         getData: function (response) {
                     return { data: response.data };
         }
@@ -211,7 +207,7 @@ $(function () {
         sortable: true,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: 'Demo Listesi',
+        title: '<span style="font-size: 18px;"><b>Demolar</b></span>',
         resizable: true,
         rowHt: 23,
 //        create: function () {

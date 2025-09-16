@@ -64,11 +64,11 @@
 
         var colM = [
 //            {title: "Durum",style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 80, sortable: false,dataIndx: "SIPARIS_DURUM"},
-            {title: "<?php echo __('statu','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "SIPARIS_DURUM_YAZI", filter: {
+            {title: "Statü", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "SIPARIS_DURUM_YAZI", filter: {
                     crules: [{condition: 'range', value: ['Aktif', 'Pasif', 'Açık']}]
                 }
             },
-            {title: "<?php echo __('durum','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "SIPARIS_DURUM_ALT_YAZI", filter: {
+            {title: "Durum", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "SIPARIS_DURUM_ALT_YAZI", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
@@ -80,7 +80,7 @@
 //    crules: [{condition: 'range'}]
 //    }
 //    },
-            {title: "<?php echo __('teklif_no','komtera'); ?>", exportRender: false, style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 80, sortable: true, dataIndx: "X_TEKLIF_NO", filter: {
+            {title: "Teklif No", exportRender: false, style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 80, sortable: true, dataIndx: "X_TEKLIF_NO", filter: {
                     crules: [{condition: 'contain'}]
                 },
                 render: function (ui) {
@@ -99,7 +99,7 @@
                             });
                 }
             },
-            {title: "<?php echo __('siparis_no','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "SIPARIS_NO", filter: {
+            {title: "Sipariş No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "SIPARIS_NO", filter: {
                     crules: [{condition: 'contain'}] //,value: ['Açık']
                 },
                 render: function (ui) {
@@ -118,21 +118,21 @@
                             });
                 }
             },
-            {title: "<?php echo __('satis_tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
+            {title: "Satış Tipi", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('fatura_tarihi','komtera'); ?>",dataType: "date", format: 'dd.mm.yy', filter: {
+            {title: "Fatura Tarihi",dataType: "date", format: 'dd.mm.yy', filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 90, sortable: true, dataIndx: "FATTARIHI"},
-            {title: "<?php echo __('skular','komtera'); ?>", filter: {
+            {title: "SKU'lar", filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 90, sortable: true, dataIndx: "skular"},
-            {title: "<?php echo __('serialler','komtera'); ?>", filter: {
+            {title: "Seriller", filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 140, sortable: true, dataIndx: "lisanslar"},
-            {title: "<?php echo __('vade','komtera'); ?>", align: "center", hidden: false, editable: false, minWidth: 50, sortable: true, dataIndx: "VADE"},
+            {title: "Vade", align: "center", hidden: false, editable: false, minWidth: 50, sortable: true, dataIndx: "VADE"},
             {title: "", render: function (ui) {
                     if (ui.rowData.id > 0) {
                         if (ui.rowData.SIPARIS_DURUM_ALT === "21") {
@@ -148,7 +148,7 @@
                         return "";
                     }
                 }, align: "center", hidden: false, editable: false, minWidth: 50, sortable: true, dataIndx: "SIPARIS_DURUM_ALT"},
-            {title: "<?php echo __('finans','komtera'); ?>", hidden: false, editable: false, minWidth: 50, sortable: false, dataIndx: "id",
+            {title: "Finans", hidden: false, editable: false, minWidth: 50, sortable: false, dataIndx: "id",
                 render: function (ui) {
                     if (ui.rowData.id > 0) {
                         return "<a href='#' title='Pasif Yap' onclick='Komut(-1,0,\"" + ui.rowData.SIPARIS_NO + "\")'><span class='ui-icon ui-icon-locked'></span></a> " +
@@ -157,7 +157,7 @@
                         return "";
                     }
                 }},
-            {title: "<?php echo __('ozel_kur','komtera'); ?>", render: function (ui) {
+            {title: "Özel Kur", render: function (ui) {
                     if (ui.rowData.id > 0) {
                         if (ui.rowData.VADE === 'PEŞİN' || ui.rowData.VADE === 'KKART') {
                             if (ui.rowData.OZEL_KUR > 0) {
@@ -178,44 +178,54 @@
 //                        crules: [{condition: 'range'}]
 //                    }
 //            },
-            {title: "<?php echo __('ozel_kur','komtera'); ?>",exportRender: true,dataType: "float", format: "#.###,00", hidden: true, editable: false, minWidth: 60, sortable: true, dataIndx: "OZEL_KUR"},
-            {title: "<?php echo __('marka','komtera'); ?>", filter: {
+            {title: "Özel Kur",exportRender: true,dataType: "float", format: "#.###,00", hidden: true, editable: false, minWidth: 60, sortable: true, dataIndx: "OZEL_KUR"},
+            {title: "Marka", filter: {
                     crules: [{condition: 'range'}]
                 }, hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA"},
-            {title: "<?php echo __('toplam','komtera'); ?>",exportRender: true,dataType: "float", align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: true, dataIndx: "TOPLAM"},
-            {title: "<?php echo __('para_birimi','komtera'); ?>", align: "right", hidden: false, editable: false, minWidth: 40, sortable: true, dataIndx: "PARA_BIRIMI"},
-            {title: "<?php echo __('toplam','komtera'); ?>", summary: {type: "sum", edit: true}, align: "right", exportRender: true,dataType: "float",format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: true, dataIndx: "DLR_TUTAR"},
+            {title: "Toplam",exportRender: true,dataType: "float", align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: true, dataIndx: "TOPLAM"},
+            {title: "Para Birimi", align: "right", hidden: false, editable: false, minWidth: 40, sortable: true, dataIndx: "PARA_BIRIMI"},
+            {title: "Toplam", summary: {type: "sum", edit: true}, align: "right", exportRender: true,dataType: "float",format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: true, dataIndx: "DLR_TUTAR"},
             {title: "ID", hidden: true, editable: false, minWidth: 110, sortable: true, dataIndx: "id", filter: {
                     crules: [{condition: 'contain'}]
                 },
             },
-            {title: "<?php echo __('musteri_temsilcisi','komtera'); ?>", render: function (ui) {
-                    if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
+            {title: "Müşteri Temsilcisi", render: function (ui) {
+                    if (false) {
                         return {style: {"background": "yellow"}};
                     }
                 }, editable: false, minWidth: 120, sortable: true, dataIndx: "MUSTERI_TEMSILCISI", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('siparis_tarihi','komtera'); ?>", minWidth: 80, dataIndx: "CD", dataType: "date", format: 'dd.mm.yy'},
-            {title: "<?php echo __('siparis_saati','komtera'); ?>", minWidth: 52, dataIndx: "CT", dataType: "date", format: 'dd.mm.yy H:i:s'},
-            {title: "<?php echo __('bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+            {title: "Sipariş Tarihi", minWidth: 80, dataIndx: "CD", dataType: "date", format: 'dd.mm.yy'},
+            {title: "Sipariş Saati", minWidth: 52, dataIndx: "CT", dataType: "date", format: 'dd.mm.yy H:i:s'},
+            {title: "Bayi", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('musteri','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+            {title: "Müşteri", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
             {title: "K", minWidth: 80, dataIndx: "KARGO_GONDERI_NO"},
-            {title: "<?php echo __('kargo_durum','komtera'); ?>", minWidth: 180, dataIndx: "KARGO_DURUM"},
+            {title: "Kargo Durum", minWidth: 180, dataIndx: "KARGO_DURUM"},
         ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const date1 = urlParams.get('date1') || '';
+        const date2 = urlParams.get('date2') || '';
+
+        // URL'yi tarih parametreleriyle oluştur
+        let dataUrl = "_tablolar/kt_siparisler.php?dbname=LKS";
+        if (date1) dataUrl += "&date1=" + encodeURIComponent(date1);
+        if (date2) dataUrl += "&date2=" + encodeURIComponent(date2);
+
         var dataModelSS = {
             location: "remote",
             dataType: "JSON",
             method: "GET",
             recIndx: "id",
-            url: "_tablolar/kt_siparisler.php?dbname=LKS&date1=<?PHP echo $date1; ?>&date2=<?PHP echo $date2; ?>",
+            url: dataUrl,
             getData: function (response) {
                 return {data: response.data};
             }
@@ -240,7 +250,7 @@
 
                     {
                         type: 'button',
-                        label: "<?php echo __('excel_kaydet','komtera'); ?>",
+                        label: "Excel Kaydet",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             ExcelKaydet();
@@ -250,7 +260,7 @@
                     {
                         type: 'checkbox',
                         value: false,
-                        label: '<?php echo __('satir_kaydir','komtera'); ?>',
+                        label: 'Satır Kaydır',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -292,7 +302,7 @@
 //                    },
                     {
                         type: 'button',
-                        label: '<?php echo __('filtre_temizle','komtera'); ?>',
+                        label: 'Filtre Temizle',
                         listener: function () {
                             this.reset({filter: true});
                         }
@@ -396,7 +406,7 @@
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: 'Siparişler',
+            title: '<span style="font-size: 18px;"><b>Siparişler</b></span>',
             resizable: false,
             summaryTitle: "",
             freezeCols: 4,

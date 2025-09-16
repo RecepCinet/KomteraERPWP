@@ -53,7 +53,7 @@ function firsatlar_cb()
     ?>
     <div class="wrap">
         <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <label for="date1" style="margin-right: 10px;"><?php echo __('tarih', 'komtera'); ?>:</label>
+            <label for="date1" style="margin-right: 10px;"><?php echo __('firsat_baslangic_tarihi', 'komtera'); ?>:</label>
             <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>"
                    style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
             
@@ -62,14 +62,14 @@ function firsatlar_cb()
                    style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
             
             <!-- Fırsat Türü Butonları -->
-            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-unlock" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-media-document" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-yes-alt" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kazanilan', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-dismiss" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-list-view" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('tum_firsatlar', 'komtera'); ?></button>
-            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; height: 34px; padding: 0 12px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-networking" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('yan_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn active" data-table="firsatlar" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-unlock" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_tek" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-media-document" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('acik_ana_teklifler', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kaz" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-yes-alt" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kazanilan', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_kay" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-dismiss" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar2" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-list-view" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('tum_firsatlar', 'komtera'); ?></button>
+            <button class="table-btn" data-table="firsatlar_yanfir" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-networking" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span><?php echo __('yan_firsatlar', 'komtera'); ?></button>
         </div>
-        <div style="position: relative; height: calc(100vh - 200px);">
+        <div style="position: relative; height: calc(100vh - 180px);">
         <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
@@ -223,11 +223,25 @@ function firsatlar_cb()
 }
 function siparisler_cb()
 {
+    // Default table, JavaScript will update this dynamically
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=siparisler';
+    $locale = get_user_locale(); // Kullanıcının seçtiği locale (tr_TR, en_US, etc.)
+    $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
     <div class="wrap">
-        <div style="position: relative; height: calc(100vh - 140px);">
-            <iframe id="erp_iframe"
+        <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
+            <label for="date1_sip" style="margin-right: 10px;"><?php echo __('siparis_olusturma_tarihi', 'komtera'); ?>:</label>
+            <input type="date" id="date1_sip" name="date1_sip" lang="<?php echo esc_attr($lang); ?>"
+                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
+
+            <label for="date2_sip" style="margin-right: 10px; line-height: 34px; vertical-align: top;">-</label>
+            <input type="date" id="date2_sip" name="date2_sip" lang="<?php echo esc_attr($lang); ?>"
+                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
+
+            <button type="button" id="getir_btn_sip" style="height: 34px; padding: 0 15px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; vertical-align: top;">Getir</button>
+        </div>
+        <div style="position: relative; height: calc(100vh - 200px);">
+        <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
@@ -235,6 +249,108 @@ function siparisler_cb()
             </iframe>
         </div>
     </div>
+    <script>
+        (function () {
+            const input1 = document.getElementById('date1_sip');
+            const input2 = document.getElementById('date2_sip');
+            const iframe = document.getElementById('erp_iframe');
+            const baseDir = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php";
+            const defaultTable = "siparisler"; // Varsayılan tablo
+            const locale = "<?php echo esc_js($locale); ?>"; // WordPress locale
+            const lang = "<?php echo esc_js($lang); ?>"; // Dil kodu
+
+            // Sayfanın dilini ayarla (takvim için)
+            if (document.documentElement.lang !== locale) {
+                document.documentElement.lang = locale;
+            }
+
+            // Input'lara da dil ayarını uygula ve format ayarla
+            input1.setAttribute('lang', locale);
+            input2.setAttribute('lang', locale);
+
+            // CSS ile date input'larının formatını ayarla
+            const style = document.createElement('style');
+            style.textContent = `
+                input[type="date"]::-webkit-calendar-picker-indicator {
+                    background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>') no-repeat;
+                    background-size: 16px;
+                }
+                input[type="date"] {
+                    font-family: inherit;
+                    direction: ${lang === 'tr' ? 'ltr' : 'ltr'};
+                }
+            `;
+            document.head.appendChild(style);
+
+            // YYYY-MM-DD format helper (local time)
+            function fmt(d) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const a = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${a}`;
+            }
+
+            // İlk gelişte: bugün ve 1 ay öncesi (daha önce seçilmemişse)
+            const today = new Date();
+            const oneMonthAgo = new Date(today);
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // 1 ay öncesi
+
+            // Tarihleri localStorage'dan al (eğer daha önce seçilmişse)
+            const savedDate1 = localStorage.getItem('siparisler_date1');
+            const savedDate2 = localStorage.getItem('siparisler_date2');
+
+            // Sadece boşsa veya geçersizse varsayılan değerleri ata
+            if (!input1.value && !savedDate1) {
+                input1.value = fmt(oneMonthAgo);
+            } else if (savedDate1) {
+                input1.value = savedDate1;
+            }
+            if (!input2.value && !savedDate2) {
+                input2.value = fmt(today);
+            } else if (savedDate2) {
+                input2.value = savedDate2;
+            }
+
+            function loadIframe() {
+                const v1 = input1.value;
+                const v2 = input2.value;
+                if (!v1 || !v2) {
+                    const msg = lang === 'tr' ? 'Lütfen iki tarihi de seçin.' : 'Please select both dates.';
+                    alert(msg);
+                    return;
+                }
+                if (v1 > v2) {
+                    const msg = lang === 'tr' ? 'Başlangıç tarihi, bitiş tarihinden büyük olamaz.' : 'Start date cannot be greater than end date.';
+                    alert(msg);
+                    return;
+                }
+
+                // Seçilen tarihleri localStorage'a kaydet
+                localStorage.setItem('siparisler_date1', v1);
+                localStorage.setItem('siparisler_date2', v2);
+
+                const url = `${baseDir}?t=${defaultTable}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
+                iframe.src = url;
+            }
+
+            // İlk yüklemede otomatik getir
+            loadIframe();
+
+            // Getir butonu event listener
+            document.getElementById('getir_btn_sip').addEventListener('click', function() {
+                loadIframe();
+            });
+
+            // Enter ile tetikleme (tarih kutularındayken)
+            [input1, input2].forEach(el => {
+                el.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        loadIframe();
+                    }
+                });
+            });
+        })();
+    </script>
     <?php
 }
 function demolar_cb()

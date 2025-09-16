@@ -1,15 +1,17 @@
 <?PHP
 //Deneme!!! 8
 error_reporting(E_ALL);
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 
 session_start();
 
 include '../../_conn.php';
 
+$date1= $_GET['date1'];
+$date2= $_GET['date2'];
+
 // where SIL<>'1' AND $dates ORDER BY BASLANGIC_TARIHI
 $sql = "select
-    top 5
     s.id,
         (SELECT
                top 1 CASE
@@ -72,8 +74,12 @@ f.PARA_BIRIMI,
 s.OZEL_KUR
 from aa_erp_kt_siparisler s LEFT JOIN aa_erp_kt_firsatlar f 
 ON s.X_FIRSAT_NO = f.FIRSAT_NO
-LEFT JOIN LG_319_01_INVOICE inv ON inv.DOCODE=s.SIPARIS_NO 
-";
+LEFT JOIN LG_319_01_INVOICE inv ON inv.DOCODE=s.SIPARIS_NO";
+
+if (!empty($date1) && !empty($date2)) {
+    $sql .= " WHERE s.CD >= '$date1' AND s.CD <= '$date2'";
+}
+
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $response = "{\"data\":" . json_encode($data) . "}";

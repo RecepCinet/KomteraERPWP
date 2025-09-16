@@ -1,11 +1,9 @@
 <?PHP
 error_reporting(E_ALL);
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 include '../../_conn.php';
-$date1= $_GET['date1'];
-$date2= $_GET['date2'];
-$dates="CD>='$date1' AND CD<='$date2'";
-$sql = "Select * from aa_erp_kt_demolar_view where SIL<>'1' AND $dates ORDER BY id desc";
+
+$sql = "Select * from aa_erp_kt_demolar_view where SIL<>'1' ORDER BY id desc";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $response = "{\"data\":" . json_encode($data) . "}";

@@ -53,9 +53,6 @@
                 },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "FIRSAT_NO", align: "center", editable: false, minWidth: 60, sortable: false,filter: {
                     crules: [{condition: 'contain'}]
                 }},
-
-
-
             {title: "Kazanılan Teklif",render: function (ui) {
                     if (ui.rowData.TEKLIF_NO) {
                         return "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>"+ui.rowData.TEKLIF_NO+"</a>";
@@ -63,9 +60,6 @@
                 },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "TEKLIF_NO", align: "center", editable: false, minWidth: 60, sortable: false,filter: {
                     crules: [{condition: 'contain'}]
                 }},
-
-
-                    
                     {title: "R",render: function (ui) {
                     if (ui.rowData.REGISTER==='1') {
                         return "<span class='ui-icon ui-icon-check'></span>";
