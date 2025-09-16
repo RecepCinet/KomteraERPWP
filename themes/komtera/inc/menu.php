@@ -1107,7 +1107,8 @@ function yenilemeler_cb() {
     </script>
     <?php
 }
-function faturalar_cb()     {
+function faturalar_cb()
+{
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=faturalar';
     ?>
     <div class="wrap">
@@ -1116,7 +1117,7 @@ function faturalar_cb()     {
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
-                    style="border:1px solid #ccc; position:absolute; top:0; left:0;">
+                    style="border: 1px solid #ccc; position: absolute; top: 0; left: 0;">
             </iframe>
         </div>
     </div>

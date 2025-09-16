@@ -158,7 +158,7 @@ $(function () {
                 crules: [{condition: 'begin'}]
             }
         },
-        {title: "<?php echo __('response','komtera'); ?>", editable: false, minWidth: 270, sortable: false, dataIndx: "r_response",filter: {
+        {title: "<?php echo __('response','komtera'); ?>", editable: false, minWidth: 540, sortable: false, dataIndx: "r_response",filter: {
                 crules: [{condition: 'contain'}]
             }
         },
