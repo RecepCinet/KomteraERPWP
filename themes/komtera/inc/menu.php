@@ -24,7 +24,10 @@ function my_custom_admin_menus_for_roles()
         $ana_yetkiler = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : [];
     }
 
-    if (array_key_exists('_opportunities_',    $ana_yetkiler)) add_menu_page(__('firsatlar', 'komtera'), __('firsatlar', 'komtera'), 'read','firsatlar',                  'firsatlar_cb','dashicons-visibility',2.01);
+    if (array_key_exists('_opportunities_',    $ana_yetkiler)) {
+        add_menu_page(__('firsatlar', 'komtera'), __('firsatlar', 'komtera'), 'read','firsatlar', 'firsatlar_cb','dashicons-visibility',2.01);
+        add_submenu_page('firsatlar', __('yeni_firsat', 'komtera'), __('yeni_firsat', 'komtera'), 'read','firsatlar_yeni', 'firsatlar_yeni_cb');
+    }
     if (array_key_exists('_orders_',   $ana_yetkiler)) add_menu_page(__('siparisler', 'komtera'), __('siparisler', 'komtera'), 'read','siparisler_slug',          'siparisler_cb','dashicons-cart',2.02);
     if (array_key_exists('_demos_',      $ana_yetkiler)) add_menu_page(__('demolar', 'komtera'), __('demolar', 'komtera'), 'read','demolar_slug',                   'demolar_cb','dashicons-screenoptions',2.03);
     if (array_key_exists('_activities_',  $ana_yetkiler)) add_menu_page(__('aktiviteler', 'komtera'), __('aktiviteler', 'komtera'), 'read','aktiviteler_slug',       'aktiviteler_cb','dashicons-clock',2.04);
@@ -54,42 +57,44 @@ function firsatlar_cb()
     <div class="wrap">
         <!-- Excel style toolbar -->
         <div class="opportunities-toolbar" style="
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        ">
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 20px 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                ">
             <!-- Tarih Seçimi ve Fırsat Türü Butonları - Excel toolbar tarzı -->
             <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
                 <!-- Yeni Fırsat Butonu -->
-                <div style="
-                    padding: 12px;
-                    background: #28a745;
-                    border: 2px solid #28a745;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    box-shadow: 0 2px 4px rgba(40,167,69,0.2);
-                " onclick="window.location.href='?page=firsatlar&mod=yeni_firsat'">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="dashicons dashicons-plus-alt2" style="font-size: 18px; color: white;"></span>
-                        <span style="font-size: 13px; font-weight: 500; color: white;"><?php echo __('yeni_firsat', 'komtera'); ?></span>
-                    </div>
+                <div class="opportunity-button table-btn" onclick="window.location.href='?page=firsatlar_yeni'" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#d4edda'; this.style.borderColor='#28a745'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-plus-alt2" style="font-size: 28px; color: #28a745; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yeni_firsat', 'komtera'); ?></span>
                 </div>
 
                 <!-- Tarih Seçimi -->
-                <div id="date_selector" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                ">
+                <div id="date_selector" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        ">
                     <span class="dashicons dashicons-calendar-alt" style="font-size: 20px; color: #0073aa;"></span>
                     <input type="date" id="date1" name="date1" lang="<?php echo esc_attr($lang); ?>"
                            style="padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; width: 130px;">
@@ -99,113 +104,105 @@ function firsatlar_cb()
                 </div>
 
                 <!-- Fırsat Türü Butonları -->
-                <div id="firsat_buttons" class="opportunity-button table-btn active" data-table="firsatlar" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px;
-                    background: #0073aa;
-                    border: 2px solid #0073aa;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    min-width: 90px;
-                    transition: all 0.2s;
-                    box-shadow: 0 2px 4px rgba(0,115,170,0.2);
-                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                <div id="firsat_buttons" class="opportunity-button table-btn active" data-table="firsatlar" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: #0073aa;
+                        border: 2px solid #0073aa;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-unlock" style="font-size: 28px; color: white; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('acik_firsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    min-width: 90px;
-                    transition: all 0.2s;
-                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-media-document" style="font-size: 28px; color: #ff9800; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    min-width: 90px;
-                    transition: all 0.2s;
-                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-yes-alt" style="font-size: 28px; color: #4caf50; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kazanilan', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    min-width: 90px;
-                    transition: all 0.2s;
-                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-dismiss" style="font-size: 28px; color: #f44336; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar2" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    min-width: 90px;
-                    transition: all 0.2s;
-                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                <div class="opportunity-button table-btn" data-table="firsatlar2" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-list-view" style="font-size: 28px; color: #9c27b0; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('tum_firsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    min-width: 90px;
-                    transition: all 0.2s;
-                " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff5722'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff5722'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-networking" style="font-size: 28px; color: #ff5722; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yan_firsatlar', 'komtera'); ?></span>
                 </div>
             </div>
         </div>
 
-        <?php
-        // Check if mod parameter is set to show PHP content instead of iframe
-        if (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') {
-            // Include the new opportunity form
-            include get_stylesheet_directory() . '/erp/mod/yeni_firsat.php';
-        } else {
-            // Show the iframe as usual
-        ?>
         <!-- Iframe container -->
         <div style="position: relative; height: calc(100vh - 280px);">
             <iframe id="erp_iframe"
@@ -215,10 +212,8 @@ function firsatlar_cb()
                     style="border: 1px solid #ccc; border-radius: 4px; position: absolute; top: 0; left: 0;">
             </iframe>
         </div>
-        <?php } ?>
     </div>
     <script>
-        <?php if (!isset($_GET['mod']) || $_GET['mod'] !== 'yeni_firsat') { ?>
         (function () {
             const input1 = document.getElementById('date1');
             const input2 = document.getElementById('date2');
@@ -291,7 +286,7 @@ function firsatlar_cb()
                 // Aktif butondan tablo adını al
                 const activeBtn = document.querySelector('.table-btn.active');
                 const tableName = activeBtn ? activeBtn.getAttribute('data-table') : defaultTable;
-                
+
                 const url = `${baseDir}?t=${tableName}&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
                 iframe.src = url;
             }
@@ -305,7 +300,7 @@ function firsatlar_cb()
                     }
                 });
             });
-            
+
             // Tablo değiştirme butonları
             document.querySelectorAll('.table-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
@@ -346,20 +341,19 @@ function firsatlar_cb()
                         spans[0].style.color = 'white'; // İkon
                         spans[1].style.color = 'white'; // Yazı
                     }
-                    
+
                     // iframe src'sini güncelle
                     let newSrc = `${baseDir}?t=${tableName}`;
-                    
+
                     // Tarih parametrelerini ekle
                     if (v1 && v2) {
                         newSrc += `&date1=${encodeURIComponent(v1)}&date2=${encodeURIComponent(v2)}`;
                     }
-                    
+
                     iframe.src = newSrc;
                 });
             });
         })();
-        <?php } ?>
     </script>
 
     <!-- Buton Stilleri -->
@@ -388,6 +382,16 @@ function firsatlar_cb()
     </style>
     <?php
 }
+
+function firsatlar_yeni_cb()
+{
+    ?>
+    <div class="wrap">
+        <?php include get_stylesheet_directory() . '/erp/mod/yeni_firsat.php'; ?>
+    </div>
+    <?php
+}
+
 function siparisler_cb()
 {
     // Default table, JavaScript will update this dynamically
