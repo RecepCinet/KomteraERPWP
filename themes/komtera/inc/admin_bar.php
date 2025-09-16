@@ -114,8 +114,10 @@ add_action('admin_head', function () {
                         background: white; 
                         padding: 20px; 
                         border-radius: 8px; 
-                        width: 900px; 
-                        height: 500px; 
+                        width: 95vw;
+                        height: 80vh;
+                        max-width: 1200px;
+                        max-height: 800px; 
                         overflow-y: auto;
                         box-shadow: 0 4px 20px rgba(0,0,0,0.3);
                     ">
