@@ -9,13 +9,13 @@
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('musteri','komtera'); ?>", editable: false, minWidth: 458, sortable: true, dataIndx: "musteri", filter: {
+            {title: "Müşteri", editable: false, minWidth: 458, sortable: true, dataIndx: "musteri", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
             {title: "", editable: false, minWidth: 50, sortable: true,
                 render: function (ui) {
-                    return "<a href='#' class='delete_btn'><?php echo __('detay','komtera'); ?></a>";
+                    return "<a href='#' class='delete_btn'>Detay</a>";
                 },
                 postRender: function (ui) {
                     var grid = this,
@@ -72,7 +72,8 @@
             stripeRows: true,
             scrollModel: {autoFit: false},
             showHeader: true,
-            showTitle: false,
+            showTitle: true,
+            title: '<span style="font-size: 18px;"><b>Müşteriler</b></span>',
             showToolbar: false,
             showTop: true,
             width: 1200, height: 400,
