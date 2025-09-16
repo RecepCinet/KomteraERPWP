@@ -266,7 +266,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     <?PHP } ?>
                     {
                         type: 'checkbox',
-                        value: false,
+                        value: true,
                         label: '<?php echo __('wrap_rows','komtera'); ?>',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
@@ -385,7 +385,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 rPPOptions: [100, 1000, 10000]
             },
             sortable: true,
-            wrap: false, hwrap: false,
+            wrap: true, hwrap: false, autoRow: true,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
             title: '<?php echo __('opportunities','komtera'); ?>: <?PHP echo $_SESSION['user']['kullanici']; ?>',
             resizable: true,

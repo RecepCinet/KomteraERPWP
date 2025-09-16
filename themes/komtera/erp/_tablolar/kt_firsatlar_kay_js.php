@@ -196,7 +196,7 @@
                     },
                     {
                         type: 'checkbox',
-                        value: false,
+                        value: true,
                         label: 'Satır Kaydır',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
@@ -313,7 +313,7 @@
                 rPPOptions: [100, 1000, 10000]
             },
             sortable: true,
-            wrap: false, hwrap: false,
+            wrap: true, hwrap: false, autoRow: true,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
             title: '<span style="font-size: 18px;"><b>Kaybedilen Fırsatlar</b></span>',
             resizable: true,
