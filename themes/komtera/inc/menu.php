@@ -26,6 +26,7 @@ function my_custom_admin_menus_for_roles()
 
     if (array_key_exists('_opportunities_',    $ana_yetkiler)) {
         add_menu_page(__('firsatlar', 'komtera'), __('firsatlar', 'komtera'), 'read','firsatlar', 'firsatlar_cb','dashicons-visibility',2.01);
+        add_submenu_page('firsatlar', __('listeler', 'komtera'), __('listeler', 'komtera'), 'read','firsatlar', 'firsatlar_cb');
         add_submenu_page('firsatlar', __('yeni_firsat', 'komtera'), __('yeni_firsat', 'komtera'), 'read','firsatlar_yeni', 'firsatlar_yeni_cb');
     }
     if (array_key_exists('_orders_',   $ana_yetkiler)) add_menu_page(__('siparisler', 'komtera'), __('siparisler', 'komtera'), 'read','siparisler_slug',          'siparisler_cb','dashicons-cart',2.02);
