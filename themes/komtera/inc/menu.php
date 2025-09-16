@@ -841,7 +841,212 @@ function raporlar_yonetim_cb() {
     </script>
     <?php
 }
-function araclar_cb()       { echo '<div class="wrap"><h1>Araçlar</h1><p>Yapım aşamasında</p></div>'; }
+function araclar_cb()
+{
+    ?>
+    <div class="wrap">
+        <!-- Excel style toolbar -->
+        <div class="tools-toolbar" style="
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">
+            <!-- Tools Buttons -->
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+
+                <!-- Sophos Siparişler -->
+                <div class="tools-button" onclick="loadToolModule('sophos_siparisler')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/logos/sophos.png" style="width: 24px; height: 24px; margin-bottom: 6px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="dashicons dashicons-cart" style="font-size: 24px; color: #ff6b35; margin-bottom: 6px; display: none;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; line-height: 1.3;">Sophos<br>Siparişler</span>
+                </div>
+
+                <!-- Marka Account Manager Silme -->
+                <div class="tools-button" onclick="loadToolModule('marka_account_manager_silme')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-trash" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; line-height: 1.3;">Marka Account<br>Manager Silme</span>
+                </div>
+
+                <!-- Acronis Faturalama -->
+                <div class="tools-button" onclick="loadToolModule('acronis_faturalama')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/logos/acronis.png" style="width: 24px; height: 24px; margin-bottom: 6px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="dashicons dashicons-money-alt" style="font-size: 24px; color: #28a745; margin-bottom: 6px; display: none;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; line-height: 1.3;">Acronis<br>Faturalama</span>
+                </div>
+
+                <!-- Sophos Faturalama -->
+                <div class="tools-button" onclick="loadToolModule('sophos_faturalama')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff9800';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/logos/sophos.png" style="width: 24px; height: 24px; margin-bottom: 6px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="dashicons dashicons-money" style="font-size: 24px; color: #ff6b35; margin-bottom: 6px; display: none;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; line-height: 1.3;">Sophos<br>Faturalama</span>
+                </div>
+
+                <!-- MediaMarkt Faturalama -->
+                <div class="tools-button" onclick="loadToolModule('mediamarkt_faturalama')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/logos/mediamarkt.png" style="width: 24px; height: 24px; margin-bottom: 6px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="dashicons dashicons-store" style="font-size: 24px; color: #e60012; margin-bottom: 6px; display: none;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; line-height: 1.3;">MediaMarkt<br>Faturalama</span>
+                </div>
+
+                <!-- Vatan Faturalama -->
+                <div class="tools-button" onclick="loadToolModule('vatan_faturalama')" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    min-width: 90px;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                " onmouseover="this.style.backgroundColor='#e1f5fe'; this.style.borderColor='#2196f3';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/logos/vatan.png" style="width: 24px; height: 24px; margin-bottom: 6px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="dashicons dashicons-building" style="font-size: 24px; color: #2196f3; margin-bottom: 6px; display: none;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; line-height: 1.3;">Vatan<br>Faturalama</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="tools-content-area" style="position: relative; height: calc(100vh - 280px); padding: 40px; text-align: center; color: #666; font-size: 16px;">
+            Bir araç modülü seçin
+        </div>
+    </div>
+
+    <script>
+        function loadToolModule(moduleName) {
+            var contentArea = document.getElementById('tools-content-area');
+            contentArea.innerHTML = '<div style="padding: 40px; text-align: center;"><div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #0073aa; border-radius: 50%; animation: spin 1s linear infinite;"></div><br><br>Yükleniyor...</div>';
+
+            // AJAX request to load module content
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', ajaxurl, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        contentArea.innerHTML = xhr.responseText;
+                    } else {
+                        contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;">Modül yüklenirken hata oluştu</div>';
+                    }
+                }
+            };
+
+            xhr.send('action=load_tools_module&module=' + encodeURIComponent(moduleName) + '&nonce=<?php echo wp_create_nonce("load_tool_module_nonce"); ?>');
+        }
+    </script>
+
+    <!-- Button Styles -->
+    <style>
+        .tools-button {
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            height: 60px;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+        .tools-button:hover {
+            transform: translateY(-1px);
+        }
+        .tools-button .dashicons {
+            font-size: 24px !important;
+            margin-bottom: 6px !important;
+        }
+        .tools-button span:last-child {
+            font-size: 11px !important;
+            text-align: center !important;
+            font-weight: 500 !important;
+            color: #333 !important;
+            height: 24px !important;
+            line-height: 1.3 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        @media (max-width: 768px) {
+            .tools-button {
+                font-size: 9px !important;
+                padding: 8px !important;
+                margin-right: 8px !important;
+                margin-bottom: 8px;
+                height: 40px !important;
+            }
+            .tools-button .dashicons {
+                font-size: 20px !important;
+                margin-bottom: 8px !important;
+            }
+        }
+    </style>
+    <?php
+}
 function fiyat_listesi_cb() {
     //Ticket: Marka popup olacak, ve marka secilince o marka listesi gelecek!
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=fiyat_listesi';
@@ -1317,6 +1522,43 @@ function handle_load_settings_module() {
         }
     } else {
         echo '<div style="padding: 40px; text-align: center; color: #666;">Geçersiz modül</div>';
+    }
+
+    wp_die();
+}
+
+// AJAX handler for loading tools modules
+add_action('wp_ajax_load_tools_module', 'handle_load_tools_module');
+add_action('wp_ajax_nopriv_load_tools_module', 'handle_load_tools_module');
+
+function handle_load_tools_module() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'load_tool_module_nonce')) {
+        wp_die('Güvenlik hatası');
+    }
+
+    $module = sanitize_text_field($_POST['module']);
+    $allowed_mods = [
+        'sophos_siparisler',
+        'marka_account_manager_silme',
+        'acronis_faturalama',
+        'sophos_faturalama',
+        'mediamarkt_faturalama',
+        'vatan_faturalama'
+    ];
+
+    if (in_array($module, $allowed_mods)) {
+        $file_path = get_stylesheet_directory() . '/erp/tools/' . $module . '.php';
+        if (file_exists($file_path)) {
+            ob_start();
+            include $file_path;
+            $content = ob_get_clean();
+            echo $content;
+        } else {
+            echo '<div style="padding: 40px; text-align: center; color: #666;">Araç modülü bulunamadı: ' . esc_html($module) . '</div>';
+        }
+    } else {
+        echo '<div style="padding: 40px; text-align: center; color: #666;">Geçersiz araç modülü</div>';
     }
 
     wp_die();
