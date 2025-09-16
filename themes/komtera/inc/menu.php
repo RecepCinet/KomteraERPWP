@@ -1108,19 +1108,293 @@ function araclar_cb()
     <?php
 }
 function fiyat_listesi_cb() {
-    //Ticket: Marka popup olacak, ve marka secilince o marka listesi gelecek!
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=fiyat_listesi';
     ?>
     <div class="wrap">
-        <div style="position: relative; height: calc(100vh - 140px);">
+        <!-- Excel style toolbar -->
+        <div class="pricelist-toolbar" style="
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 20px 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                ">
+            <!-- Excel tarzı butonlar -->
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+
+                <!-- Marka Seç Butonu -->
+                <div class="pricelist-button" onclick="showMarkaPopup()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: #0073aa;
+                        border: 2px solid #0073aa;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                        " onmouseover="this.style.backgroundColor='#005a8b'; this.style.borderColor='#005a8b';" onmouseout="this.style.backgroundColor='#0073aa'; this.style.borderColor='#0073aa';">
+                    <span class="dashicons dashicons-tag" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;">Marka Seç</span>
+                </div>
+
+                <!-- Excel'den Al Butonu -->
+                <div class="pricelist-button" onclick="exceldenAl()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-upload" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Excel'den Al</span>
+                </div>
+
+                <!-- Excel'e Gönder Butonu -->
+                <div class="pricelist-button" onclick="exceleyeGonder()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#2196f3';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-download" style="font-size: 24px; color: #2196f3; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Excel'e Gönder</span>
+                </div>
+
+                <!-- Marka Ekle Butonu -->
+                <div class="pricelist-button" onclick="markaEkle()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff9800';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-plus-alt2" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Marka Ekle</span>
+                </div>
+
+                <!-- Seçili Marka Göstergesi -->
+                <div id="selected_marka_display" style="
+                        padding: 12px;
+                        background: #e8f5e8;
+                        border: 1px solid #4caf50;
+                        border-radius: 6px;
+                        color: #2e7d32;
+                        font-weight: bold;
+                        font-size: 13px;
+                        display: none;
+                        ">
+                    <span class="dashicons dashicons-yes" style="margin-right: 5px;"></span>
+                    <span id="selected_marka_text">Tüm Markalar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marka Popup -->
+        <div id="marka_popup" style="
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 10000;
+                ">
+            <div style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    border-radius: 8px;
+                    padding: 20px;
+                    max-width: 400px;
+                    width: 90%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    ">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <h3 style="margin: 0; color: #333;">Marka Seçiniz</h3>
+                    <button onclick="closeMarkaPopup()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                </div>
+                <div id="marka_list_container">
+                    <div style="text-align: center; padding: 20px; color: #666;">
+                        <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #f3f3f3; border-top: 2px solid #0073aa; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        <br><br>Markalar yükleniyor...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Iframe container -->
+        <div style="position: relative; height: calc(100vh - 280px);">
             <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
-                    style="border:1px solid #ccc; position:absolute; top:0; left:0;">
+                    style="border: 1px solid #ccc; border-radius: 4px; position: absolute; top: 0; left: 0;">
             </iframe>
         </div>
     </div>
+
+    <script>
+        let selectedMarka = '';
+        const baseUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php";
+        const serviceUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service";
+
+        function showMarkaPopup() {
+            document.getElementById('marka_popup').style.display = 'block';
+            loadMarkalar();
+        }
+
+        function closeMarkaPopup() {
+            document.getElementById('marka_popup').style.display = 'none';
+        }
+
+        function loadMarkalar() {
+            const container = document.getElementById('marka_list_container');
+
+            fetch(serviceUrl + '/get_markalar.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let html = '';
+
+                        // Tüm Markalar seçeneği
+                        html += `<div class="marka-item" onclick="selectMarka('')" style="
+                            padding: 12px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            margin-bottom: 8px;
+                            cursor: pointer;
+                            background: #f8f9fa;
+                            font-weight: bold;
+                            transition: all 0.2s;
+                        " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='#f8f9fa'">
+                            <span class="dashicons dashicons-category" style="margin-right: 8px; color: #0073aa;"></span>
+                            Tüm Markalar
+                        </div>`;
+
+                        // Marka listesi
+                        data.markalar.forEach(marka => {
+                            html += `<div class="marka-item" onclick="selectMarka('${marka}')" style="
+                                padding: 12px;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                margin-bottom: 8px;
+                                cursor: pointer;
+                                background: white;
+                                transition: all 0.2s;
+                            " onmouseover="this.style.backgroundColor='#f0f8ff'" onmouseout="this.style.backgroundColor='white'">
+                                <span class="dashicons dashicons-tag" style="margin-right: 8px; color: #666;"></span>
+                                ${marka}
+                            </div>`;
+                        });
+
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #f44336;">Markalar yüklenirken hata oluştu</div>';
+                    }
+                })
+                .catch(error => {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #f44336;">Markalar yüklenirken hata oluştu</div>';
+                });
+        }
+
+        function selectMarka(marka) {
+            selectedMarka = marka;
+            const display = document.getElementById('selected_marka_display');
+            const text = document.getElementById('selected_marka_text');
+
+            if (marka) {
+                text.textContent = marka;
+                display.style.display = 'block';
+            } else {
+                text.textContent = 'Tüm Markalar';
+                display.style.display = 'none';
+            }
+
+            // iframe'i güncelle
+            const iframe = document.getElementById('erp_iframe');
+            let newSrc = baseUrl + '?t=fiyat_listesi';
+            if (marka) {
+                newSrc += '&marka=' + encodeURIComponent(marka);
+            }
+            iframe.src = newSrc;
+
+            closeMarkaPopup();
+        }
+
+        function exceldenAl() {
+            alert('Excel\'den Al özelliği yakında eklenecek');
+        }
+
+        function exceleyeGonder() {
+            alert('Excel\'e Gönder özelliği yakında eklenecek');
+        }
+
+        function markaEkle() {
+            const marka = prompt('Yeni marka adını giriniz:');
+            if (marka && marka.trim()) {
+                alert('Marka Ekle özelliği yakında eklenecek\nEklenecek marka: ' + marka.trim());
+            }
+        }
+
+        // Popup dışına tıklandığında kapat
+        document.getElementById('marka_popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMarkaPopup();
+            }
+        });
+    </script>
+
+    <!-- Button Styles -->
+    <style>
+        .pricelist-button {
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .pricelist-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .pricelist-button {
+                font-size: 9px !important;
+                padding: 4px 6px !important;
+                margin-right: 4px !important;
+                margin-bottom: 4px;
+            }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     <?php
 }
 function yenilemeler_cb() {
