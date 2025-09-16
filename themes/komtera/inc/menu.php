@@ -63,8 +63,24 @@ function firsatlar_cb()
         ">
             <!-- Tarih Seçimi ve Fırsat Türü Butonları - Excel toolbar tarzı -->
             <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
-                <!-- Tarih Seçimi - Sol tarafta -->
+                <!-- Yeni Fırsat Butonu -->
                 <div style="
+                    padding: 12px;
+                    background: #28a745;
+                    border: 2px solid #28a745;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 2px 4px rgba(40,167,69,0.2);
+                " onclick="window.location.href='?page=firsatlar&mod=yeni_firsat'">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="dashicons dashicons-plus-alt2" style="font-size: 18px; color: white;"></span>
+                        <span style="font-size: 13px; font-weight: 500; color: white;"><?php echo __('yeni_firsat', 'komtera'); ?></span>
+                    </div>
+                </div>
+
+                <!-- Tarih Seçimi -->
+                <div id="date_selector" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     align-items: center;
                     gap: 10px;
@@ -83,7 +99,7 @@ function firsatlar_cb()
                 </div>
 
                 <!-- Fırsat Türü Butonları -->
-                <div class="opportunity-button table-btn active" data-table="firsatlar" style="
+                <div id="firsat_buttons" class="opportunity-button table-btn active" data-table="firsatlar" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -100,7 +116,7 @@ function firsatlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('acik_firsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="
+                <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -116,7 +132,7 @@ function firsatlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="
+                <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -132,7 +148,7 @@ function firsatlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kazanilan', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="
+                <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -148,7 +164,7 @@ function firsatlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar2" style="
+                <div class="opportunity-button table-btn" data-table="firsatlar2" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -164,7 +180,7 @@ function firsatlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('tum_firsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="
+                <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="<?php echo (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') ? 'display:none;' : ''; ?>
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -182,6 +198,14 @@ function firsatlar_cb()
             </div>
         </div>
 
+        <?php
+        // Check if mod parameter is set to show PHP content instead of iframe
+        if (isset($_GET['mod']) && $_GET['mod'] === 'yeni_firsat') {
+            // Include the new opportunity form
+            include get_stylesheet_directory() . '/erp/mod/yeni_firsat.php';
+        } else {
+            // Show the iframe as usual
+        ?>
         <!-- Iframe container -->
         <div style="position: relative; height: calc(100vh - 280px);">
             <iframe id="erp_iframe"
@@ -191,8 +215,10 @@ function firsatlar_cb()
                     style="border: 1px solid #ccc; border-radius: 4px; position: absolute; top: 0; left: 0;">
             </iframe>
         </div>
+        <?php } ?>
     </div>
     <script>
+        <?php if (!isset($_GET['mod']) || $_GET['mod'] !== 'yeni_firsat') { ?>
         (function () {
             const input1 = document.getElementById('date1');
             const input2 = document.getElementById('date2');
@@ -333,8 +359,9 @@ function firsatlar_cb()
                 });
             });
         })();
+        <?php } ?>
     </script>
-    
+
     <!-- Buton Stilleri -->
     <style>
         .table-btn {
