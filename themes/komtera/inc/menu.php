@@ -401,23 +401,63 @@ function siparisler_cb()
     $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
     <div class="wrap">
-        <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <label for="date1_sip" style="margin-right: 10px;"><?php echo __('siparis_olusturma_tarihi', 'komtera'); ?>:</label>
-            <input type="date" id="date1_sip" name="date1_sip" lang="<?php echo esc_attr($lang); ?>"
-                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
+        <!-- Excel style toolbar -->
+        <div class="orders-toolbar" style="
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 20px 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                ">
+            <!-- Tarih Seçimi - Excel toolbar tarzı -->
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <!-- Tarih Seçimi -->
+                <div id="date_selector" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        ">
+                    <span class="dashicons dashicons-calendar-alt" style="font-size: 20px; color: #0073aa;"></span>
+                    <input type="date" id="date1_sip" name="date1_sip" lang="<?php echo esc_attr($lang); ?>"
+                           style="padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; width: 130px;">
+                    <span style="color: #666; font-weight: bold;">-</span>
+                    <input type="date" id="date2_sip" name="date2_sip" lang="<?php echo esc_attr($lang); ?>"
+                           style="padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; width: 130px;">
+                </div>
 
-            <label for="date2_sip" style="margin-right: 10px; line-height: 34px; vertical-align: top;">-</label>
-            <input type="date" id="date2_sip" name="date2_sip" lang="<?php echo esc_attr($lang); ?>"
-                   style="margin-right: 20px; padding: 5px; height: 34px; box-sizing: border-box; vertical-align: top;">
-
-            <button type="button" id="getir_btn_sip" style="height: 34px; padding: 0 15px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; vertical-align: top;">Getir</button>
+                <!-- Getir Butonu -->
+                <div class="order-button" id="getir_btn_sip" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: #0073aa;
+                        border: 2px solid #0073aa;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                        " onmouseover="this.style.backgroundColor='#005a8b'; this.style.borderColor='#005a8b';" onmouseout="this.style.backgroundColor='#0073aa'; this.style.borderColor='#0073aa';">
+                    <span class="dashicons dashicons-download" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('getir', 'komtera'); ?></span>
+                </div>
+            </div>
         </div>
-        <div style="position: relative; height: calc(100vh - 200px);">
-        <iframe id="erp_iframe"
+
+        <!-- Iframe container -->
+        <div style="position: relative; height: calc(100vh - 280px);">
+            <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
                     height="100%"
-                    style="border:1px solid #ccc; position:absolute; top:0; left:0;">
+                    style="border: 1px solid #ccc; border-radius: 4px; position: absolute; top: 0; left: 0;">
             </iframe>
         </div>
     </div>
@@ -523,6 +563,26 @@ function siparisler_cb()
             });
         })();
     </script>
+
+    <!-- Buton Stilleri -->
+    <style>
+        .order-button {
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .order-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .order-button {
+                font-size: 9px !important;
+                padding: 4px 6px !important;
+                margin-right: 4px !important;
+                margin-bottom: 4px;
+            }
+        }
+    </style>
     <?php
 }
 function demolar_cb()
