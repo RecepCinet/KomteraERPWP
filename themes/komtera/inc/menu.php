@@ -1123,22 +1123,22 @@ function fiyat_listesi_cb() {
             <!-- Excel tarzı butonlar -->
             <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
 
-                <!-- Marka Seç Butonu -->
+                <!-- Markalar Popup Butonu -->
                 <div class="pricelist-button" onclick="showMarkaPopup()" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: #0073aa;
-                        border: 2px solid #0073aa;
+                        background: white;
+                        border: 1px solid #ccc;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
-                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
-                        " onmouseover="this.style.backgroundColor='#005a8b'; this.style.borderColor='#005a8b';" onmouseout="this.style.backgroundColor='#0073aa'; this.style.borderColor='#0073aa';">
-                    <span class="dashicons dashicons-tag" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;">Marka Seç</span>
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#f0f8ff'; this.style.borderColor='#0073aa';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: #0073aa; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Markalar</span>
                 </div>
 
                 <!-- Excel'den Al Butonu -->
@@ -1284,24 +1284,9 @@ function fiyat_listesi_cb() {
                     if (data.success) {
                         let html = '';
 
-                        // Tüm Markalar seçeneği
-                        html += `<div class="marka-item" onclick="selectMarka('')" style="
-                            padding: 12px;
-                            border: 1px solid #ddd;
-                            border-radius: 4px;
-                            margin-bottom: 8px;
-                            cursor: pointer;
-                            background: #f8f9fa;
-                            font-weight: bold;
-                            transition: all 0.2s;
-                        " onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor='#f8f9fa'">
-                            <span class="dashicons dashicons-category" style="margin-right: 8px; color: #0073aa;"></span>
-                            Tüm Markalar
-                        </div>`;
-
-                        // Marka listesi
+                        // Marka listesi (kayıt sayısı ile)
                         data.markalar.forEach(marka => {
-                            html += `<div class="marka-item" onclick="selectMarka('${marka}')" style="
+                            html += `<div class="marka-item" onclick="selectMarka('${marka.MARKA}')" style="
                                 padding: 12px;
                                 border: 1px solid #ddd;
                                 border-radius: 4px;
@@ -1309,9 +1294,17 @@ function fiyat_listesi_cb() {
                                 cursor: pointer;
                                 background: white;
                                 transition: all 0.2s;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
                             " onmouseover="this.style.backgroundColor='#f0f8ff'" onmouseout="this.style.backgroundColor='white'">
-                                <span class="dashicons dashicons-tag" style="margin-right: 8px; color: #666;"></span>
-                                ${marka}
+                                <div style="display: flex; align-items: center;">
+                                    <span class="dashicons dashicons-tag" style="margin-right: 8px; color: #666;"></span>
+                                    <span>${marka.MARKA}</span>
+                                </div>
+                                <span style="background: #e3f2fd; color: #1976d2; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">
+                                    ${marka.kayit_sayisi}
+                                </span>
                             </div>`;
                         });
 
@@ -1330,20 +1323,12 @@ function fiyat_listesi_cb() {
             const display = document.getElementById('selected_marka_display');
             const text = document.getElementById('selected_marka_text');
 
-            if (marka) {
-                text.textContent = marka;
-                display.style.display = 'block';
-            } else {
-                text.textContent = 'Tüm Markalar';
-                display.style.display = 'none';
-            }
+            text.textContent = marka;
+            display.style.display = 'block';
 
             // iframe'i güncelle
             const iframe = document.getElementById('erp_iframe');
-            let newSrc = baseUrl + '?t=fiyat_listesi';
-            if (marka) {
-                newSrc += '&marka=' + encodeURIComponent(marka);
-            }
+            let newSrc = baseUrl + '?t=fiyat_listesi&marka=' + encodeURIComponent(marka);
             iframe.src = newSrc;
 
             closeMarkaPopup();

@@ -1,14 +1,16 @@
 <?php
-session_start();
-include '../_conn.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include '../../_conn.php';
 
 header('Content-Type: application/json');
 
 try {
-    $sql = "SELECT DISTINCT marka FROM fiyat_listesi WHERE marka IS NOT NULL AND marka != '' ORDER BY marka";
-    $stmt = $pdo->prepare($sql);
+    $sql = "SELECT MARKA, COUNT(*) as kayit_sayisi FROM aa_erp_kt_fiyat_listesi WHERE MARKA IS NOT NULL AND MARKA != '' GROUP BY MARKA ORDER BY MARKA";
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $markalar = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $markalar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode(['success' => true, 'markalar' => $markalar]);
 } catch (Exception $e) {
