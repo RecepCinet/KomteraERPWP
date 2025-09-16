@@ -44,7 +44,7 @@ $(function () {
                     });
                 }
             },
-        {title: "<?php echo __('company_title','komtera'); ?>", editable: false, minWidth: 410, sortable: true, dataIndx: "CH_UNVANI",filter: { 
+        {title: "Firma Ünvanı", editable: false, minWidth: 410, sortable: true, dataIndx: "CH_UNVANI",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
@@ -52,24 +52,24 @@ $(function () {
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "<?php echo __('due_date','komtera'); ?>", editable: false, minWidth: 70, sortable: true, dataIndx: "VADE",filter: {
+        {title: "Vade", editable: false, minWidth: 70, sortable: true, dataIndx: "VADE",filter: {
                 crules: [{condition: 'range'}]
             }
         },
-        {title: "<?php echo __('attention_list','komtera'); ?>",exportRender: false, render: function (ui) {
+        {title: "Dikkat Listesi",exportRender: false, render: function (ui) {
                 if (ui.cellData === '1') {
-                        return "<a href='#' class='demo_ac'><span class='ui-icon ui-icon-check'></span></a>";                       
+                        return "<a href='#' class='demo_ac'><span class='ui-icon ui-icon-check'></span></a>";
                     }
                 },
-                        align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "dikkat_listesi",filter: { 
+                        align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "dikkat_listesi",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-                {title: "<?php echo __('blacklist','komtera'); ?>",exportRender: false, render: function (ui) {
+                {title: "Kara Liste",exportRender: false, render: function (ui) {
                 if (ui.cellData === '1') {
-                        return "<a href='#' class='demo_ac'><span class='ui-icon ui-icon-check'></span></a>";                       
+                        return "<a href='#' class='demo_ac'><span class='ui-icon ui-icon-check'></span></a>";
                     }
-                },align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "kara_liste",filter: { 
+                },align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "kara_liste",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
@@ -116,7 +116,7 @@ $(function () {
                items: [
                    {
                        type: 'button',
-                       label: "<?php echo __('export','komtera'); ?>",
+                       label: "Dışa Aktar",
                        icon: 'ui-icon-arrowthickstop-1-s',
                        listener: function () {
                            ExcelKaydet();
@@ -124,7 +124,7 @@ $(function () {
                    },
                {
                        type: 'button',
-                       label: "<?php echo __('refresh','komtera'); ?>",
+                       label: "Yenile",
                        listener: function () {
                            grid.refreshDataAndView();
                        }
@@ -204,7 +204,7 @@ $(function () {
         rowHt: 23,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        //title: 'LOGO - Bayi Listesi',
+        title: '<span style="font-size: 18px;"><b>Bayiler</b></span>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

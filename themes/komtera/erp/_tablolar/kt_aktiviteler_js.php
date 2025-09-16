@@ -1,9 +1,3 @@
-<?PHP
-
-$date1= $_GET['date1'];
-$date2= $_GET['date2'];
-
-?>
 <script>
 var grid;
 
@@ -26,11 +20,11 @@ $(function () {
                         crules: [{condition: 'contain'}]
                     }
             },
-             {title: "<?php echo __('tarih','komtera'); ?>", editable: false, minWidth: 90, sortable: true, dataIndx: "TARIH",filter: {
+             {title: "Tarih", editable: false, minWidth: 90, sortable: true, dataIndx: "TARIH",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-            {title: "<?php echo __('musteri_temsilcisi','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MUSTERI_TEMSILCISI",filter: { 
+            {title: "Müşteri Temsilcisi", editable: false, minWidth: 110, sortable: true, dataIndx: "MUSTERI_TEMSILCISI",filter: { 
                         crules: [{condition: 'range'}],
                     }
             },
@@ -38,40 +32,40 @@ $(function () {
                         crules: [{condition: 'range'}],
                     }
             },
-            {title: "<?php echo __('tip','komtera'); ?>", editable: false, minWidth: 120, sortable: true, dataIndx: "TIP",filter: { 
+            {title: "Tip", editable: false, minWidth: 120, sortable: true, dataIndx: "TIP",filter: { 
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "<?php echo __('sure','komtera'); ?>", align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "SURE",filter: {
+            {title: "Süre", align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "SURE",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "<?php echo __('sehir','komtera'); ?>", editable: false, minWidth: 120, sortable: true, dataIndx: "SEHIR",filter: {
+            {title: "Şehir", editable: false, minWidth: 120, sortable: true, dataIndx: "SEHIR",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "<?php echo __('bayi_tipi','komtera'); ?>", editable: false, minWidth: 90, sortable: true, dataIndx: "TIP_BAYI",filter: {
+            {title: "Bayi Tipi", editable: false, minWidth: 90, sortable: true, dataIndx: "TIP_BAYI",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "<?php echo __('kim_ile','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "TIP_KIMILE",filter: {
+            {title: "Kim İle", editable: false, minWidth: 100, sortable: true, dataIndx: "TIP_KIMILE",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "<?php echo __('bayi','komtera'); ?>", editable: false, minWidth: 240, sortable: true, dataIndx: "BAYI",filter: {
+            {title: "Bayi", editable: false, minWidth: 240, sortable: true, dataIndx: "BAYI",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-            {title: "<?php echo __('musteri','komtera'); ?>", editable: false, minWidth: 240, sortable: true, dataIndx: "MUSTERI",filter: {
+            {title: "Müşteri", editable: false, minWidth: 240, sortable: true, dataIndx: "MUSTERI",filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('gorusulen','komtera'); ?>", editable: false, minWidth: 170, sortable: true, dataIndx: "GORUSME_KISI",filter: {
+            {title: "Görüşülen", editable: false, minWidth: 170, sortable: true, dataIndx: "GORUSME_KISI",filter: {
                         crules: [{condition: 'range'}]
                     }
             }
             ,
-            {title: "<?php echo __('aciklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "ACIKLAMA",filter: {
+            {title: "Açıklama", editable: false, minWidth: 250, sortable: true, dataIndx: "ACIKLAMA",filter: {
                         crules: [{condition: 'range'}]
                     }
             }
@@ -81,7 +75,7 @@ $(function () {
         dataType: "JSON",
         method: "GET",
         recIndx: "id",
-        url: "_tablolar/kt_aktiviteler.php?dbname=LKS&date1=<?PHP echo $date1; ?>&date2=<?PHP echo $date2; ?>",
+        url: "_tablolar/kt_aktiviteler.php?dbname=LKS",
         getData: function (response) {
                     return { data: response.data };
         }
@@ -173,7 +167,7 @@ $(function () {
         sortable: true,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: 'Aktiviteler',
+        title: '<span style="font-size: 18px;"><b>Aktiviteler</b></span>',
         resizable: true,
         rowHt: 23,
 //        create: function () {
