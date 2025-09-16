@@ -1,7 +1,7 @@
 <?PHP
 
 error_reporting(E_ALL);
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 
 include '../../_conn.php';
 

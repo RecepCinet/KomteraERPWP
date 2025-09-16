@@ -15,7 +15,7 @@ function YenilemeAc(id) {
 $(function () {
    
     var colM = [
-        {title: "<?php echo __('siparis_no','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "SIPARIS_NO", filter: {
+        {title: "Sipariş No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "SIPARIS_NO", filter: {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
@@ -30,7 +30,7 @@ $(function () {
                     });
             }
         },
-        {title: "<?php echo __('firsat_no','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
+        {title: "Fırsat No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
@@ -175,7 +175,7 @@ $(function () {
                 items: [
                     {
                         type: 'button',
-                        label: "<?php echo __('export','komtera'); ?>",
+                        label: "Dışa Aktar",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             this.exportData({
@@ -189,14 +189,14 @@ $(function () {
                     },
                 {
                         type: 'button',
-                        label: "<?php echo __('yenile','komtera'); ?>",                   
+                        label: "Yenile",                   
                         listener: function () {
                             grid.refreshDataAndView();
                         }
                 } , {
                         type: 'checkbox',
                         value: false,
-                        label: '<?php echo __('satir_kaydir','komtera'); ?>',
+                        label: 'Satır Kaydır',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.refresh();
@@ -277,7 +277,7 @@ $(function () {
         rowHt: 19,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<?php echo __('yenilemeler','komtera'); ?>',
+        title: '<span style="font-size: 18px;"><b>Yenilemeler Liste</b></span>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

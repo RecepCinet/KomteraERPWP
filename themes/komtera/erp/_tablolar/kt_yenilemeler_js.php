@@ -16,7 +16,7 @@ $(function () {
             },
         },
 
-        {title: "<?php echo __('opportunity_no','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
+        {title: "Fırsat No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
@@ -32,15 +32,15 @@ $(function () {
             }
         },
 
-        {title: "<?php echo __('dealer_name','komtera'); ?>", editable: false, minWidth: 360, sortable: true, dataIndx: "BAYI_ADI",filter: {
+        {title: "Bayi Adı", editable: false, minWidth: 360, sortable: true, dataIndx: "BAYI_ADI",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-        {title: "<?php echo __('customer','komtera'); ?> ", align: "left", editable: false, minWidth: 316, sortable: true, dataIndx: "MUSTERI_ADI",filter: {
+        {title: "Müşteri", align: "left", editable: false, minWidth: 316, sortable: true, dataIndx: "MUSTERI_ADI",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "<?php echo __('brand','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: {
+        {title: "Marka", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: {
                    crules: [{condition: 'contain'}]
                }
            }
@@ -74,14 +74,14 @@ $(function () {
                 items: [
                 {
                         type: 'button',
-                        label: "<?php echo __('refresh','komtera'); ?>",                   
+                        label: "Yenile",                   
                         listener: function () {
                             grid.refreshDataAndView();
                         }
                 } , {
                         type: 'checkbox',
                         value: false,
-                        label: '<?php echo __('wrap_rows','komtera'); ?>',
+                        label: 'Satır Kaydır',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.refresh();
@@ -111,8 +111,8 @@ $(function () {
         showHeader: true,
         showTitle: true,
         groupModel: {on: false}, // , dataIndx: ["BAYI"]
-        showToolbar: false,
-        showTop: false,        
+        showToolbar: true,
+        showTop: true,        
         width: 1200, height: 400,
         dataModel: dataModelSS,
         colModel: colM,
@@ -162,7 +162,7 @@ $(function () {
         rowHt: 19,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: 'Yenilemeler',
+        title: '<span style="font-size: 18px;"><b>Yenilemeler</b></span>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});
