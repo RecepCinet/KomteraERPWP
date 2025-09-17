@@ -1,5 +1,5 @@
 2025.9
--
+-Firsatlar tarih ve tum secenekleriyle calisir hale getirildi.
 -Gridde satir kaydirmada bazi yazilar satirdan tasmasi sorunu giderildi.
 -Kullanici guncelleme buttonu sag alta sabitlendi.
 -Firsatlar listesi icin tarih araligi eklendi.
