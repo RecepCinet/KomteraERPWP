@@ -142,9 +142,17 @@ if (isset($_GET['action'])) {
 
         if ($_GET['action'] === 'search_bayiler') {
             $query = $_GET['query'] ?? '';
+            $mode = $_GET['mode'] ?? 'startswith';
+
+            // Arama moduna göre search term oluştur
+            if ($mode === 'startswith') {
+                $searchTerm = $query . '%';
+            } else { // contains (default)
+                $searchTerm = '%' . $query . '%';
+            }
+
             $sql = "SELECT b.CH_KODU, b.CH_UNVANI FROM aaa_erp_kt_bayiler b WHERE b.CH_UNVANI LIKE :query ORDER BY b.CH_UNVANI";
             $stmt = $conn->prepare($sql);
-            $searchTerm = '%' . $query . '%';
             $stmt->bindParam(':query', $searchTerm);
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -421,12 +429,50 @@ if (isset($_GET['action'])) {
     margin-bottom: 15px;
 }
 
+.search-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .modal-search input {
-    width: 100%;
+    flex: 1;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+}
+
+.search-options {
+    display: flex;
+    gap: 5px;
+}
+
+.search-option {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: monospace;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.search-option:hover {
+    border-color: #007cba;
+    background-color: #f0f8ff;
+}
+
+.search-option.active {
+    border-color: #007cba;
+    background-color: #007cba;
+    color: white;
 }
 
 .modal-list {
@@ -605,7 +651,17 @@ function openBayiModal() {
                     <button class="modal-close" onclick="closeBayiModal()">&times;</button>
                 </div>
                 <div class="modal-search">
-                    <input type="text" id="bayi-search" placeholder="Bayi adı ile ara..." onkeyup="searchBayiler(this.value)">
+                    <div class="search-container">
+                        <input type="text" id="bayi-search" placeholder="Bayi adı ile ara..." onkeyup="searchBayiler(this.value)">
+                        <div class="search-options">
+                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                                *__
+                            </button>
+                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                                _*_
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-list" id="bayi-list">
                     <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
@@ -615,6 +671,28 @@ function openBayiModal() {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Search option event listeners
+    document.querySelectorAll('.search-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('.search-option').forEach(function(b) {
+                b.classList.remove('active');
+            });
+
+            // Add active class to clicked button
+            this.classList.add('active');
+
+            // Trigger search with current input value
+            const searchValue = document.getElementById('bayi-search').value;
+            if (searchValue.length >= 2) {
+                searchBayiler(searchValue);
+            } else {
+                loadAllBayiler();
+            }
+        });
+    });
+
     loadAllBayiler();
 }
 
@@ -646,8 +724,12 @@ function searchBayiler(query) {
         return;
     }
 
+    // Get selected search mode
+    const activeOption = document.querySelector('.search-option.active');
+    const searchMode = activeOption ? activeOption.getAttribute('data-mode') : 'startswith';
+
     jQuery.ajax({
-        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=search_bayiler&query=' + encodeURIComponent(query),
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=search_bayiler&query=' + encodeURIComponent(query) + '&mode=' + searchMode,
         type: 'GET',
         dataType: 'json',
         success: function(data) {
