@@ -489,6 +489,175 @@ if (isset($_GET['action'])) {
             exit;
         }
 
+        if ($_GET['action'] === 'get_musteri_temsilcileri') {
+            $selected_marka = $_GET['marka'] ?? '';
+
+            try {
+                // my_brands meta'sına sahip kullanıcıları al
+                $users = get_users(array(
+                    'meta_key' => 'my_brands',
+                    'meta_compare' => 'EXISTS'
+                ));
+
+                $filtered_users = array();
+
+                foreach ($users as $wp_user) {
+                    $user_brands = get_user_meta($wp_user->ID, 'my_brands', true);
+
+                    // Eğer marka seçildiyse, sadece o markaya yetkili kullanıcıları göster
+                    if ($selected_marka) {
+                        $has_brand = false;
+                        if (is_array($user_brands)) {
+                            $has_brand = in_array($selected_marka, $user_brands);
+                        } elseif (is_string($user_brands)) {
+                            // Serialized array olabilir
+                            $unserialized = maybe_unserialize($user_brands);
+                            if (is_array($unserialized)) {
+                                $has_brand = in_array($selected_marka, $unserialized);
+                                $user_brands = $unserialized;
+                            } else {
+                                $has_brand = ($user_brands === $selected_marka);
+                            }
+                        }
+
+                        if ($has_brand) {
+                            $filtered_users[] = array(
+                                'user_login' => $wp_user->user_login,
+                                'brands' => $user_brands
+                            );
+                        }
+                    } else {
+                        // Marka seçili değilse tüm yetkili kullanıcıları göster
+                        $filtered_users[] = array(
+                            'user_login' => $wp_user->user_login,
+                            'brands' => $user_brands
+                        );
+                    }
+                }
+
+                echo json_encode(['success' => true, 'data' => $filtered_users]);
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'get_accman') {
+            $selected_marka = $_GET['marka'] ?? '';
+
+            try {
+                // Gerçek tablo yapısı: marka, yetkili, telefon, eposta
+                if ($selected_marka) {
+                    // Seçili markaya göre filtrele
+                    $sql = "SELECT * FROM aa_erp_kt_markalar_managers WHERE marka = :marka ORDER BY yetkili";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':marka', $selected_marka);
+                    $stmt->execute();
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    // Tüm AccMan'leri getir
+                    $sql = "SELECT * FROM aa_erp_kt_markalar_managers ORDER BY marka, yetkili";
+                    $stmt = $conn->query($sql);
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+                echo json_encode([
+                    'success' => true,
+                    'data' => $data,
+                    'debug' => [
+                        'selected_marka' => $selected_marka,
+                        'count' => count($data),
+                        'sql_used' => $selected_marka ? 'filtered' : 'all'
+                    ]
+                ]);
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'save_accman') {
+            $marka = $_POST['marka'] ?? '';
+            $yetkili = $_POST['yetkili'] ?? '';
+            $telefon = $_POST['telefon'] ?? '';
+            $eposta = $_POST['eposta'] ?? '';
+
+            try {
+                if ($marka && $yetkili) {
+                    // Gerçek tablo yapısı: marka, yetkili, telefon, eposta
+                    $sql = "INSERT INTO aa_erp_kt_markalar_managers (marka, yetkili, telefon, eposta) VALUES (:marka, :yetkili, :telefon, :eposta)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':marka', $marka);
+                    $stmt->bindParam(':yetkili', $yetkili);
+                    $stmt->bindParam(':telefon', $telefon);
+                    $stmt->bindParam(':eposta', $eposta);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'AccMan başarıyla eklendi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Kayıt sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Marka ve yetkili adı gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'update_accman') {
+            $id = $_POST['id'] ?? '';
+            $yetkili = $_POST['yetkili'] ?? '';
+            $telefon = $_POST['telefon'] ?? '';
+            $eposta = $_POST['eposta'] ?? '';
+
+            try {
+                if ($id && $yetkili) {
+                    $sql = "UPDATE aa_erp_kt_markalar_managers SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':id', $id);
+                    $stmt->bindParam(':yetkili', $yetkili);
+                    $stmt->bindParam(':telefon', $telefon);
+                    $stmt->bindParam(':eposta', $eposta);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'AccMan başarıyla güncellendi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Güncelleme sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID ve yetkili adı gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'delete_accman') {
+            $id = $_POST['id'] ?? '';
+
+            try {
+                if ($id) {
+                    $sql = "DELETE FROM aa_erp_kt_markalar_managers WHERE id = :id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':id', $id);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'AccMan başarıyla silindi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Silme sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
     } catch (Exception $e) {
         echo json_encode(['error' => $e->getMessage()]);
         exit;
@@ -1157,6 +1326,7 @@ if (isset($_GET['action'])) {
                 <label for="accman">AccMan</label>
                 <div class="input-with-button">
                     <input type="text" id="accman" name="accman" placeholder="AccMan seçmek için tıklayın" readonly onclick="openAccmanModal()">
+                    <input type="hidden" id="accman_id" name="accman_id">
                     <button type="button" class="btn-search" onclick="openAccmanModal()">
                         <span class="dashicons dashicons-search"></span>
                     </button>
@@ -1183,8 +1353,13 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label>Müşteri Temsilcisi</label>
-                <input type="text" value="<?php echo esc_html($user); ?>" disabled>
+                <label for="musteri_temsilcisi">Müşteri Temsilcisi</label>
+                <div class="input-with-button">
+                    <input type="text" id="musteri_temsilcisi" name="musteri_temsilcisi" placeholder="Müşteri temsilcisi seçmek için tıklayın" readonly onclick="openMusteriTemsilcisiModal()" value="<?php echo esc_html($user); ?>">
+                    <button type="button" class="btn-search" onclick="openMusteriTemsilcisiModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
             </div>
             <div class="form-group">
                 <label>Oluşturan</label>
@@ -1330,6 +1505,12 @@ function displayMarkalar(markalar) {
 
 function selectMarka(markaAdi) {
     document.getElementById('marka').value = markaAdi;
+
+    // Marka değiştiğinde müşteri temsilcisi ve AccMan alanını sıfırla
+    document.getElementById('musteri_temsilcisi').value = '<?php echo esc_html($user); ?>';
+    document.getElementById('accman').value = '';
+    document.getElementById('accman_id').value = '';
+
     closeMarkaModal();
 }
 
@@ -1617,26 +1798,28 @@ function selectMusteri(musteriId, musteriAdi) {
     closeMusteriModal();
 }
 
-// AccMan Modal Functions (Müşteriler tablosundan)
+// AccMan Modal Functions (aa_erp_kt_markalar_managers tablosundan)
 function openAccmanModal() {
+    const selectedMarka = document.getElementById('marka').value;
+
+    if (!selectedMarka) {
+        alert('Önce bir marka seçiniz.');
+        return;
+    }
+
     const modalHtml = `
         <div id="accman-modal" class="modal-overlay" onclick="closeAccmanModal(event)">
             <div class="modal-content" onclick="event.stopPropagation()">
                 <div class="modal-header">
-                    <h3>AccMan Seçimi</h3>
+                    <h3>AccMan Seçimi (${selectedMarka})</h3>
                     <button class="modal-close" onclick="closeAccmanModal()">&times;</button>
                 </div>
-                <div class="modal-search">
-                    <div class="search-container">
-                        <input type="text" id="accman-search" placeholder="AccMan adı ile ara..." onkeyup="searchAccman(this.value)">
-                        <div class="search-options">
-                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
-                                <span class="dashicons dashicons-editor-alignleft"></span>
-                            </button>
-                            <button class="search-option" data-mode="contains" title="İçeriyor">
-                                <span class="dashicons dashicons-search"></span>
-                            </button>
-                        </div>
+                <div class="yetkili-add-form">
+                    <div class="form-row">
+                        <input type="text" id="new-accman-name" placeholder="Yetkili Adı" class="yetkili-input">
+                        <input type="text" id="new-accman-phone" placeholder="Telefon" class="yetkili-input">
+                        <input type="email" id="new-accman-email" placeholder="E-posta" class="yetkili-input">
+                        <button class="btn btn-primary" onclick="saveAccman()">Ekle</button>
                     </div>
                 </div>
                 <div class="modal-list" id="accman-list">
@@ -1647,29 +1830,7 @@ function openAccmanModal() {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-    // Search option event listeners
-    document.querySelectorAll('#accman-modal .search-option').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            document.querySelectorAll('#accman-modal .search-option').forEach(function(b) {
-                b.classList.remove('active');
-            });
-
-            // Add active class to clicked button
-            this.classList.add('active');
-
-            // Trigger search with current input value
-            const searchValue = document.getElementById('accman-search').value;
-            if (searchValue.length >= 2) {
-                searchAccman(searchValue);
-            } else {
-                loadAllAccman();
-            }
-        });
-    });
-
-    loadAllAccman();
+    loadAccmanlar(selectedMarka);
 }
 
 function closeAccmanModal(event) {
@@ -1680,60 +1841,341 @@ function closeAccmanModal(event) {
     }
 }
 
-function loadAllAccman() {
+function loadAccmanlar(marka) {
+    console.log('DEBUG - loadAccmanlar called with marka:', marka);
+
     jQuery.ajax({
-        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_musteriler',
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_accman&marka=' + encodeURIComponent(marka),
         type: 'GET',
         dataType: 'json',
-        success: function(data) {
-            displayAccman(data);
+        success: function(response) {
+            console.log('DEBUG - AccMan response:', response);
+            console.log('DEBUG - AccMan data count:', response.data ? response.data.length : 0);
+
+            if (response.success) {
+                displayAccmanlar(response.data);
+            } else {
+                document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Hata: ' + response.message + '</div>';
+            }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('DEBUG - AccMan AJAX Error:', status, error);
+            console.error('DEBUG - AccMan Response Text:', xhr.responseText);
             document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">AccMan listesi yüklenirken hata oluştu.</div>';
         }
     });
 }
 
-function searchAccman(query) {
-    if (query.length < 2) {
-        loadAllAccman();
+function displayAccmanlar(data) {
+    const listDiv = document.getElementById('accman-list');
+    const selectedMarka = document.getElementById('marka').value;
+
+    console.log('DEBUG - displayAccmanlar - selectedMarka:', selectedMarka);
+    console.log('DEBUG - displayAccmanlar - data:', data);
+    console.log('DEBUG - displayAccmanlar - count:', data.length);
+
+    if (!Array.isArray(data)) {
+        console.error('AccMan data is not an array:', data);
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
         return;
     }
 
-    const activeOption = document.querySelector('#accman-modal .search-option.active');
-    const searchMode = activeOption ? activeOption.getAttribute('data-mode') : 'startswith';
+    if (data.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bu marka (' + selectedMarka + ') için AccMan bulunamadı.</div>';
+        return;
+    }
+
+    let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
+    data.forEach(function(accman) {
+        html += `
+            <tr id="accman-row-${accman.id}">
+                <td onclick="selectAccman('${accman.id}', '${accman.yetkili || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${accman.yetkili || 'N/A'}</td>
+                <td class="yetkili-phone-cell">${accman.telefon || ''}</td>
+                <td class="yetkili-email-cell">${accman.eposta || ''}</td>
+                <td>
+                    <div class="yetkili-buttons">
+                        <button class="btn-small btn-edit" onclick="editAccman(${accman.id}, '${accman.yetkili || ''}', '${accman.telefon || ''}', '${accman.eposta || ''}')">Düzenle</button>
+                        <button class="btn-small btn-delete" onclick="deleteAccman(${accman.id})">Sil</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    html += '</tbody></table>';
+
+    listDiv.innerHTML = html;
+}
+
+function selectAccman(accmanId, accmanAdi) {
+    document.getElementById('accman').value = accmanAdi;
+    document.getElementById('accman_id').value = accmanId;
+    closeAccmanModal();
+}
+
+// CRUD Functions for AccMan
+function saveAccman() {
+    const marka = document.getElementById('marka').value;
+    const yetkili = document.getElementById('new-accman-name').value.trim();
+    const telefon = document.getElementById('new-accman-phone').value.trim();
+    const eposta = document.getElementById('new-accman-email').value.trim();
+
+    if (!yetkili) {
+        alert('Yetkili adı gereklidir.');
+        return;
+    }
 
     jQuery.ajax({
-        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=search_musteriler&query=' + encodeURIComponent(query) + '&mode=' + searchMode,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            displayAccman(data);
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=save_accman',
+        type: 'POST',
+        data: {
+            marka: marka,
+            yetkili: yetkili,
+            telefon: telefon,
+            eposta: eposta
         },
-        error: function() {
-            document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Inputları temizle
+                document.getElementById('new-accman-name').value = '';
+                document.getElementById('new-accman-phone').value = '';
+                document.getElementById('new-accman-email').value = '';
+
+                // Listeyi yenile
+                const currentMarka = document.getElementById('marka').value;
+                loadAccmanlar(currentMarka);
+
+                alert(response.message);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Save AccMan error:', status, error);
+            alert('Kayıt sırasında hata oluştu: ' + error);
         }
     });
 }
 
-function displayAccman(accmanlar) {
-    const listDiv = document.getElementById('accman-list');
-    if (accmanlar.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">AccMan bulunamadı.</div>';
+function editAccman(accmanId, currentName, currentPhone, currentEmail) {
+    const row = document.getElementById(`accman-row-${accmanId}`);
+
+    // Satırı edit moduna çevir
+    row.innerHTML = `
+        <td><input type="text" id="edit-accman-name-${accmanId}" value="${currentName}" class="yetkili-edit-input"></td>
+        <td><input type="text" id="edit-accman-phone-${accmanId}" value="${currentPhone}" class="yetkili-edit-input"></td>
+        <td><input type="email" id="edit-accman-email-${accmanId}" value="${currentEmail}" class="yetkili-edit-input"></td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="updateAccman(${accmanId})">Kaydet</button>
+                <button class="btn-small btn-delete" onclick="cancelEditAccman(${accmanId}, '${currentName}', '${currentPhone}', '${currentEmail}')">İptal</button>
+            </div>
+        </td>
+    `;
+}
+
+function updateAccman(accmanId) {
+    const yetkili = document.getElementById(`edit-accman-name-${accmanId}`).value.trim();
+    const telefon = document.getElementById(`edit-accman-phone-${accmanId}`).value.trim();
+    const eposta = document.getElementById(`edit-accman-email-${accmanId}`).value.trim();
+
+    if (!yetkili) {
+        alert('Yetkili adı gereklidir.');
+        return;
+    }
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=update_accman',
+        type: 'POST',
+        data: {
+            id: accmanId,
+            yetkili: yetkili,
+            telefon: telefon,
+            eposta: eposta
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Listeyi yenile
+                const marka = document.getElementById('marka').value;
+                loadAccmanlar(marka);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Update AccMan error:', status, error);
+            alert('Güncelleme sırasında hata oluştu: ' + error);
+        }
+    });
+}
+
+function cancelEditAccman(accmanId, originalName, originalPhone, originalEmail) {
+    const row = document.getElementById(`accman-row-${accmanId}`);
+
+    // Satırı orijinal haline döndür
+    row.innerHTML = `
+        <td onclick="selectAccman('${accmanId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td class="yetkili-phone-cell">${originalPhone || ''}</td>
+        <td class="yetkili-email-cell">${originalEmail || ''}</td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="editAccman(${accmanId}, '${originalName}', '${originalPhone}', '${originalEmail}')">Düzenle</button>
+                <button class="btn-small btn-delete" onclick="deleteAccman(${accmanId})">Sil</button>
+            </div>
+        </td>
+    `;
+}
+
+function deleteAccman(accmanId) {
+    // Önce AccMan bilgilerini alın
+    const row = document.getElementById(`accman-row-${accmanId}`);
+    const nameCell = row.querySelector('.yetkili-name-cell');
+    const phoneCell = row.querySelector('.yetkili-phone-cell');
+    const emailCell = row.querySelector('.yetkili-email-cell');
+
+    const accmanName = nameCell ? nameCell.textContent : '';
+    const accmanPhone = phoneCell ? phoneCell.textContent : '';
+    const accmanEmail = emailCell ? emailCell.textContent : '';
+
+    // Satırı delete confirmation moduna çevir
+    row.className = 'yetkili-delete-row';
+    row.innerHTML = `
+        <td colspan="3" style="text-align: center; font-weight: bold; color: #721c24;">
+            Bu AccMan'i silmek istediğinizden emin misiniz: "${accmanName}"?
+        </td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-delete" onclick="confirmDeleteAccman(${accmanId})">Sil</button>
+                <button class="btn-small btn-edit" onclick="cancelDeleteAccman(${accmanId}, '${accmanName}', '${accmanPhone}', '${accmanEmail}')">Vazgeç</button>
+            </div>
+        </td>
+    `;
+}
+
+function confirmDeleteAccman(accmanId) {
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=delete_accman',
+        type: 'POST',
+        data: {
+            id: accmanId
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Listeyi yenile
+                const marka = document.getElementById('marka').value;
+                loadAccmanlar(marka);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Delete AccMan error:', status, error);
+            alert('Silme sırasında hata oluştu: ' + error);
+        }
+    });
+}
+
+function cancelDeleteAccman(accmanId, originalName, originalPhone, originalEmail) {
+    const row = document.getElementById(`accman-row-${accmanId}`);
+
+    // Satırı orijinal haline döndür
+    row.className = '';
+    row.innerHTML = `
+        <td onclick="selectAccman('${accmanId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td class="yetkili-phone-cell">${originalPhone || ''}</td>
+        <td class="yetkili-email-cell">${originalEmail || ''}</td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="editAccman(${accmanId}, '${originalName}', '${originalPhone}', '${originalEmail}')">Düzenle</button>
+                <button class="btn-small btn-delete" onclick="deleteAccman(${accmanId})">Sil</button>
+            </div>
+        </td>
+    `;
+}
+
+// Müşteri Temsilcisi Modal Functions
+function openMusteriTemsilcisiModal() {
+    const modalHtml = `
+        <div id="musteri-temsilcisi-modal" class="modal-overlay" onclick="closeMusteriTemsilcisiModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Müşteri Temsilcisi Seçimi</h3>
+                    <button class="modal-close" onclick="closeMusteriTemsilcisiModal()">&times;</button>
+                </div>
+                <div class="modal-list" id="musteri-temsilcisi-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+                <div class="modal-footer">
+                    <div style="font-size: 12px; color: #666; text-align: center;">
+                        * Seçilen markaya yetkili kullanıcılar gösterilmektedir
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    loadMusteriTemsilcileri();
+
+    // Arama kutusuna otomatik fokus - bu modalde arama yok ama konsistency için
+    setTimeout(function() {
+        // Focus işlemi yok çünkü bu modalde arama kutusu yok
+    }, 100);
+}
+
+function closeMusteriTemsilcisiModal(event) {
+    if (event && event.target.id !== 'musteri-temsilcisi-modal') return;
+    const modal = document.getElementById('musteri-temsilcisi-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadMusteriTemsilcileri() {
+    const selectedMarka = document.getElementById('marka').value;
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_musteri_temsilcileri&marka=' + encodeURIComponent(selectedMarka),
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                displayMusteriTemsilcileri(response.data);
+            } else {
+                document.getElementById('musteri-temsilcisi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Hata: ' + response.message + '</div>';
+            }
+        },
+        error: function(xhr, status, error) {
+            document.getElementById('musteri-temsilcisi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Müşteri temsilcisi listesi yüklenirken hata oluştu.</div>';
+        }
+    });
+}
+
+function displayMusteriTemsilcileri(temsilciler) {
+    const listDiv = document.getElementById('musteri-temsilcisi-list');
+
+    if (temsilciler.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bu marka için yetkili müşteri temsilcisi bulunamadı.</div>';
         return;
     }
 
     let html = '';
-    accmanlar.forEach(function(accman) {
-        html += `<div class="bayi-item" onclick="selectAccman('${accman.musteri}')">${accman.musteri}</div>`;
+    temsilciler.forEach(function(temsilci) {
+        html += `
+            <div class="bayi-item" onclick="selectMusteriTemsilcisi('${temsilci.user_login}', '${temsilci.user_login}')">
+                ${temsilci.user_login}
+            </div>
+        `;
     });
 
     listDiv.innerHTML = html;
 }
 
-function selectAccman(accmanAdi) {
-    document.getElementById('accman').value = accmanAdi;
-    closeAccmanModal();
+function selectMusteriTemsilcisi(userLogin, userName) {
+    document.getElementById('musteri_temsilcisi').value = userName;
+    closeMusteriTemsilcisiModal();
 }
 
 // Bayi Yetkili Modal Functions
