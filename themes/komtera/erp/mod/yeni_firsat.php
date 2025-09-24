@@ -443,6 +443,52 @@ if (isset($_GET['action'])) {
             exit;
         }
 
+        if ($_GET['action'] === 'delete_bayi_yetkili') {
+            $id = $_POST['id'] ?? '';
+
+            try {
+                if ($id) {
+                    $sql = "DELETE FROM aa_erp_kt_bayiler_yetkililer WHERE id = :id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':id', $id);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'Bayi yetkili başarıyla silindi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Silme sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'delete_musteri_yetkili') {
+            $id = $_POST['id'] ?? '';
+
+            try {
+                if ($id) {
+                    $sql = "DELETE FROM aa_erp_kt_musteriler_yetkililer WHERE id = :id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':id', $id);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'Müşteri yetkili başarıyla silindi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Silme sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
     } catch (Exception $e) {
         echo json_encode(['error' => $e->getMessage()]);
         exit;
@@ -992,6 +1038,16 @@ if (isset($_GET['action'])) {
     gap: 5px;
     justify-content: flex-end;
     align-items: center;
+}
+
+/* Delete Confirmation Row */
+.yetkili-delete-row {
+    background-color: #f8d7da !important;
+    border: 2px solid #dc3545 !important;
+}
+
+.yetkili-delete-row td {
+    background-color: #f8d7da !important;
 }
 </style>
 
@@ -2046,10 +2102,71 @@ function cancelEditBayiYetkili(yetkiliId, originalName, originalPhone, originalE
 }
 
 function deleteBayiYetkili(yetkiliId) {
-    if (!confirm('Bu yetkiliyi silmek istediğinizden emin misiniz?')) return;
+    // Önce yetkili bilgilerini alın
+    const row = document.getElementById(`bayi-yetkili-row-${yetkiliId}`);
+    const nameCell = row.querySelector('.yetkili-name-cell');
+    const phoneCell = row.querySelector('.yetkili-phone-cell');
+    const emailCell = row.querySelector('.yetkili-email-cell');
 
-    // Here you would implement the delete functionality
-    alert('Bayi yetkili silme özelliği henüz implement edilmedi.');
+    const yetkiliName = nameCell ? nameCell.textContent : '';
+    const yetkiliPhone = phoneCell ? phoneCell.textContent : '';
+    const yetkiliEmail = emailCell ? emailCell.textContent : '';
+
+    // Satırı delete confirmation moduna çevir
+    row.className = 'yetkili-delete-row';
+    row.innerHTML = `
+        <td colspan="3" style="text-align: center; font-weight: bold; color: #721c24;">
+            Bu yetkiliyi silmek istediğinizden emin misiniz: "${yetkiliName}"?
+        </td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-delete" onclick="confirmDeleteBayiYetkili(${yetkiliId})">Sil</button>
+                <button class="btn-small btn-edit" onclick="cancelDeleteBayiYetkili(${yetkiliId}, '${yetkiliName}', '${yetkiliPhone}', '${yetkiliEmail}')">Vazgeç</button>
+            </div>
+        </td>
+    `;
+}
+
+function confirmDeleteBayiYetkili(yetkiliId) {
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=delete_bayi_yetkili',
+        type: 'POST',
+        data: {
+            id: yetkiliId
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Listeyi yenile
+                const bayiKodu = document.getElementById('bayi_kodu').value;
+                loadBayiYetkililer(bayiKodu);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Delete bayi yetkili error:', status, error);
+            alert('Silme sırasında hata oluştu: ' + error);
+        }
+    });
+}
+
+function cancelDeleteBayiYetkili(yetkiliId, originalName, originalPhone, originalEmail) {
+    const row = document.getElementById(`bayi-yetkili-row-${yetkiliId}`);
+
+    // Satırı orijinal haline döndür
+    row.className = '';
+    row.innerHTML = `
+        <td onclick="selectBayiYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td class="yetkili-phone-cell">${originalPhone || ''}</td>
+        <td class="yetkili-email-cell">${originalEmail || ''}</td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="editBayiYetkili(${yetkiliId}, '${originalName}', '${originalPhone}', '${originalEmail}')">Düzenle</button>
+                <button class="btn-small btn-delete" onclick="deleteBayiYetkili(${yetkiliId})">Sil</button>
+            </div>
+        </td>
+    `;
 }
 
 // CRUD Functions for Musteri Yetkili
@@ -2167,9 +2284,70 @@ function cancelEditMusteriYetkili(yetkiliId, originalName, originalPhone, origin
 }
 
 function deleteMusteriYetkili(yetkiliId) {
-    if (!confirm('Bu yetkiliyi silmek istediğinizden emin misiniz?')) return;
+    // Önce yetkili bilgilerini alın
+    const row = document.getElementById(`musteri-yetkili-row-${yetkiliId}`);
+    const nameCell = row.querySelector('.yetkili-name-cell');
+    const phoneCell = row.querySelector('.yetkili-phone-cell');
+    const emailCell = row.querySelector('.yetkili-email-cell');
 
-    // Here you would implement the delete functionality
-    alert('Müşteri yetkili silme özelliği henüz implement edilmedi.');
+    const yetkiliName = nameCell ? nameCell.textContent : '';
+    const yetkiliPhone = phoneCell ? phoneCell.textContent : '';
+    const yetkiliEmail = emailCell ? emailCell.textContent : '';
+
+    // Satırı delete confirmation moduna çevir
+    row.className = 'yetkili-delete-row';
+    row.innerHTML = `
+        <td colspan="3" style="text-align: center; font-weight: bold; color: #721c24;">
+            Bu yetkiliyi silmek istediğinizden emin misiniz: "${yetkiliName}"?
+        </td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-delete" onclick="confirmDeleteMusteriYetkili(${yetkiliId})">Sil</button>
+                <button class="btn-small btn-edit" onclick="cancelDeleteMusteriYetkili(${yetkiliId}, '${yetkiliName}', '${yetkiliPhone}', '${yetkiliEmail}')">Vazgeç</button>
+            </div>
+        </td>
+    `;
+}
+
+function confirmDeleteMusteriYetkili(yetkiliId) {
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=delete_musteri_yetkili',
+        type: 'POST',
+        data: {
+            id: yetkiliId
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Listeyi yenile
+                const musteriId = document.getElementById('musteri_id').value;
+                loadMusteriYetkililer(musteriId);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Delete musteri yetkili error:', status, error);
+            alert('Silme sırasında hata oluştu: ' + error);
+        }
+    });
+}
+
+function cancelDeleteMusteriYetkili(yetkiliId, originalName, originalPhone, originalEmail) {
+    const row = document.getElementById(`musteri-yetkili-row-${yetkiliId}`);
+
+    // Satırı orijinal haline döndür
+    row.className = '';
+    row.innerHTML = `
+        <td onclick="selectMusteriYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td class="yetkili-phone-cell">${originalPhone || ''}</td>
+        <td class="yetkili-email-cell">${originalEmail || ''}</td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="editMusteriYetkili(${yetkiliId}, '${originalName}', '${originalPhone}', '${originalEmail}')">Düzenle</button>
+                <button class="btn-small btn-delete" onclick="deleteMusteriYetkili(${yetkiliId})">Sil</button>
+            </div>
+        </td>
+    `;
 }
 </script>
