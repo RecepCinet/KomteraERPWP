@@ -327,6 +327,64 @@ if (isset($_GET['action'])) {
             exit;
         }
 
+        if ($_GET['action'] === 'save_bayi_yetkili') {
+            $bayi_kodu = $_POST['bayi_kodu'] ?? '';
+            $yetkili = $_POST['yetkili'] ?? '';
+            $telefon = $_POST['telefon'] ?? '';
+            $eposta = $_POST['eposta'] ?? '';
+
+            try {
+                if ($bayi_kodu && $yetkili) {
+                    $sql = "INSERT INTO aa_erp_kt_bayiler_yetkililer (CH_KODU, yetkili, telefon, eposta) VALUES (:bayi_kodu, :yetkili, :telefon, :eposta)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':bayi_kodu', $bayi_kodu);
+                    $stmt->bindParam(':yetkili', $yetkili);
+                    $stmt->bindParam(':telefon', $telefon);
+                    $stmt->bindParam(':eposta', $eposta);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'Bayi yetkili başarıyla eklendi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Kayıt sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Bayi kodu ve yetkili adı gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'save_musteri_yetkili') {
+            $musteri_id = $_POST['musteri_id'] ?? '';
+            $yetkili = $_POST['yetkili'] ?? '';
+            $telefon = $_POST['telefon'] ?? '';
+            $eposta = $_POST['eposta'] ?? '';
+
+            try {
+                if ($musteri_id && $yetkili) {
+                    $sql = "INSERT INTO aa_erp_kt_musteriler_yetkililer (musteri_id, yetkili, telefon, eposta) VALUES (:musteri_id, :yetkili, :telefon, :eposta)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':musteri_id', $musteri_id);
+                    $stmt->bindParam(':yetkili', $yetkili);
+                    $stmt->bindParam(':telefon', $telefon);
+                    $stmt->bindParam(':eposta', $eposta);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'Müşteri yetkili başarıyla eklendi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Kayıt sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Müşteri ID ve yetkili adı gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
     } catch (Exception $e) {
         echo json_encode(['error' => $e->getMessage()]);
         exit;
@@ -804,6 +862,46 @@ if (isset($_GET['action'])) {
 
 .btn-delete:hover {
     background-color: #c82333;
+}
+
+/* Yetkili Add Form Styles */
+.yetkili-add-form {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+.yetkili-add-form .form-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.yetkili-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.yetkili-input:focus {
+    outline: none;
+    border-color: #007cba;
+    box-shadow: 0 0 3px rgba(0,124,186,0.3);
+}
+
+@media (max-width: 768px) {
+    .yetkili-add-form .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .yetkili-input {
+        width: 100%;
+    }
 }
 </style>
 
@@ -1497,11 +1595,16 @@ function openBayiYetkiliModal() {
                     <h3>Bayi Yetkili Seçimi</h3>
                     <button class="modal-close" onclick="closeBayiYetkiliModal()">&times;</button>
                 </div>
+                <div class="yetkili-add-form">
+                    <div class="form-row">
+                        <input type="text" id="new-bayi-yetkili-name" placeholder="Yetkili Adı" class="yetkili-input">
+                        <input type="text" id="new-bayi-yetkili-phone" placeholder="Telefon" class="yetkili-input">
+                        <input type="email" id="new-bayi-yetkili-email" placeholder="E-posta" class="yetkili-input">
+                        <button class="btn btn-primary" onclick="saveBayiYetkili()">Ekle</button>
+                    </div>
+                </div>
                 <div class="modal-list" id="bayi-yetkili-list">
                     <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" onclick="addNewBayiYetkili()">Yeni Ekle</button>
                 </div>
             </div>
         </div>
@@ -1601,11 +1704,16 @@ function openMusteriYetkiliModal() {
                     <h3>Müşteri Yetkili Seçimi</h3>
                     <button class="modal-close" onclick="closeMusteriYetkiliModal()">&times;</button>
                 </div>
+                <div class="yetkili-add-form">
+                    <div class="form-row">
+                        <input type="text" id="new-musteri-yetkili-name" placeholder="Yetkili Adı" class="yetkili-input">
+                        <input type="text" id="new-musteri-yetkili-phone" placeholder="Telefon" class="yetkili-input">
+                        <input type="email" id="new-musteri-yetkili-email" placeholder="E-posta" class="yetkili-input">
+                        <button class="btn btn-primary" onclick="saveMusteriYetkili()">Ekle</button>
+                    </div>
+                </div>
                 <div class="modal-list" id="musteri-yetkili-list">
                     <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" onclick="addNewMusteriYetkili()">Yeni Ekle</button>
                 </div>
             </div>
         </div>
@@ -1730,16 +1838,47 @@ function showAlert(message, type) {
 }
 
 // CRUD Functions for Bayi Yetkili
-function addNewBayiYetkili() {
+function saveBayiYetkili() {
     const bayiKodu = document.getElementById('bayi_kodu').value;
-    const adSoyad = prompt('Ad Soyad:');
-    if (!adSoyad) return;
+    const yetkili = document.getElementById('new-bayi-yetkili-name').value.trim();
+    const telefon = document.getElementById('new-bayi-yetkili-phone').value.trim();
+    const eposta = document.getElementById('new-bayi-yetkili-email').value.trim();
 
-    const telefon = prompt('Telefon:') || '';
-    const email = prompt('Email:') || '';
+    if (!yetkili) {
+        alert('Yetkili adı gereklidir.');
+        return;
+    }
 
-    // Here you would implement the save functionality
-    alert('Bayi yetkili ekleme özelliği henüz implement edilmedi.');
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=save_bayi_yetkili',
+        type: 'POST',
+        data: {
+            bayi_kodu: bayiKodu,
+            yetkili: yetkili,
+            telefon: telefon,
+            eposta: eposta
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Inputları temizle
+                document.getElementById('new-bayi-yetkili-name').value = '';
+                document.getElementById('new-bayi-yetkili-phone').value = '';
+                document.getElementById('new-bayi-yetkili-email').value = '';
+
+                // Listeyi yenile
+                loadBayiYetkililer(bayiKodu);
+
+                alert(response.message);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Save bayi yetkili error:', status, error);
+            alert('Kayıt sırasında hata oluştu: ' + error);
+        }
+    });
 }
 
 function editBayiYetkili(yetkiliId) {
@@ -1755,16 +1894,47 @@ function deleteBayiYetkili(yetkiliId) {
 }
 
 // CRUD Functions for Musteri Yetkili
-function addNewMusteriYetkili() {
+function saveMusteriYetkili() {
     const musteriId = document.getElementById('musteri_id').value;
-    const adSoyad = prompt('Ad Soyad:');
-    if (!adSoyad) return;
+    const yetkili = document.getElementById('new-musteri-yetkili-name').value.trim();
+    const telefon = document.getElementById('new-musteri-yetkili-phone').value.trim();
+    const eposta = document.getElementById('new-musteri-yetkili-email').value.trim();
 
-    const telefon = prompt('Telefon:') || '';
-    const email = prompt('Email:') || '';
+    if (!yetkili) {
+        alert('Yetkili adı gereklidir.');
+        return;
+    }
 
-    // Here you would implement the save functionality
-    alert('Müşteri yetkili ekleme özelliği henüz implement edilmedi.');
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=save_musteri_yetkili',
+        type: 'POST',
+        data: {
+            musteri_id: musteriId,
+            yetkili: yetkili,
+            telefon: telefon,
+            eposta: eposta
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Inputları temizle
+                document.getElementById('new-musteri-yetkili-name').value = '';
+                document.getElementById('new-musteri-yetkili-phone').value = '';
+                document.getElementById('new-musteri-yetkili-email').value = '';
+
+                // Listeyi yenile
+                loadMusteriYetkililer(musteriId);
+
+                alert(response.message);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Save musteri yetkili error:', status, error);
+            alert('Kayıt sırasında hata oluştu: ' + error);
+        }
+    });
 }
 
 function editMusteriYetkili(yetkiliId) {
