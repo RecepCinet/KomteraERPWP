@@ -48,14 +48,44 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $firsat_aciklama = $_POST['firsat_aciklama'] ?? '';
         $bayi = $_POST['bayi'] ?? '';
         $bayi_kodu = $_POST['bayi_kodu'] ?? '';
+        $bayi_yetkili = $_POST['bayi_yetkili'] ?? '';
         $musteri = $_POST['musteri'] ?? '';
+        $musteri_yetkili = $_POST['musteri_yetkili'] ?? '';
+        $musteri_temsilcisi = $_POST['musteri_temsilcisi'] ?? '';
         $accman = $_POST['accman'] ?? '';
         $etkinlik = $_POST['etkinlik'] ?? '';
         $register = isset($_POST['register']) ? '1' : '0';
         $register_dr_no = $_POST['register_dr_no'] ?? '';
 
-        // Fırsat numarası oluşturma - basit bir yöntem
-        $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+        // Fırsat numarası oluşturma - son Fırsat No'ya random ekleyerek
+        try {
+            // Son fırsat numarasını al
+            $lastFirsatSql = "SELECT TOP 1 FIRSAT_NO FROM aa_erp_kt_firsatlar ORDER BY BASLANGIC_TARIHI DESC";
+            $lastFirsatStmt = $conn->query($lastFirsatSql);
+            $lastFirsat = $lastFirsatStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($lastFirsat && $lastFirsat['FIRSAT_NO']) {
+                // Son fırsat no'dan tarih kısmını çıkar
+                // Örnek: F20250924-123 -> 20250924
+                preg_match('/F(\d{8})/', $lastFirsat['FIRSAT_NO'], $matches);
+                if (!empty($matches[1])) {
+                    $lastDate = intval($matches[1]);
+                    // 2 ile 12 arası random sayı ekle
+                    $randomAdd = rand(2, 12);
+                    $newDate = $lastDate + $randomAdd;
+                    $firsat_no = 'F' . $newDate;
+                } else {
+                    // Eğer parse edilemezse varsayılan yöntem
+                    $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+                }
+            } else {
+                // Hiç kayıt yoksa varsayılan yöntem
+                $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+            }
+        } catch (Exception $e) {
+            // Hata durumunda varsayılan yöntem
+            $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+        }
 
         $sql = "INSERT INTO aa_erp_kt_firsatlar (
             FIRSAT_NO,
@@ -66,8 +96,10 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             PROJE_ADI,
             FIRSAT_ACIKLAMA,
             BAYI_ADI,
-            BAYI_KODU,
+            BAYI_CHKODU,
+            BAYI_YETKILI_TEL,
             MUSTERI_ADI,
+            MUSTERI_YETKILI_TEL,
             ETKINLIK,
             REGISTER,
             KAYIDI_ACAN,
@@ -84,12 +116,14 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             :firsat_aciklama,
             :bayi,
             :bayi_kodu,
+            :bayi_yetkili,
             :musteri,
+            :musteri_yetkili,
             :etkinlik,
             :register,
             :kayidi_acan,
             GETDATE(),
-            GETDATE(),
+            DATEADD(day, 30, GETDATE()),
             '0'
         )";
 
@@ -98,12 +132,14 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $stmt->bindParam(':marka', $marka);
         $stmt->bindParam(':gelis_kanali', $gelis_kanali);
         $stmt->bindParam(':olasilik', $olasilik);
-        $stmt->bindParam(':musteri_temsilcisi', $user);
+        $stmt->bindParam(':musteri_temsilcisi', $musteri_temsilcisi);
         $stmt->bindParam(':proje_adi', $proje_adi);
         $stmt->bindParam(':firsat_aciklama', $firsat_aciklama);
         $stmt->bindParam(':bayi', $bayi);
         $stmt->bindParam(':bayi_kodu', $bayi_kodu);
+        $stmt->bindParam(':bayi_yetkili', $bayi_yetkili);
         $stmt->bindParam(':musteri', $musteri);
+        $stmt->bindParam(':musteri_yetkili', $musteri_yetkili);
         $stmt->bindParam(':etkinlik', $etkinlik);
         $stmt->bindParam(':register', $register);
         $stmt->bindParam(':kayidi_acan', $user);
@@ -652,6 +688,43 @@ if (isset($_GET['action'])) {
                 } else {
                     echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
                 }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'get_etkinlikler') {
+            $selected_marka = $_GET['marka'] ?? '';
+
+            try {
+                if ($selected_marka) {
+                    // Seçili markaya göre ve tarih geçmemiş etkinlikleri getir
+                    $sql = "SELECT * FROM aa_erp_kt_etkinlikler
+                           WHERE marka = :marka
+                           AND (tarih_bit IS NULL OR tarih_bit >= GETDATE())
+                           ORDER BY tarih_bas ASC";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':marka', $selected_marka);
+                    $stmt->execute();
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    // Tüm aktif etkinlikleri getir
+                    $sql = "SELECT * FROM aa_erp_kt_etkinlikler
+                           WHERE (tarih_bit IS NULL OR tarih_bit >= GETDATE())
+                           ORDER BY marka, tarih_bas ASC";
+                    $stmt = $conn->query($sql);
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+                echo json_encode([
+                    'success' => true,
+                    'data' => $data,
+                    'debug' => [
+                        'selected_marka' => $selected_marka,
+                        'count' => count($data)
+                    ]
+                ]);
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
             }
@@ -1263,8 +1336,8 @@ if (isset($_GET['action'])) {
                 </select>
             </div>
             <div class="form-group">
-                <label for="proje_adi">Proje Adı <span class="required">*</span></label>
-                <input type="text" id="proje_adi" name="proje_adi" required>
+                <label for="proje_adi">Proje Adı</label>
+                <input type="text" id="proje_adi" name="proje_adi">
             </div>
         </div>
 
@@ -1277,9 +1350,9 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label for="bayi">Bayi</label>
+                <label for="bayi">Bayi <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="bayi" name="bayi" placeholder="Bayi seçmek için tıklayın" readonly onclick="openBayiModal()">
+                    <input type="text" id="bayi" name="bayi" placeholder="Bayi seçmek için tıklayın" readonly onclick="openBayiModal()" required>
                     <input type="hidden" id="bayi_kodu" name="bayi_kodu">
                     <button type="button" class="btn-search" onclick="openBayiModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1287,9 +1360,9 @@ if (isset($_GET['action'])) {
                 </div>
             </div>
             <div class="form-group">
-                <label for="bayi_yetkili">Bayi Yetkili</label>
+                <label for="bayi_yetkili">Bayi Yetkili <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="bayi_yetkili" name="bayi_yetkili" placeholder="Önce bayi seçin" readonly onclick="openBayiYetkiliModal()">
+                    <input type="text" id="bayi_yetkili" name="bayi_yetkili" placeholder="Önce bayi seçin" readonly onclick="openBayiYetkiliModal()" required>
                     <input type="hidden" id="bayi_yetkili_id" name="bayi_yetkili_id">
                     <button type="button" class="btn-search" onclick="openBayiYetkiliModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1300,9 +1373,9 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label for="musteri">Müşteri</label>
+                <label for="musteri">Müşteri <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="musteri" name="musteri" placeholder="Müşteri seçmek için tıklayın" readonly onclick="openMusteriModal()">
+                    <input type="text" id="musteri" name="musteri" placeholder="Müşteri seçmek için tıklayın" readonly onclick="openMusteriModal()" required>
                     <input type="hidden" id="musteri_id" name="musteri_id">
                     <button type="button" class="btn-search" onclick="openMusteriModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1310,9 +1383,9 @@ if (isset($_GET['action'])) {
                 </div>
             </div>
             <div class="form-group">
-                <label for="musteri_yetkili">Müşteri Yetkili</label>
+                <label for="musteri_yetkili">Müşteri Yetkili <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="musteri_yetkili" name="musteri_yetkili" placeholder="Önce müşteri seçin" readonly onclick="openMusteriYetkiliModal()">
+                    <input type="text" id="musteri_yetkili" name="musteri_yetkili" placeholder="Önce müşteri seçin" readonly onclick="openMusteriYetkiliModal()" required>
                     <input type="hidden" id="musteri_yetkili_id" name="musteri_yetkili_id">
                     <button type="button" class="btn-search" onclick="openMusteriYetkiliModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1334,7 +1407,13 @@ if (isset($_GET['action'])) {
             </div>
             <div class="form-group">
                 <label for="etkinlik">Etkinlik</label>
-                <input type="text" id="etkinlik" name="etkinlik">
+                <div class="input-with-button">
+                    <input type="text" id="etkinlik" name="etkinlik" placeholder="Etkinlik seçmek için tıklayın" readonly onclick="openEtkinlikModal()">
+                    <input type="hidden" id="etkinlik_id" name="etkinlik_id">
+                    <button type="button" class="btn-search" onclick="openEtkinlikModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1506,10 +1585,12 @@ function displayMarkalar(markalar) {
 function selectMarka(markaAdi) {
     document.getElementById('marka').value = markaAdi;
 
-    // Marka değiştiğinde müşteri temsilcisi ve AccMan alanını sıfırla
+    // Marka değiştiğinde ilgili alanları sıfırla
     document.getElementById('musteri_temsilcisi').value = '<?php echo esc_html($user); ?>';
     document.getElementById('accman').value = '';
     document.getElementById('accman_id').value = '';
+    document.getElementById('etkinlik').value = '';
+    document.getElementById('etkinlik_id').value = '';
 
     closeMarkaModal();
 }
@@ -2178,6 +2259,116 @@ function selectMusteriTemsilcisi(userLogin, userName) {
     closeMusteriTemsilcisiModal();
 }
 
+// Etkinlik Modal Functions
+function openEtkinlikModal() {
+    const selectedMarka = document.getElementById('marka').value;
+
+    if (!selectedMarka) {
+        alert('Önce bir marka seçiniz.');
+        return;
+    }
+
+    const modalHtml = `
+        <div id="etkinlik-modal" class="modal-overlay" onclick="closeEtkinlikModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Etkinlik Seçimi (${selectedMarka})</h3>
+                    <button class="modal-close" onclick="closeEtkinlikModal()">&times;</button>
+                </div>
+                <div class="modal-list" id="etkinlik-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+                <div class="modal-footer">
+                    <div style="font-size: 12px; color: #666; text-align: center;">
+                        * Sadece aktif etkinlikler gösterilmektedir (tarih geçmemiş)
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    loadEtkinlikler(selectedMarka);
+}
+
+function closeEtkinlikModal(event) {
+    if (event && event.target.id !== 'etkinlik-modal') return;
+    const modal = document.getElementById('etkinlik-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadEtkinlikler(marka) {
+    console.log('DEBUG - loadEtkinlikler called with marka:', marka);
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_etkinlikler&marka=' + encodeURIComponent(marka),
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log('DEBUG - Etkinlik response:', response);
+            console.log('DEBUG - Etkinlik data count:', response.data ? response.data.length : 0);
+
+            if (response.success) {
+                displayEtkinlikler(response.data);
+            } else {
+                document.getElementById('etkinlik-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Hata: ' + response.message + '</div>';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('DEBUG - Etkinlik AJAX Error:', status, error);
+            console.error('DEBUG - Etkinlik Response Text:', xhr.responseText);
+            document.getElementById('etkinlik-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Etkinlik listesi yüklenirken hata oluştu.</div>';
+        }
+    });
+}
+
+function displayEtkinlikler(data) {
+    const listDiv = document.getElementById('etkinlik-list');
+    const selectedMarka = document.getElementById('marka').value;
+
+    console.log('DEBUG - displayEtkinlikler - selectedMarka:', selectedMarka);
+    console.log('DEBUG - displayEtkinlikler - data:', data);
+    console.log('DEBUG - displayEtkinlikler - count:', data.length);
+
+    if (!Array.isArray(data)) {
+        console.error('Etkinlik data is not an array:', data);
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        return;
+    }
+
+    if (data.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bu marka (' + selectedMarka + ') için aktif etkinlik bulunamadı.</div>';
+        return;
+    }
+
+    let html = '';
+    data.forEach(function(etkinlik) {
+        // Tarih formatla
+        const tarihBas = etkinlik.tarih_bas ? new Date(etkinlik.tarih_bas).toLocaleDateString('tr-TR') : '';
+        const tarihBit = etkinlik.tarih_bit ? new Date(etkinlik.tarih_bit).toLocaleDateString('tr-TR') : '';
+        const tarihStr = tarihBas + (tarihBit ? ' - ' + tarihBit : '');
+
+        html += `
+            <div class="bayi-item" onclick="selectEtkinlik('${etkinlik.id}', '${etkinlik.baslik}', '${etkinlik.kodu}')">
+                <strong>${etkinlik.baslik}</strong><br>
+                <small style="color: #666;">Kod: ${etkinlik.kodu}</small><br>
+                <small style="color: #999;">${tarihStr}</small>
+            </div>
+        `;
+    });
+
+    listDiv.innerHTML = html;
+}
+
+function selectEtkinlik(etkinlikId, etkinlikBaslik, etkinlikKodu) {
+    const displayText = etkinlikBaslik + ' (' + etkinlikKodu + ')';
+    document.getElementById('etkinlik').value = displayText;
+    document.getElementById('etkinlik_id').value = etkinlikId;
+    closeEtkinlikModal();
+}
+
 // Bayi Yetkili Modal Functions
 function openBayiYetkiliModal() {
     const bayiKodu = document.getElementById('bayi_kodu').value;
@@ -2407,7 +2598,54 @@ function selectMusteriYetkili(yetkiliId, yetkiliAdi) {
 }
 
 
+function validateForm() {
+    const requiredFields = [
+        { id: 'marka', name: 'Marka' },
+        { id: 'gelis_kanali', name: 'Geliş Kanalı', type: 'radio' },
+        { id: 'olasilik', name: 'Olasılık' },
+        { id: 'bayi', name: 'Bayi' },
+        { id: 'bayi_yetkili', name: 'Bayi Yetkili' },
+        { id: 'musteri', name: 'Müşteri' },
+        { id: 'musteri_yetkili', name: 'Müşteri Yetkili' }
+    ];
+
+    const errors = [];
+
+    requiredFields.forEach(function(field) {
+        if (field.type === 'radio') {
+            // Radio button kontrolü
+            const radioButtons = document.querySelectorAll('input[name="' + field.id + '"]');
+            let isChecked = false;
+            radioButtons.forEach(function(radio) {
+                if (radio.checked) isChecked = true;
+            });
+            if (!isChecked) {
+                errors.push(field.name + ' seçilmelidir.');
+            }
+        } else {
+            // Normal input kontrolü
+            const element = document.getElementById(field.id);
+            if (!element || !element.value || element.value.trim() === '') {
+                errors.push(field.name + ' seçilmelidir.');
+            }
+        }
+    });
+
+    if (errors.length > 0) {
+        const errorMessage = 'Aşağıdaki alanlar zorunludur:\n\n' + errors.join('\n');
+        alert(errorMessage);
+        return false;
+    }
+
+    return true;
+}
+
 function submitForm() {
+    // Önce form validasyonu yap
+    if (!validateForm()) {
+        return;
+    }
+
     jQuery('#loading').show();
     var formData = jQuery('#firsat-form').serialize();
     formData += '&action=save_firsat';
