@@ -35,7 +35,10 @@
       "Bash(composer:*)",
       "Bash(php:*)",
       "Read(//c/Users/u/Documents/ShareX/Screenshots/**)",
-      "Bash(unzip:*)"
+      "Bash(unzip:*)",
+      "Bash(curl:*)",
+      "Bash(del \"C:\\Users\\u\\Documents\\GitHub\\KomteraERPWP\\temp_query.php\")",
+      "mcp__playwright__browser_console_messages"
     ],
     "deny": [],
     "ask": []

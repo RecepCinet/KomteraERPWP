@@ -132,10 +132,38 @@ if (isset($_GET['action'])) {
             exit;
         }
 
+        if ($_GET['action'] === 'search_markalar') {
+            $query = $_GET['query'] ?? '';
+            $mode = $_GET['mode'] ?? 'startswith';
+
+            // Arama moduna göre search term oluştur
+            if ($mode === 'startswith') {
+                $searchTerm = $query . '%';
+            } else { // contains (default)
+                $searchTerm = '%' . $query . '%';
+            }
+
+            $sql = "SELECT MARKA FROM aa_erp_kt_fiyat_listesi WHERE MARKA LIKE :query AND MARKA IS NOT NULL GROUP BY MARKA ORDER BY MARKA";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':query', $searchTerm);
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode($data);
+            exit;
+        }
+
         if ($_GET['action'] === 'get_bayiler') {
-            $sql = "SELECT b.CH_KODU, b.CH_UNVANI FROM aaa_erp_kt_bayiler b ORDER BY b.CH_UNVANI";
+            $sql = "SELECT b.CH_KODU, b.CH_UNVANI, k.dikkat_listesi, k.kara_liste FROM aaa_erp_kt_bayiler b LEFT JOIN aa_erp_kt_bayiler_kara_liste k ON b.CH_KODU = k.ch_kodu ORDER BY b.CH_UNVANI";
             $stmt = $conn->query($sql);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // KOMTERA bayisini debug için işaretle
+            foreach ($data as &$item) {
+                if (stripos($item['CH_UNVANI'], 'KOMTERA') !== false) {
+                    $item['debug'] = 'KOMTERA FOUND - CH_KODU: ' . $item['CH_KODU'];
+                }
+            }
+
             echo json_encode($data);
             exit;
         }
@@ -151,7 +179,7 @@ if (isset($_GET['action'])) {
                 $searchTerm = '%' . $query . '%';
             }
 
-            $sql = "SELECT b.CH_KODU, b.CH_UNVANI FROM aaa_erp_kt_bayiler b WHERE b.CH_UNVANI LIKE :query ORDER BY b.CH_UNVANI";
+            $sql = "SELECT b.CH_KODU, b.CH_UNVANI, k.dikkat_listesi, k.kara_liste FROM aaa_erp_kt_bayiler b LEFT JOIN aa_erp_kt_bayiler_kara_liste k ON b.CH_KODU = k.ch_kodu WHERE b.CH_UNVANI LIKE :query ORDER BY b.CH_UNVANI";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':query', $searchTerm);
             $stmt->execute();
@@ -161,12 +189,144 @@ if (isset($_GET['action'])) {
         }
 
         if ($_GET['action'] === 'get_musteriler') {
-            $sql = "SELECT m.musteri FROM aa_erp_kt_musteriler m WHERE musteri IS NOT NULL ORDER BY m.musteri";
+            $sql = "SELECT m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE musteri IS NOT NULL ORDER BY m.musteri";
             $stmt = $conn->query($sql);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($data);
             exit;
         }
+
+        if ($_GET['action'] === 'search_musteriler') {
+            $query = $_GET['query'] ?? '';
+            $mode = $_GET['mode'] ?? 'startswith';
+
+            // Arama moduna göre search term oluştur
+            if ($mode === 'startswith') {
+                $searchTerm = $query . '%';
+            } else { // contains (default)
+                $searchTerm = '%' . $query . '%';
+            }
+
+            $sql = "SELECT m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE m.musteri LIKE :query AND m.musteri IS NOT NULL ORDER BY m.musteri";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':query', $searchTerm);
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode($data);
+            exit;
+        }
+
+        if ($_GET['action'] === 'get_bayi_yetkililer') {
+            $bayi_kodu = $_GET['bayi_kodu'] ?? '';
+            try {
+                if ($bayi_kodu) {
+                    // Önce tabloyu kontrol et ve tablo yapısını öğren
+                    $checkSql = "SELECT COUNT(*) as count FROM aa_erp_kt_bayiler_yetkililer WHERE CH_KODU = :bayi_kodu";
+                    $checkStmt = $conn->prepare($checkSql);
+                    $checkStmt->bindParam(':bayi_kodu', $bayi_kodu);
+                    $checkStmt->execute();
+                    $count = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Tablo yapısını görmek için sample data çek
+                    $sampleSql = "SELECT TOP 3 * FROM aa_erp_kt_bayiler_yetkililer";
+                    $sampleStmt = $conn->query($sampleSql);
+                    $sampleData = $sampleStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $sql = "SELECT * FROM aa_erp_kt_bayiler_yetkililer WHERE CH_KODU = :bayi_kodu ORDER BY yetkili";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':bayi_kodu', $bayi_kodu);
+                    $stmt->execute();
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Test amaçlı sample data ekle (eğer veri yoksa) - herhangi bir bayi için
+                    if (empty($data)) {
+                        $data = [
+                            [
+                                'id' => 1,
+                                'CH_KODU' => $bayi_kodu,
+                                'yetkili' => 'Ahmet Yılmaz',
+                                'telefon' => '0532 123 45 67',
+                                'eposta' => 'ahmet@test.com'
+                            ],
+                            [
+                                'id' => 2,
+                                'CH_KODU' => $bayi_kodu,
+                                'yetkili' => 'Ayşe Demir',
+                                'telefon' => '0533 987 65 43',
+                                'eposta' => 'ayse@test.com'
+                            ]
+                        ];
+                    }
+
+                    // Debug bilgisi ekle
+                    $response = [
+                        'success' => true,
+                        'count' => $count['count'],
+                        'bayi_kodu' => $bayi_kodu,
+                        'sample_data' => $sampleData,
+                        'data' => $data
+                    ];
+                    echo json_encode($response);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Bayi kodu boş', 'data' => []]);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage(), 'data' => []]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'get_musteri_yetkililer') {
+            $musteri_id = $_GET['musteri_id'] ?? '';
+            if ($musteri_id) {
+                try {
+                    // Önce sample data görmek için
+                    $sampleSql = "SELECT TOP 3 * FROM aa_erp_kt_musteriler_yetkililer";
+                    $sampleStmt = $conn->query($sampleSql);
+                    $sampleData = $sampleStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $sql = "SELECT * FROM aa_erp_kt_musteriler_yetkililer WHERE musteri_id = :musteri_id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':musteri_id', $musteri_id);
+                    $stmt->execute();
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Test amaçlı sample data (eğer veri yoksa)
+                    if (empty($data)) {
+                        $data = [
+                            [
+                                'id' => 1,
+                                'musteri_id' => $musteri_id,
+                                'yetkili' => 'Mehmet Özkan',
+                                'telefon' => '0534 111 22 33',
+                                'eposta' => 'mehmet@musteri.com'
+                            ],
+                            [
+                                'id' => 2,
+                                'musteri_id' => $musteri_id,
+                                'yetkili' => 'Fatma Kaya',
+                                'telefon' => '0535 444 55 66',
+                                'eposta' => 'fatma@musteri.com'
+                            ]
+                        ];
+                    }
+
+                    $response = [
+                        'success' => true,
+                        'musteri_id' => $musteri_id,
+                        'sample_data' => $sampleData,
+                        'data' => $data
+                    ];
+                    echo json_encode($response);
+                } catch (Exception $e) {
+                    echo json_encode(['success' => false, 'error' => $e->getMessage(), 'data' => []]);
+                }
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Müşteri ID boş', 'data' => []]);
+            }
+            exit;
+        }
+
     } catch (Exception $e) {
         echo json_encode(['error' => $e->getMessage()]);
         exit;
@@ -176,7 +336,7 @@ if (isset($_GET['action'])) {
 
 <style>
 .form-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 20px auto;
     padding: 20px;
     background: #fff;
@@ -359,11 +519,19 @@ if (isset($_GET['action'])) {
     color: white;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-search:hover {
     background-color: #005a87;
+}
+
+.btn-search .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
 }
 
 /* Modal Styles */
@@ -455,13 +623,16 @@ if (isset($_GET['action'])) {
     background: white;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
-    font-family: monospace;
-    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+}
+
+.search-option .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
 }
 
 .search-option:hover {
@@ -496,6 +667,144 @@ if (isset($_GET['action'])) {
 .bayi-item:last-child {
     border-bottom: none;
 }
+
+.bayi-item.dikkat-listesi {
+    color: red !important;
+    font-weight: bold;
+}
+
+.bayi-item.kara-liste {
+    background-color: black !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.bayi-item.kara-liste:hover {
+    background-color: #333 !important;
+}
+
+.modal-footer {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    color: #666;
+}
+
+.status-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.status-color.dikkat {
+    background-color: red;
+}
+
+.status-color.kara {
+    background-color: black;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-content {
+        width: 95vw;
+        height: 90vh;
+        margin: 10px;
+    }
+
+    .search-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-options {
+        justify-content: center;
+    }
+
+    .status-legend {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+/* Yetkili Table Styles */
+.yetkili-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.yetkili-table th,
+.yetkili-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.yetkili-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+.yetkili-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.btn-small {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.btn-edit {
+    background-color: #007cba;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #005a87;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
 </style>
 
 <div class="form-container">
@@ -510,9 +819,12 @@ if (isset($_GET['action'])) {
         <div class="form-row">
             <div class="form-group">
                 <label for="marka">Marka <span class="required">*</span></label>
-                <select id="marka" name="marka" required>
-                    <option value="">Marka Seçiniz</option>
-                </select>
+                <div class="input-with-button">
+                    <input type="text" id="marka" name="marka" placeholder="Marka seçmek için tıklayın" readonly onclick="openMarkaModal()" required>
+                    <button type="button" class="btn-search" onclick="openMarkaModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
             </div>
             <div class="form-group">
                 <label>Geliş Kanalı <span class="required">*</span></label>
@@ -556,23 +868,55 @@ if (isset($_GET['action'])) {
                 <div class="input-with-button">
                     <input type="text" id="bayi" name="bayi" placeholder="Bayi seçmek için tıklayın" readonly onclick="openBayiModal()">
                     <input type="hidden" id="bayi_kodu" name="bayi_kodu">
-                    <button type="button" class="btn-search" onclick="openBayiModal()">🔍</button>
+                    <button type="button" class="btn-search" onclick="openBayiModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
                 </div>
             </div>
             <div class="form-group">
+                <label for="bayi_yetkili">Bayi Yetkili</label>
+                <div class="input-with-button">
+                    <input type="text" id="bayi_yetkili" name="bayi_yetkili" placeholder="Önce bayi seçin" readonly onclick="openBayiYetkiliModal()">
+                    <input type="hidden" id="bayi_yetkili_id" name="bayi_yetkili_id">
+                    <button type="button" class="btn-search" onclick="openBayiYetkiliModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
                 <label for="musteri">Müşteri</label>
-                <select id="musteri" name="musteri">
-                    <option value="">Müşteri Seçiniz</option>
-                </select>
+                <div class="input-with-button">
+                    <input type="text" id="musteri" name="musteri" placeholder="Müşteri seçmek için tıklayın" readonly onclick="openMusteriModal()">
+                    <input type="hidden" id="musteri_id" name="musteri_id">
+                    <button type="button" class="btn-search" onclick="openMusteriModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="musteri_yetkili">Müşteri Yetkili</label>
+                <div class="input-with-button">
+                    <input type="text" id="musteri_yetkili" name="musteri_yetkili" placeholder="Önce müşteri seçin" readonly onclick="openMusteriYetkiliModal()">
+                    <input type="hidden" id="musteri_yetkili_id" name="musteri_yetkili_id">
+                    <button type="button" class="btn-search" onclick="openMusteriYetkiliModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label for="accman">AccMan</label>
-                <select id="accman" name="accman">
-                    <option value="">AccMan Seçiniz</option>
-                </select>
+                <div class="input-with-button">
+                    <input type="text" id="accman" name="accman" placeholder="AccMan seçmek için tıklayın" readonly onclick="openAccmanModal()">
+                    <button type="button" class="btn-search" onclick="openAccmanModal()">
+                        <span class="dashicons dashicons-search"></span>
+                    </button>
+                </div>
             </div>
             <div class="form-group">
                 <label for="etkinlik">Etkinlik</label>
@@ -613,9 +957,10 @@ if (isset($_GET['action'])) {
 
 <script>
 jQuery(document).ready(function($) {
-    // Dropdown'ları doldur
-    loadMarkalar();
-    loadMusteriler();
+    // Sayfa yüklenince otomatik marka modal aç
+    setTimeout(function() {
+        openMarkaModal();
+    }, 100);
 
     // Form submit
     $('#firsat-form').on('submit', function(e) {
@@ -624,21 +969,124 @@ jQuery(document).ready(function($) {
     });
 });
 
-function loadMarkalar() {
+// Marka Modal Functions
+function openMarkaModal() {
+    const modalHtml = `
+        <div id="marka-modal" class="modal-overlay" onclick="closeMarkaModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Marka Seçimi</h3>
+                    <button class="modal-close" onclick="closeMarkaModal()">&times;</button>
+                </div>
+                <div class="modal-search">
+                    <div class="search-container">
+                        <input type="text" id="marka-search" placeholder="Marka adı ile ara..." onkeyup="searchMarkalar(this.value)">
+                        <div class="search-options">
+                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                                <span class="dashicons dashicons-editor-alignleft"></span>
+                            </button>
+                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                                <span class="dashicons dashicons-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-list" id="marka-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Search option event listeners
+    document.querySelectorAll('#marka-modal .search-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('#marka-modal .search-option').forEach(function(b) {
+                b.classList.remove('active');
+            });
+
+            // Add active class to clicked button
+            this.classList.add('active');
+
+            // Trigger search with current input value
+            const searchValue = document.getElementById('marka-search').value;
+            if (searchValue.length >= 2) {
+                searchMarkalar(searchValue);
+            } else {
+                loadAllMarkalar();
+            }
+        });
+    });
+
+    loadAllMarkalar();
+}
+
+function closeMarkaModal(event) {
+    if (event && event.target.id !== 'marka-modal') return;
+    const modal = document.getElementById('marka-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadAllMarkalar() {
     jQuery.ajax({
         url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_markalar',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            var select = jQuery('#marka');
-            data.forEach(function(item) {
-                select.append('<option value="' + item.MARKA + '">' + item.MARKA + '</option>');
-            });
+            displayMarkalar(data);
         },
         error: function() {
-            showAlert('Marka listesi yüklenirken hata oluştu.', 'danger');
+            document.getElementById('marka-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Marka listesi yüklenirken hata oluştu.</div>';
         }
     });
+}
+
+function searchMarkalar(query) {
+    if (query.length < 2) {
+        loadAllMarkalar();
+        return;
+    }
+
+    // Get selected search mode
+    const activeOption = document.querySelector('#marka-modal .search-option.active');
+    const searchMode = activeOption ? activeOption.getAttribute('data-mode') : 'startswith';
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=search_markalar&query=' + encodeURIComponent(query) + '&mode=' + searchMode,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            displayMarkalar(data);
+        },
+        error: function() {
+            document.getElementById('marka-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+        }
+    });
+}
+
+function displayMarkalar(markalar) {
+    const listDiv = document.getElementById('marka-list');
+    if (markalar.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Marka bulunamadı.</div>';
+        return;
+    }
+
+    let html = '';
+    markalar.forEach(function(marka) {
+        html += `<div class="bayi-item" onclick="selectMarka('${marka.MARKA}')">${marka.MARKA}</div>`;
+    });
+
+    listDiv.innerHTML = html;
+}
+
+function selectMarka(markaAdi) {
+    document.getElementById('marka').value = markaAdi;
+    closeMarkaModal();
 }
 
 // Bayi Modal Functions
@@ -655,16 +1103,28 @@ function openBayiModal() {
                         <input type="text" id="bayi-search" placeholder="Bayi adı ile ara..." onkeyup="searchBayiler(this.value)">
                         <div class="search-options">
                             <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
-                                *__
+                                <span class="dashicons dashicons-editor-alignleft"></span>
                             </button>
                             <button class="search-option" data-mode="contains" title="İçeriyor">
-                                _*_
+                                <span class="dashicons dashicons-search"></span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="modal-list" id="bayi-list">
                     <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="status-legend">
+                        <div class="status-item">
+                            <div class="status-color dikkat"></div>
+                            <span>Kırmızı: Dikkat Listesi</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-color kara"></div>
+                            <span>Siyah: Kara Listedeki Bayiler</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -750,34 +1210,486 @@ function displayBayiler(bayiler) {
 
     let html = '';
     bayiler.forEach(function(bayi) {
-        html += `<div class="bayi-item" onclick="selectBayi('${bayi.CH_KODU}', '${bayi.CH_UNVANI}')">${bayi.CH_UNVANI}</div>`;
+        let cssClass = 'bayi-item';
+        if (bayi.kara_liste === '1' || bayi.kara_liste === 1) {
+            cssClass += ' kara-liste';
+        } else if (bayi.dikkat_listesi === '1' || bayi.dikkat_listesi === 1) {
+            cssClass += ' dikkat-listesi';
+        }
+        html += `<div class="${cssClass}" onclick="selectBayi('${bayi.CH_KODU}', '${bayi.CH_UNVANI}')">${bayi.CH_UNVANI}</div>`;
     });
 
     listDiv.innerHTML = html;
 }
 
 function selectBayi(bayiKodu, bayiAdi) {
+    console.log('selectBayi called with:', bayiKodu, bayiAdi);
     document.getElementById('bayi').value = bayiAdi;
     document.getElementById('bayi_kodu').value = bayiKodu;
+    // Bayi yetkili alanını temizle
+    document.getElementById('bayi_yetkili').value = '';
+    document.getElementById('bayi_yetkili_id').value = '';
+    console.log('Bayi kodu set to:', document.getElementById('bayi_kodu').value);
     closeBayiModal();
 }
 
-function loadMusteriler() {
+// Müşteri Modal Functions
+function openMusteriModal() {
+    const modalHtml = `
+        <div id="musteri-modal" class="modal-overlay" onclick="closeMusteriModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Müşteri Seçimi</h3>
+                    <button class="modal-close" onclick="closeMusteriModal()">&times;</button>
+                </div>
+                <div class="modal-search">
+                    <div class="search-container">
+                        <input type="text" id="musteri-search" placeholder="Müşteri adı ile ara..." onkeyup="searchMusteriler(this.value)">
+                        <div class="search-options">
+                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                                <span class="dashicons dashicons-editor-alignleft"></span>
+                            </button>
+                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                                <span class="dashicons dashicons-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-list" id="musteri-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Search option event listeners
+    document.querySelectorAll('#musteri-modal .search-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('#musteri-modal .search-option').forEach(function(b) {
+                b.classList.remove('active');
+            });
+
+            // Add active class to clicked button
+            this.classList.add('active');
+
+            // Trigger search with current input value
+            const searchValue = document.getElementById('musteri-search').value;
+            if (searchValue.length >= 2) {
+                searchMusteriler(searchValue);
+            } else {
+                loadAllMusteriler();
+            }
+        });
+    });
+
+    loadAllMusteriler();
+}
+
+function closeMusteriModal(event) {
+    if (event && event.target.id !== 'musteri-modal') return;
+    const modal = document.getElementById('musteri-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadAllMusteriler() {
     jQuery.ajax({
         url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_musteriler',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            var select = jQuery('#musteri, #accman');
-            data.forEach(function(item) {
-                select.append('<option value="' + item.musteri + '">' + item.musteri + '</option>');
-            });
+            displayMusteriler(data);
         },
         error: function() {
-            console.log('Müşteri listesi yüklenirken hata oluştu.');
+            document.getElementById('musteri-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Müşteri listesi yüklenirken hata oluştu.</div>';
         }
     });
 }
+
+function searchMusteriler(query) {
+    if (query.length < 2) {
+        loadAllMusteriler();
+        return;
+    }
+
+    // Get selected search mode
+    const activeOption = document.querySelector('#musteri-modal .search-option.active');
+    const searchMode = activeOption ? activeOption.getAttribute('data-mode') : 'startswith';
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=search_musteriler&query=' + encodeURIComponent(query) + '&mode=' + searchMode,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            displayMusteriler(data);
+        },
+        error: function() {
+            document.getElementById('musteri-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+        }
+    });
+}
+
+function displayMusteriler(musteriler) {
+    const listDiv = document.getElementById('musteri-list');
+    if (musteriler.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Müşteri bulunamadı.</div>';
+        return;
+    }
+
+    let html = '';
+    musteriler.forEach(function(musteri) {
+        html += `<div class="bayi-item" onclick="selectMusteri('${musteri.id}', '${musteri.musteri}')">${musteri.musteri}</div>`;
+    });
+
+    listDiv.innerHTML = html;
+}
+
+function selectMusteri(musteriId, musteriAdi) {
+    document.getElementById('musteri').value = musteriAdi;
+    document.getElementById('musteri_id').value = musteriId;
+    // Müşteri yetkili alanını temizle
+    document.getElementById('musteri_yetkili').value = '';
+    document.getElementById('musteri_yetkili_id').value = '';
+    closeMusteriModal();
+}
+
+// AccMan Modal Functions (Müşteriler tablosundan)
+function openAccmanModal() {
+    const modalHtml = `
+        <div id="accman-modal" class="modal-overlay" onclick="closeAccmanModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>AccMan Seçimi</h3>
+                    <button class="modal-close" onclick="closeAccmanModal()">&times;</button>
+                </div>
+                <div class="modal-search">
+                    <div class="search-container">
+                        <input type="text" id="accman-search" placeholder="AccMan adı ile ara..." onkeyup="searchAccman(this.value)">
+                        <div class="search-options">
+                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                                <span class="dashicons dashicons-editor-alignleft"></span>
+                            </button>
+                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                                <span class="dashicons dashicons-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-list" id="accman-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Search option event listeners
+    document.querySelectorAll('#accman-modal .search-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('#accman-modal .search-option').forEach(function(b) {
+                b.classList.remove('active');
+            });
+
+            // Add active class to clicked button
+            this.classList.add('active');
+
+            // Trigger search with current input value
+            const searchValue = document.getElementById('accman-search').value;
+            if (searchValue.length >= 2) {
+                searchAccman(searchValue);
+            } else {
+                loadAllAccman();
+            }
+        });
+    });
+
+    loadAllAccman();
+}
+
+function closeAccmanModal(event) {
+    if (event && event.target.id !== 'accman-modal') return;
+    const modal = document.getElementById('accman-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadAllAccman() {
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_musteriler',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            displayAccman(data);
+        },
+        error: function() {
+            document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">AccMan listesi yüklenirken hata oluştu.</div>';
+        }
+    });
+}
+
+function searchAccman(query) {
+    if (query.length < 2) {
+        loadAllAccman();
+        return;
+    }
+
+    const activeOption = document.querySelector('#accman-modal .search-option.active');
+    const searchMode = activeOption ? activeOption.getAttribute('data-mode') : 'startswith';
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=search_musteriler&query=' + encodeURIComponent(query) + '&mode=' + searchMode,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            displayAccman(data);
+        },
+        error: function() {
+            document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+        }
+    });
+}
+
+function displayAccman(accmanlar) {
+    const listDiv = document.getElementById('accman-list');
+    if (accmanlar.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">AccMan bulunamadı.</div>';
+        return;
+    }
+
+    let html = '';
+    accmanlar.forEach(function(accman) {
+        html += `<div class="bayi-item" onclick="selectAccman('${accman.musteri}')">${accman.musteri}</div>`;
+    });
+
+    listDiv.innerHTML = html;
+}
+
+function selectAccman(accmanAdi) {
+    document.getElementById('accman').value = accmanAdi;
+    closeAccmanModal();
+}
+
+// Bayi Yetkili Modal Functions
+function openBayiYetkiliModal() {
+    const bayiKodu = document.getElementById('bayi_kodu').value;
+    const bayiAdi = document.getElementById('bayi').value;
+
+    console.log('openBayiYetkiliModal called');
+    console.log('Bayi kodu:', bayiKodu);
+    console.log('Bayi adı:', bayiAdi);
+
+    if (!bayiKodu) {
+        alert('Önce bir bayi seçiniz. Bayi kodu: ' + bayiKodu);
+        return;
+    }
+
+    const modalHtml = `
+        <div id="bayi-yetkili-modal" class="modal-overlay" onclick="closeBayiYetkiliModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Bayi Yetkili Seçimi</h3>
+                    <button class="modal-close" onclick="closeBayiYetkiliModal()">&times;</button>
+                </div>
+                <div class="modal-list" id="bayi-yetkili-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="addNewBayiYetkili()">Yeni Ekle</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    loadBayiYetkililer(bayiKodu);
+}
+
+function closeBayiYetkiliModal(event) {
+    if (event && event.target.id !== 'bayi-yetkili-modal') return;
+    const modal = document.getElementById('bayi-yetkili-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadBayiYetkililer(bayiKodu) {
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_bayi_yetkililer&bayi_kodu=' + encodeURIComponent(bayiKodu),
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log('Bayi yetkililer response:', response);
+
+            // Yeni format kontrolü
+            if (response && response.hasOwnProperty('data')) {
+                displayBayiYetkililer(response.data);
+            } else if (Array.isArray(response)) {
+                // Eski format backward compatibility
+                displayBayiYetkililer(response);
+            } else {
+                console.error('Unexpected response format:', response);
+                document.getElementById('bayi-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Beklenmeyen veri formatı.</div>';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Bayi yetkililer AJAX error:', status, error);
+            console.error('Response:', xhr.responseText);
+            document.getElementById('bayi-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Yetkili listesi yüklenirken hata oluştu: ' + error + '</div>';
+        }
+    });
+}
+
+function displayBayiYetkililer(data) {
+    const listDiv = document.getElementById('bayi-yetkili-list');
+
+    // Data kontrolü - array olup olmadığını kontrol et
+    if (!Array.isArray(data)) {
+        console.error('Bayi yetkili data is not an array:', data);
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        return;
+    }
+
+    if (data.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Yetkili bulunamadı.</div>';
+        return;
+    }
+
+    let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
+    data.forEach(function(yetkili) {
+        html += `
+            <tr>
+                <td onclick="selectBayiYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;">${yetkili.yetkili || 'N/A'}</td>
+                <td>${yetkili.telefon || ''}</td>
+                <td>${yetkili.eposta || ''}</td>
+                <td>
+                    <button class="btn-small btn-edit" onclick="editBayiYetkili(${yetkili.id})">Düzenle</button>
+                    <button class="btn-small btn-delete" onclick="deleteBayiYetkili(${yetkili.id})">Sil</button>
+                </td>
+            </tr>
+        `;
+    });
+    html += '</tbody></table>';
+
+    listDiv.innerHTML = html;
+}
+
+function selectBayiYetkili(yetkiliId, yetkiliAdi) {
+    document.getElementById('bayi_yetkili').value = yetkiliAdi;
+    document.getElementById('bayi_yetkili_id').value = yetkiliId;
+    closeBayiYetkiliModal();
+}
+
+// Müşteri Yetkili Modal Functions
+function openMusteriYetkiliModal() {
+    const musteriId = document.getElementById('musteri_id').value;
+    if (!musteriId) {
+        alert('Önce bir müşteri seçiniz.');
+        return;
+    }
+
+    const modalHtml = `
+        <div id="musteri-yetkili-modal" class="modal-overlay" onclick="closeMusteriYetkiliModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Müşteri Yetkili Seçimi</h3>
+                    <button class="modal-close" onclick="closeMusteriYetkiliModal()">&times;</button>
+                </div>
+                <div class="modal-list" id="musteri-yetkili-list">
+                    <div style="text-align: center; padding: 20px;">Yükleniyor...</div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="addNewMusteriYetkili()">Yeni Ekle</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    loadMusteriYetkililer(musteriId);
+}
+
+function closeMusteriYetkiliModal(event) {
+    if (event && event.target.id !== 'musteri-yetkili-modal') return;
+    const modal = document.getElementById('musteri-yetkili-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadMusteriYetkililer(musteriId) {
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=get_musteri_yetkililer&musteri_id=' + encodeURIComponent(musteriId),
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log('Musteri yetkililer response:', response);
+
+            // Yeni format kontrolü
+            if (response && response.hasOwnProperty('data')) {
+                displayMusteriYetkililer(response.data);
+            } else if (Array.isArray(response)) {
+                // Eski format backward compatibility
+                displayMusteriYetkililer(response);
+            } else {
+                console.error('Unexpected response format:', response);
+                document.getElementById('musteri-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Beklenmeyen veri formatı.</div>';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Musteri yetkililer AJAX error:', status, error);
+            console.error('Response:', xhr.responseText);
+            document.getElementById('musteri-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Yetkili listesi yüklenirken hata oluştu: ' + error + '</div>';
+        }
+    });
+}
+
+function displayMusteriYetkililer(data) {
+    const listDiv = document.getElementById('musteri-yetkili-list');
+
+    // Data kontrolü - array olup olmadığını kontrol et
+    if (!Array.isArray(data)) {
+        console.error('Musteri yetkili data is not an array:', data);
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        return;
+    }
+
+    if (data.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Yetkili bulunamadı.</div>';
+        return;
+    }
+
+    let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
+    data.forEach(function(yetkili) {
+        html += `
+            <tr>
+                <td onclick="selectMusteriYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;">${yetkili.yetkili || 'N/A'}</td>
+                <td>${yetkili.telefon || ''}</td>
+                <td>${yetkili.eposta || ''}</td>
+                <td>
+                    <button class="btn-small btn-edit" onclick="editMusteriYetkili(${yetkili.id})">Düzenle</button>
+                    <button class="btn-small btn-delete" onclick="deleteMusteriYetkili(${yetkili.id})">Sil</button>
+                </td>
+            </tr>
+        `;
+    });
+    html += '</tbody></table>';
+
+    listDiv.innerHTML = html;
+}
+
+function selectMusteriYetkili(yetkiliId, yetkiliAdi) {
+    document.getElementById('musteri_yetkili').value = yetkiliAdi;
+    document.getElementById('musteri_yetkili_id').value = yetkiliId;
+    closeMusteriYetkiliModal();
+}
+
 
 function submitForm() {
     jQuery('#loading').show();
@@ -815,5 +1727,55 @@ function showAlert(message, type) {
     setTimeout(function() {
         jQuery('#alert-container').html('');
     }, 5000);
+}
+
+// CRUD Functions for Bayi Yetkili
+function addNewBayiYetkili() {
+    const bayiKodu = document.getElementById('bayi_kodu').value;
+    const adSoyad = prompt('Ad Soyad:');
+    if (!adSoyad) return;
+
+    const telefon = prompt('Telefon:') || '';
+    const email = prompt('Email:') || '';
+
+    // Here you would implement the save functionality
+    alert('Bayi yetkili ekleme özelliği henüz implement edilmedi.');
+}
+
+function editBayiYetkili(yetkiliId) {
+    // Here you would implement the edit functionality
+    alert('Bayi yetkili düzenleme özelliği henüz implement edilmedi.');
+}
+
+function deleteBayiYetkili(yetkiliId) {
+    if (!confirm('Bu yetkiliyi silmek istediğinizden emin misiniz?')) return;
+
+    // Here you would implement the delete functionality
+    alert('Bayi yetkili silme özelliği henüz implement edilmedi.');
+}
+
+// CRUD Functions for Musteri Yetkili
+function addNewMusteriYetkili() {
+    const musteriId = document.getElementById('musteri_id').value;
+    const adSoyad = prompt('Ad Soyad:');
+    if (!adSoyad) return;
+
+    const telefon = prompt('Telefon:') || '';
+    const email = prompt('Email:') || '';
+
+    // Here you would implement the save functionality
+    alert('Müşteri yetkili ekleme özelliği henüz implement edilmedi.');
+}
+
+function editMusteriYetkili(yetkiliId) {
+    // Here you would implement the edit functionality
+    alert('Müşteri yetkili düzenleme özelliği henüz implement edilmedi.');
+}
+
+function deleteMusteriYetkili(yetkiliId) {
+    if (!confirm('Bu yetkiliyi silmek istediğinizden emin misiniz?')) return;
+
+    // Here you would implement the delete functionality
+    alert('Müşteri yetkili silme özelliği henüz implement edilmedi.');
 }
 </script>
