@@ -57,6 +57,69 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $register = isset($_POST['register']) ? '1' : '0';
         $register_dr_no = $_POST['register_dr_no'] ?? '';
 
+        // Server-side validation - zorunlu alanlar kontrolü
+        $required_fields = [
+            'marka' => 'Marka',
+            'gelis_kanali' => 'Geliş Kanalı',
+            'olasilik' => 'Olasılık',
+            'bayi' => 'Bayi',
+            'bayi_kodu' => 'Bayi Kodu',
+            'bayi_yetkili' => 'Bayi Yetkili',
+            'musteri' => 'Müşteri',
+            'musteri_yetkili' => 'Müşteri Yetkili',
+            'accman' => 'AccMan',
+            'musteri_temsilcisi' => 'Müşteri Temsilcisi'
+        ];
+
+        $validation_errors = [];
+        foreach ($required_fields as $field => $label) {
+            $value = $_POST[$field] ?? '';
+            if (empty($value) || trim($value) === '') {
+                $validation_errors[] = $label . ' alanı zorunludur.';
+            }
+        }
+
+        // Hidden ID alanları da kontrol et
+        $bayi_yetkili_id = $_POST['bayi_yetkili_id'] ?? '';
+        $musteri_id = $_POST['musteri_id'] ?? '';
+        $musteri_yetkili_id = $_POST['musteri_yetkili_id'] ?? '';
+        $accman_id = $_POST['accman_id'] ?? '';
+
+        if (empty($bayi_yetkili_id)) {
+            $validation_errors[] = 'Bayi Yetkili seçimi tamamlanmamış.';
+        }
+        if (empty($musteri_id)) {
+            $validation_errors[] = 'Müşteri seçimi tamamlanmamış.';
+        }
+        if (empty($musteri_yetkili_id)) {
+            $validation_errors[] = 'Müşteri Yetkili seçimi tamamlanmamış.';
+        }
+        if (empty($accman_id)) {
+            $validation_errors[] = 'AccMan seçimi tamamlanmamış.';
+        }
+
+        if (!empty($validation_errors)) {
+            echo json_encode(['success' => false, 'message' => "Validasyon hataları:<br /><br />• " . implode("<br />• ", $validation_errors)]);
+            exit;
+        }
+
+        // String truncate hatasını önlemek için veri uzunluklarını sınırla
+        $marka = mb_substr($marka, 0, 50, 'UTF-8');
+        $gelis_kanali = mb_substr($gelis_kanali, 0, 20, 'UTF-8');
+        $olasilik = mb_substr($olasilik, 0, 30, 'UTF-8');
+        $proje_adi = mb_substr($proje_adi, 0, 100, 'UTF-8');
+        $firsat_aciklama = mb_substr($firsat_aciklama, 0, 500, 'UTF-8');
+        $bayi = mb_substr($bayi, 0, 100, 'UTF-8');
+        $bayi_kodu = mb_substr($bayi_kodu, 0, 20, 'UTF-8');
+        $bayi_yetkili = mb_substr($bayi_yetkili, 0, 100, 'UTF-8');
+        $musteri = mb_substr($musteri, 0, 100, 'UTF-8');
+        $musteri_yetkili = mb_substr($musteri_yetkili, 0, 100, 'UTF-8');
+        $musteri_temsilcisi = mb_substr($musteri_temsilcisi, 0, 50, 'UTF-8');
+        $accman = mb_substr($accman, 0, 50, 'UTF-8');
+        $etkinlik = mb_substr($etkinlik, 0, 100, 'UTF-8');
+        $register_dr_no = mb_substr($register_dr_no, 0, 50, 'UTF-8');
+        $user = mb_substr($user, 0, 50, 'UTF-8');
+
         // Fırsat numarası oluşturma - son Fırsat No'ya random ekleyerek
         try {
             // Son fırsat numarasını al
@@ -1337,14 +1400,14 @@ if (isset($_GET['action'])) {
             </div>
             <div class="form-group">
                 <label for="proje_adi">Proje Adı</label>
-                <input type="text" id="proje_adi" name="proje_adi">
+                <input type="text" id="proje_adi" name="proje_adi" maxlength="100">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group full-width">
                 <label for="firsat_aciklama">Fırsat Açıklama</label>
-                <textarea id="firsat_aciklama" name="firsat_aciklama" rows="3"></textarea>
+                <textarea id="firsat_aciklama" name="firsat_aciklama" rows="3" maxlength="500"></textarea>
             </div>
         </div>
 
@@ -1396,9 +1459,9 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label for="accman">AccMan</label>
+                <label for="accman">AccMan <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="accman" name="accman" placeholder="AccMan seçmek için tıklayın" readonly onclick="openAccmanModal()">
+                    <input type="text" id="accman" name="accman" placeholder="AccMan seçmek için tıklayın" readonly onclick="openAccmanModal()" required>
                     <input type="hidden" id="accman_id" name="accman_id">
                     <button type="button" class="btn-search" onclick="openAccmanModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1426,15 +1489,15 @@ if (isset($_GET['action'])) {
             </div>
             <div class="form-group">
                 <label for="register_dr_no">Register DR No</label>
-                <input type="text" id="register_dr_no" name="register_dr_no">
+                <input type="text" id="register_dr_no" name="register_dr_no" maxlength="50">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="musteri_temsilcisi">Müşteri Temsilcisi</label>
+                <label for="musteri_temsilcisi">Müşteri Temsilcisi <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="musteri_temsilcisi" name="musteri_temsilcisi" placeholder="Müşteri temsilcisi seçmek için tıklayın" readonly onclick="openMusteriTemsilcisiModal()" value="<?php echo esc_html($user); ?>">
+                    <input type="text" id="musteri_temsilcisi" name="musteri_temsilcisi" placeholder="Müşteri temsilcisi seçmek için tıklayın" readonly onclick="openMusteriTemsilcisiModal()" value="<?php echo esc_html($user); ?>" required>
                     <button type="button" class="btn-search" onclick="openMusteriTemsilcisiModal()">
                         <span class="dashicons dashicons-search"></span>
                     </button>
@@ -2606,7 +2669,9 @@ function validateForm() {
         { id: 'bayi', name: 'Bayi' },
         { id: 'bayi_yetkili', name: 'Bayi Yetkili' },
         { id: 'musteri', name: 'Müşteri' },
-        { id: 'musteri_yetkili', name: 'Müşteri Yetkili' }
+        { id: 'musteri_yetkili', name: 'Müşteri Yetkili' },
+        { id: 'accman', name: 'AccMan' },
+        { id: 'musteri_temsilcisi', name: 'Müşteri Temsilcisi' }
     ];
 
     const errors = [];
@@ -2631,9 +2696,40 @@ function validateForm() {
         }
     });
 
+    // Özel kontroller - hidden fieldların da dolu olması gerekiyor
+    // Bayi kodu kontrolü
+    const bayiKodu = document.getElementById('bayi_kodu');
+    if (!bayiKodu || !bayiKodu.value || bayiKodu.value.trim() === '') {
+        errors.push('Bayi seçimi tamamlanmamış. Lütfen geçerli bir bayi seçin.');
+    }
+
+    // Bayi yetkili ID kontrolü
+    const bayiYetkiliId = document.getElementById('bayi_yetkili_id');
+    if (!bayiYetkiliId || !bayiYetkiliId.value || bayiYetkiliId.value.trim() === '') {
+        errors.push('Bayi Yetkili seçimi tamamlanmamış. Lütfen geçerli bir bayi yetkili seçin.');
+    }
+
+    // Müşteri ID kontrolü
+    const musteriId = document.getElementById('musteri_id');
+    if (!musteriId || !musteriId.value || musteriId.value.trim() === '') {
+        errors.push('Müşteri seçimi tamamlanmamış. Lütfen geçerli bir müşteri seçin.');
+    }
+
+    // Müşteri yetkili ID kontrolü
+    const musteriYetkiliId = document.getElementById('musteri_yetkili_id');
+    if (!musteriYetkiliId || !musteriYetkiliId.value || musteriYetkiliId.value.trim() === '') {
+        errors.push('Müşteri Yetkili seçimi tamamlanmamış. Lütfen geçerli bir müşteri yetkili seçin.');
+    }
+
+    // AccMan ID kontrolü
+    const accmanId = document.getElementById('accman_id');
+    if (!accmanId || !accmanId.value || accmanId.value.trim() === '') {
+        errors.push('AccMan seçimi tamamlanmamış. Lütfen geçerli bir AccMan seçin.');
+    }
+
     if (errors.length > 0) {
-        const errorMessage = 'Aşağıdaki alanlar zorunludur:\n\n' + errors.join('\n');
-        alert(errorMessage);
+        const errorMessage = 'Aşağıdaki alanlar zorunludur:<br /><br />• ' + errors.join('<br />• ');
+        showAlert(errorMessage, 'danger');
         return false;
     }
 
@@ -2660,6 +2756,7 @@ function submitForm() {
             if (response.success) {
                 showAlert('Fırsat başarıyla oluşturuldu! Fırsat No: ' + response.firsat_no, 'success');
                 jQuery('#firsat-form')[0].reset();
+                jQuery('#alert-container').html(''); // Hata mesajlarını da temizle
                 setTimeout(function() {
                     window.location.href = '<?php echo admin_url('admin.php?page=firsatlar'); ?>';
                 }, 2000);
@@ -2678,9 +2775,12 @@ function showAlert(message, type) {
     var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
     var html = '<div class="alert ' + alertClass + '">' + message + '</div>';
     jQuery('#alert-container').html(html);
-    setTimeout(function() {
-        jQuery('#alert-container').html('');
-    }, 5000);
+    // Hata mesajları kalıcı olsun - success durumunda hala otomatik kapanacak
+    if (type === 'success') {
+        setTimeout(function() {
+            jQuery('#alert-container').html('');
+        }, 5000);
+    }
 }
 
 // CRUD Functions for Bayi Yetkili
