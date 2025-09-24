@@ -99,26 +99,26 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         }
 
         if (!empty($validation_errors)) {
-            echo json_encode(['success' => false, 'message' => "Validasyon hataları:<br /><br />• " . implode("<br />• ", $validation_errors)]);
+            echo json_encode(['success' => false, 'message' => "<b>Hatalar:</b>d<br /><br />• " . implode("<br />• ", $validation_errors)]);
             exit;
         }
 
-        // String truncate hatasını önlemek için veri uzunluklarını sınırla
-        $marka = mb_substr($marka, 0, 50, 'UTF-8');
-        $gelis_kanali = mb_substr($gelis_kanali, 0, 20, 'UTF-8');
-        $olasilik = mb_substr($olasilik, 0, 30, 'UTF-8');
-        $proje_adi = mb_substr($proje_adi, 0, 100, 'UTF-8');
-        $firsat_aciklama = mb_substr($firsat_aciklama, 0, 500, 'UTF-8');
-        $bayi = mb_substr($bayi, 0, 100, 'UTF-8');
-        $bayi_kodu = mb_substr($bayi_kodu, 0, 20, 'UTF-8');
-        $bayi_yetkili = mb_substr($bayi_yetkili, 0, 100, 'UTF-8');
-        $musteri = mb_substr($musteri, 0, 100, 'UTF-8');
-        $musteri_yetkili = mb_substr($musteri_yetkili, 0, 100, 'UTF-8');
-        $musteri_temsilcisi = mb_substr($musteri_temsilcisi, 0, 50, 'UTF-8');
-        $accman = mb_substr($accman, 0, 50, 'UTF-8');
-        $etkinlik = mb_substr($etkinlik, 0, 100, 'UTF-8');
-        $register_dr_no = mb_substr($register_dr_no, 0, 50, 'UTF-8');
-        $user = mb_substr($user, 0, 50, 'UTF-8');
+        // String truncate hatasını önlemek için veri uzunluklarını daha konservatif sınırla
+        $marka = mb_substr($marka, 0, 25, 'UTF-8');
+        $gelis_kanali = mb_substr($gelis_kanali, 0, 15, 'UTF-8');
+        $olasilik = mb_substr($olasilik, 0, 25, 'UTF-8');
+        $proje_adi = mb_substr($proje_adi, 0, 50, 'UTF-8');
+        $firsat_aciklama = mb_substr($firsat_aciklama, 0, 250, 'UTF-8');
+        $bayi = mb_substr($bayi, 0, 50, 'UTF-8');
+        $bayi_kodu = mb_substr($bayi_kodu, 0, 10, 'UTF-8');
+        $bayi_yetkili = mb_substr($bayi_yetkili, 0, 50, 'UTF-8');
+        $musteri = mb_substr($musteri, 0, 50, 'UTF-8');
+        $musteri_yetkili = mb_substr($musteri_yetkili, 0, 50, 'UTF-8');
+        $musteri_temsilcisi = mb_substr($musteri_temsilcisi, 0, 25, 'UTF-8');
+        $accman = mb_substr($accman, 0, 25, 'UTF-8');
+        $etkinlik = mb_substr($etkinlik, 0, 50, 'UTF-8');
+        $register_dr_no = mb_substr($register_dr_no, 0, 25, 'UTF-8');
+        $user = mb_substr($user, 0, 25, 'UTF-8');
 
         // Fırsat numarası oluşturma - son Fırsat No'ya random ekleyerek
         try {
@@ -214,7 +214,11 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         }
         exit;
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+        $errorMsg = $e->getMessage();
+        if (strpos($errorMsg, 'truncated') !== false) {
+            $errorMsg = 'Veri çok uzun! Lütfen daha kısa metinler girin. Detay: ' . $errorMsg;
+        }
+        echo json_encode(['success' => false, 'message' => 'Hata: ' . $errorMsg]);
         exit;
     }
 }
@@ -1400,14 +1404,14 @@ if (isset($_GET['action'])) {
             </div>
             <div class="form-group">
                 <label for="proje_adi">Proje Adı</label>
-                <input type="text" id="proje_adi" name="proje_adi" maxlength="100">
+                <input type="text" id="proje_adi" name="proje_adi" maxlength="50">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group full-width">
                 <label for="firsat_aciklama">Fırsat Açıklama</label>
-                <textarea id="firsat_aciklama" name="firsat_aciklama" rows="3" maxlength="500"></textarea>
+                <textarea id="firsat_aciklama" name="firsat_aciklama" rows="3" maxlength="250"></textarea>
             </div>
         </div>
 
@@ -1489,7 +1493,7 @@ if (isset($_GET['action'])) {
             </div>
             <div class="form-group">
                 <label for="register_dr_no">Register DR No</label>
-                <input type="text" id="register_dr_no" name="register_dr_no" maxlength="50">
+                <input type="text" id="register_dr_no" name="register_dr_no" maxlength="25">
             </div>
         </div>
 
@@ -1511,16 +1515,20 @@ if (isset($_GET['action'])) {
 
         <div class="btn-container">
             <button type="submit" class="btn btn-primary">Fırsat Oluştur</button>
-            <button type="button" class="btn btn-secondary" onclick="window.history.back()">İptal</button>
+            <button type="button" class="btn btn-warning" onclick="if(confirm('Formu temizlemek istediğinizden emin misiniz?')) { clearFormData(); location.reload(); }">Formu Temizle</button>
+            <button type="button" class="btn btn-secondary" onclick="clearFormData(); window.history.back()">İptal</button>
         </div>
     </form>
 </div>
 
 <script>
 jQuery(document).ready(function($) {
-    // Sayfa yüklenince otomatik marka modal aç
+    // Sayfa yüklenince otomatik marka modal aç (sadece marka boşsa)
     setTimeout(function() {
-        openMarkaModal();
+        const markaField = document.getElementById('marka');
+        if (!markaField || !markaField.value || markaField.value.trim() === '') {
+            openMarkaModal();
+        }
     }, 100);
 
     // Form submit
@@ -2757,6 +2765,7 @@ function submitForm() {
                 showAlert('Fırsat başarıyla oluşturuldu! Fırsat No: ' + response.firsat_no, 'success');
                 jQuery('#firsat-form')[0].reset();
                 jQuery('#alert-container').html(''); // Hata mesajlarını da temizle
+                clearFormData(); // Kayıtlı form verilerini temizle
                 setTimeout(function() {
                     window.location.href = '<?php echo admin_url('admin.php?page=firsatlar'); ?>';
                 }, 2000);
@@ -2775,12 +2784,82 @@ function showAlert(message, type) {
     var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
     var html = '<div class="alert ' + alertClass + '">' + message + '</div>';
     jQuery('#alert-container').html(html);
+
+    // Hata durumunda sayfayı en üste kaydır
+    if (type === 'danger') {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
     // Hata mesajları kalıcı olsun - success durumunda hala otomatik kapanacak
     if (type === 'success') {
         setTimeout(function() {
             jQuery('#alert-container').html('');
         }, 5000);
     }
+}
+
+// LocalStorage Form Data Functions
+function saveFormData() {
+    const formData = {
+        marka: jQuery('#marka').val(),
+        gelis_kanali: jQuery('input[name="gelis_kanali"]:checked').val(),
+        olasilik: jQuery('#olasilik').val(),
+        proje_adi: jQuery('#proje_adi').val(),
+        firsat_aciklama: jQuery('#firsat_aciklama').val(),
+        bayi: jQuery('#bayi').val(),
+        bayi_kodu: jQuery('#bayi_kodu').val(),
+        bayi_yetkili: jQuery('#bayi_yetkili').val(),
+        bayi_yetkili_id: jQuery('#bayi_yetkili_id').val(),
+        musteri: jQuery('#musteri').val(),
+        musteri_id: jQuery('#musteri_id').val(),
+        musteri_yetkili: jQuery('#musteri_yetkili').val(),
+        musteri_yetkili_id: jQuery('#musteri_yetkili_id').val(),
+        accman: jQuery('#accman').val(),
+        accman_id: jQuery('#accman_id').val(),
+        etkinlik: jQuery('#etkinlik').val(),
+        etkinlik_id: jQuery('#etkinlik_id').val(),
+        register: jQuery('#register').is(':checked'),
+        register_dr_no: jQuery('#register_dr_no').val(),
+        musteri_temsilcisi: jQuery('#musteri_temsilcisi').val()
+    };
+
+    localStorage.setItem('firsat_form_data', JSON.stringify(formData));
+}
+
+function loadFormData() {
+    const savedData = localStorage.getItem('firsat_form_data');
+    if (savedData) {
+        const formData = JSON.parse(savedData);
+
+        // Verileri forma yükle
+        if (formData.marka) jQuery('#marka').val(formData.marka);
+        if (formData.gelis_kanali) jQuery('input[name="gelis_kanali"][value="' + formData.gelis_kanali + '"]').prop('checked', true);
+        if (formData.olasilik) jQuery('#olasilik').val(formData.olasilik);
+        if (formData.proje_adi) jQuery('#proje_adi').val(formData.proje_adi);
+        if (formData.firsat_aciklama) jQuery('#firsat_aciklama').val(formData.firsat_aciklama);
+        if (formData.bayi) jQuery('#bayi').val(formData.bayi);
+        if (formData.bayi_kodu) jQuery('#bayi_kodu').val(formData.bayi_kodu);
+        if (formData.bayi_yetkili) jQuery('#bayi_yetkili').val(formData.bayi_yetkili);
+        if (formData.bayi_yetkili_id) jQuery('#bayi_yetkili_id').val(formData.bayi_yetkili_id);
+        if (formData.musteri) jQuery('#musteri').val(formData.musteri);
+        if (formData.musteri_id) jQuery('#musteri_id').val(formData.musteri_id);
+        if (formData.musteri_yetkili) jQuery('#musteri_yetkili').val(formData.musteri_yetkili);
+        if (formData.musteri_yetkili_id) jQuery('#musteri_yetkili_id').val(formData.musteri_yetkili_id);
+        if (formData.accman) jQuery('#accman').val(formData.accman);
+        if (formData.accman_id) jQuery('#accman_id').val(formData.accman_id);
+        if (formData.etkinlik) jQuery('#etkinlik').val(formData.etkinlik);
+        if (formData.etkinlik_id) jQuery('#etkinlik_id').val(formData.etkinlik_id);
+        if (formData.register) jQuery('#register').prop('checked', formData.register);
+        if (formData.register_dr_no) jQuery('#register_dr_no').val(formData.register_dr_no);
+        if (formData.musteri_temsilcisi) jQuery('#musteri_temsilcisi').val(formData.musteri_temsilcisi);
+    }
+}
+
+function clearFormData() {
+    localStorage.removeItem('firsat_form_data');
 }
 
 // CRUD Functions for Bayi Yetkili
@@ -3146,4 +3225,58 @@ function cancelDeleteMusteriYetkili(yetkiliId, originalName, originalPhone, orig
         </td>
     `;
 }
+
+// Sayfa yüklendiğinde ve form değişikliklerinde localStorage işlemleri
+jQuery(document).ready(function() {
+    // Sayfa yüklendiğinde kayıtlı verileri geri yükle
+    loadFormData();
+
+    // Form değişikliklerini dinle ve otomatik kaydet
+    const formFields = [
+        '#proje_adi', '#firsat_aciklama', '#register_dr_no',
+        'input[name="gelis_kanali"]', '#olasilik', '#register'
+    ];
+
+    formFields.forEach(function(selector) {
+        jQuery(document).on('change keyup', selector, function() {
+            // Kısa bir gecikme ile kaydet (çok sık kaydetmeyi önlemek için)
+            clearTimeout(window.saveFormTimeout);
+            window.saveFormTimeout = setTimeout(function() {
+                saveFormData();
+            }, 1000); // 1 saniye bekle
+        });
+    });
+
+    // Modal'lardan seçim yapıldığında da kaydet
+    const originalSelectMarka = window.selectMarka;
+    window.selectMarka = function(marka) {
+        originalSelectMarka(marka);
+        saveFormData();
+    };
+
+    // Diğer select fonksiyonları için de aynısını yap
+    if (window.selectBayi) {
+        const originalSelectBayi = window.selectBayi;
+        window.selectBayi = function(bayi, kodu) {
+            originalSelectBayi(bayi, kodu);
+            saveFormData();
+        };
+    }
+
+    if (window.selectMusteriYetkili) {
+        const originalSelectMusteriYetkili = window.selectMusteriYetkili;
+        window.selectMusteriYetkili = function(id, name) {
+            originalSelectMusteriYetkili(id, name);
+            saveFormData();
+        };
+    }
+
+    if (window.selectAccman) {
+        const originalSelectAccman = window.selectAccman;
+        window.selectAccman = function(id, name) {
+            originalSelectAccman(id, name);
+            saveFormData();
+        };
+    }
+});
 </script>
