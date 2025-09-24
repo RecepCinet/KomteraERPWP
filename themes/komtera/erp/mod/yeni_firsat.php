@@ -385,6 +385,64 @@ if (isset($_GET['action'])) {
             exit;
         }
 
+        if ($_GET['action'] === 'update_bayi_yetkili') {
+            $id = $_POST['id'] ?? '';
+            $yetkili = $_POST['yetkili'] ?? '';
+            $telefon = $_POST['telefon'] ?? '';
+            $eposta = $_POST['eposta'] ?? '';
+
+            try {
+                if ($id && $yetkili) {
+                    $sql = "UPDATE aa_erp_kt_bayiler_yetkililer SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':id', $id);
+                    $stmt->bindParam(':yetkili', $yetkili);
+                    $stmt->bindParam(':telefon', $telefon);
+                    $stmt->bindParam(':eposta', $eposta);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'Bayi yetkili başarıyla güncellendi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Güncelleme sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID ve yetkili adı gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
+        if ($_GET['action'] === 'update_musteri_yetkili') {
+            $id = $_POST['id'] ?? '';
+            $yetkili = $_POST['yetkili'] ?? '';
+            $telefon = $_POST['telefon'] ?? '';
+            $eposta = $_POST['eposta'] ?? '';
+
+            try {
+                if ($id && $yetkili) {
+                    $sql = "UPDATE aa_erp_kt_musteriler_yetkililer SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':id', $id);
+                    $stmt->bindParam(':yetkili', $yetkili);
+                    $stmt->bindParam(':telefon', $telefon);
+                    $stmt->bindParam(':eposta', $eposta);
+
+                    if ($stmt->execute()) {
+                        echo json_encode(['success' => true, 'message' => 'Müşteri yetkili başarıyla güncellendi.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Güncelleme sırasında hata oluştu.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID ve yetkili adı gerekli.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+
     } catch (Exception $e) {
         echo json_encode(['error' => $e->getMessage()]);
         exit;
@@ -902,6 +960,38 @@ if (isset($_GET['action'])) {
     .yetkili-input {
         width: 100%;
     }
+}
+
+/* Edit Input Styles */
+.yetkili-edit-input {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #007cba;
+    border-radius: 3px;
+    font-size: 13px;
+    background-color: #f0f8ff;
+}
+
+.yetkili-edit-input:focus {
+    outline: none;
+    border-color: #005a87;
+    background-color: white;
+}
+
+/* İşlemler Sütunu Sabit Genişlik */
+.yetkili-table th:last-child,
+.yetkili-table td:last-child {
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+}
+
+/* Buton Container */
+.yetkili-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+    align-items: center;
 }
 </style>
 
@@ -1667,13 +1757,15 @@ function displayBayiYetkililer(data) {
     let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
     data.forEach(function(yetkili) {
         html += `
-            <tr>
-                <td onclick="selectBayiYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;">${yetkili.yetkili || 'N/A'}</td>
-                <td>${yetkili.telefon || ''}</td>
-                <td>${yetkili.eposta || ''}</td>
+            <tr id="bayi-yetkili-row-${yetkili.id}">
+                <td onclick="selectBayiYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${yetkili.yetkili || 'N/A'}</td>
+                <td class="yetkili-phone-cell">${yetkili.telefon || ''}</td>
+                <td class="yetkili-email-cell">${yetkili.eposta || ''}</td>
                 <td>
-                    <button class="btn-small btn-edit" onclick="editBayiYetkili(${yetkili.id})">Düzenle</button>
-                    <button class="btn-small btn-delete" onclick="deleteBayiYetkili(${yetkili.id})">Sil</button>
+                    <div class="yetkili-buttons">
+                        <button class="btn-small btn-edit" onclick="editBayiYetkili(${yetkili.id}, '${yetkili.yetkili || ''}', '${yetkili.telefon || ''}', '${yetkili.eposta || ''}')">Düzenle</button>
+                        <button class="btn-small btn-delete" onclick="deleteBayiYetkili(${yetkili.id})">Sil</button>
+                    </div>
                 </td>
             </tr>
         `;
@@ -1776,13 +1868,15 @@ function displayMusteriYetkililer(data) {
     let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
     data.forEach(function(yetkili) {
         html += `
-            <tr>
-                <td onclick="selectMusteriYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;">${yetkili.yetkili || 'N/A'}</td>
-                <td>${yetkili.telefon || ''}</td>
-                <td>${yetkili.eposta || ''}</td>
+            <tr id="musteri-yetkili-row-${yetkili.id}">
+                <td onclick="selectMusteriYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${yetkili.yetkili || 'N/A'}</td>
+                <td class="yetkili-phone-cell">${yetkili.telefon || ''}</td>
+                <td class="yetkili-email-cell">${yetkili.eposta || ''}</td>
                 <td>
-                    <button class="btn-small btn-edit" onclick="editMusteriYetkili(${yetkili.id})">Düzenle</button>
-                    <button class="btn-small btn-delete" onclick="deleteMusteriYetkili(${yetkili.id})">Sil</button>
+                    <div class="yetkili-buttons">
+                        <button class="btn-small btn-edit" onclick="editMusteriYetkili(${yetkili.id}, '${yetkili.yetkili || ''}', '${yetkili.telefon || ''}', '${yetkili.eposta || ''}')">Düzenle</button>
+                        <button class="btn-small btn-delete" onclick="deleteMusteriYetkili(${yetkili.id})">Sil</button>
+                    </div>
                 </td>
             </tr>
         `;
@@ -1881,9 +1975,74 @@ function saveBayiYetkili() {
     });
 }
 
-function editBayiYetkili(yetkiliId) {
-    // Here you would implement the edit functionality
-    alert('Bayi yetkili düzenleme özelliği henüz implement edilmedi.');
+function editBayiYetkili(yetkiliId, currentName, currentPhone, currentEmail) {
+    const row = document.getElementById(`bayi-yetkili-row-${yetkiliId}`);
+
+    // Satırı edit moduna çevir
+    row.innerHTML = `
+        <td><input type="text" id="edit-bayi-yetkili-name-${yetkiliId}" value="${currentName}" class="yetkili-edit-input"></td>
+        <td><input type="text" id="edit-bayi-yetkili-phone-${yetkiliId}" value="${currentPhone}" class="yetkili-edit-input"></td>
+        <td><input type="email" id="edit-bayi-yetkili-email-${yetkiliId}" value="${currentEmail}" class="yetkili-edit-input"></td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="updateBayiYetkili(${yetkiliId})">Kaydet</button>
+                <button class="btn-small btn-delete" onclick="cancelEditBayiYetkili(${yetkiliId}, '${currentName}', '${currentPhone}', '${currentEmail}')">İptal</button>
+            </div>
+        </td>
+    `;
+}
+
+function updateBayiYetkili(yetkiliId) {
+    const yetkili = document.getElementById(`edit-bayi-yetkili-name-${yetkiliId}`).value.trim();
+    const telefon = document.getElementById(`edit-bayi-yetkili-phone-${yetkiliId}`).value.trim();
+    const eposta = document.getElementById(`edit-bayi-yetkili-email-${yetkiliId}`).value.trim();
+
+    if (!yetkili) {
+        alert('Yetkili adı gereklidir.');
+        return;
+    }
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=update_bayi_yetkili',
+        type: 'POST',
+        data: {
+            id: yetkiliId,
+            yetkili: yetkili,
+            telefon: telefon,
+            eposta: eposta
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Listeyi yenile
+                const bayiKodu = document.getElementById('bayi_kodu').value;
+                loadBayiYetkililer(bayiKodu);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Update bayi yetkili error:', status, error);
+            alert('Güncelleme sırasında hata oluştu: ' + error);
+        }
+    });
+}
+
+function cancelEditBayiYetkili(yetkiliId, originalName, originalPhone, originalEmail) {
+    const row = document.getElementById(`bayi-yetkili-row-${yetkiliId}`);
+
+    // Satırı orijinal haline döndür
+    row.innerHTML = `
+        <td onclick="selectBayiYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td class="yetkili-phone-cell">${originalPhone || ''}</td>
+        <td class="yetkili-email-cell">${originalEmail || ''}</td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="editBayiYetkili(${yetkiliId}, '${originalName}', '${originalPhone}', '${originalEmail}')">Düzenle</button>
+                <button class="btn-small btn-delete" onclick="deleteBayiYetkili(${yetkiliId})">Sil</button>
+            </div>
+        </td>
+    `;
 }
 
 function deleteBayiYetkili(yetkiliId) {
@@ -1937,9 +2096,74 @@ function saveMusteriYetkili() {
     });
 }
 
-function editMusteriYetkili(yetkiliId) {
-    // Here you would implement the edit functionality
-    alert('Müşteri yetkili düzenleme özelliği henüz implement edilmedi.');
+function editMusteriYetkili(yetkiliId, currentName, currentPhone, currentEmail) {
+    const row = document.getElementById(`musteri-yetkili-row-${yetkiliId}`);
+
+    // Satırı edit moduna çevir
+    row.innerHTML = `
+        <td><input type="text" id="edit-musteri-yetkili-name-${yetkiliId}" value="${currentName}" class="yetkili-edit-input"></td>
+        <td><input type="text" id="edit-musteri-yetkili-phone-${yetkiliId}" value="${currentPhone}" class="yetkili-edit-input"></td>
+        <td><input type="email" id="edit-musteri-yetkili-email-${yetkiliId}" value="${currentEmail}" class="yetkili-edit-input"></td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="updateMusteriYetkili(${yetkiliId})">Kaydet</button>
+                <button class="btn-small btn-delete" onclick="cancelEditMusteriYetkili(${yetkiliId}, '${currentName}', '${currentPhone}', '${currentEmail}')">İptal</button>
+            </div>
+        </td>
+    `;
+}
+
+function updateMusteriYetkili(yetkiliId) {
+    const yetkili = document.getElementById(`edit-musteri-yetkili-name-${yetkiliId}`).value.trim();
+    const telefon = document.getElementById(`edit-musteri-yetkili-phone-${yetkiliId}`).value.trim();
+    const eposta = document.getElementById(`edit-musteri-yetkili-email-${yetkiliId}`).value.trim();
+
+    if (!yetkili) {
+        alert('Yetkili adı gereklidir.');
+        return;
+    }
+
+    jQuery.ajax({
+        url: '<?php echo get_stylesheet_directory_uri(); ?>/erp/mod/yeni_firsat.php?action=update_musteri_yetkili',
+        type: 'POST',
+        data: {
+            id: yetkiliId,
+            yetkili: yetkili,
+            telefon: telefon,
+            eposta: eposta
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Listeyi yenile
+                const musteriId = document.getElementById('musteri_id').value;
+                loadMusteriYetkililer(musteriId);
+            } else {
+                alert('Hata: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Update musteri yetkili error:', status, error);
+            alert('Güncelleme sırasında hata oluştu: ' + error);
+        }
+    });
+}
+
+function cancelEditMusteriYetkili(yetkiliId, originalName, originalPhone, originalEmail) {
+    const row = document.getElementById(`musteri-yetkili-row-${yetkiliId}`);
+
+    // Satırı orijinal haline döndür
+    row.innerHTML = `
+        <td onclick="selectMusteriYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td class="yetkili-phone-cell">${originalPhone || ''}</td>
+        <td class="yetkili-email-cell">${originalEmail || ''}</td>
+        <td>
+            <div class="yetkili-buttons">
+                <button class="btn-small btn-edit" onclick="editMusteriYetkili(${yetkiliId}, '${originalName}', '${originalPhone}', '${originalEmail}')">Düzenle</button>
+                <button class="btn-small btn-delete" onclick="deleteMusteriYetkili(${yetkiliId})">Sil</button>
+            </div>
+        </td>
+    `;
 }
 
 function deleteMusteriYetkili(yetkiliId) {
