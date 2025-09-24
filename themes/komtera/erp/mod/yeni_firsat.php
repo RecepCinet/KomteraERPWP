@@ -1398,6 +1398,14 @@ function openBayiModal() {
     });
 
     loadAllBayiler();
+
+    // Arama kutusuna otomatik fokus
+    setTimeout(function() {
+        const searchInput = document.getElementById('bayi-search');
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }, 100);
 }
 
 function closeBayiModal(event) {
@@ -1530,6 +1538,14 @@ function openMusteriModal() {
     });
 
     loadAllMusteriler();
+
+    // Arama kutusuna otomatik fokus
+    setTimeout(function() {
+        const searchInput = document.getElementById('musteri-search');
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }, 100);
 }
 
 function closeMusteriModal(event) {
