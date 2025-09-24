@@ -57,6 +57,103 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $register = isset($_POST['register']) ? '1' : '0';
         $register_dr_no = $_POST['register_dr_no'] ?? '';
 
+        // Yeni ek alanlar - veritabanından çekilen veriler
+        $bitis_tarihi = date('Y-m-d', strtotime('+30 days')); // Başlangıç tarihi + 30 gün
+        $marka_bayi_seviye = '';
+        $bayi_yetkili_isim = $bayi_yetkili; // Formdan gelen bayi yetkili ismi
+        $bayi_yetkili_telefon = $_POST['bayi_yetkili_telefon'] ?? '';
+        $bayi_yetkili_eposta = $_POST['bayi_yetkili_eposta'] ?? '';
+        $musteri_yetkili_isim = $musteri_yetkili; // Formdan gelen müşteri yetkili ismi
+        $musteri_yetkili_telefon = $_POST['musteri_yetkili_telefon'] ?? '';
+        $musteri_yetkili_eposta = $_POST['musteri_yetkili_eposta'] ?? '';
+        $bayi_adres = '';
+        $bayi_sehir = '';
+        $bayi_ilce = '';
+        $cn = $user; // Olusturan user name
+        $para_birimi = 'USD'; // Varsayılan
+        $vade = 30; // Varsayılan 30 gün - bayiler tablosundan alinacak
+        $marka_manager = $accman; // ACCMan formdan
+        $marka_manager_eposta = '';
+
+        // Bayi bilgilerini veritabanından çek (seviye, adres, vade)
+        if (!empty($bayi_kodu)) {
+            try {
+                // Bayi seviyesi bilgisini al
+                $seviyeSql = "SELECT TOP 1 CH_KODU FROM aa_erp_kt_bayiler_markaseviyeleri WHERE CH_KODU = :bayi_kodu";
+                $seviyeStmt = $conn->prepare($seviyeSql);
+                $seviyeStmt->bindParam(':bayi_kodu', $bayi_kodu);
+                $seviyeStmt->execute();
+                $seviyeResult = $seviyeStmt->fetch(PDO::FETCH_ASSOC);
+                if ($seviyeResult) {
+                    $marka_bayi_seviye = $seviyeResult['CH_KODU'];
+                }
+
+                // Bayi adres ve vade bilgilerini al
+                $bayiSql = "SELECT ADRES1 + ' ' + ADRES2 as bayi_adres, SEHIR as bayi_sehir, ILCE as bayi_ilce, vade FROM aaa_erp_kt_bayiler WHERE CH_KODU = :bayi_kodu";
+                $bayiStmt = $conn->prepare($bayiSql);
+                $bayiStmt->bindParam(':bayi_kodu', $bayi_kodu);
+                $bayiStmt->execute();
+                $bayiResult = $bayiStmt->fetch(PDO::FETCH_ASSOC);
+                if ($bayiResult) {
+                    $bayi_adres = $bayiResult['bayi_adres'] ?? '';
+                    $bayi_sehir = $bayiResult['bayi_sehir'] ?? '';
+                    $bayi_ilce = $bayiResult['bayi_ilce'] ?? '';
+                    $vade = $bayiResult['vade'] ?? 30;
+                }
+            } catch (Exception $e) {
+                // Hata durumunda varsayılan değerler kullanılacak
+                error_log("Bayi bilgileri çekme hatası: " . $e->getMessage());
+            }
+        }
+
+        // Bayi yetkili eposta bilgisini al
+        if (!empty($bayi_yetkili_id)) {
+            try {
+                $bayiYetkiliSql = "SELECT eposta FROM aa_erp_kt_bayiler_yetkililer WHERE id = :bayi_yetkili_id";
+                $bayiYetkiliStmt = $conn->prepare($bayiYetkiliSql);
+                $bayiYetkiliStmt->bindParam(':bayi_yetkili_id', $bayi_yetkili_id);
+                $bayiYetkiliStmt->execute();
+                $bayiYetkiliResult = $bayiYetkiliStmt->fetch(PDO::FETCH_ASSOC);
+                if ($bayiYetkiliResult) {
+                    $bayi_yetkili_eposta = $bayiYetkiliResult['eposta'] ?? '';
+                }
+            } catch (Exception $e) {
+                error_log("Bayi yetkili eposta çekme hatası: " . $e->getMessage());
+            }
+        }
+
+        // Müşteri yetkili eposta bilgisini al
+        if (!empty($musteri_yetkili_id)) {
+            try {
+                $musteriYetkiliSql = "SELECT eposta FROM aa_erp_kt_musteriler_yetkililer WHERE id = :musteri_yetkili_id";
+                $musteriYetkiliStmt = $conn->prepare($musteriYetkiliSql);
+                $musteriYetkiliStmt->bindParam(':musteri_yetkili_id', $musteri_yetkili_id);
+                $musteriYetkiliStmt->execute();
+                $musteriYetkiliResult = $musteriYetkiliStmt->fetch(PDO::FETCH_ASSOC);
+                if ($musteriYetkiliResult) {
+                    $musteri_yetkili_eposta = $musteriYetkiliResult['eposta'] ?? '';
+                }
+            } catch (Exception $e) {
+                error_log("Müşteri yetkili eposta çekme hatası: " . $e->getMessage());
+            }
+        }
+
+        // Marka manager eposta bilgisini al
+        if (!empty($accman_id)) {
+            try {
+                $accmanSql = "SELECT eposta FROM aa_erp_kt_markalar_managers WHERE id = :accman_id";
+                $accmanStmt = $conn->prepare($accmanSql);
+                $accmanStmt->bindParam(':accman_id', $accman_id);
+                $accmanStmt->execute();
+                $accmanResult = $accmanStmt->fetch(PDO::FETCH_ASSOC);
+                if ($accmanResult) {
+                    $marka_manager_eposta = $accmanResult['eposta'] ?? '';
+                }
+            } catch (Exception $e) {
+                error_log("AccMan eposta çekme hatası: " . $e->getMessage());
+            }
+        }
+
         // Server-side validation - zorunlu alanlar kontrolü
         $required_fields = [
             'marka' => 'Marka',
@@ -103,53 +200,18 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             exit;
         }
 
-        // String truncate hatasını önlemek için veri uzunluklarını daha konservatif sınırla
-        $marka = mb_substr($marka, 0, 25, 'UTF-8');
-        $gelis_kanali = mb_substr($gelis_kanali, 0, 15, 'UTF-8');
-        $olasilik = mb_substr($olasilik, 0, 25, 'UTF-8');
-        $proje_adi = mb_substr($proje_adi, 0, 50, 'UTF-8');
-        $firsat_aciklama = mb_substr($firsat_aciklama, 0, 250, 'UTF-8');
-        $bayi = mb_substr($bayi, 0, 50, 'UTF-8');
-        $bayi_kodu = mb_substr($bayi_kodu, 0, 10, 'UTF-8');
-        $bayi_yetkili = mb_substr($bayi_yetkili, 0, 50, 'UTF-8');
-        $musteri = mb_substr($musteri, 0, 50, 'UTF-8');
-        $musteri_yetkili = mb_substr($musteri_yetkili, 0, 50, 'UTF-8');
-        $musteri_temsilcisi = mb_substr($musteri_temsilcisi, 0, 25, 'UTF-8');
-        $accman = mb_substr($accman, 0, 25, 'UTF-8');
-        $etkinlik = mb_substr($etkinlik, 0, 50, 'UTF-8');
-        $register_dr_no = mb_substr($register_dr_no, 0, 25, 'UTF-8');
-        $user = mb_substr($user, 0, 25, 'UTF-8');
 
         // Fırsat numarası oluşturma - son Fırsat No'ya random ekleyerek
         try {
             // Son fırsat numarasını al
-            $lastFirsatSql = "SELECT TOP 1 FIRSAT_NO FROM aa_erp_kt_firsatlar ORDER BY BASLANGIC_TARIHI DESC";
+            $lastFirsatSql = "SELECT TOP 1 id FROM aa_erp_kt_firsatlar ORDER BY id DESC";
             $lastFirsatStmt = $conn->query($lastFirsatSql);
             $lastFirsat = $lastFirsatStmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($lastFirsat && $lastFirsat['FIRSAT_NO']) {
-                // Son fırsat no'dan tarih kısmını çıkar
-                // Örnek: F20250924-123 -> 20250924
-                preg_match('/F(\d{8})/', $lastFirsat['FIRSAT_NO'], $matches);
-                if (!empty($matches[1])) {
-                    $lastDate = intval($matches[1]);
-                    // 2 ile 12 arası random sayı ekle
-                    $randomAdd = rand(2, 12);
-                    $newDate = $lastDate + $randomAdd;
-                    $firsat_no = 'F' . $newDate;
-                } else {
-                    // Eğer parse edilemezse varsayılan yöntem
-                    $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-                }
-            } else {
-                // Hiç kayıt yoksa varsayılan yöntem
-                $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-            }
+            $firsat_no="F" . ((int)($lastFirsat['id']) + 1);
         } catch (Exception $e) {
             // Hata durumunda varsayılan yöntem
-            $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+            // $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
         }
-
         $sql = "INSERT INTO aa_erp_kt_firsatlar (
             FIRSAT_NO,
             MARKA,
@@ -168,7 +230,21 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             KAYIDI_ACAN,
             BASLANGIC_TARIHI,
             REVIZE_TARIHI,
-            DURUM
+            DURUM,
+            BITIS_TARIHI,
+            MARKA_BAYI_SEVIYE,
+            BAYI_YETKILI_ISIM,
+            BAYI_YETKILI_EPOSTA,
+            MUSTERI_YETKILI_ISIM,
+            MUSTERI_YETKILI_EPOSTA,
+            BAYI_ADRES,
+            BAYI_SEHIR,
+            BAYI_ILCE,
+            CN,
+            PARA_BIRIMI,
+            VADE,
+            MARKA_MANAGER,
+            MARKA_MANAGER_EPOSTA
         ) VALUES (
             :firsat_no,
             :marka,
@@ -179,15 +255,29 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             :firsat_aciklama,
             :bayi,
             :bayi_kodu,
-            :bayi_yetkili,
+            :bayi_yetkili_telefon,
             :musteri,
-            :musteri_yetkili,
+            :musteri_yetkili_telefon,
             :etkinlik,
             :register,
             :kayidi_acan,
             GETDATE(),
             DATEADD(day, 30, GETDATE()),
-            '0'
+            '0',
+            :bitis_tarihi,
+            :marka_bayi_seviye,
+            :bayi_yetkili_isim,
+            :bayi_yetkili_eposta,
+            :musteri_yetkili_isim,
+            :musteri_yetkili_eposta,
+            :bayi_adres,
+            :bayi_sehir,
+            :bayi_ilce,
+            :cn,
+            :para_birimi,
+            :vade,
+            :marka_manager,
+            :marka_manager_eposta
         )";
 
         $stmt = $conn->prepare($sql);
@@ -200,12 +290,28 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $stmt->bindParam(':firsat_aciklama', $firsat_aciklama);
         $stmt->bindParam(':bayi', $bayi);
         $stmt->bindParam(':bayi_kodu', $bayi_kodu);
-        $stmt->bindParam(':bayi_yetkili', $bayi_yetkili);
+        $stmt->bindParam(':bayi_yetkili_telefon', $bayi_yetkili_telefon);
         $stmt->bindParam(':musteri', $musteri);
-        $stmt->bindParam(':musteri_yetkili', $musteri_yetkili);
+        $stmt->bindParam(':musteri_yetkili_telefon', $musteri_yetkili_telefon);
         $stmt->bindParam(':etkinlik', $etkinlik);
         $stmt->bindParam(':register', $register);
         $stmt->bindParam(':kayidi_acan', $user);
+
+        // Yeni alanlar için bind parametreleri
+        $stmt->bindParam(':bitis_tarihi', $bitis_tarihi);
+        $stmt->bindParam(':marka_bayi_seviye', $marka_bayi_seviye);
+        $stmt->bindParam(':bayi_yetkili_isim', $bayi_yetkili_isim);
+        $stmt->bindParam(':bayi_yetkili_eposta', $bayi_yetkili_eposta);
+        $stmt->bindParam(':musteri_yetkili_isim', $musteri_yetkili_isim);
+        $stmt->bindParam(':musteri_yetkili_eposta', $musteri_yetkili_eposta);
+        $stmt->bindParam(':bayi_adres', $bayi_adres);
+        $stmt->bindParam(':bayi_sehir', $bayi_sehir);
+        $stmt->bindParam(':bayi_ilce', $bayi_ilce);
+        $stmt->bindParam(':cn', $cn);
+        $stmt->bindParam(':para_birimi', $para_birimi);
+        $stmt->bindParam(':vade', $vade);
+        $stmt->bindParam(':marka_manager', $marka_manager);
+        $stmt->bindParam(':marka_manager_eposta', $marka_manager_eposta);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Fırsat başarıyla oluşturuldu.', 'firsat_no' => $firsat_no]);
@@ -216,7 +322,33 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
     } catch (Exception $e) {
         $errorMsg = $e->getMessage();
         if (strpos($errorMsg, 'truncated') !== false) {
-            $errorMsg = 'Veri çok uzun! Lütfen daha kısa metinler girin. Detay: ' . $errorMsg;
+            // Parametrelerin uzunluklarını ve değerlerini göster
+            $paramData = [
+                'firsat_no' => $firsat_no ?? '',
+                'marka' => $marka ?? '',
+                'gelis_kanali' => $gelis_kanali ?? '',
+                'olasilik' => $olasilik ?? '',
+                'musteri_temsilcisi' => $musteri_temsilcisi ?? '',
+                'proje_adi' => $proje_adi ?? '',
+                'firsat_aciklama' => $firsat_aciklama ?? '',
+                'bayi' => $bayi ?? '',
+                'bayi_kodu' => $bayi_kodu ?? '',
+                'bayi_yetkili' => $bayi_yetkili ?? '',
+                'musteri' => $musteri ?? '',
+                'musteri_yetkili' => $musteri_yetkili ?? '',
+                'etkinlik' => $etkinlik ?? '',
+                'register' => $register ?? '',
+                'kayidi_acan' => $user ?? ''
+            ];
+
+            $paramDetails = '';
+            foreach ($paramData as $param => $value) {
+                $length = mb_strlen($value);
+                $displayValue = mb_strlen($value) > 50 ? mb_substr($value, 0, 50) . '...' : $value;
+                $paramDetails .= '<strong>' . $param . ':</strong> ' . $length . ' karakter - "' . htmlspecialchars($displayValue) . '"<br/>';
+            }
+
+            $errorMsg = 'Veri çok uzun! Lütfen daha kısa metinler girin.<br/><br/><strong>Veri Uzunlukları:</strong><br/>' . $paramDetails . '<br/><strong>SQL Sorgusu:</strong><br/><pre>' . htmlspecialchars($sql) . '</pre><br/><strong>Hata Detayı:</strong> ' . $errorMsg;
         }
         echo json_encode(['success' => false, 'message' => 'Hata: ' . $errorMsg]);
         exit;
@@ -292,7 +424,7 @@ if (isset($_GET['action'])) {
         }
 
         if ($_GET['action'] === 'get_musteriler') {
-            $sql = "SELECT m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE musteri IS NOT NULL ORDER BY m.musteri";
+            $sql = "SELECT top 100 m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE musteri IS NOT NULL ORDER BY m.musteri";
             $stmt = $conn->query($sql);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($data);
@@ -310,7 +442,7 @@ if (isset($_GET['action'])) {
                 $searchTerm = '%' . $query . '%';
             }
 
-            $sql = "SELECT m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE m.musteri LIKE :query AND m.musteri IS NOT NULL ORDER BY m.musteri";
+            $sql = "SELECT top 100 m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE m.musteri LIKE :query AND m.musteri IS NOT NULL ORDER BY m.musteri";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':query', $searchTerm);
             $stmt->execute();
@@ -1431,6 +1563,8 @@ if (isset($_GET['action'])) {
                 <div class="input-with-button">
                     <input type="text" id="bayi_yetkili" name="bayi_yetkili" placeholder="Önce bayi seçin" readonly onclick="openBayiYetkiliModal()" required>
                     <input type="hidden" id="bayi_yetkili_id" name="bayi_yetkili_id">
+                    <input type="hidden" id="bayi_yetkili_telefon" name="bayi_yetkili_telefon">
+                    <input type="hidden" id="bayi_yetkili_eposta" name="bayi_yetkili_eposta">
                     <button type="button" class="btn-search" onclick="openBayiYetkiliModal()">
                         <span class="dashicons dashicons-search"></span>
                     </button>
@@ -1454,6 +1588,8 @@ if (isset($_GET['action'])) {
                 <div class="input-with-button">
                     <input type="text" id="musteri_yetkili" name="musteri_yetkili" placeholder="Önce müşteri seçin" readonly onclick="openMusteriYetkiliModal()" required>
                     <input type="hidden" id="musteri_yetkili_id" name="musteri_yetkili_id">
+                    <input type="hidden" id="musteri_yetkili_telefon" name="musteri_yetkili_telefon">
+                    <input type="hidden" id="musteri_yetkili_eposta" name="musteri_yetkili_eposta">
                     <button type="button" class="btn-search" onclick="openMusteriYetkiliModal()">
                         <span class="dashicons dashicons-search"></span>
                     </button>
@@ -1516,7 +1652,7 @@ if (isset($_GET['action'])) {
         <div class="btn-container">
             <button type="submit" class="btn btn-primary">Fırsat Oluştur</button>
             <button type="button" class="btn btn-warning" onclick="if(confirm('Formu temizlemek istediğinizden emin misiniz?')) { clearFormData(); location.reload(); }">Formu Temizle</button>
-            <button type="button" class="btn btn-secondary" onclick="clearFormData(); window.history.back()">İptal</button>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">İptal</button>
         </div>
     </form>
 </div>
@@ -1814,6 +1950,8 @@ function selectBayi(bayiKodu, bayiAdi) {
     // Bayi yetkili alanını temizle
     document.getElementById('bayi_yetkili').value = '';
     document.getElementById('bayi_yetkili_id').value = '';
+    document.getElementById('bayi_yetkili_telefon').value = '';
+    document.getElementById('bayi_yetkili_eposta').value = '';
     console.log('Bayi kodu set to:', document.getElementById('bayi_kodu').value);
     closeBayiModal();
 }
@@ -1824,7 +1962,7 @@ function openMusteriModal() {
         <div id="musteri-modal" class="modal-overlay" onclick="closeMusteriModal(event)">
             <div class="modal-content" onclick="event.stopPropagation()">
                 <div class="modal-header">
-                    <h3>Müşteri Seçimi</h3>
+                    <h3>Müşteri Seçimi (100 Kayıt)</h3>
                     <button class="modal-close" onclick="closeMusteriModal()">&times;</button>
                 </div>
                 <div class="modal-search">
@@ -1947,6 +2085,8 @@ function selectMusteri(musteriId, musteriAdi) {
     // Müşteri yetkili alanını temizle
     document.getElementById('musteri_yetkili').value = '';
     document.getElementById('musteri_yetkili_id').value = '';
+    document.getElementById('musteri_yetkili_telefon').value = '';
+    document.getElementById('musteri_yetkili_eposta').value = '';
     closeMusteriModal();
 }
 
@@ -2534,7 +2674,7 @@ function displayBayiYetkililer(data) {
     data.forEach(function(yetkili) {
         html += `
             <tr id="bayi-yetkili-row-${yetkili.id}">
-                <td onclick="selectBayiYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${yetkili.yetkili || 'N/A'}</td>
+                <td onclick="selectBayiYetkili('${yetkili.id}', '${yetkili.yetkili || ''}', '${yetkili.telefon || ''}', '${yetkili.eposta || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${yetkili.yetkili || 'N/A'}</td>
                 <td class="yetkili-phone-cell">${yetkili.telefon || ''}</td>
                 <td class="yetkili-email-cell">${yetkili.eposta || ''}</td>
                 <td>
@@ -2551,9 +2691,11 @@ function displayBayiYetkililer(data) {
     listDiv.innerHTML = html;
 }
 
-function selectBayiYetkili(yetkiliId, yetkiliAdi) {
+function selectBayiYetkili(yetkiliId, yetkiliAdi, yetkiliTelefon, yetkiliEposta) {
     document.getElementById('bayi_yetkili').value = yetkiliAdi;
     document.getElementById('bayi_yetkili_id').value = yetkiliId;
+    document.getElementById('bayi_yetkili_telefon').value = yetkiliTelefon || '';
+    document.getElementById('bayi_yetkili_eposta').value = yetkiliEposta || '';
     closeBayiYetkiliModal();
 }
 
@@ -2645,7 +2787,7 @@ function displayMusteriYetkililer(data) {
     data.forEach(function(yetkili) {
         html += `
             <tr id="musteri-yetkili-row-${yetkili.id}">
-                <td onclick="selectMusteriYetkili('${yetkili.id}', '${yetkili.yetkili || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${yetkili.yetkili || 'N/A'}</td>
+                <td onclick="selectMusteriYetkili('${yetkili.id}', '${yetkili.yetkili || ''}', '${yetkili.telefon || ''}', '${yetkili.eposta || ''}')" style="cursor: pointer;" class="yetkili-name-cell">${yetkili.yetkili || 'N/A'}</td>
                 <td class="yetkili-phone-cell">${yetkili.telefon || ''}</td>
                 <td class="yetkili-email-cell">${yetkili.eposta || ''}</td>
                 <td>
@@ -2662,9 +2804,11 @@ function displayMusteriYetkililer(data) {
     listDiv.innerHTML = html;
 }
 
-function selectMusteriYetkili(yetkiliId, yetkiliAdi) {
+function selectMusteriYetkili(yetkiliId, yetkiliAdi, yetkiliTelefon, yetkiliEposta) {
     document.getElementById('musteri_yetkili').value = yetkiliAdi;
     document.getElementById('musteri_yetkili_id').value = yetkiliId;
+    document.getElementById('musteri_yetkili_telefon').value = yetkiliTelefon || '';
+    document.getElementById('musteri_yetkili_eposta').value = yetkiliEposta || '';
     closeMusteriYetkiliModal();
 }
 
@@ -2765,7 +2909,7 @@ function submitForm() {
                 showAlert('Fırsat başarıyla oluşturuldu! Fırsat No: ' + response.firsat_no, 'success');
                 jQuery('#firsat-form')[0].reset();
                 jQuery('#alert-container').html(''); // Hata mesajlarını da temizle
-                clearFormData(); // Kayıtlı form verilerini temizle
+                // clearFormData(); // GEÇİCİ: Deneme aşamasında localStorage'ı temizleme
                 setTimeout(function() {
                     window.location.href = '<?php echo admin_url('admin.php?page=firsatlar'); ?>';
                 }, 2000);
@@ -2813,10 +2957,14 @@ function saveFormData() {
         bayi_kodu: jQuery('#bayi_kodu').val(),
         bayi_yetkili: jQuery('#bayi_yetkili').val(),
         bayi_yetkili_id: jQuery('#bayi_yetkili_id').val(),
+        bayi_yetkili_telefon: jQuery('#bayi_yetkili_telefon').val(),
+        bayi_yetkili_eposta: jQuery('#bayi_yetkili_eposta').val(),
         musteri: jQuery('#musteri').val(),
         musteri_id: jQuery('#musteri_id').val(),
         musteri_yetkili: jQuery('#musteri_yetkili').val(),
         musteri_yetkili_id: jQuery('#musteri_yetkili_id').val(),
+        musteri_yetkili_telefon: jQuery('#musteri_yetkili_telefon').val(),
+        musteri_yetkili_eposta: jQuery('#musteri_yetkili_eposta').val(),
         accman: jQuery('#accman').val(),
         accman_id: jQuery('#accman_id').val(),
         etkinlik: jQuery('#etkinlik').val(),
@@ -2844,10 +2992,14 @@ function loadFormData() {
         if (formData.bayi_kodu) jQuery('#bayi_kodu').val(formData.bayi_kodu);
         if (formData.bayi_yetkili) jQuery('#bayi_yetkili').val(formData.bayi_yetkili);
         if (formData.bayi_yetkili_id) jQuery('#bayi_yetkili_id').val(formData.bayi_yetkili_id);
+        if (formData.bayi_yetkili_telefon) jQuery('#bayi_yetkili_telefon').val(formData.bayi_yetkili_telefon);
+        if (formData.bayi_yetkili_eposta) jQuery('#bayi_yetkili_eposta').val(formData.bayi_yetkili_eposta);
         if (formData.musteri) jQuery('#musteri').val(formData.musteri);
         if (formData.musteri_id) jQuery('#musteri_id').val(formData.musteri_id);
         if (formData.musteri_yetkili) jQuery('#musteri_yetkili').val(formData.musteri_yetkili);
         if (formData.musteri_yetkili_id) jQuery('#musteri_yetkili_id').val(formData.musteri_yetkili_id);
+        if (formData.musteri_yetkili_telefon) jQuery('#musteri_yetkili_telefon').val(formData.musteri_yetkili_telefon);
+        if (formData.musteri_yetkili_eposta) jQuery('#musteri_yetkili_eposta').val(formData.musteri_yetkili_eposta);
         if (formData.accman) jQuery('#accman').val(formData.accman);
         if (formData.accman_id) jQuery('#accman_id').val(formData.accman_id);
         if (formData.etkinlik) jQuery('#etkinlik').val(formData.etkinlik);
@@ -2964,7 +3116,7 @@ function cancelEditBayiYetkili(yetkiliId, originalName, originalPhone, originalE
 
     // Satırı orijinal haline döndür
     row.innerHTML = `
-        <td onclick="selectBayiYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td onclick="selectBayiYetkili('${yetkiliId}', '${originalName}', '${originalPhone}', '${originalEmail}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
         <td class="yetkili-phone-cell">${originalPhone || ''}</td>
         <td class="yetkili-email-cell">${originalEmail || ''}</td>
         <td>
@@ -3032,7 +3184,7 @@ function cancelDeleteBayiYetkili(yetkiliId, originalName, originalPhone, origina
     // Satırı orijinal haline döndür
     row.className = '';
     row.innerHTML = `
-        <td onclick="selectBayiYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td onclick="selectBayiYetkili('${yetkiliId}', '${originalName}', '${originalPhone}', '${originalEmail}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
         <td class="yetkili-phone-cell">${originalPhone || ''}</td>
         <td class="yetkili-email-cell">${originalEmail || ''}</td>
         <td>
@@ -3146,7 +3298,7 @@ function cancelEditMusteriYetkili(yetkiliId, originalName, originalPhone, origin
 
     // Satırı orijinal haline döndür
     row.innerHTML = `
-        <td onclick="selectMusteriYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td onclick="selectMusteriYetkili('${yetkiliId}', '${originalName}', '${originalPhone}', '${originalEmail}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
         <td class="yetkili-phone-cell">${originalPhone || ''}</td>
         <td class="yetkili-email-cell">${originalEmail || ''}</td>
         <td>
@@ -3214,7 +3366,7 @@ function cancelDeleteMusteriYetkili(yetkiliId, originalName, originalPhone, orig
     // Satırı orijinal haline döndür
     row.className = '';
     row.innerHTML = `
-        <td onclick="selectMusteriYetkili('${yetkiliId}', '${originalName}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
+        <td onclick="selectMusteriYetkili('${yetkiliId}', '${originalName}', '${originalPhone}', '${originalEmail}')" style="cursor: pointer;" class="yetkili-name-cell">${originalName || 'N/A'}</td>
         <td class="yetkili-phone-cell">${originalPhone || ''}</td>
         <td class="yetkili-email-cell">${originalEmail || ''}</td>
         <td>
@@ -3265,8 +3417,8 @@ jQuery(document).ready(function() {
 
     if (window.selectMusteriYetkili) {
         const originalSelectMusteriYetkili = window.selectMusteriYetkili;
-        window.selectMusteriYetkili = function(id, name) {
-            originalSelectMusteriYetkili(id, name);
+        window.selectMusteriYetkili = function(id, name, telefon, eposta) {
+            originalSelectMusteriYetkili(id, name, telefon, eposta);
             saveFormData();
         };
     }
