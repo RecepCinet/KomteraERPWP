@@ -2909,7 +2909,7 @@ function submitForm() {
                 showAlert('Fırsat başarıyla oluşturuldu! Fırsat No: ' + response.firsat_no, 'success');
                 jQuery('#firsat-form')[0].reset();
                 jQuery('#alert-container').html(''); // Hata mesajlarını da temizle
-                // clearFormData(); // GEÇİCİ: Deneme aşamasında localStorage'ı temizleme
+                clearFormData(); // localStorage'ı temizle
                 setTimeout(function() {
                     window.location.href = '<?php echo admin_url('admin.php?page=firsatlar'); ?>';
                 }, 2000);
