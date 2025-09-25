@@ -1,0 +1,58 @@
+# Komtera ERP WordPress Proje Analizi
+## Tarih: 2025-09-25
+
+## Proje Yapısı
+- **WordPress temelli ERP sistemi** - Komtera teması altında
+- **PHP/MySQL** tabanlı, jQuery UI grid sistemi kullanıyor
+- **Fırsat yönetimi odaklı** - opportunities/teklifler (proposals) sistemi
+
+## Son Değişiklikler (Git Status)
+```
+M  themes/komtera/erp/_tablolar/kt_firsatlar_js.php  (Modified)
+AM themes/komtera/erp/mod/firsatlar_detay.php       (Added/Modified)
+M  themes/komtera/inc/menu.php                       (Modified)
+```
+
+## Son Commitler
+- `yeni_firsat okey` - Yeni fırsat özelliği tamamlandı
+- `MARKA_BAYI_SEVIYE` - Marka/bayi seviye sistemi çalışıyor
+- Çeşitli bayi yetkili ve müşteri temsilcisi düzeltmeleri
+
+## Ana Modüller
+- **Fırsatlar**: Satış fırsatlarını yönetme sistemi
+- **Teklifler**: Fırsatlara bağlı teklifler
+- **Bayiler**: Bayi yönetimi ve yetkili kişiler
+- **Müşteriler**: Müşteri bilgileri ve temsilcileri
+- **Aktiviteler**: CRM aktivite takibi
+- **Raporlar**: Çeşitli raporlar ve analizler
+
+## Teknik Detaylar
+- **Çok dilli**: Türkçe/İngilizce destekli
+- **Yetki sistemi**: Role-based permissions
+- **Grid sistemi**: pqGrid jQuery plugin kullanıyor
+- **Database**: SQL Server bağlantılı (`_conn.php`)
+
+## Sonuç
+Proje aktif geliştirme aşamasında ve CRM/ERP işlevleri odaklı.
+
+## Dosya Yapısı
+```
+KomteraERPWP/
+├── themes/komtera/
+│   ├── erp/
+│   │   ├── _tablolar/         # Grid/tablo JS dosyaları
+│   │   │   └── kt_firsatlar_js.php
+│   │   ├── mod/               # Modül sayfaları
+│   │   │   ├── firsatlar_detay.php
+│   │   │   └── yeni_firsat.php
+│   │   └── index.php
+│   └── inc/
+│       └── menu.php           # WordPress admin menü tanımları
+├── plugins/komtera/           # Özel plugin dosyaları
+├── debug.log                  # WordPress debug log
+├── create_log_table.sql       # Database script
+└── test-erp-demo.js          # Test dosyası
+```
+
+## Özet
+WordPress üzerinde geliştirilmiş profesyonel bir ERP/CRM sistemi. Ana odak satış fırsatları yönetimi, bayi ilişkileri ve müşteri takibi üzerine kurulu.

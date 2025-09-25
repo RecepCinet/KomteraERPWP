@@ -28,6 +28,8 @@ function my_custom_admin_menus_for_roles()
         add_menu_page(__('firsatlar', 'komtera'), __('firsatlar', 'komtera'), 'read','firsatlar', 'firsatlar_cb','dashicons-visibility',2.01);
         add_submenu_page('firsatlar', __('listeler', 'komtera'), __('listeler', 'komtera'), 'read','firsatlar', 'firsatlar_cb');
         add_submenu_page('firsatlar', __('yeni_firsat', 'komtera'), __('yeni_firsat', 'komtera'), 'read','firsatlar_yeni', 'firsatlar_yeni_cb');
+        // Gizli sayfa: parent null olduğu için menüde görünmez
+        add_submenu_page(null, __('firsat_detay', 'komtera'), __('firsat_detay', 'komtera'), 'read','firsatlar_detay', 'firsatlar_detay_cb');
     }
     if (array_key_exists('_orders_',   $ana_yetkiler)) add_menu_page(__('siparisler', 'komtera'), __('siparisler', 'komtera'), 'read','siparisler_slug',          'siparisler_cb','dashicons-cart',2.02);
     if (array_key_exists('_demos_',      $ana_yetkiler)) add_menu_page(__('demolar', 'komtera'), __('demolar', 'komtera'), 'read','demolar_slug',                   'demolar_cb','dashicons-screenoptions',2.03);
@@ -47,6 +49,7 @@ function my_custom_admin_menus_for_roles()
 }
 
 add_action('admin_menu', 'my_custom_admin_menus_for_roles');
+
 
 function firsatlar_cb()
 {
@@ -605,7 +608,39 @@ function aktiviteler_cb()   {
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=aktiviteler';
     ?>
     <div class="wrap">
-        <div style="position: relative; height: calc(100vh - 140px);">
+        <div class="activities-toolbar" style="
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        ">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="baslangic_tarihi" style="font-weight: 600;">Başlangıç Tarihi:</label>
+                <input type="date" id="baslangic_tarihi" name="baslangic_tarihi"
+                       style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="bitis_tarihi" style="font-weight: 600;">Bitiş Tarihi:</label>
+                <input type="date" id="bitis_tarihi" name="bitis_tarihi"
+                       style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            </div>
+            <button type="button" id="filtrele_btn" onclick="aktiviteleriFiltrele()" style="
+                background: #0073aa;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 600;
+            ">Filtrele</button>
+        </div>
+        <div style="position: relative; height: calc(100vh - 220px);">
             <iframe id="erp_iframe"
                     src="<?php echo esc_url($src); ?>"
                     width="100%"
@@ -614,6 +649,45 @@ function aktiviteler_cb()   {
             </iframe>
         </div>
     </div>
+    <script>
+    // Sayfa yüklendiğinde varsayılan tarihleri ayarla
+    document.addEventListener('DOMContentLoaded', function() {
+        const bugün = new Date();
+        const birAyÖnce = new Date();
+        birAyÖnce.setMonth(bugün.getMonth() - 1);
+
+        // Tarih formatını YYYY-MM-DD olarak ayarla
+        const bugünStr = bugün.toISOString().split('T')[0];
+        const birAyÖnceStr = birAyÖnce.toISOString().split('T')[0];
+
+        document.getElementById('baslangic_tarihi').value = birAyÖnceStr;
+        document.getElementById('bitis_tarihi').value = bugünStr;
+
+        // Sayfa ilk yüklendiğinde filtreyi uygula
+        aktiviteleriFiltrele();
+    });
+
+    function aktiviteleriFiltrele() {
+        const baslangicTarihi = document.getElementById('baslangic_tarihi').value;
+        const bitisTarihi = document.getElementById('bitis_tarihi').value;
+
+        let src = '<?php echo esc_url($src); ?>';
+        let params = [];
+
+        if (baslangicTarihi) {
+            params.push('baslangic_tarihi=' + encodeURIComponent(baslangicTarihi));
+        }
+        if (bitisTarihi) {
+            params.push('bitis_tarihi=' + encodeURIComponent(bitisTarihi));
+        }
+
+        if (params.length > 0) {
+            src += (src.includes('?') ? '&' : '?') + params.join('&');
+        }
+
+        document.getElementById('erp_iframe').src = src;
+    }
+    </script>
     <?php
 }
 function poc_cb()           {
@@ -1882,4 +1956,10 @@ function handle_load_tools_module() {
     }
 
     wp_die();
+}
+
+function firsatlar_detay_cb()
+{
+    // Sadece PHP dosyasını include et, iframe yok
+    include get_template_directory() . '/erp/mod/firsatlar_detay.php';
 }

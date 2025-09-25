@@ -443,4 +443,14 @@
             this.saveState();
         })
     });
+
+    // Fırsat detay sayfasını açma fonksiyonu - iframe'den parent window'a çık
+    function FirsatAc(firsatNo) {
+        var url = '<?php echo admin_url('admin.php?page=firsatlar_detay&firsat_no='); ?>' + encodeURIComponent(firsatNo);
+        if (window.parent) {
+            window.parent.location.href = url;
+        } else {
+            window.location.href = url;
+        }
+    }
 </script>

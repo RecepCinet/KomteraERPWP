@@ -1,0 +1,30 @@
+KOMTERA ERP AKTIVITELER SAYFASI MODIFIKASYON LOGLARI
+======================================================
+Tarih: 2025-09-25
+Claude CLI kullanarak yapılan değişiklikler:
+
+1. DOSYA DEGISIKLIKLERI:
+   - themes/komtera/erp/_tablolar/kt_aktiviteler.php
+     * Tarih filtresi parametrelerini alma eklendi (date1, date2)
+     * session_start() eklendi
+     * SQL sorguya WHERE koşulu eklendi (TARIH >= date1 AND TARIH <= date2)
+
+   - themes/komtera/erp/_tablolar/kt_aktiviteler.html
+     * updateGridData() fonksiyonu eklendi
+     * Başlangıç ve Bitiş tarihi input alanları eklendi
+     * "Getir" butonu eklendi (siparisler sayfası ile aynı)
+     * Tarih validasyonu eklendi
+
+2. FONKSIYONELLIK:
+   - Aktiviteler sayfasına 2 tarih filtresi eklendi
+   - "Getir" butonu ile filtreleme aktif
+   - Siparişler sayfası ile aynı görünüm ve davranış
+   - URL parametreleri ile iframe yenileme yapısı
+
+3. TEKNIK DETAYLAR:
+   - PHP backend: $_GET['date1'] ve $_GET['date2'] parametreleri
+   - JavaScript frontend: updateGridData() fonksiyonu
+   - HTML UI: date input fields ve buton
+   - SQL WHERE koşulu: TARIH alanına göre filtreleme
+
+İşlem başarıyla tamamlandı. Aktiviteler sayfası artık siparişler sayfası gibi tarih filtrelemesi yapabiliyor.
