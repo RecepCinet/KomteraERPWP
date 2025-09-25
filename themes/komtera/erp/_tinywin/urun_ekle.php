@@ -38,7 +38,7 @@ $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (!$data) {
-    die("NOK|SKU Bulunamadi!");    
+    die(__('Hata', 'komtera') . "|" . __('SKU Bulunamadı!', 'komtera'));    
 }
 $cvp=$data[0];
 
@@ -82,7 +82,7 @@ $mmsl=$cvp2['MM'];
 
 
 if ($cvp2['FN']==="1") {
-    die("NOK,KILIT");
+    die(__('Hata', 'komtera') . "," . __('KiLiT', 'komtera'));
 }
 $temp_sira=$cvp2['SIRA'];
 if ($temp_sira>0) {

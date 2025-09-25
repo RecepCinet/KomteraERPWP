@@ -166,7 +166,7 @@ $(function () {
                 items: [
                     {
                         type: 'button',
-                        label: "Export",
+                        label: "<?php echo __('Excel\'e Aktar','komtera'); ?>",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             this.exportData({
@@ -180,14 +180,14 @@ $(function () {
                     },
                 {
                         type: 'button',
-                        label: "Yenile",                   
+                        label: "<?php echo __('Yenile','komtera'); ?>",                   
                         listener: function () {
                             grid.refreshDataAndView();
                         }
                 } , {
                         type: 'checkbox',
                         value: false,
-                        label: 'Satır Kaydır',
+                        label: '<?php echo __('Satırları Kaydır','komtera'); ?>',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.refresh();
@@ -206,8 +206,8 @@ $(function () {
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", { label: 'Undo (' + ui.num_undo + ')' });
-                $redo.button("option", { label: 'Redo (' + ui.num_redo + ')' });
+                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
+                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
             },
         roundCorners: false,
         rowBorders: true,

@@ -23,7 +23,7 @@ $(function () {
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "CH_KODU", editable: false, minWidth: 130, sortable: true, dataIndx: "CH_KODU",filter: { 
+        {title: "<?php echo __('Cari Kodu','komtera'); ?>", editable: false, minWidth: 130, sortable: true, dataIndx: "CH_KODU",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
@@ -103,8 +103,8 @@ $(function () {
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", { label: 'Undo (' + ui.num_undo + ')' });
-                $redo.button("option", { label: 'Redo (' + ui.num_redo + ')' });
+                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
+                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
             },
         roundCorners: false,
         rowBorders: true,

@@ -8,7 +8,7 @@ include dirname(__DIR__) . '/_conn.php';
 $firsat_no = $_GET['firsat_no'] ?? '';
 
 if (empty($firsat_no)) {
-    echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">Fırsat numarası belirtilmemiş.</div>';
+    echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">' . __('Fırsat numarası belirtilmemiş.', 'komtera') . '</div>';
     exit;
 }
 
@@ -24,11 +24,11 @@ try {
     $firsat_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$firsat_data) {
-        echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">Fırsat bulunamadı: ' . htmlspecialchars($firsat_no) . '</div>';
+        echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">' . __('Fırsat bulunamadı', 'komtera') . ': ' . htmlspecialchars($firsat_no) . '</div>';
         exit;
     }
 } catch (Exception $e) {
-    echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">Veri çekme hatası: ' . htmlspecialchars($e->getMessage()) . '</div>';
+    echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">' . __('Veri çekme hatası', 'komtera') . ': ' . htmlspecialchars($e->getMessage()) . '</div>';
     exit;
 }
 
@@ -75,7 +75,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fırsat Detay - <?php echo htmlspecialchars($firsat_no); ?></title>
+    <title><?php echo __('Fırsat Detay', 'komtera'); ?> - <?php echo htmlspecialchars($firsat_no); ?></title>
     <style>
         * {
             margin: 0;
@@ -309,57 +309,57 @@ try {
         <!-- Header -->
         <div class="header">
             <h1>
-                Fırsat Detay: <?php echo htmlspecialchars($firsat_data['FIRSAT_NO']); ?>
+                <?php echo __('Fırsat Detay', 'komtera'); ?>: <?php echo htmlspecialchars($firsat_data['FIRSAT_NO']); ?>
                 <?php
                 $durum = $firsat_data['DURUM'] ?? '0';
                 $status_class = 'status-acik';
-                $status_text = 'Açık';
+                $status_text = __('Açık', 'komtera');
 
                 if ($durum == '1') {
                     $status_class = 'status-kazanildi';
-                    $status_text = 'Kazanıldı';
+                    $status_text = __('Kazanıldı', 'komtera');
                 } elseif ($durum == '-1') {
                     $status_class = 'status-kaybedildi';
-                    $status_text = 'Kaybedildi';
+                    $status_text = __('Kaybedildi', 'komtera');
                 }
                 ?>
                 <span class="status-badge <?php echo $status_class; ?>"><?php echo $status_text; ?></span>
             </h1>
-            <div class="subtitle"><?php echo htmlspecialchars($firsat_data['PROJE_ADI'] ?? 'Proje adı belirtilmemiş'); ?></div>
+            <div class="subtitle"><?php echo htmlspecialchars($firsat_data['PROJE_ADI'] ?? __('Proje adı belirtilmemiş', 'komtera')); ?></div>
 
             <!-- Fırsat Açıklaması -->
             <div style="margin-top: 16px; padding: 16px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #007cba;">
                 <div style="font-weight: bold; color: #000; font-size: 15px; line-height: 1.5;">
-                    <?php echo nl2br(htmlspecialchars($firsat_data['FIRSAT_ACIKLAMA'] ?? 'Açıklama girilmemiş')); ?>
+                    <?php echo nl2br(htmlspecialchars($firsat_data['FIRSAT_ACIKLAMA'] ?? __('Açıklama girilmemiş', 'komtera'))); ?>
                 </div>
             </div>
         </div>
 
         <!-- İlişkili Teklifler - Cardların üstünde -->
         <div style="background: #fff; border-radius: 8px; padding: 24px; margin: 24px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; border-left: 4px solid #007cba;">
-            <h2 style="color: #007cba; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #007cba;">İlişkili Teklifler</h2>
+            <h2 style="color: #007cba; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #007cba;"><?php echo __('İlişkili Teklifler', 'komtera'); ?></h2>
                 <?php if (!empty($teklif_error)): ?>
                     <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 12px; border-radius: 4px; margin-bottom: 16px;">
-                        <strong>Hata:</strong> <?php echo htmlspecialchars($teklif_error); ?>
+                        <strong><?php echo __('Hata', 'komtera'); ?>:</strong> <?php echo htmlspecialchars($teklif_error); ?>
                     </div>
                 <?php endif; ?>
 
                 <!-- Debug bilgisi -->
                 <div style="background: #f8f9fa; border: 1px solid #dee2e6; color: #6c757d; padding: 8px; border-radius: 4px; margin-bottom: 16px; font-size: 12px;">
-                    <strong>Debug:</strong> Fırsat No: <?php echo htmlspecialchars($firsat_no); ?> |
-                    Bulunan Teklif Sayısı: <?php echo count($teklifler); ?>
+                    <strong><?php echo __('Debug', 'komtera'); ?>:</strong> <?php echo __('Fırsat No', 'komtera'); ?>: <?php echo htmlspecialchars($firsat_no); ?> |
+                    <?php echo __('Bulunan Teklif Sayısı', 'komtera'); ?>: <?php echo count($teklifler); ?>
                 </div>
 
                 <?php if (count($teklifler) > 0): ?>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Teklif No</th>
-                                <th>Açma Tarihi</th>
-                                <th>Ürün Sayısı</th>
-                                <th>Teklif Tipi</th>
-                                <th>İşlemler</th>
-                                <th>Durum</th>
+                                <th><?php echo __('Teklif No', 'komtera'); ?></th>
+                                <th><?php echo __('Açma Tarihi', 'komtera'); ?></th>
+                                <th><?php echo __('Ürün Sayısı', 'komtera'); ?></th>
+                                <th><?php echo __('Teklif Tipi', 'komtera'); ?></th>
+                                <th><?php echo __('İşlemler', 'komtera'); ?></th>
+                                <th><?php echo __('Durum', 'komtera'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -388,14 +388,14 @@ try {
                                         }
                                         ?>
                                     </td>
-                                    <td><?php echo $teklif['URUN_SAYISI'] ?? 0; ?> ürün</td>
+                                    <td><?php echo $teklif['URUN_SAYISI'] ?? 0; ?> <?php echo __('ürün', 'komtera'); ?></td>
                                     <td><?php echo htmlspecialchars($teklif['TEKLIF_TIPI'] ?? '-'); ?></td>
                                     <td>
                                         <div class="action-icons">
-                                            <button class="icon-btn icon-cogalt" title="Çoğalt" onclick="teklifCogalt('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
+                                            <button class="icon-btn icon-cogalt" title="<?php echo __('Çoğalt', 'komtera'); ?>" onclick="teklifCogalt('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
                                                 📋
                                             </button>
-                                            <button class="icon-btn icon-pdf" title="PDF İndir" onclick="teklifPDF('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
+                                            <button class="icon-btn icon-pdf" title="<?php echo __('PDF İndir', 'komtera'); ?>" onclick="teklifPDF('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
                                                 📄
                                             </button>
                                         </div>
@@ -406,14 +406,14 @@ try {
                                             // Satış tipi gösterimi
                                             $satis_tipi = $teklif['SATIS_TIPI'] ?? '';
                                             if ($satis_tipi == '0') {
-                                                echo '<span class="status-icon" style="background: #e3f2fd; color: #1976d2;" title="İlk Satış">1️⃣</span>';
+                                                echo '<span class="status-icon" style="background: #e3f2fd; color: #1976d2;" title="' . __('İlk Satış', 'komtera') . '">1️⃣</span>';
                                             } elseif ($satis_tipi == '1') {
-                                                echo '<span class="status-icon" style="background: #fff8e1; color: #f9a825;" title="Yenileme">🔄</span>';
+                                                echo '<span class="status-icon" style="background: #fff8e1; color: #f9a825;" title="' . __('Yenileme', 'komtera') . '">🔄</span>';
                                             }
                                             ?>
 
                                             <?php if ($teklif['KILIT'] == '1'): ?>
-                                                <span class="status-icon icon-kilit" title="Kilitli">🔒</span>
+                                                <span class="status-icon icon-kilit" title="<?php echo __('Kilitli', 'komtera'); ?>">🔒</span>
                                             <?php endif; ?>
                                         </div>
                                     </td>
@@ -423,7 +423,7 @@ try {
                     </table>
                 <?php else: ?>
                     <div class="empty-state">
-                        Bu fırsatla ilişkili herhangi bir teklif bulunamadı.
+                        <?php echo __('Bu fırsatla ilişkili herhangi bir teklif bulunamadı.', 'komtera'); ?>
                     </div>
                 <?php endif; ?>
         </div>
@@ -431,160 +431,160 @@ try {
         <div class="grid">
             <!-- Temel Bilgiler -->
             <div class="card">
-                <h2>Temel Bilgiler</h2>
+                <h2><?php echo __('Temel Bilgiler', 'komtera'); ?></h2>
                 <div class="field-group">
-                    <div class="field-label">Marka</div>
+                    <div class="field-label"><?php echo __('Marka', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MARKA']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MARKA'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MARKA'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Olasılık</div>
+                    <div class="field-label"><?php echo __('Olasılık', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['OLASILIK']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['OLASILIK'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['OLASILIK'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Geliş Kanalı</div>
+                    <div class="field-label"><?php echo __('Geliş Kanalı', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['GELIS_KANALI']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['GELIS_KANALI'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['GELIS_KANALI'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Para Birimi</div>
+                    <div class="field-label"><?php echo __('Para Birimi', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['PARA_BIRIMI']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['PARA_BIRIMI'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['PARA_BIRIMI'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
                     <div class="field-label">Register</div>
                     <div class="field-value">
-                        <?php echo ($firsat_data['REGISTER'] == '1') ? '✓ Evet' : '✗ Hayır'; ?>
+                        <?php echo ($firsat_data['REGISTER'] == '1') ? '✓ ' . __('Evet', 'komtera') : '✗ ' . __('Hayır', 'komtera'); ?>
                     </div>
                 </div>
             </div>
 
             <!-- Bayi Bilgileri -->
             <div class="card">
-                <h2>Bayi Bilgileri</h2>
+                <h2><?php echo __('Bayi Bilgileri', 'komtera'); ?></h2>
                 <div class="field-group">
-                    <div class="field-label">Bayi Adı</div>
+                    <div class="field-label"><?php echo __('Bayi Adı', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BAYI_ADI']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['BAYI_ADI'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['BAYI_ADI'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Bayi Kodu</div>
+                    <div class="field-label"><?php echo __('Bayi Kodu', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BAYI_CHKODU']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['BAYI_CHKODU'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['BAYI_CHKODU'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Bayi Yetkili</div>
+                    <div class="field-label"><?php echo __('Bayi Yetkili', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BAYI_YETKILI_ISIM']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_ISIM'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_ISIM'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Telefon</div>
+                    <div class="field-label"><?php echo __('Telefon', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BAYI_YETKILI_TEL']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_TEL'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_TEL'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">E-posta</div>
+                    <div class="field-label"><?php echo __('E-posta', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BAYI_YETKILI_EPOSTA']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_EPOSTA'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_EPOSTA'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Adres</div>
+                    <div class="field-label"><?php echo __('Adres', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BAYI_ADRES']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['BAYI_ADRES'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['BAYI_ADRES'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
             </div>
 
             <!-- Müşteri Bilgileri -->
             <div class="card">
-                <h2>Müşteri Bilgileri</h2>
+                <h2><?php echo __('Müşteri Bilgileri', 'komtera'); ?></h2>
                 <div class="field-group">
-                    <div class="field-label">Müşteri Adı</div>
+                    <div class="field-label"><?php echo __('Müşteri Adı', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MUSTERI_ADI']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MUSTERI_ADI'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MUSTERI_ADI'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Müşteri Yetkili</div>
+                    <div class="field-label"><?php echo __('Müşteri Yetkili', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MUSTERI_YETKILI_ISIM']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_ISIM'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_ISIM'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Telefon</div>
+                    <div class="field-label"><?php echo __('Telefon', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MUSTERI_YETKILI_TEL']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_TEL'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_TEL'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">E-posta</div>
+                    <div class="field-label"><?php echo __('E-posta', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MUSTERI_YETKILI_EPOSTA']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_EPOSTA'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_EPOSTA'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Müşteri Temsilcisi</div>
+                    <div class="field-label"><?php echo __('Müşteri Temsilcisi', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MUSTERI_TEMSILCISI']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MUSTERI_TEMSILCISI'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MUSTERI_TEMSILCISI'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
             </div>
 
             <!-- Tarihler ve Yönetim -->
             <div class="card">
-                <h2>Tarihler & Yönetim</h2>
+                <h2><?php echo __('Tarihler & Yönetim', 'komtera'); ?></h2>
                 <div class="field-group">
-                    <div class="field-label">Başlangıç Tarihi</div>
+                    <div class="field-label"><?php echo __('Başlangıç Tarihi', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BASLANGIC_TARIHI']) ? 'empty' : ''; ?>">
                         <?php
                         if ($firsat_data['BASLANGIC_TARIHI']) {
                             $date = new DateTime($firsat_data['BASLANGIC_TARIHI']);
                             echo $date->format('d.m.Y');
                         } else {
-                            echo 'Belirtilmemiş';
+                            echo __('Belirtilmemiş', 'komtera');
                         }
                         ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Bitiş Tarihi</div>
+                    <div class="field-label"><?php echo __('Bitiş Tarihi', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['BITIS_TARIHI']) ? 'empty' : ''; ?>">
                         <?php
                         if ($firsat_data['BITIS_TARIHI']) {
                             $date = new DateTime($firsat_data['BITIS_TARIHI']);
                             echo $date->format('d.m.Y');
                         } else {
-                            echo 'Belirtilmemiş';
+                            echo __('Belirtilmemiş', 'komtera');
                         }
                         ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Kaydı Açan</div>
+                    <div class="field-label"><?php echo __('Kaydı Açan', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['KAYIDI_ACAN']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['KAYIDI_ACAN'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['KAYIDI_ACAN'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Marka Manager</div>
+                    <div class="field-label"><?php echo __('Marka Manager', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['MARKA_MANAGER']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['MARKA_MANAGER'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['MARKA_MANAGER'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label">Etkinlik</div>
+                    <div class="field-label"><?php echo __('Etkinlik', 'komtera'); ?></div>
                     <div class="field-value <?php echo empty($firsat_data['ETKINLIK']) ? 'empty' : ''; ?>">
-                        <?php echo htmlspecialchars($firsat_data['ETKINLIK'] ?? 'Belirtilmemiş'); ?>
+                        <?php echo htmlspecialchars($firsat_data['ETKINLIK'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
             </div>
@@ -595,21 +595,21 @@ try {
     <script>
         // Teklif açma fonksiyonu - şimdilik alert göster
         function TeklifAc(teklifNo) {
-            alert('Teklif detayı: ' + teklifNo);
+            alert('<?php echo __('Teklif detayı', 'komtera'); ?>: ' + teklifNo);
             // TODO: Teklif detay sayfasını aç
         }
 
         // Teklif çoğaltma fonksiyonu
         function teklifCogalt(teklifNo) {
-            if (confirm('Teklifi çoğaltmak istediğinizden emin misiniz?\n\nTeklif No: ' + teklifNo)) {
-                alert('Çoğaltma işlemi başlatıldı: ' + teklifNo);
+            if (confirm('<?php echo __('Teklifi çoğaltmak istediğinizden emin misiniz?', 'komtera'); ?>\n\n<?php echo __('Teklif No', 'komtera'); ?>: ' + teklifNo)) {
+                alert('<?php echo __('Çoğaltma işlemi başlatıldı', 'komtera'); ?>: ' + teklifNo);
                 // TODO: Teklif çoğaltma işlemi
             }
         }
 
         // PDF indirme fonksiyonu
         function teklifPDF(teklifNo) {
-            alert('PDF indiriliyor: ' + teklifNo);
+            alert('<?php echo __('PDF indiriliyor', 'komtera'); ?>: ' + teklifNo);
             // TODO: PDF indirme işlemi
             // window.open('pdf_endpoint.php?teklif_no=' + teklifNo, '_blank');
         }

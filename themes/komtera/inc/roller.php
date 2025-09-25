@@ -31,13 +31,13 @@ add_action('init', function () {
     }
 
     $custom_roles = [
-        'satis'        => 'Satış',
-        'satis_destek' => 'Satış Destek',
-        'teknik'       => 'Teknik',
-        'finans'       => 'Finans',
-        'yonetim'      => 'Yönetim',
-        'lojistik'     => 'Lojistik',
-        'idari_isler'  => 'İdari İşler',
+        'satis'        => __('Satış','komtera'),
+        'satis_destek' => __('Satış Destek','komtera'),
+        'teknik'       => __('Teknik','komtera'),
+        'finans'       => __('Finans','komtera'),
+        'yonetim'      => __('Yönetim','komtera'),
+        'lojistik'     => __('Lojistik','komtera'),
+        'idari_isler'  => __('İdari İşler','komtera'),
     ];
 
     foreach ($custom_roles as $role_key => $role_name) {

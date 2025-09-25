@@ -38,11 +38,11 @@
             {title: "Durum", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
-                    if (ui.cellData === 'Açık') {
+                    if (ui.cellData === '<?php echo __('Açık','komtera'); ?>') {
                         return {style: {"background": "#ebebeb"}};
-                    } else if (ui.cellData === 'Kazanıldı') {
+                    } else if (ui.cellData === '<?php echo __('Kazanıldı','komtera'); ?>') {
                         return {style: {"background": "#b2f4ac"}};
-                    } else if (ui.cellData === 'Kaybedildi') {
+                    } else if (ui.cellData === '<?php echo __('Kaybedildi','komtera'); ?>') {
                         return {style: {"background": "#f4acb8"}};
                     }
                 }
@@ -257,7 +257,7 @@
                 items: [
                     {
                         type: 'button',
-                        label: "Export",
+                        label: "<?php echo __('Excel\'e Aktar','komtera'); ?>",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             ExcelKaydet();
@@ -266,7 +266,7 @@
                     {
                         type: 'checkbox',
                         value: true,
-                        label: 'Satır Kaydır',
+                        label: '<?php echo __('Satırları Kaydır','komtera'); ?>',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -276,7 +276,7 @@
                     {
                     type: 'button',
                     icon: 'ui-icon-arrowreturn-1-s',
-                    label: 'Undo',                    
+                    label: '<?php echo __('Geri Al','komtera'); ?>',                    
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'undo' });
@@ -285,7 +285,7 @@
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowrefresh-1-s',
-                    label: 'Redo',
+                    label: '<?php echo __('Yinele','komtera'); ?>',
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'redo' });
@@ -308,7 +308,7 @@
 //                },
                 {
                                 type:'button',
-                                label: 'Filtre Temizle',
+                                label: '<?php echo __('Filtreleri Temizle','komtera'); ?>',
                                 listener: function(){
                                         this.reset({filter: true});
                                         grid.saveState();
@@ -316,14 +316,14 @@
                     },
                               {
                             type:'button',
-                            label: 'Dizaynı Kaydet',
+                            label: '<?php echo __('Görünümü Kaydet','komtera'); ?>',
                             listener: function(){
                                     grid.saveState();
                             }
                     },
                         {
                             type:'button',
-                            label: 'Dizaynı Yukle',
+                            label: '<?php echo __('Görünümü Yükle','komtera'); ?>',
                             listener: function(){
                                     grid.loadState({refresh: false});
                             }
@@ -342,8 +342,8 @@
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", {label: 'Undo (' + ui.num_undo + ')'});
-                $redo.button("option", {label: 'Redo (' + ui.num_redo + ')'});
+                $undo.button("option", {label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')'});
             },
             roundCorners: false,
             rowBorders: true,

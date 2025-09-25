@@ -16,7 +16,7 @@ $(function () {
             },
         },
 
-        {title: "Fırsat No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
+        {title: "<?php echo __('Fırsat No','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
@@ -32,15 +32,15 @@ $(function () {
             }
         },
 
-        {title: "Bayi Adı", editable: false, minWidth: 360, sortable: true, dataIndx: "BAYI_ADI",filter: {
+        {title: "<?php echo __('Bayi','komtera'); ?>", editable: false, minWidth: 360, sortable: true, dataIndx: "BAYI_ADI",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-        {title: "Müşteri", align: "left", editable: false, minWidth: 316, sortable: true, dataIndx: "MUSTERI_ADI",filter: {
+        {title: "<?php echo __('Müşteri','komtera'); ?>", align: "left", editable: false, minWidth: 316, sortable: true, dataIndx: "MUSTERI_ADI",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "Marka", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: {
+        {title: "<?php echo __('Marka','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: {
                    crules: [{condition: 'contain'}]
                }
            }
@@ -74,14 +74,14 @@ $(function () {
                 items: [
                 {
                         type: 'button',
-                        label: "Yenile",                   
+                        label: "<?php echo __('Yenile','komtera'); ?>",                   
                         listener: function () {
                             grid.refreshDataAndView();
                         }
                 } , {
                         type: 'checkbox',
                         value: false,
-                        label: 'Satır Kaydır',
+                        label: '<?php echo __('Satır Kaydır','komtera'); ?>',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.refresh();
@@ -162,7 +162,7 @@ $(function () {
         rowHt: 19,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b>Yenilemeler</b></span>',
+        title: '<span style="font-size: 18px;"><b><?php echo __('Yenilemeler','komtera'); ?></b></span>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

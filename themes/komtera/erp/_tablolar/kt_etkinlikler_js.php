@@ -17,11 +17,11 @@ function EtkinlikAc(id) {
 $(function () {
    
     var colM = [
-        {title: "<?php echo __('marka','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "marka",filter: { 
+        {title: "<?php echo __('Marka','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "marka",filter: { 
                         crules: [{condition: 'range'}]
                     }
             },
-        {title: "<?php echo __('baslik','komtera'); ?>", align: "left", editable: false, minWidth: 176, sortable: true, dataIndx: "baslik",filter: { 
+        {title: "<?php echo __('Başlık','komtera'); ?>", align: "left", editable: false, minWidth: 176, sortable: true, dataIndx: "baslik",filter: { 
                         crules: [{condition: 'contain'}]
                     }
             },
@@ -50,7 +50,7 @@ $(function () {
                 }
             },
         },
-        {title: "<?php echo __('durum','komtera'); ?>", align: "center", editable: false, minWidth: 60, sortable: true, dataIndx: "BITTI",
+        {title: "<?php echo __('Durum','komtera'); ?>", align: "center", editable: false, minWidth: 60, sortable: true, dataIndx: "BITTI",
                 filter: { 
                    crules: [{condition: 'range'}]
                }
@@ -103,14 +103,14 @@ $(function () {
                 items: [
                 {
                         type: 'button',
-                        label: "<?php echo __('yenile','komtera'); ?>",                   
+                        label: "<?php echo __('Yenile','komtera'); ?>",                   
                         listener: function () {
                             grid.refreshDataAndView();
                         }
                 } , {
                         type: 'checkbox',
                         value: false,
-                        label: '<?php echo __('satir_kaydir','komtera'); ?>',
+                        label: '<?php echo __('Satır Kaydır','komtera'); ?>',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.refresh();
@@ -129,8 +129,8 @@ $(function () {
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", { label: 'Undo (' + ui.num_undo + ')' });
-                $redo.button("option", { label: 'Redo (' + ui.num_redo + ')' });
+                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
+                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
             },
         roundCorners: false,
         rowBorders: true,
@@ -156,7 +156,7 @@ $(function () {
             
             // ROW Komple:
         rowInit: function (ui) {
-            if (ui.rowData.BITTI == "<?php echo __('bitti','komtera'); ?>") {
+            if (ui.rowData.BITTI == "<?php echo __('Bitti','komtera'); ?>") {
                 return { 
                     style: { "background": "#FFEEEE" } //can also return attr (for attributes) and cls (for css classes) properties.
                 };
@@ -191,7 +191,7 @@ $(function () {
         rowHt: 19,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<?php echo __('logo_etkinlikler','komtera'); ?>',
+        title: '<?php echo __('Logo Etkinlikler','komtera'); ?>',
         resizable: true,
 //        create: function () {
 //                        this.loadState({refresh: false});

@@ -25,26 +25,26 @@ function my_custom_admin_menus_for_roles()
     }
 
     if (array_key_exists('_opportunities_',    $ana_yetkiler)) {
-        add_menu_page(__('firsatlar', 'komtera'), __('firsatlar', 'komtera'), 'read','firsatlar', 'firsatlar_cb','dashicons-visibility',2.01);
-        add_submenu_page('firsatlar', __('listeler', 'komtera'), __('listeler', 'komtera'), 'read','firsatlar', 'firsatlar_cb');
-        add_submenu_page('firsatlar', __('yeni_firsat', 'komtera'), __('yeni_firsat', 'komtera'), 'read','firsatlar_yeni', 'firsatlar_yeni_cb');
+        add_menu_page(__('Fırsatlar', 'komtera'), __('Fırsatlar', 'komtera'), 'read','firsatlar', 'firsatlar_cb','dashicons-visibility',2.01);
+        add_submenu_page('firsatlar', __('Listeler', 'komtera'), __('Listeler', 'komtera'), 'read','firsatlar', 'firsatlar_cb');
+        add_submenu_page('firsatlar', __('Yeni Fırsat', 'komtera'), __('Yeni Fırsat', 'komtera'), 'read','firsatlar_yeni', 'firsatlar_yeni_cb');
         // Gizli sayfa: parent null olduğu için menüde görünmez
-        add_submenu_page(null, __('firsat_detay', 'komtera'), __('firsat_detay', 'komtera'), 'read','firsatlar_detay', 'firsatlar_detay_cb');
+        add_submenu_page(null, __('Fırsat Detayı', 'komtera'), __('Fırsat Detayı', 'komtera'), 'read','firsatlar_detay', 'firsatlar_detay_cb');
     }
-    if (array_key_exists('_orders_',   $ana_yetkiler)) add_menu_page(__('siparisler', 'komtera'), __('siparisler', 'komtera'), 'read','siparisler_slug',          'siparisler_cb','dashicons-cart',2.02);
-    if (array_key_exists('_demos_',      $ana_yetkiler)) add_menu_page(__('demolar', 'komtera'), __('demolar', 'komtera'), 'read','demolar_slug',                   'demolar_cb','dashicons-screenoptions',2.03);
-    if (array_key_exists('_activities_',  $ana_yetkiler)) add_menu_page(__('aktiviteler', 'komtera'), __('aktiviteler', 'komtera'), 'read','aktiviteler_slug',       'aktiviteler_cb','dashicons-clock',2.04);
-    if (array_key_exists('_poc_',          $ana_yetkiler)) add_menu_page(__('poc', 'komtera'), __('poc', 'komtera'), 'read','poc_slug',                               'poc_cb','dashicons-networking',2.05);
-    if (array_key_exists('_reports_',     $ana_yetkiler)) add_menu_page(__('raporlar', 'komtera'), __('raporlar', 'komtera'), 'read','raporlar_slug',                'raporlar_cb','dashicons-chart-pie',2.06);
-    if (array_key_exists('_reports_management_', $ana_yetkiler)) add_menu_page(__('raporlar yonetim', 'komtera'), __('raporlar yonetim', 'komtera'), 'read','raporlar_yonetim_slug','raporlar_yonetim_cb','dashicons-chart-line',2.065);
-    if (array_key_exists('_tools_',      $ana_yetkiler)) add_menu_page(__('araclar', 'komtera'), __('araclar', 'komtera'), 'read','araclar_slug',                   'araclar_cb','dashicons-admin-tools',2.07);
-    if (array_key_exists('_pricelist_', $ana_yetkiler)) add_menu_page(__('fiyat listesi', 'komtera'), __('fiyat listesi', 'komtera'), 'read','fiyat_listesi_slug', 'fiyat_listesi_cb','dashicons-tag',2.08);
-    if (array_key_exists('_renewals_',  $ana_yetkiler)) add_menu_page(__('yenilemeler', 'komtera'), __('yenilemeler', 'komtera'), 'read','yenilemeler_slug',       'yenilemeler_cb','dashicons-update',2.09);
-    if (array_key_exists('_invoices_',    $ana_yetkiler)) add_menu_page(__('faturalar', 'komtera'), __('faturalar', 'komtera'), 'read','faturalar_slug',             'faturalar_cb','dashicons-text',2.10);
-    if (array_key_exists('_stocks_',      $ana_yetkiler)) add_menu_page(__('stoklar', 'komtera'), __('stoklar', 'komtera'), 'read','stoklar_slug',                   'stoklar_cb','dashicons-database-add',2.11);
-    if (array_key_exists('_dealers_',      $ana_yetkiler)) add_menu_page(__('bayiler', 'komtera'), __('bayiler', 'komtera'), 'read','bayiler_slug',                   'bayiler_cb','dashicons-building',2.12);
-    if (array_key_exists('_customers_',   $ana_yetkiler)) add_menu_page(__('musteriler', 'komtera'), __('musteriler', 'komtera'), 'read','musteriler_slug',          'musteriler_cb','dashicons-groups',2.13);
-    if (array_key_exists('_settings_',      $ana_yetkiler)) add_menu_page(__('ayarlar', 'komtera'), __('ayarlar', 'komtera'), 'read','ayarlar_slug',                   'ayarlar_cb','dashicons-admin-generic',2.14);
+    if (array_key_exists('_orders_',   $ana_yetkiler)) add_menu_page(__('Siparişler', 'komtera'), __('Siparişler', 'komtera'), 'read','siparisler_slug',          'siparisler_cb','dashicons-cart',2.02);
+    if (array_key_exists('_demos_',      $ana_yetkiler)) add_menu_page(__('Demolar', 'komtera'), __('Demolar', 'komtera'), 'read','demolar_slug',                   'demolar_cb','dashicons-screenoptions',2.03);
+    if (array_key_exists('_activities_',  $ana_yetkiler)) add_menu_page(__('Aktiviteler', 'komtera'), __('Aktiviteler', 'komtera'), 'read','aktiviteler_slug',       'aktiviteler_cb','dashicons-clock',2.04);
+    if (array_key_exists('_poc_',          $ana_yetkiler)) add_menu_page(__('POC', 'komtera'), __('POC', 'komtera'), 'read','poc_slug',                               'poc_cb','dashicons-networking',2.05);
+    if (array_key_exists('_reports_',     $ana_yetkiler)) add_menu_page(__('Raporlar', 'komtera'), __('Raporlar', 'komtera'), 'read','raporlar_slug',                'raporlar_cb','dashicons-chart-pie',2.06);
+    if (array_key_exists('_reports_management_', $ana_yetkiler)) add_menu_page(__('Raporlar Yönetimi', 'komtera'), __('Raporlar Yönetimi', 'komtera'), 'read','raporlar_yonetim_slug','raporlar_yonetim_cb','dashicons-chart-line',2.065);
+    if (array_key_exists('_tools_',      $ana_yetkiler)) add_menu_page(__('Araçlar', 'komtera'), __('Araçlar', 'komtera'), 'read','araclar_slug',                   'araclar_cb','dashicons-admin-tools',2.07);
+    if (array_key_exists('_pricelist_', $ana_yetkiler)) add_menu_page(__('Fiyat Listesi', 'komtera'), __('Fiyat Listesi', 'komtera'), 'read','fiyat_listesi_slug', 'fiyat_listesi_cb','dashicons-tag',2.08);
+    if (array_key_exists('_renewals_',  $ana_yetkiler)) add_menu_page(__('Yenilemeler', 'komtera'), __('Yenilemeler', 'komtera'), 'read','yenilemeler_slug',       'yenilemeler_cb','dashicons-update',2.09);
+    if (array_key_exists('_invoices_',    $ana_yetkiler)) add_menu_page(__('Faturalar', 'komtera'), __('Faturalar', 'komtera'), 'read','faturalar_slug',             'faturalar_cb','dashicons-text',2.10);
+    if (array_key_exists('_stocks_',      $ana_yetkiler)) add_menu_page(__('Stoklar', 'komtera'), __('Stoklar', 'komtera'), 'read','stoklar_slug',                   'stoklar_cb','dashicons-database-add',2.11);
+    if (array_key_exists('_dealers_',      $ana_yetkiler)) add_menu_page(__('Bayiler', 'komtera'), __('Bayiler', 'komtera'), 'read','bayiler_slug',                   'bayiler_cb','dashicons-building',2.12);
+    if (array_key_exists('_customers_',   $ana_yetkiler)) add_menu_page(__('Müşteriler', 'komtera'), __('Müşteriler', 'komtera'), 'read','musteriler_slug',          'musteriler_cb','dashicons-groups',2.13);
+    if (array_key_exists('_settings_',      $ana_yetkiler)) add_menu_page(__('Ayarlar', 'komtera'), __('Ayarlar', 'komtera'), 'read','ayarlar_slug',                   'ayarlar_cb','dashicons-admin-generic',2.14);
 
 }
 
@@ -85,7 +85,7 @@ function firsatlar_cb()
                         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#d4edda'; this.style.borderColor='#28a745'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-plus-alt2" style="font-size: 24px; color: #28a745; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yeni_firsat', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Yeni Fırsat', 'komtera'); ?></span>
                 </div>
 
                 <!-- Tarih Seçimi -->
@@ -122,7 +122,7 @@ function firsatlar_cb()
                         box-shadow: 0 2px 4px rgba(0,115,170,0.2);
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-unlock" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('acik_firsatlar', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('Açık Fırsatlar', 'komtera'); ?></span>
                 </div>
 
                 <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="
@@ -138,7 +138,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-media-document" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('acik_ana_teklifler', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Açık Ana Teklifler', 'komtera'); ?></span>
                 </div>
 
                 <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="
@@ -154,7 +154,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-yes-alt" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kazanilan', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Kazanılan', 'komtera'); ?></span>
                 </div>
 
                 <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="
@@ -170,7 +170,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-dismiss" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('kaybedilen_firsatlar', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Kaybedilen Fırsatlar', 'komtera'); ?></span>
                 </div>
 
                 <div class="opportunity-button table-btn" data-table="firsatlar2" style="
@@ -186,7 +186,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-list-view" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('tum_firsatlar', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Tüm Fırsatlar', 'komtera'); ?></span>
                 </div>
 
                 <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="
@@ -202,7 +202,7 @@ function firsatlar_cb()
                         transition: all 0.2s;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff5722'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
                     <span class="dashicons dashicons-networking" style="font-size: 24px; color: #ff5722; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('yan_firsatlar', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Yan Fırsatlar', 'komtera'); ?></span>
                 </div>
             </div>
         </div>
@@ -275,12 +275,12 @@ function firsatlar_cb()
                 const v1 = input1.value;
                 const v2 = input2.value;
                 if (!v1 || !v2) {
-                    const msg = lang === 'tr' ? 'Lütfen iki tarihi de seçin.' : 'Please select both dates.';
+                    const msg = lang === 'tr' ? '<?php echo __('Lütfen iki tarihi de seçin.','komtera'); ?>' : 'Please select both dates.';
                     alert(msg);
                     return;
                 }
                 if (v1 > v2) {
-                    const msg = lang === 'tr' ? 'Başlangıç tarihi, bitiş tarihinden büyük olamaz.' : 'Start date cannot be greater than end date.';
+                    const msg = lang === 'tr' ? '<?php echo __('Başlangıç tarihi, bitiş tarihinden büyük olamaz.','komtera'); ?>' : 'Start date cannot be greater than end date.';
                     alert(msg);
                     return;
                 }
@@ -449,7 +449,7 @@ function siparisler_cb()
                         box-shadow: 0 2px 4px rgba(0,115,170,0.2);
                         " onmouseover="this.style.backgroundColor='#005a8b'; this.style.borderColor='#005a8b';" onmouseout="this.style.backgroundColor='#0073aa'; this.style.borderColor='#0073aa';">
                     <span class="dashicons dashicons-download" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('getir', 'komtera'); ?></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('Getir', 'komtera'); ?></span>
                 </div>
             </div>
         </div>
@@ -530,12 +530,12 @@ function siparisler_cb()
                 const v1 = input1.value;
                 const v2 = input2.value;
                 if (!v1 || !v2) {
-                    const msg = lang === 'tr' ? 'Lütfen iki tarihi de seçin.' : 'Please select both dates.';
+                    const msg = lang === 'tr' ? '<?php echo __('Lütfen iki tarihi de seçin.','komtera'); ?>' : 'Please select both dates.';
                     alert(msg);
                     return;
                 }
                 if (v1 > v2) {
-                    const msg = lang === 'tr' ? 'Başlangıç tarihi, bitiş tarihinden büyük olamaz.' : 'Start date cannot be greater than end date.';
+                    const msg = lang === 'tr' ? '<?php echo __('Başlangıç tarihi, bitiş tarihinden büyük olamaz.','komtera'); ?>' : 'Start date cannot be greater than end date.';
                     alert(msg);
                     return;
                 }
@@ -620,12 +620,12 @@ function aktiviteler_cb()   {
             flex-wrap: wrap;
         ">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <label for="baslangic_tarihi" style="font-weight: 600;">Başlangıç Tarihi:</label>
+                <label for="baslangic_tarihi" style="font-weight: 600;"><?php echo __('Başlangıç Tarihi:','komtera'); ?></label>
                 <input type="date" id="baslangic_tarihi" name="baslangic_tarihi"
                        style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <label for="bitis_tarihi" style="font-weight: 600;">Bitiş Tarihi:</label>
+                <label for="bitis_tarihi" style="font-weight: 600;"><?php echo __('Bitiş Tarihi:','komtera'); ?></label>
                 <input type="date" id="bitis_tarihi" name="bitis_tarihi"
                        style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
             </div>
@@ -1109,7 +1109,7 @@ function araclar_cb()
 
         <!-- Content Area -->
         <div id="tools-content-area" style="position: relative; height: calc(100vh - 280px); padding: 40px; text-align: center; color: #666; font-size: 16px;">
-            Bir araç modülü seçin
+<?php echo __('Bir araç modülü seçin','komtera'); ?>
         </div>
     </div>
 
@@ -1128,7 +1128,7 @@ function araclar_cb()
                     if (xhr.status === 200) {
                         contentArea.innerHTML = xhr.responseText;
                     } else {
-                        contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;">Modül yüklenirken hata oluştu</div>';
+                        contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;"><?php echo __('Modül yüklenirken hata oluştu','komtera'); ?></div>';
                     }
                 }
             };
@@ -1230,7 +1230,7 @@ function fiyat_listesi_cb() {
                         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                         " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
                     <span class="dashicons dashicons-upload" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Excel'den Al</span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Excel\'den Al','komtera'); ?></span>
                 </div>
 
                 <!-- Excel'e Gönder Butonu -->
@@ -1248,7 +1248,7 @@ function fiyat_listesi_cb() {
                         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                         " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#2196f3';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
                     <span class="dashicons dashicons-download" style="font-size: 24px; color: #2196f3; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Excel'e Gönder</span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Excel\'e Gönder','komtera'); ?></span>
                 </div>
 
                 <!-- Marka Ekle Butonu -->
@@ -1409,17 +1409,17 @@ function fiyat_listesi_cb() {
         }
 
         function exceldenAl() {
-            alert('Excel\'den Al özelliği yakında eklenecek');
+            alert('<?php echo __('Excel\'den Al özelliği yakında eklenecek','komtera'); ?>');
         }
 
         function exceleyeGonder() {
-            alert('Excel\'e Gönder özelliği yakında eklenecek');
+            alert('<?php echo __('Excel\'e Gönder özelliği yakında eklenecek','komtera'); ?>');
         }
 
         function markaEkle() {
-            const marka = prompt('Yeni marka adını giriniz:');
+            const marka = prompt('<?php echo __('Yeni marka adını giriniz:','komtera'); ?>');
             if (marka && marka.trim()) {
-                alert('Marka Ekle özelliği yakında eklenecek\nEklenecek marka: ' + marka.trim());
+                alert('<?php echo __('Marka Ekle özelliği yakında eklenecek','komtera'); ?>\n<?php echo __('Eklenecek marka:','komtera'); ?> ' + marka.trim());
             }
         }
 
@@ -1798,7 +1798,7 @@ function ayarlar_cb()
 
         <!-- Content Area -->
         <div id="content-area" style="position: relative; height: calc(100vh - 280px); padding: 40px; text-align: center; color: #666; font-size: 16px;">
-            Bir ayar modülü seçin
+<?php echo __('Bir ayar modülü seçin','komtera'); ?>
         </div>
     </div>
 
@@ -1817,7 +1817,7 @@ function ayarlar_cb()
                     if (xhr.status === 200) {
                         contentArea.innerHTML = xhr.responseText;
                     } else {
-                        contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;">Modül yüklenirken hata oluştu</div>';
+                        contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;"><?php echo __('Modül yüklenirken hata oluştu','komtera'); ?></div>';
                     }
                 }
             };
@@ -1912,10 +1912,10 @@ function handle_load_settings_module() {
             $content = ob_get_clean();
             echo $content;
         } else {
-            echo '<div style="padding: 40px; text-align: center; color: #666;">Modül bulunamadı: ' . esc_html($module) . '</div>';
+            echo '<div style="padding: 40px; text-align: center; color: #666;">' . __('Modül bulunamadı: ','komtera') . esc_html($module) . '</div>';
         }
     } else {
-        echo '<div style="padding: 40px; text-align: center; color: #666;">Geçersiz modül</div>';
+        echo '<div style="padding: 40px; text-align: center; color: #666;">' . __('Geçersiz modül','komtera') . '</div>';
     }
 
     wp_die();
@@ -1949,10 +1949,10 @@ function handle_load_tools_module() {
             $content = ob_get_clean();
             echo $content;
         } else {
-            echo '<div style="padding: 40px; text-align: center; color: #666;">Araç modülü bulunamadı: ' . esc_html($module) . '</div>';
+            echo '<div style="padding: 40px; text-align: center; color: #666;">' . __('Araç modülü bulunamadı: ','komtera') . esc_html($module) . '</div>';
         }
     } else {
-        echo '<div style="padding: 40px; text-align: center; color: #666;">Geçersiz araç modülü</div>';
+        echo '<div style="padding: 40px; text-align: center; color: #666;">' . __('Geçersiz araç modülü','komtera') . '</div>';
     }
 
     wp_die();

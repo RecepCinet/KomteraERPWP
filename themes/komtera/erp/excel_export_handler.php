@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['marka'])) {
     $marka = $_POST['marka'];
 
     if (empty($marka)) {
-        echo json_encode(['success' => false, 'message' => 'Marka seçilmedi.']);
+        echo json_encode(['success' => false, 'message' => __('Marka Seçilmedi', 'komtera')]);
         exit;
     }
 
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['marka'])) {
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($data)) {
-            echo json_encode(['success' => false, 'message' => 'Bu marka için veri bulunamadı.']);
+            echo json_encode(['success' => false, 'message' => __('Bu Marka İçin Veri Bulunamadı', 'komtera')]);
             exit;
         }
 
@@ -222,14 +222,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['marka'])) {
             exit;
 
         } else {
-            echo json_encode(['success' => false, 'message' => 'Excel dosyası oluşturulamadı.']);
+            echo json_encode(['success' => false, 'message' => __('Excel Dosyası Oluşturulamadı', 'komtera')]);
         }
 
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Veritabanı hatası: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'message' => __('Veritabanı Hatası: ', 'komtera') . $e->getMessage()]);
     }
 
 } else {
-    echo json_encode(['success' => false, 'message' => 'Geçersiz istek.']);
+    echo json_encode(['success' => false, 'message' => __('Geçersiz İstek', 'komtera')]);
 }
 ?>

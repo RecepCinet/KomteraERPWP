@@ -63,10 +63,10 @@ $sqlinsert = "INSERT INTO LKS.dbo.ARYD_FIS_AKTARIM ([SIPARISID],[NO],[CARIKOD],[
 try {
     $stmt = $conn->prepare($sqlinsert);
     $result = $stmt->execute();
-    echo "OK";
+    echo __('Başarılı', 'komtera');
 } catch (PDOException $e) {
     BotMesaj("Siparis no: " . $siparis_no . "\n" . $e->getMessage() . "\n" . $sqlinsert . "\n" . $_GET['user']);
-    die("NOK|Sorun Teknik ekibe aktarilmistir!");
+    die(__('Hata', 'komtera') . "|" . __('Sorun Teknik ekibe aktarılmıştır!', 'komtera'));
 }
 
 ?>

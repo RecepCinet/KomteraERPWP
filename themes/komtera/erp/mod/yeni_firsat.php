@@ -13,8 +13,8 @@ for ($i = 0; $i < 10; $i++) {
 
 if (!$found) {
     header('Content-Type: text/plain; charset=utf-8');
-    echo "wp-load.php bulunamadı.\n";
-    echo "Başlangıç dizini: " . __DIR__ . "\n";
+    echo __('wp-load.php bulunamadı.','komtera') . "\n";
+    echo __('Başlangıç dizini: ','komtera') . __DIR__ . "\n";
     exit;
 }
 
@@ -22,7 +22,7 @@ if (!$found) {
 if (!is_user_logged_in()) {
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttrequest') {
         header('Content-Type: application/json');
-        echo json_encode(['error' => 'Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.']);
+        echo json_encode(['error' => __('Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.','komtera')]);
         exit;
     } else {
         wp_redirect(wp_login_url());
@@ -157,22 +157,22 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         // Server-side validation - zorunlu alanlar kontrolü
         $required_fields = [
             'marka' => 'Marka',
-            'gelis_kanali' => 'Geliş Kanalı',
-            'olasilik' => 'Olasılık',
+            'gelis_kanali' => __('Geliş Kanalı','komtera'),
+            'olasilik' => __('Olasılık','komtera'),
             'bayi' => 'Bayi',
             'bayi_kodu' => 'Bayi Kodu',
             'bayi_yetkili' => 'Bayi Yetkili',
-            'musteri' => 'Müşteri',
-            'musteri_yetkili' => 'Müşteri Yetkili',
+            'musteri' => __('Müşteri','komtera'),
+            'musteri_yetkili' => __('Müşteri Yetkili','komtera'),
             'accman' => 'AccMan',
-            'musteri_temsilcisi' => 'Müşteri Temsilcisi'
+            'musteri_temsilcisi' => __('Müşteri Temsilcisi','komtera')
         ];
 
         $validation_errors = [];
         foreach ($required_fields as $field => $label) {
             $value = $_POST[$field] ?? '';
             if (empty($value) || trim($value) === '') {
-                $validation_errors[] = $label . ' alanı zorunludur.';
+                $validation_errors[] = $label . __(' alanı zorunludur.','komtera');
             }
         }
 
@@ -183,16 +183,16 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $accman_id = $_POST['accman_id'] ?? '';
 
         if (empty($bayi_yetkili_id)) {
-            $validation_errors[] = 'Bayi Yetkili seçimi tamamlanmamış.';
+            $validation_errors[] = __('Bayi Yetkili seçimi tamamlanmamış.','komtera');
         }
         if (empty($musteri_id)) {
-            $validation_errors[] = 'Müşteri seçimi tamamlanmamış.';
+            $validation_errors[] = __('Müşteri seçimi tamamlanmamış.','komtera');
         }
         if (empty($musteri_yetkili_id)) {
-            $validation_errors[] = 'Müşteri Yetkili seçimi tamamlanmamış.';
+            $validation_errors[] = __('Müşteri Yetkili seçimi tamamlanmamış.','komtera');
         }
         if (empty($accman_id)) {
-            $validation_errors[] = 'AccMan seçimi tamamlanmamış.';
+            $validation_errors[] = __('AccMan seçimi tamamlanmamış.','komtera');
         }
 
         if (!empty($validation_errors)) {
@@ -314,9 +314,9 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $stmt->bindParam(':marka_manager_eposta', $marka_manager_eposta);
 
         if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Fırsat başarıyla oluşturuldu.', 'firsat_no' => $firsat_no]);
+            echo json_encode(['success' => true, 'message' => __('Fırsat başarıyla oluşturuldu.','komtera'), 'firsat_no' => $firsat_no]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Kayıt sırasında bir hata oluştu.']);
+            echo json_encode(['success' => false, 'message' => __('Kayıt sırasında bir hata oluştu.','komtera')]);
         }
         exit;
     } catch (Exception $e) {
@@ -348,7 +348,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
                 $paramDetails .= '<strong>' . $param . ':</strong> ' . $length . ' karakter - "' . htmlspecialchars($displayValue) . '"<br/>';
             }
 
-            $errorMsg = 'Veri çok uzun! Lütfen daha kısa metinler girin.<br/><br/><strong>Veri Uzunlukları:</strong><br/>' . $paramDetails . '<br/><strong>SQL Sorgusu:</strong><br/><pre>' . htmlspecialchars($sql) . '</pre><br/><strong>Hata Detayı:</strong> ' . $errorMsg;
+            $errorMsg = __('Veri çok uzun! Lütfen daha kısa metinler girin.','komtera') . '<br/><br/><strong>' . __('Veri Uzunlukları:','komtera') . '</strong><br/>' . $paramDetails . '<br/><strong>' . __('SQL Sorgusu:','komtera') . '</strong><br/><pre>' . htmlspecialchars($sql) . '</pre><br/><strong>' . __('Hata Detayı:','komtera') . '</strong> ' . $errorMsg;
         }
         echo json_encode(['success' => false, 'message' => 'Hata: ' . $errorMsg]);
         exit;
@@ -503,7 +503,7 @@ if (isset($_GET['action'])) {
                     ];
                     echo json_encode($response);
                 } else {
-                    echo json_encode(['success' => false, 'error' => 'Bayi kodu boş', 'data' => []]);
+                    echo json_encode(['success' => false, 'error' => __('Bayi kodu boş','komtera'), 'data' => []]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => $e->getMessage(), 'data' => []]);
@@ -557,7 +557,7 @@ if (isset($_GET['action'])) {
                     echo json_encode(['success' => false, 'error' => $e->getMessage(), 'data' => []]);
                 }
             } else {
-                echo json_encode(['success' => false, 'error' => 'Müşteri ID boş', 'data' => []]);
+                echo json_encode(['success' => false, 'error' => __('Müşteri ID boş','komtera'), 'data' => []]);
             }
             exit;
         }
@@ -578,12 +578,12 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':eposta', $eposta);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'Bayi yetkili başarıyla eklendi.']);
+                        echo json_encode(['success' => true, 'message' => __('Bayi yetkili başarıyla eklendi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Kayıt sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Kayıt sırasında hata oluştu.','komtera')]);
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Bayi kodu ve yetkili adı gerekli.']);
+                    echo json_encode(['success' => false, 'message' => __('Bayi kodu ve yetkili adı gerekli.','komtera')]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
@@ -607,12 +607,12 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':eposta', $eposta);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'Müşteri yetkili başarıyla eklendi.']);
+                        echo json_encode(['success' => true, 'message' => __('Müşteri yetkili başarıyla eklendi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Kayıt sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Kayıt sırasında hata oluştu.','komtera')]);
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Müşteri ID ve yetkili adı gerekli.']);
+                    echo json_encode(['success' => false, 'message' => __('Müşteri ID ve yetkili adı gerekli.','komtera')]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
@@ -636,12 +636,12 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':eposta', $eposta);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'Bayi yetkili başarıyla güncellendi.']);
+                        echo json_encode(['success' => true, 'message' => __('Bayi yetkili başarıyla güncellendi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Güncelleme sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Güncelleme sırasında hata oluştu.','komtera')]);
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'ID ve yetkili adı gerekli.']);
+                    echo json_encode(['success' => false, 'message' => __('ID ve yetkili adı gerekli.','komtera')]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
@@ -665,12 +665,12 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':eposta', $eposta);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'Müşteri yetkili başarıyla güncellendi.']);
+                        echo json_encode(['success' => true, 'message' => __('Müşteri yetkili başarıyla güncellendi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Güncelleme sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Güncelleme sırasında hata oluştu.','komtera')]);
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'ID ve yetkili adı gerekli.']);
+                    echo json_encode(['success' => false, 'message' => __('ID ve yetkili adı gerekli.','komtera')]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
@@ -688,9 +688,9 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':id', $id);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'Bayi yetkili başarıyla silindi.']);
+                        echo json_encode(['success' => true, 'message' => __('Bayi yetkili başarıyla silindi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Silme sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Silme sırasında hata oluştu.','komtera')]);
                     }
                 } else {
                     echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
@@ -711,9 +711,9 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':id', $id);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'Müşteri yetkili başarıyla silindi.']);
+                        echo json_encode(['success' => true, 'message' => __('Müşteri yetkili başarıyla silindi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Silme sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Silme sırasında hata oluştu.','komtera')]);
                     }
                 } else {
                     echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
@@ -828,12 +828,12 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':eposta', $eposta);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'AccMan başarıyla eklendi.']);
+                        echo json_encode(['success' => true, 'message' => __('AccMan başarıyla eklendi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Kayıt sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Kayıt sırasında hata oluştu.','komtera')]);
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Marka ve yetkili adı gerekli.']);
+                    echo json_encode(['success' => false, 'message' => __('Marka ve yetkili adı gerekli.','komtera')]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
@@ -857,12 +857,12 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':eposta', $eposta);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'AccMan başarıyla güncellendi.']);
+                        echo json_encode(['success' => true, 'message' => __('AccMan başarıyla güncellendi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Güncelleme sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Güncelleme sırasında hata oluştu.','komtera')]);
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'ID ve yetkili adı gerekli.']);
+                    echo json_encode(['success' => false, 'message' => __('ID ve yetkili adı gerekli.','komtera')]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Hata: ' . $e->getMessage()]);
@@ -880,9 +880,9 @@ if (isset($_GET['action'])) {
                     $stmt->bindParam(':id', $id);
 
                     if ($stmt->execute()) {
-                        echo json_encode(['success' => true, 'message' => 'AccMan başarıyla silindi.']);
+                        echo json_encode(['success' => true, 'message' => __('AccMan başarıyla silindi.','komtera')]);
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Silme sırasında hata oluştu.']);
+                        echo json_encode(['success' => false, 'message' => __('Silme sırasında hata oluştu.','komtera')]);
                     }
                 } else {
                     echo json_encode(['success' => false, 'message' => 'ID gerekli.']);
@@ -1503,9 +1503,9 @@ if (isset($_GET['action'])) {
     <form id="firsat-form">
         <div class="form-row">
             <div class="form-group">
-                <label for="marka">Marka <span class="required">*</span></label>
+                <label for="marka"><?php echo __('Marka','komtera'); ?> <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="marka" name="marka" placeholder="Marka seçmek için tıklayın" readonly onclick="openMarkaModal()" required>
+                    <input type="text" id="marka" name="marka" placeholder="<?php echo __('Marka seçmek için tıklayın','komtera'); ?>" readonly onclick="openMarkaModal()" required>
                     <button type="button" class="btn-search" onclick="openMarkaModal()">
                         <span class="dashicons dashicons-search"></span>
                     </button>
@@ -1515,7 +1515,7 @@ if (isset($_GET['action'])) {
                 <label>Geliş Kanalı <span class="required">*</span></label>
                 <div class="radio-group">
                     <label><input type="radio" name="gelis_kanali" value="Bayiden" required> Bayiden</label>
-                    <label><input type="radio" name="gelis_kanali" value="Üreticiden" required> Üreticiden</label>
+                    <label><input type="radio" name="gelis_kanali" value="Üreticiden" required> <?php echo __('Üreticiden','komtera'); ?></label>
                     <label><input type="radio" name="gelis_kanali" value="Komtera" required> Komtera</label>
                 </div>
             </div>
@@ -1523,9 +1523,9 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label for="olasilik">Olasılık <span class="required">*</span></label>
+                <label for="olasilik"><?php echo __('Olasılık','komtera'); ?> <span class="required">*</span></label>
                 <select id="olasilik" name="olasilik" required>
-                    <option value="">Olasılık Seçiniz</option>
+                    <option value=""><?php echo __('Olasılık Seçiniz','komtera'); ?></option>
                     <option value="1-Discovery">1-Discovery</option>
                     <option value="2-Solution Mapping">2-Solution Mapping</option>
                     <option value="3-Demo/POC">3-Demo/POC</option>
@@ -1551,7 +1551,7 @@ if (isset($_GET['action'])) {
             <div class="form-group">
                 <label for="bayi">Bayi <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="bayi" name="bayi" placeholder="Bayi seçmek için tıklayın" readonly onclick="openBayiModal()" required>
+                    <input type="text" id="bayi" name="bayi" placeholder="<?php echo __('Bayi seçmek için tıklayın','komtera'); ?>" readonly onclick="openBayiModal()" required>
                     <input type="hidden" id="bayi_kodu" name="bayi_kodu">
                     <button type="button" class="btn-search" onclick="openBayiModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1559,9 +1559,9 @@ if (isset($_GET['action'])) {
                 </div>
             </div>
             <div class="form-group">
-                <label for="bayi_yetkili">Bayi Yetkili <span class="required">*</span></label>
+                <label for="bayi_yetkili"><?php echo __('Bayi Yetkili','komtera'); ?> <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="bayi_yetkili" name="bayi_yetkili" placeholder="Önce bayi seçin" readonly onclick="openBayiYetkiliModal()" required>
+                    <input type="text" id="bayi_yetkili" name="bayi_yetkili" placeholder="<?php echo __('Önce bayi seçin','komtera'); ?>" readonly onclick="openBayiYetkiliModal()" required>
                     <input type="hidden" id="bayi_yetkili_id" name="bayi_yetkili_id">
                     <input type="hidden" id="bayi_yetkili_telefon" name="bayi_yetkili_telefon">
                     <input type="hidden" id="bayi_yetkili_eposta" name="bayi_yetkili_eposta">
@@ -1574,9 +1574,9 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label for="musteri">Müşteri <span class="required">*</span></label>
+                <label for="musteri"><?php echo __('Müşteri','komtera'); ?> <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="musteri" name="musteri" placeholder="Müşteri seçmek için tıklayın" readonly onclick="openMusteriModal()" required>
+                    <input type="text" id="musteri" name="musteri" placeholder="<?php echo __('Müşteri seçmek için tıklayın','komtera'); ?>" readonly onclick="openMusteriModal()" required>
                     <input type="hidden" id="musteri_id" name="musteri_id">
                     <button type="button" class="btn-search" onclick="openMusteriModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1584,9 +1584,9 @@ if (isset($_GET['action'])) {
                 </div>
             </div>
             <div class="form-group">
-                <label for="musteri_yetkili">Müşteri Yetkili <span class="required">*</span></label>
+                <label for="musteri_yetkili"><?php echo __('Müşteri Yetkili','komtera'); ?> <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="musteri_yetkili" name="musteri_yetkili" placeholder="Önce müşteri seçin" readonly onclick="openMusteriYetkiliModal()" required>
+                    <input type="text" id="musteri_yetkili" name="musteri_yetkili" placeholder="<?php echo __('Önce müşteri seçin','komtera'); ?>" readonly onclick="openMusteriYetkiliModal()" required>
                     <input type="hidden" id="musteri_yetkili_id" name="musteri_yetkili_id">
                     <input type="hidden" id="musteri_yetkili_telefon" name="musteri_yetkili_telefon">
                     <input type="hidden" id="musteri_yetkili_eposta" name="musteri_yetkili_eposta">
@@ -1601,7 +1601,7 @@ if (isset($_GET['action'])) {
             <div class="form-group">
                 <label for="accman">AccMan <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="accman" name="accman" placeholder="AccMan seçmek için tıklayın" readonly onclick="openAccmanModal()" required>
+                    <input type="text" id="accman" name="accman" placeholder="<?php echo __('AccMan seçmek için tıklayın','komtera'); ?>" readonly onclick="openAccmanModal()" required>
                     <input type="hidden" id="accman_id" name="accman_id">
                     <button type="button" class="btn-search" onclick="openAccmanModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1611,7 +1611,7 @@ if (isset($_GET['action'])) {
             <div class="form-group">
                 <label for="etkinlik">Etkinlik</label>
                 <div class="input-with-button">
-                    <input type="text" id="etkinlik" name="etkinlik" placeholder="Etkinlik seçmek için tıklayın" readonly onclick="openEtkinlikModal()">
+                    <input type="text" id="etkinlik" name="etkinlik" placeholder="<?php echo __('Etkinlik seçmek için tıklayın','komtera'); ?>" readonly onclick="openEtkinlikModal()">
                     <input type="hidden" id="etkinlik_id" name="etkinlik_id">
                     <button type="button" class="btn-search" onclick="openEtkinlikModal()">
                         <span class="dashicons dashicons-search"></span>
@@ -1635,9 +1635,9 @@ if (isset($_GET['action'])) {
 
         <div class="form-row">
             <div class="form-group">
-                <label for="musteri_temsilcisi">Müşteri Temsilcisi <span class="required">*</span></label>
+                <label for="musteri_temsilcisi"><?php echo __('Müşteri Temsilcisi','komtera'); ?> <span class="required">*</span></label>
                 <div class="input-with-button">
-                    <input type="text" id="musteri_temsilcisi" name="musteri_temsilcisi" placeholder="Müşteri temsilcisi seçmek için tıklayın" readonly onclick="openMusteriTemsilcisiModal()" value="<?php echo esc_html($user); ?>" required>
+                    <input type="text" id="musteri_temsilcisi" name="musteri_temsilcisi" placeholder="<?php echo __('Müşteri temsilcisi seçmek için tıklayın','komtera'); ?>" readonly onclick="openMusteriTemsilcisiModal()" value="<?php echo esc_html($user); ?>" required>
                     <button type="button" class="btn-search" onclick="openMusteriTemsilcisiModal()">
                         <span class="dashicons dashicons-search"></span>
                     </button>
@@ -1651,8 +1651,8 @@ if (isset($_GET['action'])) {
 
         <div class="btn-container">
             <button type="submit" class="btn btn-primary">Fırsat Oluştur</button>
-            <button type="button" class="btn btn-warning" onclick="if(confirm('Formu temizlemek istediğinizden emin misiniz?')) { clearFormData(); location.reload(); }">Formu Temizle</button>
-            <button type="button" class="btn btn-secondary" onclick="window.history.back()">İptal</button>
+            <button type="button" class="btn btn-warning" onclick="if(confirm('<?php echo __('Formu temizlemek istediğinizden emin misiniz?','komtera'); ?>')) { clearFormData(); location.reload(); }"><?php echo __('Formu Temizle','komtera'); ?></button>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()"><?php echo __('İptal','komtera'); ?></button>
         </div>
     </form>
 </div>
@@ -1685,12 +1685,12 @@ function openMarkaModal() {
                 </div>
                 <div class="modal-search">
                     <div class="search-container">
-                        <input type="text" id="marka-search" placeholder="Marka adı ile ara..." onkeyup="searchMarkalar(this.value)">
+                        <input type="text" id="marka-search" placeholder="<?php echo __('Marka adı ile ara...','komtera'); ?>" onkeyup="searchMarkalar(this.value)">
                         <div class="search-options">
-                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                            <button class="search-option active" data-mode="startswith" title="<?php echo __('İle Başlıyor','komtera'); ?>">
                                 <span class="dashicons dashicons-editor-alignleft"></span>
                             </button>
-                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                            <button class="search-option" data-mode="contains" title="<?php echo __('İçeriyor','komtera'); ?>">
                                 <span class="dashicons dashicons-search"></span>
                             </button>
                         </div>
@@ -1746,7 +1746,7 @@ function loadAllMarkalar() {
             displayMarkalar(data);
         },
         error: function() {
-            document.getElementById('marka-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Marka listesi yüklenirken hata oluştu.</div>';
+            document.getElementById('marka-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Marka listesi yüklenirken hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -1769,7 +1769,7 @@ function searchMarkalar(query) {
             displayMarkalar(data);
         },
         error: function() {
-            document.getElementById('marka-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+            document.getElementById('marka-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Arama sırasında hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -1777,7 +1777,7 @@ function searchMarkalar(query) {
 function displayMarkalar(markalar) {
     const listDiv = document.getElementById('marka-list');
     if (markalar.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Marka bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Marka bulunamadı.','komtera'); ?></div>';
         return;
     }
 
@@ -1813,12 +1813,12 @@ function openBayiModal() {
                 </div>
                 <div class="modal-search">
                     <div class="search-container">
-                        <input type="text" id="bayi-search" placeholder="Bayi adı ile ara..." onkeyup="searchBayiler(this.value)">
+                        <input type="text" id="bayi-search" placeholder="<?php echo __('Bayi adı ile ara...','komtera'); ?>" onkeyup="searchBayiler(this.value)">
                         <div class="search-options">
-                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                            <button class="search-option active" data-mode="startswith" title="<?php echo __('İle Başlıyor','komtera'); ?>">
                                 <span class="dashicons dashicons-editor-alignleft"></span>
                             </button>
-                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                            <button class="search-option" data-mode="contains" title="<?php echo __('İçeriyor','komtera'); ?>">
                                 <span class="dashicons dashicons-search"></span>
                             </button>
                         </div>
@@ -1894,7 +1894,7 @@ function loadAllBayiler() {
             displayBayiler(data);
         },
         error: function() {
-            document.getElementById('bayi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Bayi listesi yüklenirken hata oluştu.</div>';
+            document.getElementById('bayi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Bayi listesi yüklenirken hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -1917,7 +1917,7 @@ function searchBayiler(query) {
             displayBayiler(data);
         },
         error: function() {
-            document.getElementById('bayi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+            document.getElementById('bayi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Arama sırasında hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -1925,7 +1925,7 @@ function searchBayiler(query) {
 function displayBayiler(bayiler) {
     const listDiv = document.getElementById('bayi-list');
     if (bayiler.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bayi bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Bayi bulunamadı.','komtera'); ?></div>';
         return;
     }
 
@@ -1967,12 +1967,12 @@ function openMusteriModal() {
                 </div>
                 <div class="modal-search">
                     <div class="search-container">
-                        <input type="text" id="musteri-search" placeholder="Müşteri adı ile ara..." onkeyup="searchMusteriler(this.value)">
+                        <input type="text" id="musteri-search" placeholder="<?php echo __('Müşteri adı ile ara...','komtera'); ?>" onkeyup="searchMusteriler(this.value)">
                         <div class="search-options">
-                            <button class="search-option active" data-mode="startswith" title="İle Başlıyor">
+                            <button class="search-option active" data-mode="startswith" title="<?php echo __('İle Başlıyor','komtera'); ?>">
                                 <span class="dashicons dashicons-editor-alignleft"></span>
                             </button>
-                            <button class="search-option" data-mode="contains" title="İçeriyor">
+                            <button class="search-option" data-mode="contains" title="<?php echo __('İçeriyor','komtera'); ?>">
                                 <span class="dashicons dashicons-search"></span>
                             </button>
                         </div>
@@ -2036,7 +2036,7 @@ function loadAllMusteriler() {
             displayMusteriler(data);
         },
         error: function() {
-            document.getElementById('musteri-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Müşteri listesi yüklenirken hata oluştu.</div>';
+            document.getElementById('musteri-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Müşteri listesi yüklenirken hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -2059,7 +2059,7 @@ function searchMusteriler(query) {
             displayMusteriler(data);
         },
         error: function() {
-            document.getElementById('musteri-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Arama sırasında hata oluştu.</div>';
+            document.getElementById('musteri-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Arama sırasında hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -2067,7 +2067,7 @@ function searchMusteriler(query) {
 function displayMusteriler(musteriler) {
     const listDiv = document.getElementById('musteri-list');
     if (musteriler.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Müşteri bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Müşteri bulunamadı.','komtera'); ?></div>';
         return;
     }
 
@@ -2095,7 +2095,7 @@ function openAccmanModal() {
     const selectedMarka = document.getElementById('marka').value;
 
     if (!selectedMarka) {
-        alert('Önce bir marka seçiniz.');
+        alert('<?php echo __('Önce bir marka seçiniz.','komtera'); ?>');
         return;
     }
 
@@ -2108,7 +2108,7 @@ function openAccmanModal() {
                 </div>
                 <div class="yetkili-add-form">
                     <div class="form-row">
-                        <input type="text" id="new-accman-name" placeholder="Yetkili Adı" class="yetkili-input">
+                        <input type="text" id="new-accman-name" placeholder="<?php echo __('Yetkili Adı','komtera'); ?>" class="yetkili-input">
                         <input type="text" id="new-accman-phone" placeholder="Telefon" class="yetkili-input">
                         <input type="email" id="new-accman-email" placeholder="E-posta" class="yetkili-input">
                         <button class="btn btn-primary" onclick="saveAccman()">Ekle</button>
@@ -2153,7 +2153,7 @@ function loadAccmanlar(marka) {
         error: function(xhr, status, error) {
             console.error('DEBUG - AccMan AJAX Error:', status, error);
             console.error('DEBUG - AccMan Response Text:', xhr.responseText);
-            document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">AccMan listesi yüklenirken hata oluştu.</div>';
+            document.getElementById('accman-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('AccMan listesi yüklenirken hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -2168,16 +2168,16 @@ function displayAccmanlar(data) {
 
     if (!Array.isArray(data)) {
         console.error('AccMan data is not an array:', data);
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Veri formatı hatalı.','komtera'); ?></div>';
         return;
     }
 
     if (data.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bu marka (' + selectedMarka + ') için AccMan bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Bu marka ','komtera'); ?>(' + selectedMarka + ')<?php echo __(' için AccMan bulunamadı.','komtera'); ?></div>';
         return;
     }
 
-    let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
+    let html = '<table class="yetkili-table"><thead><tr><th><?php echo __('Yetkili','komtera'); ?></th><th><?php echo __('Telefon','komtera'); ?></th><th><?php echo __('E-posta','komtera'); ?></th><th><?php echo __('İşlemler','komtera'); ?></th></tr></thead><tbody>';
     data.forEach(function(accman) {
         html += `
             <tr id="accman-row-${accman.id}">
@@ -2212,7 +2212,7 @@ function saveAccman() {
     const eposta = document.getElementById('new-accman-email').value.trim();
 
     if (!yetkili) {
-        alert('Yetkili adı gereklidir.');
+        alert('<?php echo __('Yetkili adı gereklidir.','komtera'); ?>');
         return;
     }
 
@@ -2244,7 +2244,7 @@ function saveAccman() {
         },
         error: function(xhr, status, error) {
             console.error('Save AccMan error:', status, error);
-            alert('Kayıt sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Kayıt sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -2272,7 +2272,7 @@ function updateAccman(accmanId) {
     const eposta = document.getElementById(`edit-accman-email-${accmanId}`).value.trim();
 
     if (!yetkili) {
-        alert('Yetkili adı gereklidir.');
+        alert('<?php echo __('Yetkili adı gereklidir.','komtera'); ?>');
         return;
     }
 
@@ -2297,7 +2297,7 @@ function updateAccman(accmanId) {
         },
         error: function(xhr, status, error) {
             console.error('Update AccMan error:', status, error);
-            alert('Güncelleme sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Güncelleme sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -2334,7 +2334,7 @@ function deleteAccman(accmanId) {
     row.className = 'yetkili-delete-row';
     row.innerHTML = `
         <td colspan="3" style="text-align: center; font-weight: bold; color: #721c24;">
-            Bu AccMan'i silmek istediğinizden emin misiniz: "${accmanName}"?
+            <?php echo __('Bu AccMan\'i silmek istediğinizden emin misiniz: ','komtera'); ?>"${accmanName}"?
         </td>
         <td>
             <div class="yetkili-buttons">
@@ -2364,7 +2364,7 @@ function confirmDeleteAccman(accmanId) {
         },
         error: function(xhr, status, error) {
             console.error('Delete AccMan error:', status, error);
-            alert('Silme sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Silme sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -2440,7 +2440,7 @@ function loadMusteriTemsilcileri() {
             }
         },
         error: function(xhr, status, error) {
-            document.getElementById('musteri-temsilcisi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Müşteri temsilcisi listesi yüklenirken hata oluştu.</div>';
+            document.getElementById('musteri-temsilcisi-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Müşteri temsilcisi listesi yüklenirken hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -2449,7 +2449,7 @@ function displayMusteriTemsilcileri(temsilciler) {
     const listDiv = document.getElementById('musteri-temsilcisi-list');
 
     if (temsilciler.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bu marka için yetkili müşteri temsilcisi bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Bu marka için yetkili müşteri temsilcisi bulunamadı.','komtera'); ?></div>';
         return;
     }
 
@@ -2475,7 +2475,7 @@ function openEtkinlikModal() {
     const selectedMarka = document.getElementById('marka').value;
 
     if (!selectedMarka) {
-        alert('Önce bir marka seçiniz.');
+        alert('<?php echo __('Önce bir marka seçiniz.','komtera'); ?>');
         return;
     }
 
@@ -2530,7 +2530,7 @@ function loadEtkinlikler(marka) {
         error: function(xhr, status, error) {
             console.error('DEBUG - Etkinlik AJAX Error:', status, error);
             console.error('DEBUG - Etkinlik Response Text:', xhr.responseText);
-            document.getElementById('etkinlik-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Etkinlik listesi yüklenirken hata oluştu.</div>';
+            document.getElementById('etkinlik-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Etkinlik listesi yüklenirken hata oluştu.','komtera'); ?></div>';
         }
     });
 }
@@ -2545,12 +2545,12 @@ function displayEtkinlikler(data) {
 
     if (!Array.isArray(data)) {
         console.error('Etkinlik data is not an array:', data);
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Veri formatı hatalı.','komtera'); ?></div>';
         return;
     }
 
     if (data.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Bu marka (' + selectedMarka + ') için aktif etkinlik bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Bu marka ','komtera'); ?>(' + selectedMarka + ')<?php echo __(' için aktif etkinlik bulunamadı.','komtera'); ?></div>';
         return;
     }
 
@@ -2590,7 +2590,7 @@ function openBayiYetkiliModal() {
     console.log('Bayi adı:', bayiAdi);
 
     if (!bayiKodu) {
-        alert('Önce bir bayi seçiniz. Bayi kodu: ' + bayiKodu);
+        alert('<?php echo __('Önce bir bayi seçiniz. Bayi kodu: ','komtera'); ?>' + bayiKodu);
         return;
     }
 
@@ -2603,7 +2603,7 @@ function openBayiYetkiliModal() {
                 </div>
                 <div class="yetkili-add-form">
                     <div class="form-row">
-                        <input type="text" id="new-bayi-yetkili-name" placeholder="Yetkili Adı" class="yetkili-input">
+                        <input type="text" id="new-bayi-yetkili-name" placeholder="<?php echo __('Yetkili Adı','komtera'); ?>" class="yetkili-input">
                         <input type="text" id="new-bayi-yetkili-phone" placeholder="Telefon" class="yetkili-input">
                         <input type="email" id="new-bayi-yetkili-email" placeholder="E-posta" class="yetkili-input">
                         <button class="btn btn-primary" onclick="saveBayiYetkili()">Ekle</button>
@@ -2644,13 +2644,13 @@ function loadBayiYetkililer(bayiKodu) {
                 displayBayiYetkililer(response);
             } else {
                 console.error('Unexpected response format:', response);
-                document.getElementById('bayi-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Beklenmeyen veri formatı.</div>';
+                document.getElementById('bayi-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Beklenmeyen veri formatı.','komtera'); ?></div>';
             }
         },
         error: function(xhr, status, error) {
             console.error('Bayi yetkililer AJAX error:', status, error);
             console.error('Response:', xhr.responseText);
-            document.getElementById('bayi-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Yetkili listesi yüklenirken hata oluştu: ' + error + '</div>';
+            document.getElementById('bayi-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Yetkili listesi yüklenirken hata oluştu: ','komtera'); ?>' + error + '</div>';
         }
     });
 }
@@ -2661,16 +2661,16 @@ function displayBayiYetkililer(data) {
     // Data kontrolü - array olup olmadığını kontrol et
     if (!Array.isArray(data)) {
         console.error('Bayi yetkili data is not an array:', data);
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Veri formatı hatalı.','komtera'); ?></div>';
         return;
     }
 
     if (data.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Yetkili bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Yetkili bulunamadı.','komtera'); ?></div>';
         return;
     }
 
-    let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
+    let html = '<table class="yetkili-table"><thead><tr><th><?php echo __('Yetkili','komtera'); ?></th><th><?php echo __('Telefon','komtera'); ?></th><th><?php echo __('E-posta','komtera'); ?></th><th><?php echo __('İşlemler','komtera'); ?></th></tr></thead><tbody>';
     data.forEach(function(yetkili) {
         html += `
             <tr id="bayi-yetkili-row-${yetkili.id}">
@@ -2703,7 +2703,7 @@ function selectBayiYetkili(yetkiliId, yetkiliAdi, yetkiliTelefon, yetkiliEposta)
 function openMusteriYetkiliModal() {
     const musteriId = document.getElementById('musteri_id').value;
     if (!musteriId) {
-        alert('Önce bir müşteri seçiniz.');
+        alert('<?php echo __('Önce bir müşteri seçiniz.','komtera'); ?>');
         return;
     }
 
@@ -2716,7 +2716,7 @@ function openMusteriYetkiliModal() {
                 </div>
                 <div class="yetkili-add-form">
                     <div class="form-row">
-                        <input type="text" id="new-musteri-yetkili-name" placeholder="Yetkili Adı" class="yetkili-input">
+                        <input type="text" id="new-musteri-yetkili-name" placeholder="<?php echo __('Yetkili Adı','komtera'); ?>" class="yetkili-input">
                         <input type="text" id="new-musteri-yetkili-phone" placeholder="Telefon" class="yetkili-input">
                         <input type="email" id="new-musteri-yetkili-email" placeholder="E-posta" class="yetkili-input">
                         <button class="btn btn-primary" onclick="saveMusteriYetkili()">Ekle</button>
@@ -2757,13 +2757,13 @@ function loadMusteriYetkililer(musteriId) {
                 displayMusteriYetkililer(response);
             } else {
                 console.error('Unexpected response format:', response);
-                document.getElementById('musteri-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Beklenmeyen veri formatı.</div>';
+                document.getElementById('musteri-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Beklenmeyen veri formatı.','komtera'); ?></div>';
             }
         },
         error: function(xhr, status, error) {
             console.error('Musteri yetkililer AJAX error:', status, error);
             console.error('Response:', xhr.responseText);
-            document.getElementById('musteri-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Yetkili listesi yüklenirken hata oluştu: ' + error + '</div>';
+            document.getElementById('musteri-yetkili-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Yetkili listesi yüklenirken hata oluştu: ','komtera'); ?>' + error + '</div>';
         }
     });
 }
@@ -2774,16 +2774,16 @@ function displayMusteriYetkililer(data) {
     // Data kontrolü - array olup olmadığını kontrol et
     if (!Array.isArray(data)) {
         console.error('Musteri yetkili data is not an array:', data);
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">Veri formatı hatalı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Veri formatı hatalı.','komtera'); ?></div>';
         return;
     }
 
     if (data.length === 0) {
-        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Yetkili bulunamadı.</div>';
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Yetkili bulunamadı.','komtera'); ?></div>';
         return;
     }
 
-    let html = '<table class="yetkili-table"><thead><tr><th>Yetkili</th><th>Telefon</th><th>E-posta</th><th>İşlemler</th></tr></thead><tbody>';
+    let html = '<table class="yetkili-table"><thead><tr><th><?php echo __('Yetkili','komtera'); ?></th><th><?php echo __('Telefon','komtera'); ?></th><th><?php echo __('E-posta','komtera'); ?></th><th><?php echo __('İşlemler','komtera'); ?></th></tr></thead><tbody>';
     data.forEach(function(yetkili) {
         html += `
             <tr id="musteri-yetkili-row-${yetkili.id}">
@@ -2816,14 +2816,14 @@ function selectMusteriYetkili(yetkiliId, yetkiliAdi, yetkiliTelefon, yetkiliEpos
 function validateForm() {
     const requiredFields = [
         { id: 'marka', name: 'Marka' },
-        { id: 'gelis_kanali', name: 'Geliş Kanalı', type: 'radio' },
-        { id: 'olasilik', name: 'Olasılık' },
+        { id: 'gelis_kanali', name: '<?php echo __('Geliş Kanalı','komtera'); ?>', type: 'radio' },
+        { id: 'olasilik', name: '<?php echo __('Olasılık','komtera'); ?>' },
         { id: 'bayi', name: 'Bayi' },
         { id: 'bayi_yetkili', name: 'Bayi Yetkili' },
-        { id: 'musteri', name: 'Müşteri' },
-        { id: 'musteri_yetkili', name: 'Müşteri Yetkili' },
+        { id: 'musteri', name: '<?php echo __('Müşteri','komtera'); ?>' },
+        { id: 'musteri_yetkili', name: '<?php echo __('Müşteri Yetkili','komtera'); ?>' },
         { id: 'accman', name: 'AccMan' },
-        { id: 'musteri_temsilcisi', name: 'Müşteri Temsilcisi' }
+        { id: 'musteri_temsilcisi', name: '<?php echo __('Müşteri Temsilcisi','komtera'); ?>' }
     ];
 
     const errors = [];
@@ -2837,13 +2837,13 @@ function validateForm() {
                 if (radio.checked) isChecked = true;
             });
             if (!isChecked) {
-                errors.push(field.name + ' seçilmelidir.');
+                errors.push(field.name + '<?php echo __(' seçilmelidir.','komtera'); ?>');
             }
         } else {
             // Normal input kontrolü
             const element = document.getElementById(field.id);
             if (!element || !element.value || element.value.trim() === '') {
-                errors.push(field.name + ' seçilmelidir.');
+                errors.push(field.name + '<?php echo __(' seçilmelidir.','komtera'); ?>');
             }
         }
     });
@@ -2852,35 +2852,35 @@ function validateForm() {
     // Bayi kodu kontrolü
     const bayiKodu = document.getElementById('bayi_kodu');
     if (!bayiKodu || !bayiKodu.value || bayiKodu.value.trim() === '') {
-        errors.push('Bayi seçimi tamamlanmamış. Lütfen geçerli bir bayi seçin.');
+        errors.push('<?php echo __('Bayi seçimi tamamlanmamış. Lütfen geçerli bir bayi seçin.','komtera'); ?>');
     }
 
     // Bayi yetkili ID kontrolü
     const bayiYetkiliId = document.getElementById('bayi_yetkili_id');
     if (!bayiYetkiliId || !bayiYetkiliId.value || bayiYetkiliId.value.trim() === '') {
-        errors.push('Bayi Yetkili seçimi tamamlanmamış. Lütfen geçerli bir bayi yetkili seçin.');
+        errors.push('<?php echo __('Bayi Yetkili seçimi tamamlanmamış. Lütfen geçerli bir bayi yetkili seçin.','komtera'); ?>');
     }
 
     // Müşteri ID kontrolü
     const musteriId = document.getElementById('musteri_id');
     if (!musteriId || !musteriId.value || musteriId.value.trim() === '') {
-        errors.push('Müşteri seçimi tamamlanmamış. Lütfen geçerli bir müşteri seçin.');
+        errors.push('<?php echo __('Müşteri seçimi tamamlanmamış. Lütfen geçerli bir müşteri seçin.','komtera'); ?>');
     }
 
     // Müşteri yetkili ID kontrolü
     const musteriYetkiliId = document.getElementById('musteri_yetkili_id');
     if (!musteriYetkiliId || !musteriYetkiliId.value || musteriYetkiliId.value.trim() === '') {
-        errors.push('Müşteri Yetkili seçimi tamamlanmamış. Lütfen geçerli bir müşteri yetkili seçin.');
+        errors.push('<?php echo __('Müşteri Yetkili seçimi tamamlanmamış. Lütfen geçerli bir müşteri yetkili seçin.','komtera'); ?>');
     }
 
     // AccMan ID kontrolü
     const accmanId = document.getElementById('accman_id');
     if (!accmanId || !accmanId.value || accmanId.value.trim() === '') {
-        errors.push('AccMan seçimi tamamlanmamış. Lütfen geçerli bir AccMan seçin.');
+        errors.push('<?php echo __('AccMan seçimi tamamlanmamış. Lütfen geçerli bir AccMan seçin.','komtera'); ?>');
     }
 
     if (errors.length > 0) {
-        const errorMessage = 'Aşağıdaki alanlar zorunludur:<br /><br />• ' + errors.join('<br />• ');
+        const errorMessage = '<?php echo __('Aşağıdaki alanlar zorunludur:','komtera'); ?><br /><br />• ' + errors.join('<br />• ');
         showAlert(errorMessage, 'danger');
         return false;
     }
@@ -2906,7 +2906,7 @@ function submitForm() {
         success: function(response) {
             jQuery('#loading').hide();
             if (response.success) {
-                showAlert('Fırsat başarıyla oluşturuldu! Fırsat No: ' + response.firsat_no, 'success');
+                showAlert('<?php echo __('Fırsat başarıyla oluşturuldu! Fırsat No: ','komtera'); ?>' + response.firsat_no, 'success');
                 jQuery('#firsat-form')[0].reset();
                 jQuery('#alert-container').html(''); // Hata mesajlarını da temizle
                 clearFormData(); // localStorage'ı temizle
@@ -2919,7 +2919,7 @@ function submitForm() {
         },
         error: function() {
             jQuery('#loading').hide();
-            showAlert('Bir hata oluştu. Lütfen tekrar deneyin.', 'danger');
+            showAlert('<?php echo __('Bir hata oluştu. Lütfen tekrar deneyin.','komtera'); ?>', 'danger');
         }
     });
 }
@@ -3022,7 +3022,7 @@ function saveBayiYetkili() {
     const eposta = document.getElementById('new-bayi-yetkili-email').value.trim();
 
     if (!yetkili) {
-        alert('Yetkili adı gereklidir.');
+        alert('<?php echo __('Yetkili adı gereklidir.','komtera'); ?>');
         return;
     }
 
@@ -3053,7 +3053,7 @@ function saveBayiYetkili() {
         },
         error: function(xhr, status, error) {
             console.error('Save bayi yetkili error:', status, error);
-            alert('Kayıt sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Kayıt sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -3081,7 +3081,7 @@ function updateBayiYetkili(yetkiliId) {
     const eposta = document.getElementById(`edit-bayi-yetkili-email-${yetkiliId}`).value.trim();
 
     if (!yetkili) {
-        alert('Yetkili adı gereklidir.');
+        alert('<?php echo __('Yetkili adı gereklidir.','komtera'); ?>');
         return;
     }
 
@@ -3106,7 +3106,7 @@ function updateBayiYetkili(yetkiliId) {
         },
         error: function(xhr, status, error) {
             console.error('Update bayi yetkili error:', status, error);
-            alert('Güncelleme sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Güncelleme sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -3173,7 +3173,7 @@ function confirmDeleteBayiYetkili(yetkiliId) {
         },
         error: function(xhr, status, error) {
             console.error('Delete bayi yetkili error:', status, error);
-            alert('Silme sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Silme sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -3204,7 +3204,7 @@ function saveMusteriYetkili() {
     const eposta = document.getElementById('new-musteri-yetkili-email').value.trim();
 
     if (!yetkili) {
-        alert('Yetkili adı gereklidir.');
+        alert('<?php echo __('Yetkili adı gereklidir.','komtera'); ?>');
         return;
     }
 
@@ -3235,7 +3235,7 @@ function saveMusteriYetkili() {
         },
         error: function(xhr, status, error) {
             console.error('Save musteri yetkili error:', status, error);
-            alert('Kayıt sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Kayıt sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -3263,7 +3263,7 @@ function updateMusteriYetkili(yetkiliId) {
     const eposta = document.getElementById(`edit-musteri-yetkili-email-${yetkiliId}`).value.trim();
 
     if (!yetkili) {
-        alert('Yetkili adı gereklidir.');
+        alert('<?php echo __('Yetkili adı gereklidir.','komtera'); ?>');
         return;
     }
 
@@ -3288,7 +3288,7 @@ function updateMusteriYetkili(yetkiliId) {
         },
         error: function(xhr, status, error) {
             console.error('Update musteri yetkili error:', status, error);
-            alert('Güncelleme sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Güncelleme sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }
@@ -3355,7 +3355,7 @@ function confirmDeleteMusteriYetkili(yetkiliId) {
         },
         error: function(xhr, status, error) {
             console.error('Delete musteri yetkili error:', status, error);
-            alert('Silme sırasında hata oluştu: ' + error);
+            alert('<?php echo __('Silme sırasında hata oluştu: ','komtera'); ?>' + error);
         }
     });
 }

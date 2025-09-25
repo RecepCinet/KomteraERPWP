@@ -139,20 +139,20 @@ try {
 
         var colM = [
             {
-                title: "Durum", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+                title: "<?php echo __('Durum','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 }, render: function (ui) {
-                    if (ui.cellData === 'Açık') {
+                    if (ui.cellData === '<?php echo __('Açık','komtera'); ?>') {
                         return {style: {"background": "#ebebeb"}};
-                    } else if (ui.cellData === 'Kazanıldı') {
+                    } else if (ui.cellData === '<?php echo __('Kazanıldı','komtera'); ?>') {
                         return {style: {"background": "#b2f4ac"}};
-                    } else if (ui.cellData === 'Kaybedildi') {
+                    } else if (ui.cellData === '<?php echo __('Kaybedildi','komtera'); ?>') {
                         return {style: {"background": "#f4acb8"}};
                     }
                 }
             },
             {
-                title: "Fırsat",
+                title: "<?php echo __('Fırsat','komtera'); ?>",
                 render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>" + ui.rowData.FIRSAT_NO + "</a>";
@@ -191,7 +191,7 @@ try {
 
 
             {
-                title: "Teklifler",
+                title: "<?php echo __('Teklifler','komtera'); ?>",
                 exportRender: false,
                 style: {'text-color': '#dd0000'},
                 align: "left",
@@ -202,34 +202,34 @@ try {
                     crules: [{condition: 'contain'}]
                 }
             }, {
-                title: "SKUlar", filter: {
+                title: "<?php echo __('SKUlar','komtera'); ?>", filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 90, sortable: true, dataIndx: "skular"
             },
             {
-                title: "Cozumler", filter: {
+                title: "<?php echo __('Cozumler','komtera'); ?>", filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 90, sortable: true, dataIndx: "Cozumler"
             },
 
             {
-                title: "Satis Tipi", sortable: true, minWidth: 120, dataIndx: "SATIP",
+                title: "<?php echo __('Satis Tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
             {
-                title: "Tarih",
+                title: "<?php echo __('Tarih','komtera'); ?>",
                 sortable: true,
                 minWidth: 80,
                 dataIndx: "BASLANGIC_TARIHI",
                 dataType: "date",
                 format: 'dd.mm.yy'
             },
-            {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "Bitis Tarihi", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('Son Değişiklik','komtera'); ?>", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('Bitis Tarihi','komtera'); ?>", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: 'dd.mm.yy'},
             {
-                title: "BitisAY",
+                title: "<?php echo __('BitisAY','komtera'); ?>",
                 hidden: false,
                 editable: false,
                 minWidth: 70,
@@ -240,7 +240,7 @@ try {
                 }
             },
             {
-                title: "Marka",
+                title: "<?php echo __('Marka','komtera'); ?>",
                 hidden: false,
                 editable: false,
                 minWidth: 110,
@@ -251,7 +251,7 @@ try {
                 }
             },
             {
-                title: "Mar.Man.",
+                title: "<?php echo __('Mar.Man.','komtera'); ?>",
                 hidden: false,
                 editable: false,
                 minWidth: 110,
@@ -267,7 +267,7 @@ try {
                 }
             },
             {
-                title: "Kayıdı Açan",
+                title: "<?php echo __('Kayıdı Açan','komtera'); ?>",
                 render: function (ui) {
                     if (ui.cellData === '') {
                         return {style: {"background": "yellow"}};
@@ -278,7 +278,7 @@ try {
                 }
             },
             {
-                title: "Müşteri Temsilcisi",
+                title: "<?php echo __('Müşteri Temsilcisi','komtera'); ?>",
                 render: function (ui) {
                     if (ui.cellData === '') {
                         return {style: {"background": "yellow"}};
@@ -324,13 +324,13 @@ try {
                 dataIndx: "DLR_TUTAR"
             },
             {
-                title: "Bayi", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+                title: "<?php echo __('Bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             }
             ,
             {
-                title: "Bayi Yetkili",
+                title: "<?php echo __('Bayi Yetkili','komtera'); ?>",
                 hidden: false,
                 editable: false,
                 minWidth: 110,
@@ -345,12 +345,12 @@ try {
 //     }
 // },
             {
-                title: "Müşteri", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+                title: "<?php echo __('Müşteri','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
             {
-                title: "Olasılık", filter: {
+                title: "<?php echo __('Olasılık','komtera'); ?>", filter: {
                     crules: [{condition: 'range'}]
                 }, minWidth: 210, dataIndx: "OLASILIK",
                 render: function (ui) {
@@ -370,7 +370,7 @@ try {
                 }
             },
             {
-                title: "Gelis Kanali",
+                title: "<?php echo __('Gelis Kanali','komtera'); ?>",
                 editable: false,
                 minWidth: 160,
                 sortable: true,
@@ -380,15 +380,15 @@ try {
                 }
             },
             {
-                title: "Etkinlik", editable: false, minWidth: 150, sortable: true, dataIndx: "ETKINLIK", filter: {
+                title: "<?php echo __('Etkinlik','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "ETKINLIK", filter: {
                     crules: [{condition: 'contain'}]
                 }
             }, {
-                title: "Proje Adı", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
+                title: "<?php echo __('Proje Adı','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             }, {
-                title: "Fırsat Açıklama",
+                title: "<?php echo __('Fırsat Açıklama','komtera'); ?>",
                 editable: false,
                 minWidth: 250,
                 sortable: true,
@@ -398,7 +398,7 @@ try {
                 }
             },
             {
-                title: "Notlar", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
+                title: "<?php echo __('Notlar','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
                     crules: [{condition: 'contain'}]
                 }
             }
@@ -409,7 +409,7 @@ try {
             width: "1400px",
             height: 400,
             resizable: true,
-            title: "Firsatlar",
+            title: "<?php echo __('Firsatlar','komtera'); ?>",
             showBottom: false,
             colModel: colM,
             groupModel: {

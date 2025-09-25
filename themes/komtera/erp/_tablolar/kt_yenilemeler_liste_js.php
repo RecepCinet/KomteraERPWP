@@ -46,32 +46,32 @@ $(function () {
             }
         },
 
-        {title: "<?php echo __('sku','komtera'); ?>", editable: false, minWidth: 160, sortable: true, dataIndx: "SKU",filter: {
+        {title: "<?php echo __('SKU','komtera'); ?>", editable: false, minWidth: 160, sortable: true, dataIndx: "SKU",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-        {title: "<?php echo __('aciklama','komtera'); ?>", align: "left", editable: false, minWidth: 216, sortable: true, dataIndx: "ACIKLAMA",filter: {
+        {title: "<?php echo __('Açıklama','komtera'); ?>", align: "left", editable: false, minWidth: 216, sortable: true, dataIndx: "ACIKLAMA",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "<?php echo __('bayi_ch_kodu','komtera'); ?>", align: "left", editable: false, minWidth: 116, sortable: true, dataIndx: "BAYI_CHKODU",filter: {
+        {title: "<?php echo __('Bayi CH Kodu','komtera'); ?>", align: "left", editable: false, minWidth: 116, sortable: true, dataIndx: "BAYI_CHKODU",filter: {
                 crules: [{condition: 'contain'}]
             }
         },
-        {title: "<?php echo __('marka','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: {
+        {title: "<?php echo __('Marka','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: {
                    crules: [{condition: 'contain'}]
                }
            },
-        {title: "<?php echo __('musteri_temsilcisi','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MUSTERI_TEMSILCISI",filter: {
+        {title: "<?php echo __('Müşteri Temsilcisi','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MUSTERI_TEMSILCISI",filter: {
                 crules: [{condition: 'contain'}]
             }
         },
-        {dataType: "date", format: 'dd.mm.yy',title: "<?php echo __('siparis_tarihi','komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "CD",filter: {
+        {dataType: "date", format: 'dd.mm.yy',title: "<?php echo __('Sipariş Tarihi','komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "CD",filter: {
                 crules: [{condition: 'contain'}]
             }
         }
         ,
-        {dataType: "date", format: 'dd.mm.yy',title: "<?php echo __('yenileme_tarihi','komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "YENILEMETARIHI",filter: {
+        {dataType: "date", format: 'dd.mm.yy',title: "<?php echo __('Yenileme Tarihi','komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "YENILEMETARIHI",filter: {
                 crules: [{condition: 'contain'}]
             }
         }
@@ -80,7 +80,7 @@ $(function () {
 
         ?>
         ,
-        {title: "<?php echo __('tarih_duzelt','komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "",filter: {
+        {title: "<?php echo __('Tarih Düzelt','komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "",filter: {
                 crules: [{condition: 'contain'}]
             },render: function (ui) {
                 var out='';
@@ -92,22 +92,22 @@ $(function () {
     }
     ?>
         ,
-        {title: "<?php echo __('alis_fiyati','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "ALIS_FIYATI",filter: {
+        {title: "<?php echo __('Alış Fiyatı','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "ALIS_FIYATI",filter: {
                 crules: [{condition: 'contain'}]
             }
         }
         ,
-        {title: "<?php echo __('satis_fiyati','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "SATIS_FIYATI",filter: {
+        {title: "<?php echo __('Satış Fiyatı','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "SATIS_FIYATI",filter: {
                 crules: [{condition: 'contain'}]
             }
         }
         ,
-        {title: "<?php echo __('sku','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "SKU",filter: {
+        {title: "<?php echo __('SKU','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "SKU",filter: {
                 crules: [{condition: 'contain'}]
             }
         }
         ,
-        {title: "<?php echo __('aciklama','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "ACIKLAMA",filter: {
+        {title: "<?php echo __('Açıklama','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "ACIKLAMA",filter: {
                 crules: [{condition: 'contain'}]
             }
         }

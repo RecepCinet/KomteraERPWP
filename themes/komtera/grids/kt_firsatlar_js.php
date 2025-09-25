@@ -76,14 +76,14 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "Durum", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "<?php echo __('Durum','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
-                    if (ui.cellData === 'Açık') {
+                    if (ui.cellData === '<?php echo __('Açık','komtera'); ?>') {
                         return {style: {"background": "#ebebeb"}};
-                    } else if (ui.cellData === 'Kazanıldı') {
+                    } else if (ui.cellData === '<?php echo __('Kazanıldı','komtera'); ?>') {
                         return {style: {"background": "#b2f4ac"}};
-                    } else if (ui.cellData === 'Kaybedildi') {
+                    } else if (ui.cellData === '<?php echo __('Kaybedildi','komtera'); ?>') {
                         return {style: {"background": "#f4acb8"}};
                     }
                 }
@@ -101,7 +101,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 //                            });
 //                }
 //            },
-            {title: "Fırsat",render: function (ui) {
+            {title: "<?php echo __('Fırsat','komtera'); ?>",render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
                     }
@@ -118,7 +118,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 }},
                     
                     
-            {title: "Teklifler",exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "Teklifler", align: "left", editable: false, minWidth: 90, sortable: false,
+            {title: "<?php echo __('Teklifler','komtera'); ?>",exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "Teklifler", align: "left", editable: false, minWidth: 90, sortable: false,
                 render: function (ui) {
                     var out = "";
                     var data = ui.rowData.Teklifler;
@@ -136,30 +136,30 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 },filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "SKUlar",filter: {
+            },{title: "<?php echo __('SKUlar','komtera'); ?>",filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 90, sortable: true, dataIndx: "skular"},
-            {title: "Cozumler",filter: {
+            {title: "<?php echo __('Cozumler','komtera'); ?>",filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 90, sortable: true, dataIndx: "Cozumler"},
 
-            {title: "Satis Tipi", sortable: true, minWidth: 120, dataIndx: "SATIP",
+            {title: "<?php echo __('Satis Tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "Tarih", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "Son Değişiklik", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "Bitis Tarihi", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: 'dd.mm.yy'},
-            {title: "BitisAY", hidden: false, editable: false, minWidth: 70, sortable: true, dataIndx: "BITIS_AY", filter: {
+            {title: "<?php echo __('Tarih','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('Son Değişiklik','komtera'); ?>", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('Bitis Tarihi','komtera'); ?>", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('BitisAY','komtera'); ?>", hidden: false, editable: false, minWidth: 70, sortable: true, dataIndx: "BITIS_AY", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "Marka", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
+            {title: "<?php echo __('Marka','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-			{title: "Mar.Man.", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA_MANAGER", filter: {
+			{title: "<?php echo __('Mar.Man.','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA_MANAGER", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
@@ -167,7 +167,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "Kayıdı Açan",
+            {title: "<?php echo __('Kayıdı Açan','komtera'); ?>",
                 render: function (ui) {
                     if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
                         return {style: {"background": "yellow"}};
@@ -177,7 +177,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     crules: [{condition: 'range'}],
                 }
             },
-            {title: "Müşteri Temsilcisi",
+            {title: "<?php echo __('Müşteri Temsilcisi','komtera'); ?>",
                 render: function (ui) {
                     if (ui.cellData === '<?PHP echo $user['kullanici']; ?>') {
                         return {style: {"background": "yellow"}};
@@ -208,12 +208,12 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                         return {style: {"background": "#FF8888"}};
                     }
                 }, summary: {type: "sum", edit: true}, align: "right", format: "#.###,00", editable: false, minWidth: 90, sortable: true, dataIndx: "DLR_TUTAR"},
-            {title: "Bayi", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+            {title: "<?php echo __('Bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             }
             ,
-						{title: "Bayi Yetkili", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "BAYI_YETKILI_ISIM", filter: {
+						{title: "<?php echo __('Bayi Yetkili','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "BAYI_YETKILI_ISIM", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
@@ -221,11 +221,11 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             //         crules: [{condition: 'contain'}]
             //     }
             // },
-            {title: "Müşteri", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+            {title: "<?php echo __('Müşteri','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "Olasılık",filter: {
+            {title: "<?php echo __('Olasılık','komtera'); ?>",filter: {
                     crules: [{condition: 'range'}]
                 },minWidth: 210, dataIndx: "OLASILIK",
                 render: function (ui) {
@@ -244,21 +244,21 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     }
                 }
             },
-                {title: "Gelis Kanali", editable: false, minWidth: 160, sortable: true, dataIndx: "GELIS_KANALI", filter: {
+                {title: "<?php echo __('Gelis Kanali','komtera'); ?>", editable: false, minWidth: 160, sortable: true, dataIndx: "GELIS_KANALI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-{title: "Etkinlik", editable: false, minWidth: 150, sortable: true, dataIndx: "ETKINLIK", filter: {
+{title: "<?php echo __('Etkinlik','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "ETKINLIK", filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "Proje Adı", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
+            },{title: "<?php echo __('Proje Adı','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "Fırsat Açıklama", editable: false, minWidth: 250, sortable: true, dataIndx: "FIRSAT_ACIKLAMA", filter: {
+            },{title: "<?php echo __('Fırsat Açıklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "FIRSAT_ACIKLAMA", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-                {title: "Notlar", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
+                {title: "<?php echo __('Notlar','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
                     crules: [{condition: 'contain'}]
                 }
                 }
@@ -292,7 +292,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     <?PHP if (YetkiVarmi($izin,'FI-104')==1) { ?>
                     {
                         type: 'button',
-                        label: "Export",
+                        label: "<?php echo __('Excel\'e Aktar','komtera'); ?>",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             ExcelKaydet();
@@ -302,7 +302,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     {
                         type: 'checkbox',
                         value: false,
-                        label: 'Satır Kaydır',
+                        label: '<?php echo __('Satır Kaydır','komtera'); ?>',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -312,7 +312,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     {
                     type: 'button',
                     icon: 'ui-icon-arrowreturn-1-s',
-                    label: 'Undo',                    
+                    label: '<?php echo __('Geri Al','komtera'); ?>',                    
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'undo' });
@@ -321,7 +321,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowrefresh-1-s',
-                    label: 'Redo',
+                    label: '<?php echo __('Yinele','komtera'); ?>',
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'redo' });
@@ -344,7 +344,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
 //                },
                 {
                                 type:'button',
-                                label: 'Filtre Temizle',
+                                label: '<?php echo __('Filtre Temizle','komtera'); ?>',
                                 listener: function(){
                                         this.reset({filter: true});
                                         grid.saveState();
@@ -352,14 +352,14 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                     },
                               {
                             type:'button',
-                            label: 'Dizaynı Kaydet',
+                            label: '<?php echo __('Görünümü Kaydet','komtera'); ?>',
                             listener: function(){
                                     grid.saveState();
                             }
                     },
                         {
                             type:'button',
-                            label: 'Dizaynı Yukle',
+                            label: '<?php echo __('Görünümü Yükle','komtera'); ?>',
                             listener: function(){
                                     grid.loadState({refresh: false});
                             }
@@ -378,8 +378,8 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", {label: 'Undo (' + ui.num_undo + ')'});
-                $redo.button("option", {label: 'Redo (' + ui.num_redo + ')'});
+                $undo.button("option", {label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')'});
             },
             roundCorners: false,
             rowBorders: true,
@@ -437,7 +437,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: 'Fırsatlar',
+            title: '<?php echo __('Fırsatlar','komtera'); ?>',
             resizable: true,
             summaryTitle: "",
             groupModel: {
@@ -472,7 +472,7 @@ $izin = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['kt_yetki_firsatlar'];
             grid.filter({
                 oper: 'add',
                 rules: [
-                    { dataIndx: 'DURUM', value: ['Açık'] }
+                    { dataIndx: 'DURUM', value: ['<?php echo __('Açık','komtera'); ?>'] }
                 ]
             });
 

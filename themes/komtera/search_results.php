@@ -18,58 +18,58 @@ echo "<!-- DEBUG: Search term: '$search_term' -->";
 ?>
 
 <div class="wrap">
-    <h1>🔍 Arama Sonuçları</h1>
+    <h1>🔍 <?php echo __('Arama Sonuçları', 'komtera'); ?></h1>
     
     <!-- Debug çıktısı -->
     <div class="notice notice-info" style="background: #e7f3ff; border-left: 4px solid #007cba; padding: 15px;">
-        <h3>🔍 Debug Bilgisi</h3>
-        <p><strong>GET Parametreleri:</strong> <?php echo json_encode($_GET); ?></p>
-        <p><strong>Search Terimi:</strong> <?php echo $search_term ? "'{$search_term}'" : "BOŞ"; ?></p>
-        <p><strong>URL:</strong> <?php echo $_SERVER['REQUEST_URI'] ?? 'Bilinmiyor'; ?></p>
+        <h3>🔍 <?php echo __('Debug Bilgisi', 'komtera'); ?></h3>
+        <p><strong><?php echo __('GET Parametreleri', 'komtera'); ?>:</strong> <?php echo json_encode($_GET); ?></p>
+        <p><strong><?php echo __('Search Terimi', 'komtera'); ?>:</strong> <?php echo $search_term ? "'{$search_term}'" : __('BOŞ', 'komtera'); ?></p>
+        <p><strong><?php echo __('URL', 'komtera'); ?>:</strong> <?php echo $_SERVER['REQUEST_URI'] ?? __('Bilinmiyor', 'komtera'); ?></p>
     </div>
     
     <?php if (!empty($search_term)) : ?>
         <div class="notice notice-info" style="background: #f0f8f0; border-left: 4px solid #46b450; padding: 15px;">
-            <h2>✅ Arama Başarılı</h2>
-            <p><strong>Aranan:</strong> "<?php echo esc_html($search_term); ?>"</p>
+            <h2>✅ <?php echo __('Arama Başarılı', 'komtera'); ?></h2>
+            <p><strong><?php echo __('Aranan', 'komtera'); ?>:</strong> "<?php echo esc_html($search_term); ?>"</p>
         </div>
         
         <div class="notice notice-warning" style="background: #fff8e1; border-left: 4px solid #ffb900; padding: 20px; margin: 20px 0;">
-            <h2>🚧 YAPIM AŞAMASINDA</h2>
-            <h3>Sonuç Bulunamadı</h3>
-            <p><strong>Bu arama özelliği şu anda geliştirilme aşamasında</strong></p>
-            <p><em>Çok yakında aktif olacak...</em></p>
+            <h2>🚧 <?php echo __('YAPIM AŞAMASINDA', 'komtera'); ?></h2>
+            <h3><?php echo __('Sonuç Bulunamadı', 'komtera'); ?></h3>
+            <p><strong><?php echo __('Bu arama özelliği şu anda geliştirilme aşamasında', 'komtera'); ?></strong></p>
+            <p><em><?php echo __('Çok yakında aktif olacak...', 'komtera'); ?></em></p>
             <hr style="margin: 20px 0;">
-            <p><strong>Geliştirici Notu:</strong> Bu alana arama kodları eklenecek</p>
+            <p><strong><?php echo __('Geliştirici Notu', 'komtera'); ?>:</strong> <?php echo __('Bu alana arama kodları eklenecek', 'komtera'); ?></p>
             <ul>
-                <li>Fırsatlar tablosunda arama</li>
-                <li>Siparişler tablosunda arama</li>
-                <li>Müşteriler tablosunda arama</li>
-                <li>Global arama</li>
+                <li><?php echo __('Fırsatlar tablosunda arama', 'komtera'); ?></li>
+                <li><?php echo __('Siparişler tablosunda arama', 'komtera'); ?></li>
+                <li><?php echo __('Müşteriler tablosunda arama', 'komtera'); ?></li>
+                <li><?php echo __('Global arama', 'komtera'); ?></li>
             </ul>
         </div>
         
     <?php else : ?>
         <div class="notice notice-error" style="background: #ffebee; border-left: 4px solid #dc3232; padding: 15px;">
-            <h3>❌ Arama Terimi Girilmedi</h3>
-            <p>Lütfen arama terimi girin ve tekrar deneyin</p>
-            <p><strong>URL'de 'search' parametresi bulunamadı!</strong></p>
+            <h3>❌ <?php echo __('Arama Terimi Girilmedi', 'komtera'); ?></h3>
+            <p><?php echo __('Lütfen arama terimi girin ve tekrar deneyin', 'komtera'); ?></p>
+            <p><strong><?php echo __('URL\'de \'search\' parametresi bulunamadı!', 'komtera'); ?></strong></p>
         </div>
     <?php endif; ?>
     
     <p class="submit">
-        <a href="javascript:history.back()" class="button button-secondary">← Geri Dön</a>
-        <a href="<?php echo admin_url(); ?>" class="button button-primary" style="margin-left: 10px;">🏠 Ana Sayfa</a>
+        <a href="javascript:history.back()" class="button button-secondary">← <?php echo __('Geri Dön', 'komtera'); ?></a>
+        <a href="<?php echo admin_url(); ?>" class="button button-primary" style="margin-left: 10px;">🏠 <?php echo __('Ana Sayfa', 'komtera'); ?></a>
     </p>
     
     <hr>
     <div class="notice notice-info" style="margin-top: 20px;">
-        <h4>Geliştirici Bilgisi</h4>
+        <h4><?php echo __('Geliştirici Bilgisi', 'komtera'); ?></h4>
         <ul>
-            <li><strong>Dosya:</strong> <code><?php echo basename(__FILE__); ?></code></li>
-            <li><strong>GET Parametresi:</strong> <code>search=<?php echo esc_html($search_term); ?></code></li>
-            <li><strong>Kullanıcı:</strong> <?php echo wp_get_current_user()->display_name; ?> (<?php echo wp_get_current_user()->user_login; ?>)</li>
-            <li><strong>Zaman:</strong> <?php echo date('Y-m-d H:i:s'); ?></li>
+            <li><strong><?php echo __('Dosya', 'komtera'); ?>:</strong> <code><?php echo basename(__FILE__); ?></code></li>
+            <li><strong><?php echo __('GET Parametresi', 'komtera'); ?>:</strong> <code>search=<?php echo esc_html($search_term); ?></code></li>
+            <li><strong><?php echo __('Kullanıcı', 'komtera'); ?>:</strong> <?php echo wp_get_current_user()->display_name; ?> (<?php echo wp_get_current_user()->user_login; ?>)</li>
+            <li><strong><?php echo __('Zaman', 'komtera'); ?>:</strong> <?php echo date('Y-m-d H:i:s'); ?></li>
             <li><strong>WordPress Admin URL:</strong> <code><?php echo admin_url(); ?></code></li>
         </ul>
     </div>

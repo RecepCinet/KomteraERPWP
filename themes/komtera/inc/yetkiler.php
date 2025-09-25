@@ -184,9 +184,9 @@ function my_render_custom_user_fields($user) {
     ?>
 
     <!-- Kullanıcı Seçim Arayüzü -->
-    <h2><?php echo __('permission_subpermission','komtera'); ?>
+    <h2><?php echo __('Yetki Alt Yetkiler','komtera'); ?>
         <select id="user-permission-copy" style="margin-left: 20px; width: 200px;">
-            <option value=""><?php echo __('select_user_to_copy', 'komtera'); ?></option>
+            <option value=""><?php echo __('Kopyalanacak Kullanıcıyı Seçin', 'komtera'); ?></option>
             <?php foreach ($all_users as $usr) : ?>
                 <?php if ($usr->ID == $user->ID) continue; // Mevcut kullanıcıyı listeden çıkar ?>
                 <option value="<?php echo $usr->ID; ?>">
@@ -195,7 +195,7 @@ function my_render_custom_user_fields($user) {
             <?php endforeach; ?>
         </select>
         <button type="button" id="apply-user-permissions" class="button" style="margin-left: 10px;">
-            <?php echo __('apply_permissions', 'komtera'); ?>
+            <?php echo __('Yetkileri Uygula', 'komtera'); ?>
         </button>
     </h2>
 
@@ -204,7 +204,7 @@ function my_render_custom_user_fields($user) {
     <table class="form-table" role="presentation">
         <tr>
             <th><div class="my-perm-col">
-                    <strong><?php __('permission', 'komtera'); ?></strong>
+                    <strong><?php __('Yetki', 'komtera'); ?></strong>
                     <ul class="my-perm-list">
                         <?php foreach ($perms as $permKey => $subs): ?>
                             <?php
@@ -233,7 +233,7 @@ function my_render_custom_user_fields($user) {
             <td>
                 <div class="my-perm-grid">
                     <div class="my-perm">
-                        <strong><?php __('permision', 'komtera'); ?></strong>
+                        <strong><?php __('Yetki', 'komtera'); ?></strong>
                         <?php foreach ($perms as $permKey => $subs): ?>
                             <?php
                             // Skip entries with '-'
@@ -248,7 +248,7 @@ function my_render_custom_user_fields($user) {
                                 <legend>
                                     <?php echo esc_html($permKey); ?>
                                     <button type="button" class="select-all-btn" data-group="my-perm-<?php echo esc_attr($permKey); ?>">
-                                        <?php echo __('select_all', 'komtera'); ?>
+                                        <?php echo __('Tümünü Seç', 'komtera'); ?>
                                     </button>
                                 </legend>
                                 <?php foreach ($subs as $sub): ?>
@@ -277,12 +277,12 @@ function my_render_custom_user_fields($user) {
             $('#apply-user-permissions').on('click', function() {
                 var selectedUserId = $('#user-permission-copy').val();
                 if (!selectedUserId) {
-                    alert('<?php echo __('please_select_user', 'komtera'); ?>');
+                    alert('<?php echo __('Lütfen kullanıcı seçiniz', 'komtera'); ?>');
                     return;
                 }
 
                 // Feedback alanını göster
-                $('#copy-permissions-feedback').show().html('<?php echo __('loading', 'komtera'); ?>...');
+                $('#copy-permissions-feedback').show().html('<?php echo __('Yüklü..', 'komtera'); ?>...');
 
                 // AJAX isteği
                 $.ajax({
@@ -337,19 +337,19 @@ function my_render_custom_user_fields($user) {
                                 );
                             }
 
-                            $('#copy-permissions-feedback').html('<?php echo __('permissions_applied_successfully', 'komtera'); ?>').css({
+                            $('#copy-permissions-feedback').html('<?php echo __('Yetkiler başarıyla uygulandı', 'komtera'); ?>').css({
                                 'border-left-color': '#46b450',
                                 'color': '#2e4453'
                             });
                         } else {
-                            $('#copy-permissions-feedback').html('<?php echo __('error_loading_permissions', 'komtera'); ?>: ' + response.data).css({
+                            $('#copy-permissions-feedback').html('<?php echo __('Yetkiler yüklenirken hata', 'komtera'); ?>: ' + response.data).css({
                                 'border-left-color': '#dc3232',
                                 'color': '#d63638'
                             });
                         }
                     },
                     error: function() {
-                        $('#copy-permissions-feedback').html('<?php echo __('server_error', 'komtera'); ?>').css({
+                        $('#copy-permissions-feedback').html('<?php echo __('Sunucu Hatası', 'komtera'); ?>').css({
                             'border-left-color': '#dc3232',
                             'color': '#d63638'
                         });
@@ -360,7 +360,7 @@ function my_render_custom_user_fields($user) {
     </script>
 
     <!-- Geri kalan aynı (markalar ve stil/script kısımları) -->
-    <h2><?php echo __('brands', 'komtera'); ?></h2><label><b>
+    <h2><?php echo __('Markalar', 'komtera'); ?></h2><label><b>
             <input type="checkbox" id="brands-check-all">
             <?php esc_html_e('select_all', 'textdomain'); ?>
         </b></label>
@@ -537,7 +537,7 @@ function my_custom_user_fields($user) {
     ?>
     <table class="form-table">
         <tr>
-            <th><label for="logo_kullanici"><?php echo __('logo_username','komtera'); ?></label></th>
+            <th><label for="logo_kullanici"><?php echo __('Logo Kullanıcı Adı','komtera'); ?></label></th>
             <td>
                 <input type="text" name="logo_kullanici" id="logo_kullanici"
                        value="<?php echo esc_attr(get_user_meta($user->ID, 'logo_kullanici', true)); ?>"
@@ -545,19 +545,19 @@ function my_custom_user_fields($user) {
             </td>
         </tr>
         <tr>
-            <th><label for="cinsiyet"><?php echo __('gender','komtera'); ?></label></th>
+            <th><label for="cinsiyet"><?php echo __('Cinsiyet','komtera'); ?></label></th>
             <td>
                 <select name="cinsiyet" id="cinsiyet">
                     <?php $c = get_user_meta($user->ID, 'cinsiyet', true); ?>
-                    <option value=""><?php echo __('select','komtera'); ?></option>
-                    <option value="male" <?php selected($c, 'male'); ?>><?php echo __('male','komtera'); ?></option>
-                    <option value="female" <?php selected($c, 'female'); ?>><?php echo __('female','komtera'); ?></option>
-                    <option value="other" <?php selected($c, 'other'); ?>><?php echo __('other','komtera'); ?></option>
+                    <option value=""><?php echo __('Seçiniz','komtera'); ?></option>
+                    <option value="male" <?php selected($c, 'male'); ?>><?php echo __('Erkek','komtera'); ?></option>
+                    <option value="female" <?php selected($c, 'female'); ?>><?php echo __('Kadın','komtera'); ?></option>
+                    <option value="other" <?php selected($c, 'other'); ?>><?php echo __('Diğer','komtera'); ?></option>
                 </select>
             </td>
         </tr>
         <tr>
-            <th><label for="telefon"><?php echo __('phone','komtera'); ?></label></th>
+            <th><label for="telefon"><?php echo __('Telefon','komtera'); ?></label></th>
             <td>
                 <input type="text" name="telefon" id="telefon"
                        value="<?php echo esc_attr(get_user_meta($user->ID, 'telefon', true)); ?>"

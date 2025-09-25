@@ -67,7 +67,7 @@ IF (!is_null($gelen)) {
             {title: "id", hidden: true, editable: false, minWidth: 50, sortable: false, dataIndx: "id"},
             //{title: "Sira",formatter: "number", hidden: false, editable: true, minWidth: 50, sortable: true, dataIndx: "SIRA"},
             {title: "SKU", hidden: false, editable: true, minWidth: 90, sortable: false, dataIndx: "SKU"},
-            {title: "<?php echo __('aciklama','komtera'); ?>", hidden: false, editable: true, minWidth: 305, sortable: false, dataIndx: "ACIKLAMA"},
+            {title: "<?php echo __('Açıklama','komtera'); ?>", hidden: false, editable: true, minWidth: 305, sortable: false, dataIndx: "ACIKLAMA"},
             //{title: "MS", hidden: false, editable: true, minWidth: 55, sortable: false, dataIndx: "MCSURE"},
             {title: "<?php echo __('tur','komtera'); ?>", hidden: false, editable: false, minWidth: 65, sortable: false, dataIndx: "TIP"},
             {title: "<?php echo __('sure','komtera'); ?>", align: "center", hidden: false, editable: false, minWidth: 53, sortable: false, dataIndx: "SURE"},
@@ -83,15 +83,15 @@ IF (!is_null($gelen)) {
             {title: "<?php echo __('maliyet','komtera'); ?>", align: "center", format: "#.###,00", hidden: false, editable: false, minWidth: 55, sortable: false, dataIndx: "MALIYET"},
             {title: "<?php echo __('toplam_maliyet','komtera'); ?>", align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "T_MALIYET"},
 
-            {title: "<?php echo __('adet','komtera'); ?>", align: "center", hidden: false, editable: false, minWidth: 55, sortable: false, dataIndx: "ADET"},
-            {title: "<?php echo __('satis_fiyati','komtera'); ?>", align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "BIRIM_FIYAT"},
+            {title: "<?php echo __('Adet','komtera'); ?>", align: "center", hidden: false, editable: false, minWidth: 55, sortable: false, dataIndx: "ADET"},
+            {title: "<?php echo __('Satış Fiyatı','komtera'); ?>", align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "BIRIM_FIYAT"},
             {title: "<?php echo __('satis_toplam','komtera'); ?>", align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "TOPLAM"},
             {title: "SLot", align: "right", hidden: false, editable: false, minWidth: 40, sortable: false, dataIndx: "SLOT"},
-            {title: "<?php echo __('select_serial','komtera'); ?>", align: "center", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "LISANS",
+            {title: "<?php echo __('Seri Seç','komtera'); ?>", align: "center", format: "#.###,00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "LISANS",
                 render: function (ui) {
                     var out = '';
                     if (ui.rowData.id !== undefined && ui.rowData.SLOT > 0) {
-                        out += '<a href="#" onclick="SerialSec(\'' + ui.rowData.SKU + '\',\'' + ui.rowData.id + '\');"><?php echo __('select_serial','komtera'); ?></a>';
+                        out += '<a href="#" onclick="SerialSec(\'' + ui.rowData.SKU + '\',\'' + ui.rowData.id + '\');"><?php echo __('Seri Seç','komtera'); ?></a>';
                     }
                     return out;
                 }
@@ -206,7 +206,7 @@ IF (!is_null($gelen)) {
             sortable: false,
             wrap: false, hwrap: false,
             //numberCell: {show: false, resizable: true, width: 30, title: "#"},
-            title: '<?php echo __('products','komtera'); ?>',
+            title: '<?php echo __('Ürünler','komtera'); ?>',
             resizable: true,
             //rowHt: 19,
 //        create: function () {

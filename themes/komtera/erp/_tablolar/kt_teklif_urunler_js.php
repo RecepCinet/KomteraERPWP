@@ -160,10 +160,10 @@ if ($gelen['KILIT'] === "1") {
         });
     }
     function sil(ff) {
-        if (confirm('Ürünü silmek istediğiniziden emin misiniz?')) {
+        if (confirm('<?php echo __('Ürünü silmek istediğiniziden emin misiniz?','komtera'); ?>')) {
             $.get("_tinywin/urun_sil.php?bb=" + ff, function (data) {
                 if (data === "NOK,KILIT") {
-                    alert('Teklif Kilitli!');
+                    alert('<?php echo __('Teklif Kilitli!','komtera'); ?>');
                 } else {
                     refreshDataAndView();
                     //FileMaker.PerformScriptWithOption("Teklif", "refresh");
@@ -193,8 +193,8 @@ if ($gelen['KILIT'] === "1") {
             },
 
             {title: "<?php echo __('slot','komtera'); ?>", hidden: false, editable: true, minWidth: 50, sortable: false, dataIndx: "TRACK_TYPE"},
-            {title: "<?php echo __('sku','komtera'); ?>",styleHead: {'height': '150px'}, hidden: false, editable: true, minWidth: 110, sortable: false, dataIndx: "SKU"},
-            {title: "<?php echo __('aciklama','komtera'); ?>", hidden: false, editable: true, minWidth: 255, sortable: false, dataIndx: "ACIKLAMA"},
+            {title: "<?php echo __('SKU','komtera'); ?>",styleHead: {'height': '150px'}, hidden: false, editable: true, minWidth: 110, sortable: false, dataIndx: "SKU"},
+            {title: "<?php echo __('Açıklama','komtera'); ?>", hidden: false, editable: true, minWidth: 255, sortable: false, dataIndx: "ACIKLAMA"},
             //{title: "MS", hidden: false, editable: true, minWidth: 55, sortable: false, dataIndx: "MCSURE"},
             {title: "<?php echo __('tip','komtera'); ?>", hidden: false, editable: false, minWidth: 65, sortable: false, dataIndx: "TIP"},
             {title: "<?php echo __('satis_tipi','komtera'); ?>", style: {"background": "#C2E7D1"}, hidden: true, editable: true, minWidth: 95, sortable: false, dataIndx: "SATIS_TIPI",
@@ -260,12 +260,12 @@ if ($gelen['KILIT'] === "1") {
             {title: "<?php echo __('standart_maliyet','komtera'); ?>", align: "right", hidden: false, format: "#.###,00", editable: false, minWidth: 80, sortable: false, dataIndx: "O_MALIYET"},
             {title: "<?php echo __('ozel_satis_iskonto','komtera'); ?>", style: {"background": "#C2E7D1"}, align: "right", format: "#.###,00", hidden: false, editable: <?PHP echo $izin; ?>, minWidth: 60, sortable: false, dataIndx: "ISKONTO"},
             {title: "<?php echo __('ozel_alim_maliyeti','komtera'); ?>", style: {"background": "#C2E7D1"}, align: "right", hidden: false, format: "#.###,00", editable: <?PHP echo $izin; ?>, minWidth: 90, sortable: false, dataIndx: "B_MALIYET"},
-            {title: "<?php echo __('adet','komtera'); ?>", style: {"background": "#C2E7D1"}, align: "center", hidden: false, editable: <?PHP echo $izin; ?>, minWidth: 55, sortable: false, dataIndx: "ADET"},
-            {title: "<?php echo __('satis_fiyati_birim','komtera'); ?>", style: {"background": "#C2E7D1"}, align: "right", format: "#.###,00", hidden: false, editable: <?PHP echo $izin; ?>, minWidth: 90, sortable: false, dataIndx: "B_SATIS_FIYATI"},
+            {title: "<?php echo __('Adet','komtera'); ?>", style: {"background": "#C2E7D1"}, align: "center", hidden: false, editable: <?PHP echo $izin; ?>, minWidth: 55, sortable: false, dataIndx: "ADET"},
+            {title: "<?php echo __('Birim Satış Fiyatı','komtera'); ?>", style: {"background": "#C2E7D1"}, align: "right", format: "#.###,00", hidden: false, editable: <?PHP echo $izin; ?>, minWidth: 90, sortable: false, dataIndx: "B_SATIS_FIYATI"},
             //{title: "Top Lis Fiy",summary: {type: "sum", edit: true}, align: "right", format: "#,###.00", hidden: false, editable: false, minWidth: 100, sortable: false, dataIndx: "T_LISTE_FIYATI"},
             {title: "<?php echo __('toplam_maliyet','komtera'); ?>", summary: {type: "sum", edit: true}, align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 100, sortable: false, dataIndx: "T_MALIYET"},
             //{title: "T Öz Mly",style: {"background": "#F2BDBD"}, align: "right", format: "#,###.00", hidden: false, editable: false, minWidth: 80, sortable: false, dataIndx: "B_OZEL_FIYAT"},
-            {title: "<?php echo __('toplam_satis_fiyati','komtera'); ?>", summary: {type: "sum", edit: true}, align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 95, sortable: false, dataIndx: "T_SATIS_FIYATI"},
+            {title: "<?php echo __('Toplam Satış Fiyatı','komtera'); ?>", summary: {type: "sum", edit: true}, align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 95, sortable: false, dataIndx: "T_SATIS_FIYATI"},
             {title: "<?php echo __('kar_orani','komtera'); ?>", style: {'background': '#dddddd'}, summary: {type: "avg", edit: true}, align: "right", format: "#.###,00", hidden: false, editable: false, minWidth: 50, sortable: false, dataIndx: "KARLILIK"},
             {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
                 render: function (ui) {

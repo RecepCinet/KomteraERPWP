@@ -22,14 +22,14 @@
             $this.filter(".pq-to").datepicker("option", "defaultDate", new Date("31-12-2021"));
         }
         var colM = [
-            {title: "<?php echo __('durum','komtera');?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
+            {title: "<?php echo __('Durum','komtera');?>", editable: false, minWidth: 110, sortable: true, dataIndx: "DURUM", filter: {
                     crules: [{condition: 'range'}]
                 },render: function (ui) {
-                    if (ui.cellData === 'Açık') {
+                    if (ui.cellData === '<?php echo __('Açık','komtera'); ?>') {
                         return {style: {"background": "#ebebeb"}};
-                    } else if (ui.cellData === 'Kazanıldı') {
+                    } else if (ui.cellData === '<?php echo __('Kazanıldı','komtera'); ?>') {
                         return {style: {"background": "#b2f4ac"}};
-                    } else if (ui.cellData === 'Kaybedildi') {
+                    } else if (ui.cellData === '<?php echo __('Kaybedildi','komtera'); ?>') {
                         return {style: {"background": "#f4acb8"}};
                     }
                 }
@@ -47,7 +47,7 @@
 //                            });
 //                }
 //            },
-            {title: "<?php echo __('firsat','komtera'); ?>",render: function (ui) {
+            {title: "<?php echo __('Fırsat','komtera'); ?>",render: function (ui) {
                     if (ui.rowData.FIRSAT_NO) {
                         return "<a href='#' class='demo_ac' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>"+ui.rowData.FIRSAT_NO+"</a>";
                     }
@@ -64,7 +64,7 @@
                 }},
                     
                     
-            {title: "<?php echo __('teklifler','komtera'); ?>",exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "Teklifler", align: "left", editable: false, minWidth: 90, sortable: false,
+            {title: "<?php echo __('Teklifler','komtera'); ?>",exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "Teklifler", align: "left", editable: false, minWidth: 90, sortable: false,
                 render: function (ui) {
                     var out = "";
                     var data = ui.rowData.Teklifler;
@@ -82,30 +82,30 @@
                 },filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "<?php echo __('skular','komtera'); ?>",filter: {
+            },{title: "<?php echo __('SKUlar','komtera'); ?>",filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 180, sortable: true, dataIndx: "skular"},
-            {title: "<?php echo __('cozumler','komtera'); ?>",filter: {
+            {title: "<?php echo __('Çözümler','komtera'); ?>",filter: {
                     crules: [{condition: 'contain'}]
                 }, editable: false, minWidth: 405, sortable: true, dataIndx: "Cozumler"},
 
-            {title: "<?php echo __('satis_tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
+            {title: "<?php echo __('Satış Tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('tarih','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
-            {title: "<?php echo __('son_degisiklik','komtera'); ?>", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
-            {title: "<?php echo __('bitis_tarihi','komtera'); ?>", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
-            {title: "BitisAY", hidden: false, editable: false, minWidth: 70, sortable: true, dataIndx: "BITIS_AY", filter: {
+            {title: "<?php echo __('Başlangıç Tarihi','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "BASLANGIC_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
+            {title: "<?php echo __('Son Değişiklik','komtera'); ?>", minWidth: 80, dataIndx: "REVIZE_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
+            {title: "<?php echo __('Bitiş Tarihi','komtera'); ?>", minWidth: 80, dataIndx: "BITIS_TARIHI", dataType: "date", format: '<?php echo (get_user_locale() === "tr_TR") ? "dd.mm.yy" : "mm/dd/yy"; ?>'},
+            {title: "<?php echo __('Bitiş Ayı','komtera'); ?>", hidden: false, editable: false, minWidth: 70, sortable: true, dataIndx: "BITIS_AY", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('marka','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
+            {title: "<?php echo __('Marka','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-			{title: "<?php echo __('marka_manager','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA_MANAGER", filter: {
+			{title: "<?php echo __('Marka Müdürü','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA_MANAGER", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
@@ -113,7 +113,7 @@
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('kayidi_acan','komtera'); ?>",
+            {title: "<?php echo __('Kaydı Açan','komtera'); ?>",
                 render: function (ui) {
                     if (ui.cellData === 'KULLANICI') {
                         return {style: {"background": "yellow"}};
@@ -123,7 +123,7 @@
                     crules: [{condition: 'range'}],
                 }
             },
-            {title: "<?php echo __('musteri_temsilcisi','komtera'); ?>",
+            {title: "<?php echo __('Müşteri Temsilcisi','komtera'); ?>",
                 render: function (ui) {
                     if (ui.cellData === 'KULLANICI') {
                         return {style: {"background": "yellow"}};
@@ -143,7 +143,7 @@
 //            },
 //            {title: "Bitiş", align: "center",dataType: 'date', format: 'dd-mm-yy', editable: false, minWidth: 80, sortable: true, dataIndx: "BITIS_TARIHI",
 //            },
-            {title: "<?php echo __('tutar','komtera'); ?>", exportRender: true,dataType: "float", render: function (ui) {
+            {title: "<?php echo __('Tutar','komtera'); ?>", exportRender: true,dataType: "float", render: function (ui) {
                     if (ui.cellData === null) {
                         return {style: {"background": "#FF8888"}};
                     }
@@ -154,12 +154,12 @@
                         return {style: {"background": "#FF8888"}};
                     }
                 }, summary: {type: "sum", edit: true}, align: "right", format: "#.###,00", editable: false, minWidth: 90, sortable: true, dataIndx: "DLR_TUTAR"},
-            {title: "<?php echo __('bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
+            {title: "<?php echo __('Bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             }
             ,
-						{title: "<?php echo __('bayi_yetkili','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "BAYI_YETKILI_ISIM", filter: {
+						{title: "<?php echo __('Bayi Yetkilisi','komtera'); ?>", hidden: false, editable: false, minWidth: 110, sortable: true, dataIndx: "BAYI_YETKILI_ISIM", filter: {
                     crules: [{condition: 'range'}]
                 }
             },
@@ -167,11 +167,11 @@
             //         crules: [{condition: 'contain'}]
             //     }
             // },
-            {title: "<?php echo __('musteri','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
+            {title: "<?php echo __('Müşteri','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "MUSTERI_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('olasilik','komtera'); ?>",filter: {
+            {title: "<?php echo __('Olasılık','komtera'); ?>",filter: {
                     crules: [{condition: 'range'}]
                 },minWidth: 210, dataIndx: "OLASILIK",
                 render: function (ui) {
@@ -190,21 +190,21 @@
                     }
                 }
             },
-                {title: "<?php echo __('gelis_kanali','komtera'); ?>", editable: false, minWidth: 160, sortable: true, dataIndx: "GELIS_KANALI", filter: {
+                {title: "<?php echo __('Geliş Kanalı','komtera'); ?>", editable: false, minWidth: 160, sortable: true, dataIndx: "GELIS_KANALI", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-{title: "<?php echo __('etkinlik','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "ETKINLIK", filter: {
+{title: "<?php echo __('Etkinlik','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "ETKINLIK", filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "<?php echo __('proje_adi','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
+            },{title: "<?php echo __('Proje Adı','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "<?php echo __('firsat_aciklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "FIRSAT_ACIKLAMA", filter: {
+            },{title: "<?php echo __('Fırsat Açıklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "FIRSAT_ACIKLAMA", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-                {title: "<?php echo __('notlar','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
+                {title: "<?php echo __('Notlar','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
                     crules: [{condition: 'contain'}]
                 }
                 }
@@ -247,7 +247,7 @@
                 items: [
                     {
                         type: 'button',
-                        label: "<?php echo __('excel_kaydet','komtera'); ?>",
+                        label: "<?php echo __('Excel\'e Kaydet','komtera'); ?>",
                         icon: 'ui-icon-arrowthickstop-1-s',
                         listener: function () {
                             ExcelKaydet();
@@ -256,7 +256,7 @@
                     {
                         type: 'checkbox',
                         value: true,
-                        label: '<?php echo __('satir_kaydir','komtera'); ?>',
+                        label: '<?php echo __('Satır Kaydır','komtera'); ?>',
                         listener: function (evt) {
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -266,7 +266,7 @@
                     {
                     type: 'button',
                     icon: 'ui-icon-arrowreturn-1-s',
-                    label: 'Undo',                    
+                    label: '<?php echo __('Geri Al','komtera'); ?>',                    
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'undo' });
@@ -275,7 +275,7 @@
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowrefresh-1-s',
-                    label: 'Redo',
+                    label: '<?php echo __('Yinele','komtera'); ?>',
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'redo' });
@@ -298,7 +298,7 @@
 //                },
                 {
                                 type:'button',
-                                label: '<?php echo __('filtre_temizle','komtera'); ?>',
+                                label: '<?php echo __('Filtreyi Temizle','komtera'); ?>',
                                 listener: function(){
                                         this.reset({filter: true});
                                         grid.saveState();
@@ -306,14 +306,14 @@
                     },
                               {
                             type:'button',
-                            label: '<?php echo __('dizayni_kaydet','komtera'); ?>',
+                            label: '<?php echo __('Tasarımı Kaydet','komtera'); ?>',
                             listener: function(){
                                     grid.saveState();
                             }
                     },
                         {
                             type:'button',
-                            label: '<?php echo __('dizayni_yukle','komtera'); ?>',
+                            label: '<?php echo __('Tasarımı Yükle','komtera'); ?>',
                             listener: function(){
                                     grid.loadState({refresh: false});
                             }
@@ -332,8 +332,8 @@
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", {label: 'Undo (' + ui.num_undo + ')'});
-                $redo.button("option", {label: 'Redo (' + ui.num_redo + ')'});
+                $undo.button("option", {label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')'});
             },
             roundCorners: false,
             rowBorders: true,

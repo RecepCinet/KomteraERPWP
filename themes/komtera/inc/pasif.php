@@ -15,10 +15,10 @@ function my_user_disable_field($user){
     $disabled = get_user_meta($user->ID, 'account_disabled', true);
     wp_nonce_field('my_user_disable_save', 'my_user_disable_nonce');
     ?>
-    <h2><?php echo __('hesap_durumu','komtera'); ?></h2>
+    <h2><?php echo __('Hesap Durumu','komtera'); ?></h2>
     <table class="form-table" role="presentation">
         <tr>
-            <th><label for="account_disabled"><?php echo __('account_disabled','komtera'); ?></label></th>
+            <th><label for="account_disabled"><?php echo __('Hesap Devre Dışı','komtera'); ?></label></th>
             <td>
                 <label>
                     <input type="checkbox" id="account_disabled" name="account_disabled" value="1" <?php checked($disabled, '1'); ?>>

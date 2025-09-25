@@ -81,7 +81,7 @@ $(function () {
                         crules: [{condition: 'begin'}]
                     }
             },
-        {title: "Edit", align: "center", editable: false, minWidth: 50, sortable: false,
+        {title: "<?php echo __('Düzenle', 'komtera'); ?>", align: "center", editable: false, minWidth: 50, sortable: false,
             render: function (ui) {
                 return "<a href='#' class='edit_btn'>" + ui.rowData.id + "</a>";
                 //return "<button type='button' class='delete_btn' style='height: 23px;'>Edit</button>";
@@ -97,10 +97,10 @@ $(function () {
                     });
             }
         },
-        {title: "Status", editable: true, minWidth: 90, sortable: true, dataIndx: "status",  filter: { 
+        {title: "<?php echo __('Durum', 'komtera'); ?>", editable: true, minWidth: 90, sortable: true, dataIndx: "status",  filter: { 
                         crules: [{condition: 'range',value: ['In progess','Open']}]
                     }},
-                        {title: "Type", width: 110, dataIndx: "type",
+                        {title: "<?php echo __('Tip', 'komtera'); ?>", width: 110, dataIndx: "type",
             editor: {
                     options: ['Task', 'Bug', 'Info', 'New Feature'],
                     type: function (ui) {
@@ -176,15 +176,15 @@ $(function () {
                         crules: [{condition: 'range'}]
                     }
             },
-        {title: "CDate", editable: false, minWidth: 80, sortable: true, dataIndx: "cd"},
-        {title: "Açan", editable: false, minWidth: 80, sortable: true, dataIndx: "cn"},
-        {title: "Modul", editable: false, minWidth: 80, sortable: true, dataIndx: "modul"},
-        {title: "Title", width: 230, dataIndx: "title",
+        {title: "<?php echo __('Tarih', 'komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "cd"},
+        {title: "<?php echo __('Açan', 'komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "cn"},
+        {title: "<?php echo __('Modül', 'komtera'); ?>", editable: false, minWidth: 80, sortable: true, dataIndx: "modul"},
+        {title: "<?php echo __('Başlık', 'komtera'); ?>", width: 230, dataIndx: "title",
             filter: { 
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "Description", width: 410, dataIndx: "description",
+        {title: "<?php echo __('Açıklama', 'komtera'); ?>", width: 410, dataIndx: "description",
             filter: {
                         crules: [{condition: 'contain'}]
                     }
@@ -263,7 +263,7 @@ $(function () {
                 items: [{
                     type: 'button',
                     icon: 'ui-icon-plus',
-                    label: 'New Ticket',
+                    label: '<?php echo __('Yeni Bilet','komtera'); ?>',
                     listener: function () {                        
                         FileMaker.PerformScriptWithOption ( "Ticket", "Yeni" , 1 );
                     }
@@ -272,7 +272,7 @@ $(function () {
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowreturn-1-s',
-                    label: 'Undo',                    
+                    label: '<?php echo __('Geri Al','komtera'); ?>',                    
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'undo' });
@@ -281,7 +281,7 @@ $(function () {
                 {
                     type: 'button',
                     icon: 'ui-icon-arrowrefresh-1-s',
-                    label: 'Redo',
+                    label: '<?php echo __('Yinele','komtera'); ?>',
                     options: { disabled: true },
                     listener: function () {
                         grid.history({ method: 'redo' });
@@ -291,7 +291,7 @@ $(function () {
                     {
                         type: 'checkbox',
                         value: false,
-                        label: 'Satır Kaydır',
+                        label: '<?php echo __('Satırları Kaydır','komtera'); ?>',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -311,8 +311,8 @@ $(function () {
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", { label: 'Undo (' + ui.num_undo + ')' });
-                $redo.button("option", { label: 'Redo (' + ui.num_redo + ')' });
+                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
+                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
             },
         roundCorners: true,
         rowBorders: true,

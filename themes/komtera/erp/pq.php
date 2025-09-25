@@ -23,7 +23,7 @@ require_once '../inc/yetkiler.php';
 
 $current_user_id = get_current_user_id();
 if (!$current_user_id) {
-    echo json_encode(['error' => 'Giriş yapmış kullanıcı bulunamadı.']);
+    echo json_encode(['error' => __('Giriş yapmış kullanıcı bulunamadı.','komtera')]);
     exit;
 }
 //echo "#$current_user_id#<br />";

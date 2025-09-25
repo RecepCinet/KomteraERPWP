@@ -12,7 +12,7 @@ $stmt->execute(['id' => $bb]);
 $gelen = $stmt->fetch()["KILIT"][0];
 
 if ($gelen==="1") {
-    die("NOK,KILIT");
+    die(__('Hata', 'komtera') . "," . __('KiLiT', 'komtera'));
 }
 
 $sql = "delete from aa_erp_kt_teklifler_urunler WHERE id=?";

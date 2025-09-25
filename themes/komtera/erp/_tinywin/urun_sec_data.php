@@ -27,7 +27,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $sut5 = $data[$t]['listeFiyati'];
         ?>
         <tr class='ss-button'>
-            <td width='40' align='center'><a href="#" onclick='Sec("COMMON_WINDOW", "Urun_Sec_Back", "<?PHP echo $sut1; ?>");'>Ekle</a></td>
+            <td width='40' align='center'><a href="#" onclick='Sec("COMMON_WINDOW", "Urun_Sec_Back", "<?PHP echo $sut1; ?>");'><?php echo __('Ekle', 'komtera'); ?></a></td>
             <td width='90'><?PHP echo $sut1; ?></td>
             <td><?PHP echo "$sut1-$sut2 ($sut4)"; ?></td>
             <td width="80" align="right"><?PHP echo number_format($sut5, 2, "." , ","); ?></td>

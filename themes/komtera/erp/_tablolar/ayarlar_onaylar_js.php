@@ -3,12 +3,12 @@
     $(function () {
 
         var moduller = [
-            "<?php echo __('offers','komtera'); ?>",
-            "<?php echo __('orders','komtera'); ?>"
+            "<?php echo __('Teklifler','komtera'); ?>",
+            "<?php echo __('Siparişler','komtera'); ?>"
         ];
 
         var kurallar = [
-            "<?php echo __('profitability','komtera'); ?>",
+            "<?php echo __('Karlılık','komtera'); ?>",
             "<?php echo __('dealer_term_change','komtera'); ?>",
             "<?php echo __('cash_sale','komtera'); ?>",
             "<?php echo __('sales_total','komtera'); ?>",
@@ -20,7 +20,7 @@
         ]
         
         var islemler = [
-            "<?php echo __('approval','komtera'); ?>","<?php echo __('info','komtera'); ?>","<?php echo __('attention','komtera'); ?>","<?php echo __('note','komtera'); ?>"
+            "<?php echo __('approval','komtera'); ?>","<?php echo __('Bilgi','komtera'); ?>","<?php echo __('attention','komtera'); ?>","<?php echo __('note','komtera'); ?>"
         ]
         
         function autoCompleteEditor(source) {
@@ -124,7 +124,7 @@
                     crules: [{condition: 'begin'}]
                 }
             },
-            {title: "<?php echo __('module','komtera'); ?>", align: "left", editable: true, minWidth: 120, sortable: false, dataIndx: "modul",
+            {title: "<?php echo __('Modül','komtera'); ?>", align: "left", editable: true, minWidth: 120, sortable: false, dataIndx: "modul",
                 cls: 'pq-dropdown pq-side-icon',
                 editor: {
                     type: "textbox",
@@ -180,7 +180,7 @@
                 menuInHide: true,
                 render: function (ui) {
                     if (!ui.rowData.pq_gtitle && !ui.rowData.pq_grandsummary)
-                        return "<button type='button' class='delete_btn'><?php echo __('delete','komtera'); ?></button>";
+                        return "<button type='button' class='delete_btn'><?php echo __('Sil','komtera'); ?></button>";
                 },
                 postRender: function (ui) {
                     var rowIndx = ui.rowIndx,
@@ -238,7 +238,7 @@
                 items: [{
                         type: 'button',
                         icon: 'ui-icon-plus',
-                        label: '<?php echo __('new_rule','komtera'); ?>',
+                        label: '<?php echo __('Yeni Kural','komtera'); ?>',
                         listener: function () {
                             grid.addRow( { newRow: {} } );
                         }
@@ -247,7 +247,7 @@
                     {
                         type: 'button',
                         icon: 'ui-icon-arrowreturn-1-s',
-                        label: 'Undo',
+                        label: '<?php echo __('Geri Al','komtera'); ?>',
                         options: {disabled: true},
                         listener: function () {
                             grid.history({method: 'undo'});
@@ -256,7 +256,7 @@
                     {
                         type: 'button',
                         icon: 'ui-icon-arrowrefresh-1-s',
-                        label: 'Redo',
+                        label: '<?php echo __('Yinele','komtera'); ?>',
                         options: {disabled: true},
                         listener: function () {
                             grid.history({method: 'redo'});
@@ -275,8 +275,8 @@
                 if (ui.canRedo != null) {
                     $redo.button("option", "disabled", !ui.canRedo);
                 }
-                $undo.button("option", {label: 'Undo (' + ui.num_undo + ')'});
-                $redo.button("option", {label: 'Redo (' + ui.num_redo + ')'});
+                $undo.button("option", {label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')'});
+                $redo.button("option", {label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')'});
             },
             roundCorners: true,
             rowBorders: true,
@@ -338,7 +338,7 @@
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {show: true, resizable: true, width: 50, title: "#"},
-            title: '<?php echo __('settings_approvals','komtera'); ?>',
+            title: '<?php echo __('Ayarlar Onaylar','komtera'); ?>',
             autoRow: true,
             resizable: true,
             rowHt: 23,

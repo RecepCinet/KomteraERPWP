@@ -23,10 +23,10 @@ $sqlupdate = "update aa_erp_kt_firsatlar set MUSTERI_TEMSILCISI='$mt2' where DUR
 try {
     $stmt = $conn->prepare($sqlupdate);
     $result = $stmt->execute();
-    echo "OK";
+    echo __('Başarılı', 'komtera');
 } catch (PDOException $e) {
     BotMesaj("Siparis no: " . $siparis_no . "\n" . $e->getMessage() . "\n" . $sqlinsert . "\n" . $_GET['user'] );
-    die("NOK|Sorun Teknik ekibe aktarilmistir!");
+    die(__('Hata', 'komtera') . "|" . __('Sorun Teknik ekibe aktarılmıştır!', 'komtera'));
 }
 
 ?>

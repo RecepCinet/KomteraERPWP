@@ -19,20 +19,20 @@ $stmt->execute(['siparis_no' => $siparis_no]);
 $s = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 
 IF ($s['BU']===$s['BUNA']) {
-    die ('NOK|Logoya Düzgün Aktarım Gerçekleştiği için silemsiniz!');
+    die (__('Hata', 'komtera') . '|' . __('Logoya Düzgün Aktarım Gerçekleştiği için silemsiniz!', 'komtera'));
 }
 
 IF ($s['BU']==="0") {
-    die ('NOK|Tabloda Kayıt Bulunamadı!');
+    die (__('Hata', 'komtera') . '|' . __('Tabloda Kayıt Bulunamadı!', 'komtera'));
 }
 
 $sqldel = "delete from LKS.dbo.ARYD_FIS_AKTARIM WHERE [NO]=:siparis_no";
   try {
 $stmt = $conn->prepare($sqldel);
 $result = $stmt->execute(['siparis_no' => $siparis_no]);
-    echo "OK";
+    echo __('Başarılı', 'komtera');
         } catch (PDOException $e) {
             BotMesaj("Siparis no: " . $siparis_no . "\n" . $e->getMessage() . "\n" . $sqldel . "\n" . $_GET['user'] );
-            die("NOK|Sorun Teknik ekibe aktarilmistir!");
+            die(__('Hata', 'komtera') . "|" . __('Sorun Teknik ekibe aktarılmıştır!', 'komtera'));
         }
 ?>

@@ -46,7 +46,7 @@ function kur_dashboard_widget() {
         <!-- Hızlı Çevirme Butonu -->
         <div class="kur-converter-section">
             <button type="button" id="openConverter" class="kur-converter-btn">
-                💱 Hızlı Çevirme Aracı
+💱 <?php echo __('Hızlı Çevirme Aracı','komtera'); ?>
             </button>
         </div>
     </div>
@@ -55,36 +55,36 @@ function kur_dashboard_widget() {
     <div id="kurConverterModal" class="kur-modal">
         <div class="kur-modal-content">
             <div class="kur-modal-header">
-                <h3>Hızlı Para Çevirme</h3>
+                <h3><?php echo __('Hızlı Para Çevirme','komtera'); ?></h3>
                 <span class="kur-modal-close">&times;</span>
             </div>
             <div class="kur-modal-body">
                 <div class="kur-form-group">
-                    <label>Kaynak Para Birimi:</label>
+                    <label><?php echo __('Kaynak Para Birimi:','komtera'); ?></label>
                     <select id="sourceCurrency">
-                        <option value="TRY">TRY (Türk Lirası)</option>
-                        <option value="USD">USD (Amerikan Doları)</option>
+                        <option value="TRY"><?php echo __('TRY (Türk Lirası)','komtera'); ?></option>
+                        <option value="USD"><?php echo __('USD (Amerikan Doları)','komtera'); ?></option>
                         <option value="EUR">EUR (Euro)</option>
                     </select>
                 </div>
 
                 <div class="kur-form-group">
-                    <label>Hedef Para Birimi:</label>
+                    <label><?php echo __('Hedef Para Birimi:','komtera'); ?></label>
                     <select id="targetCurrency">
-                        <option value="USD">USD (Amerikan Doları)</option>
+                        <option value="USD"><?php echo __('USD (Amerikan Doları)','komtera'); ?></option>
                         <option value="EUR">EUR (Euro)</option>
-                        <option value="TRY">TRY (Türk Lirası)</option>
+                        <option value="TRY"><?php echo __('TRY (Türk Lirası)','komtera'); ?></option>
                     </select>
                 </div>
 
                 <div class="kur-form-group">
-                    <label>Miktar:</label>
+                    <label><?php echo __('Miktar:','komtera'); ?></label>
                     <input type="number" id="amount" placeholder="0.00" step="1" min="0">
                     <span id="sourceLabel">TRY</span>
                 </div>
 
                 <div class="kur-result">
-                    <div id="conversionResult">Sonuç burada görünecek</div>
+                    <div id="conversionResult"><?php echo __('Sonuç burada görünecek','komtera'); ?></div>
                 </div>
             </div>
         </div>
@@ -153,7 +153,7 @@ function kur_dashboard_widget() {
                 const target = targetCurrency.value;
 
                 if (amount === 0) {
-                    resultDiv.innerHTML = 'Miktar girin';
+                    resultDiv.innerHTML = '<?php echo __('Miktar girin','komtera'); ?>';
                     return;
                 }
 
@@ -214,7 +214,7 @@ function kur_dashboard_widget() {
 function add_kur_dashboard_widget() {
     wp_add_dashboard_widget(
         'kur_widget',
-        'Döviz Kurları',
+        __('Döviz Kurları','komtera'),
         'kur_dashboard_widget'
     );
 }

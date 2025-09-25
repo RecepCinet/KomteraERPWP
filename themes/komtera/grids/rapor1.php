@@ -100,7 +100,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             height: 'flex',
             colModel: colM,
             resizable: true,
-            title: "<span style='font-size: 150%;'><b>Satış Marka Komisyonlu</b></span>",
+            title: "<span style='font-size: 150%;'><b><?php echo __('Satış Marka Komisyonlu','komtera'); ?></b></span>",
             showBottom: false,
             scrollModel: {autoFit: false},
             dataModel: {data: data}
@@ -235,7 +235,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             height: 'flex',
             colModel: colM,
             resizable: true,
-            title: "<span style='font-size: 150%;'><b>Satış Marka Komisyonsuz</b></span>",
+            title: "<span style='font-size: 150%;'><b><?php echo __('Satış Marka Komisyonsuz','komtera'); ?></b></span>",
             showBottom: false,
             scrollModel: {autoFit: false},
             dataModel: {data: data}
@@ -352,7 +352,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             height: 'flex',
             colModel: colM,
             resizable: true,
-            title: "<span style='font-size: 150%;'><b>Satış Marka Komisyon</b></span>",
+            title: "<span style='font-size: 150%;'><b><?php echo __('Satış Marka Komisyon','komtera'); ?></b></span>",
             showBottom: false,
             scrollModel: {autoFit: false},
             dataModel: {data: data}

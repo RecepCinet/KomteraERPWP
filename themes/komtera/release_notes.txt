@@ -1,4 +1,5 @@
 2025.9
+-Turkce yazilar duzeltildi.
 -Kurlar duzeltildi parity ve hizli cevirme araci eklendi
 -Yeni Firsat acma eklendi
 -Siparisler tarih calisir hale getirildi

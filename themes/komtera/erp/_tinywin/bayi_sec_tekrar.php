@@ -69,7 +69,7 @@ td {
         <script>
             function Sec(script, cmd, bayi) {
 
-                var result = confirm(bayi + "\n seçildi! Emin misiniz?");
+                var result = confirm(bayi + "\n <?php echo __('seçildi! Emin misiniz?', 'komtera'); ?>");
 
                 if (result === true) {
                     FileMaker.PerformScript(script, atob(cmd));

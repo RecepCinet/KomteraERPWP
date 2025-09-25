@@ -214,7 +214,7 @@ foreach ($su as $key => $satir) {
         $result = $stmt->execute();
             } catch (PDOException $e) {
                 BotMesaj("Siparis no: " . $siparis_no . "\n" . $e->getMessage() . "\n" . $sqlinsert . "\n" . $_GET['user']);
-                die("NOK|Sorun Teknik ekibe aktarilmistir!");
+                die(__('Hata', 'komtera') . "|" . __('Sorun Teknik ekibe aktarılmıştır!', 'komtera'));
             }
         }
 } // ------------------------------------------ DONGU SONU!
@@ -233,10 +233,10 @@ if ($trace === 1) {
           try {
         $stmt = $conn->prepare($sqlupdate);
         $result = $stmt->execute();
-            echo "OK";
+            echo __('Başarılı', 'komtera');
                 } catch (PDOException $e) {
                     BotMesaj("Siparis no: " . $siparis_no . "\n" . $e->getMessage() . "\n" . $sqlinsert . "\n" . $_GET['user'] );
-                    die("NOK|Sorun Teknik ekibe aktarilmistir!");
+                    die(__('Hata', 'komtera') . "|" . __('Sorun Teknik ekibe aktarılmıştır!', 'komtera'));
                 }
 }
 

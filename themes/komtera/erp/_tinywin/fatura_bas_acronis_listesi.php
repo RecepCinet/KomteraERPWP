@@ -64,7 +64,7 @@ for ($t=0;$t<count($data);$t++) {
         //echo ".";
     } catch (PDOException $e) { 
         BotMesaj($e->getMessage() . "\n" . $sqlinsert . "\n" . $_GET['user']);
-        die("NOK|Sorun Teknik ekibe aktarilmistir!");
+        die(__('Hata', 'komtera') . "|" . __('Sorun Teknik ekibe aktarılmıştır!', 'komtera'));
     }
 
     $temp_ch=$_CARI_KOD;

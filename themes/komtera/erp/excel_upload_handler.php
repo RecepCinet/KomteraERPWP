@@ -260,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
         echo json_encode([
             'success' => false,
             'needConfirmation' => true,
-            'message' => "Marka seçilmemiş ancak dosya adından '{$fileMarka}' markası algılandı. Bu markaya import edilecek, eminmisiniz?",
+            'message' => __('Marka Seçilmemiş Ancak Dosya Adından', 'komtera') . " '{$fileMarka}' " . __('Markası Algılandı. Bu Markaya Import Edilecek, Emin Misiniz?', 'komtera'),
             'suggestedMarka' => $fileMarka,
             'fileName' => $fileName
         ]);
@@ -274,13 +274,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
 
     // Check for upload errors
     if ($fileError !== 0) {
-        echo json_encode(['success' => false, 'message' => 'Dosya yükleme hatası: ' . $fileError]);
+        echo json_encode(['success' => false, 'message' => __('Dosya Yükleme Hatası: ', 'komtera') . $fileError]);
         exit;
     }
 
     // Validate file size (max 10MB)
     if ($fileSize > 10 * 1024 * 1024) {
-        echo json_encode(['success' => false, 'message' => 'Dosya boyutu çok büyük (max 10MB)']);
+        echo json_encode(['success' => false, 'message' => __('Dosya Boyutu Çok Büyük (Maks. 10MB)', 'komtera')]);
         exit;
     }
 
@@ -289,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
     $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
     if (!in_array($fileExtension, $allowedExtensions)) {
-        echo json_encode(['success' => false, 'message' => 'Geçersiz dosya türü. Sadece Excel (.xlsx, .xls) ve CSV dosyaları kabul edilir.']);
+        echo json_encode(['success' => false, 'message' => __('Geçersiz Dosya Türü. Sadece Excel (.xlsx, .xls) ve CSV Dosyaları Kabul Edilir', 'komtera')]);
         exit;
     }
 
@@ -315,14 +315,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
                 error_log("EXCEL DEBUG: readXLSX returned " . count($data) . " rows");
             } else {
                 // For .xls files, we'll need a different approach or suggest converting to .xlsx
-                echo json_encode(['success' => false, 'message' => '.xls dosyaları desteklenmemektedir. Lütfen .xlsx formatında kaydedin.']);
+                echo json_encode(['success' => false, 'message' => __('.xls Dosyaları Desteklenmemektedir. Lütfen .xlsx Formatında Kaydedin', 'komtera')]);
                 unlink($uploadPath);
                 exit;
             }
 
             // Process the data
             if (empty($data)) {
-                echo json_encode(['success' => false, 'message' => 'Dosya boş veya okunamadı.']);
+                echo json_encode(['success' => false, 'message' => __('Dosya Boş veya Okunamadı', 'komtera')]);
                 unlink($uploadPath);
                 exit;
             }
@@ -338,7 +338,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
             if (empty($headers)) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'İlk satır (header) boş geldi!',
+                    'message' => __('İlk Satır (Header) Boş Geldi', 'komtera'),
                     'debug' => [
                         'total_rows' => count($data),
                         'first_data_row' => isset($data[0]) ? $data[0] : 'yok'
@@ -359,7 +359,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
             if (empty($headerMapping)) {
                 $response = [
                     'success' => false,
-                    'message' => 'DEBUG: Hiç header eşleşmedi!',
+                    'message' => __('DEBUG: Hiç Header Eşleşmedi', 'komtera'),
                     'debug' => [
                         'excel_headers' => $headers,
                         'valid_fields' => [
@@ -381,14 +381,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
             $requiredFields = ['sku', 'urunAciklama'];
             foreach ($requiredFields as $field) {
                 if (!isset($headerMapping[$field])) {
-                    $errors[] = "Gerekli sütun bulunamadı: $field";
+                    $errors[] = __('Gerekli Sütun Bulunamadı:', 'komtera') . " $field";
                 }
             }
 
             if (!empty($errors)) {
                 $response = [
                     'success' => false,
-                    'message' => 'Excel dosyası formatı hatalı: ' . implode(', ', $errors),
+                    'message' => __('Excel Dosyası Formatı Hatalı: ', 'komtera') . implode(', ', $errors),
                     'debug' => [
                         'excel_headers' => $headers,
                         'header_mapping' => $headerMapping,
@@ -435,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
                         'mappedFields' => array_keys($headerMapping),
                         'totalExcelRows' => count($excelSKUs)
                     ],
-                    'message' => 'Önizleme hazır. Değişiklikleri onaylayın.'
+                    'message' => __('Önizleme Hazır. Değişiklikleri Onaylayın', 'komtera')
                 ];
                 echo json_encode($response);
                 unlink($uploadPath);
@@ -542,19 +542,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
             // Prepare response message with brand and operation information
             $brandInfo = '';
             if ($fileMarka && $targetMarka && $fileMarka !== strtoupper($targetMarka)) {
-                $brandInfo = " ($fileMarka markasından $targetMarka markasına aktarıldı)";
+                $brandInfo = " (" . $fileMarka . " " . __('markasından', 'komtera') . " " . $targetMarka . " " . __('markasına aktarıldı', 'komtera') . ")";
             } else if ($fileMarka && !$targetMarka) {
-                $brandInfo = " ($fileMarka markası)";
+                $brandInfo = " (" . $fileMarka . " " . __('markası', 'komtera') . ")";
             } else if (!$fileMarka && $targetMarka) {
-                $brandInfo = " ($targetMarka markasına aktarıldı)";
+                $brandInfo = " (" . $targetMarka . " " . __('markasına aktarıldı', 'komtera') . ")";
             }
 
-            $operationSummary = "• $deletedCount SKU silindi\n• $updatedCount SKU güncellendi\n• $insertedCount yeni SKU eklendi";
+            $operationSummary = "• " . $deletedCount . " " . __('SKU silindi', 'komtera') . "\n• " . $updatedCount . " " . __('SKU güncellendi', 'komtera') . "\n• " . $insertedCount . " " . __('yeni SKU eklendi', 'komtera');
 
             // Return response
             $response = [
                 'success' => true,
-                'message' => "Senkronizasyon tamamlandı!$brandInfo\n\n$operationSummary",
+                'message' => __('Senkronizasyon Tamamlandı', 'komtera') . "$brandInfo\n\n$operationSummary",
                 'operations' => [
                     'deleted' => $deletedCount,
                     'updated' => $updatedCount,
@@ -570,14 +570,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
 
         } catch (Exception $e) {
             unlink($uploadPath);
-            echo json_encode(['success' => false, 'message' => 'Dosya işleme hatası: ' . $e->getMessage()]);
+            echo json_encode(['success' => false, 'message' => __('Dosya İşleme Hatası: ', 'komtera') . $e->getMessage()]);
         }
 
     } else {
-        echo json_encode(['success' => false, 'message' => 'Dosya yüklenemedi.']);
+        echo json_encode(['success' => false, 'message' => __('Dosya Yüklenemedi', 'komtera')]);
     }
 
 } else {
-    echo json_encode(['success' => false, 'message' => 'Geçersiz istek.']);
+    echo json_encode(['success' => false, 'message' => __('Geçersiz İstek', 'komtera')]);
 }
 ?>

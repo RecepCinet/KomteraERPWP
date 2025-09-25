@@ -20,11 +20,11 @@ $(function () {
                         crules: [{condition: 'contain'}]
                     }
             },
-             {title: "Tarih", editable: false, minWidth: 90, sortable: true, dataIndx: "TARIH",filter: {
+             {title: "<?php echo __('Tarih','komtera'); ?>", editable: false, minWidth: 90, sortable: true, dataIndx: "TARIH",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-            {title: "Müşteri Temsilcisi", editable: false, minWidth: 110, sortable: true, dataIndx: "MUSTERI_TEMSILCISI",filter: { 
+            {title: "<?php echo __('Müşteri Temsilcisi','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MUSTERI_TEMSILCISI",filter: {
                         crules: [{condition: 'range'}],
                     }
             },
@@ -32,40 +32,40 @@ $(function () {
                         crules: [{condition: 'range'}],
                     }
             },
-            {title: "Tip", editable: false, minWidth: 120, sortable: true, dataIndx: "TIP",filter: { 
+            {title: "<?php echo __('Tip','komtera'); ?>", editable: false, minWidth: 120, sortable: true, dataIndx: "TIP",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "Süre", align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "SURE",filter: {
+            {title: "<?php echo __('Süre','komtera'); ?>", align: "center", editable: false, minWidth: 70, sortable: true, dataIndx: "SURE",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "Şehir", editable: false, minWidth: 120, sortable: true, dataIndx: "SEHIR",filter: {
+            {title: "<?php echo __('Şehir','komtera'); ?>", editable: false, minWidth: 120, sortable: true, dataIndx: "SEHIR",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "Bayi Tipi", editable: false, minWidth: 90, sortable: true, dataIndx: "TIP_BAYI",filter: {
+            {title: "<?php echo __('Bayi Tipi','komtera'); ?>", editable: false, minWidth: 90, sortable: true, dataIndx: "TIP_BAYI",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "Kim İle", editable: false, minWidth: 100, sortable: true, dataIndx: "TIP_KIMILE",filter: {
+            {title: "<?php echo __('Kim İle','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "TIP_KIMILE",filter: {
                         crules: [{condition: 'range'}]
                     }
             },
-            {title: "Bayi", editable: false, minWidth: 240, sortable: true, dataIndx: "BAYI",filter: {
+            {title: "<?php echo __('Bayi','komtera'); ?>", editable: false, minWidth: 240, sortable: true, dataIndx: "BAYI",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
-            {title: "Müşteri", editable: false, minWidth: 240, sortable: true, dataIndx: "MUSTERI",filter: {
+            {title: "<?php echo __('Müşteri','komtera'); ?>", editable: false, minWidth: 240, sortable: true, dataIndx: "MUSTERI",filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "Görüşülen", editable: false, minWidth: 170, sortable: true, dataIndx: "GORUSME_KISI",filter: {
+            {title: "<?php echo __('Görüşülen','komtera'); ?>", editable: false, minWidth: 170, sortable: true, dataIndx: "GORUSME_KISI",filter: {
                         crules: [{condition: 'range'}]
                     }
             }
             ,
-            {title: "Açıklama", editable: false, minWidth: 250, sortable: true, dataIndx: "ACIKLAMA",filter: {
+            {title: "<?php echo __('Açıklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "ACIKLAMA",filter: {
                         crules: [{condition: 'range'}]
                     }
             }
@@ -100,7 +100,7 @@ $(function () {
                     {
                         type: 'checkbox',
                         value: false,
-                        label: 'Satır Kaydır',
+                        label: '<?php echo __('Satırları Kaydır','komtera'); ?>',
                         listener: function (evt) {                            
                             this.option('wrap', evt.target.checked);
                             this.option('autoRow', evt.target.checked);
@@ -167,7 +167,7 @@ $(function () {
         sortable: true,
         wrap: false, hwrap: false,
         numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<span style="font-size: 18px;"><b>Aktiviteler</b></span>',
+        title: '<span style="font-size: 18px;"><b><?php echo __('Aktiviteler','komtera'); ?></b></span>',
         resizable: true,
         rowHt: 23,
 //        create: function () {
