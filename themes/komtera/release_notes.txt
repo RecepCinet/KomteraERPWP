@@ -1,4 +1,7 @@
 2025.9
+-Kurlar duzeltildi parity ve hizli cevirme araci eklendi
+-Yeni Firsat acma eklendi
+-Siparisler tarih calisir hale getirildi
 -Firsatlar tarih ve tum secenekleriyle calisir hale getirildi.
 -Gridde satir kaydirmada bazi yazilar satirdan tasmasi sorunu giderildi.
 -Kullanici guncelleme buttonu sag alta sabitlendi.

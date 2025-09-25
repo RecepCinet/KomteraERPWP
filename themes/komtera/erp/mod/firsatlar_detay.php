@@ -34,23 +34,40 @@ try {
 
 // Fetch related teklifler
 $teklifler = [];
+$teklif_error = '';
 try {
-    $teklif_sql = "SELECT DISTINCT t.TEKLIF_NO, t.TEKLIF_TIPI, t.SATIS_TIPI,
-                          SUM(tu.ADET * tu.B_SATIS_FIYATI) as TUTAR,
-                          t.PARA_BIRIMI,
-                          t.KAYIT_TARIHI
+    // Tablo yapısına göre düzeltilmiş sorgu
+    $teklif_sql = "SELECT t.TEKLIF_NO,
+                          t.YARATILIS_TARIHI,
+                          t.YARATILIS_SAATI,
+                          t.KILIT,
+                          t.TEKLIF_TIPI,
+                          t.SATIS_TIPI
                    FROM aa_erp_kt_teklifler t
-                   LEFT JOIN aa_erp_kt_teklifler_urunler tu ON tu.X_TEKLIF_NO = t.TEKLIF_NO
-                   WHERE t.X_FIRSAT_NO = :firsat_no
-                   GROUP BY t.TEKLIF_NO, t.TEKLIF_TIPI, t.SATIS_TIPI, t.PARA_BIRIMI, t.KAYIT_TARIHI
-                   ORDER BY t.KAYIT_TARIHI DESC";
+                   WHERE t.X_FIRSAT_NO = :firsat_no AND (t.SIL IS NULL OR t.SIL <> '1')
+                   ORDER BY t.YARATILIS_TARIHI DESC, t.YARATILIS_SAATI DESC";
 
     $teklif_stmt = $conn->prepare($teklif_sql);
     $teklif_stmt->bindParam(':firsat_no', $firsat_no);
     $teklif_stmt->execute();
-    $teklifler = $teklif_stmt->fetchAll(PDO::FETCH_ASSOC);
+    $teklifler_temp = $teklif_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Her teklif için ürün sayısını ayrı ayrı al
+    foreach ($teklifler_temp as $teklif) {
+        $urun_sql = "SELECT COUNT(*) as URUN_SAYISI
+                     FROM aa_erp_kt_teklifler_urunler
+                     WHERE X_TEKLIF_NO = :teklif_no";
+        $urun_stmt = $conn->prepare($urun_sql);
+        $urun_stmt->bindParam(':teklif_no', $teklif['TEKLIF_NO']);
+        $urun_stmt->execute();
+        $urun_result = $urun_stmt->fetch(PDO::FETCH_ASSOC);
+
+        $teklif['URUN_SAYISI'] = $urun_result['URUN_SAYISI'] ?? 0;
+        $teklifler[] = $teklif;
+    }
+
 } catch (Exception $e) {
-    // Teklifler alınamazsa devam et
+    $teklif_error = $e->getMessage();
 }
 
 ?><!DOCTYPE html>
@@ -207,6 +224,55 @@ try {
             text-decoration: underline;
         }
 
+        .action-icons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .icon-cogalt { background: #e3f2fd; color: #1976d2; }
+        .icon-cogalt:hover { background: #bbdefb; }
+
+        .icon-pdf { background: #fff3e0; color: #f57c00; }
+        .icon-pdf:hover { background: #ffe0b2; }
+
+        .icon-siparis { background: #e8f5e8; color: #2e7d32; }
+        .icon-siparis:hover { background: #c8e6c9; }
+
+        .icon-ana-teklif { background: #fff8e1; color: #f9a825; }
+        .icon-ana-teklif:hover { background: #ffecb3; }
+
+        .icon-kilit { background: #ffebee; color: #c62828; }
+        .icon-kilit:hover { background: #ffcdd2; }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
         .empty-state {
             text-align: center;
             color: #999;
@@ -272,16 +338,28 @@ try {
         <!-- İlişkili Teklifler - Cardların üstünde -->
         <div style="background: #fff; border-radius: 8px; padding: 24px; margin: 24px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; border-left: 4px solid #007cba;">
             <h2 style="color: #007cba; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #007cba;">İlişkili Teklifler</h2>
+                <?php if (!empty($teklif_error)): ?>
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 12px; border-radius: 4px; margin-bottom: 16px;">
+                        <strong>Hata:</strong> <?php echo htmlspecialchars($teklif_error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Debug bilgisi -->
+                <div style="background: #f8f9fa; border: 1px solid #dee2e6; color: #6c757d; padding: 8px; border-radius: 4px; margin-bottom: 16px; font-size: 12px;">
+                    <strong>Debug:</strong> Fırsat No: <?php echo htmlspecialchars($firsat_no); ?> |
+                    Bulunan Teklif Sayısı: <?php echo count($teklifler); ?>
+                </div>
+
                 <?php if (count($teklifler) > 0): ?>
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Teklif No</th>
+                                <th>Açma Tarihi</th>
+                                <th>Ürün Sayısı</th>
                                 <th>Teklif Tipi</th>
-                                <th>Satış Tipi</th>
-                                <th>Tutar</th>
-                                <th>Para Birimi</th>
-                                <th>Kayıt Tarihi</th>
+                                <th>İşlemler</th>
+                                <th>Durum</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -292,26 +370,52 @@ try {
                                             <?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>
                                         </a>
                                     </td>
-                                    <td><?php echo htmlspecialchars($teklif['TEKLIF_TIPI'] ?? '-'); ?></td>
                                     <td>
                                         <?php
-                                        $satis_tipi = $teklif['SATIS_TIPI'] ?? '';
-                                        if ($satis_tipi == '0') echo 'İlk Satış';
-                                        elseif ($satis_tipi == '1') echo 'Yenileme';
-                                        else echo '-';
-                                        ?>
-                                    </td>
-                                    <td><?php echo number_format($teklif['TUTAR'] ?? 0, 2, ',', '.'); ?></td>
-                                    <td><?php echo htmlspecialchars($teklif['PARA_BIRIMI'] ?? '-'); ?></td>
-                                    <td>
-                                        <?php
-                                        if ($teklif['KAYIT_TARIHI']) {
-                                            $date = new DateTime($teklif['KAYIT_TARIHI']);
-                                            echo $date->format('d.m.Y H:i');
+                                        if ($teklif['YARATILIS_TARIHI']) {
+                                            try {
+                                                $tarih_str = $teklif['YARATILIS_TARIHI'];
+                                                if (!empty($teklif['YARATILIS_SAATI'])) {
+                                                    $tarih_str .= ' ' . $teklif['YARATILIS_SAATI'];
+                                                }
+                                                $date = new DateTime($tarih_str);
+                                                echo $date->format('d.m.Y H:i');
+                                            } catch (Exception $e) {
+                                                echo htmlspecialchars($teklif['YARATILIS_TARIHI']);
+                                            }
                                         } else {
                                             echo '-';
                                         }
                                         ?>
+                                    </td>
+                                    <td><?php echo $teklif['URUN_SAYISI'] ?? 0; ?> ürün</td>
+                                    <td><?php echo htmlspecialchars($teklif['TEKLIF_TIPI'] ?? '-'); ?></td>
+                                    <td>
+                                        <div class="action-icons">
+                                            <button class="icon-btn icon-cogalt" title="Çoğalt" onclick="teklifCogalt('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
+                                                📋
+                                            </button>
+                                            <button class="icon-btn icon-pdf" title="PDF İndir" onclick="teklifPDF('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
+                                                📄
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <?php
+                                            // Satış tipi gösterimi
+                                            $satis_tipi = $teklif['SATIS_TIPI'] ?? '';
+                                            if ($satis_tipi == '0') {
+                                                echo '<span class="status-icon" style="background: #e3f2fd; color: #1976d2;" title="İlk Satış">1️⃣</span>';
+                                            } elseif ($satis_tipi == '1') {
+                                                echo '<span class="status-icon" style="background: #fff8e1; color: #f9a825;" title="Yenileme">🔄</span>';
+                                            }
+                                            ?>
+
+                                            <?php if ($teklif['KILIT'] == '1'): ?>
+                                                <span class="status-icon icon-kilit" title="Kilitli">🔒</span>
+                                            <?php endif; ?>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -493,6 +597,21 @@ try {
         function TeklifAc(teklifNo) {
             alert('Teklif detayı: ' + teklifNo);
             // TODO: Teklif detay sayfasını aç
+        }
+
+        // Teklif çoğaltma fonksiyonu
+        function teklifCogalt(teklifNo) {
+            if (confirm('Teklifi çoğaltmak istediğinizden emin misiniz?\n\nTeklif No: ' + teklifNo)) {
+                alert('Çoğaltma işlemi başlatıldı: ' + teklifNo);
+                // TODO: Teklif çoğaltma işlemi
+            }
+        }
+
+        // PDF indirme fonksiyonu
+        function teklifPDF(teklifNo) {
+            alert('PDF indiriliyor: ' + teklifNo);
+            // TODO: PDF indirme işlemi
+            // window.open('pdf_endpoint.php?teklif_no=' + teklifNo, '_blank');
         }
 
         // Sayfa yüklendiğinde focus için
