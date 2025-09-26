@@ -754,8 +754,29 @@ try {
         // Ana teklif yapma fonksiyonu
         function anaTeklifYap(teklifNo) {
             if (confirm('<?php echo __('Bu teklifi ana teklif olarak ayarlamak istediğinizden emin misiniz?', 'komtera'); ?>\n\n<?php echo __('Teklif No', 'komtera'); ?>: ' + teklifNo)) {
-                alert('<?php echo __('Ana teklif ayarlama işlemi başlatıldı', 'komtera'); ?>: ' + teklifNo);
-                // TODO: Ana teklif yapma işlemi
+                // XMLHttpRequest kullan (jQuery yerine)
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/ana_teklif_yap.php?teklif_no=' + teklifNo, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            try {
+                                var data = JSON.parse(xhr.responseText);
+                                if (data.success) {
+                                    alert('<?php echo __('İşlem başarılı', 'komtera'); ?>: ' + teklifNo + ' <?php echo __('ana teklif olarak ayarlandı', 'komtera'); ?>');
+                                    location.reload();
+                                } else {
+                                    alert('<?php echo __('Hata', 'komtera'); ?>: ' + data.error);
+                                }
+                            } catch (e) {
+                                alert('<?php echo __('JSON parse hatası', 'komtera'); ?>');
+                            }
+                        } else {
+                            alert('<?php echo __('Bağlantı hatası oluştu', 'komtera'); ?>');
+                        }
+                    }
+                };
+                xhr.send();
             }
         }
 
