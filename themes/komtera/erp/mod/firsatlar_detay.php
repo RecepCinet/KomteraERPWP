@@ -333,6 +333,22 @@ try {
             background: #005a87;
         }
 
+        .firsat-cogalt-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .firsat-cogalt-btn:hover {
+            background: #218838;
+        }
+
         .empty-state {
             text-align: center;
             color: #999;
@@ -469,11 +485,15 @@ try {
 
 
                 <?php if (count($teklifler) > 0): ?>
-                    <!-- Seçili tekliflerle işlem yapma butonu -->
-                    <div style="margin-bottom: 16px;">
+                    <!-- Seçili tekliflerle işlem yapma butonları -->
+                    <div style="margin-bottom: 16px; display: flex; gap: 10px;">
                         <button id="alternatifTeklifBtn" class="alternatif-teklif-btn" onclick="alternatifTeklifYap()">
                             <span class="dashicons dashicons-admin-tools" style="margin-right: 5px; font-size: 16px; line-height: 1;"></span>
                             <?php echo __('Seçilileri Alternatifli Teklif Yap', 'komtera'); ?>
+                        </button>
+                        <button class="firsat-cogalt-btn" onclick="firsatCogalt()">
+                            <span class="dashicons dashicons-admin-page" style="margin-right: 5px; font-size: 16px; line-height: 1;"></span>
+                            <?php echo __('Fırsat Çoğalt', 'komtera'); ?>
                         </button>
                     </div>
 
@@ -550,9 +570,11 @@ try {
                                             }
                                             ?>
 
-                                            <?php if ($teklif['KILIT'] == '1'): ?>
+                                            <?php if ($teklif['KILIT'] == '1') { ?>
                                                 <span class="status-icon kilitli" title="<?php echo __('Kilitli', 'komtera'); ?>"><span class="dashicons dashicons-lock"></span></span>
-                                            <?php endif; ?>
+                                            <?php } else {?>
+                                                <span class="status-icon" title="<?php echo __('Kilitli', 'komtera'); ?>"><span class="dashicons dashicons-unlock"></span></span>
+                                            <?php } ?>
 
                                             <!-- PDF Durumu - şimdilik gri, sonra dinamik olacak -->
                                             <span class="status-icon" title="<?php echo __('PDF Hazır Değil', 'komtera'); ?>">
@@ -743,11 +765,39 @@ try {
             // TODO: Teklif detay sayfasını aç
         }
 
-        // Teklif çoğaltma fonksiyonu
+        // Teklif çoğaltma fonksiyonu (daha sonra yapılacak)
         function teklifCogalt(teklifNo) {
-            if (confirm('<?php echo __('Teklifi çoğaltmak istediğinizden emin misiniz?', 'komtera'); ?>\n\n<?php echo __('Teklif No', 'komtera'); ?>: ' + teklifNo)) {
-                alert('<?php echo __('Çoğaltma işlemi başlatıldı', 'komtera'); ?>: ' + teklifNo);
-                // TODO: Teklif çoğaltma işlemi
+            alert('<?php echo __('Teklif çoğaltma işlemi daha sonra eklenecek', 'komtera'); ?>: ' + teklifNo);
+            // TODO: Teklif çoğaltma işlemi
+        }
+
+        // Fırsat çoğaltma fonksiyonu
+        function firsatCogalt() {
+            if (confirm('<?php echo __('Fırsatı çoğaltmak istediğinizden emin misiniz?', 'komtera'); ?>\n\n<?php echo __('Fırsat No', 'komtera'); ?>: <?php echo htmlspecialchars($firsat_no); ?>')) {
+                // XMLHttpRequest kullan
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/firsat_cogalt.php?firsat_no=<?php echo urlencode($firsat_no); ?>', true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            try {
+                                var data = JSON.parse(xhr.responseText);
+                                if (data.success) {
+                                    alert('<?php echo __('İşlem başarılı', 'komtera'); ?>: ' + data.yeni_firsat_no + ' <?php echo __('numaralı fırsat oluşturuldu', 'komtera'); ?>');
+                                    // Yeni fırsata yönlendir
+                                    window.location.href = 'admin.php?page=firsatlar_detay&firsat_no=' + data.yeni_firsat_no;
+                                } else {
+                                    alert('<?php echo __('Hata', 'komtera'); ?>: ' + data.error);
+                                }
+                            } catch (e) {
+                                alert('<?php echo __('JSON parse hatası', 'komtera'); ?>');
+                            }
+                        } else {
+                            alert('<?php echo __('Bağlantı hatası oluştu', 'komtera'); ?>');
+                        }
+                    }
+                };
+                xhr.send();
             }
         }
 
