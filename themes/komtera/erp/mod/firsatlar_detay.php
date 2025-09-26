@@ -178,8 +178,9 @@ try {
         }
 
         .field-value.empty {
-            color: #999;
+            color: #d32f2f;
             font-style: italic;
+            font-weight: normal;
         }
 
         .wide-card {
@@ -214,6 +215,19 @@ try {
             background: #f8f9fa;
         }
 
+        .table tbody tr.ana-teklif {
+            background: #d4f0d4 !important;
+        }
+
+        .table tbody tr.ana-teklif:hover {
+            background: #c8e6c9 !important;
+        }
+
+        .status-icon.kilitli {
+            background: #333 !important;
+            color: #fff !important;
+        }
+
         .teklif-link {
             color: #007cba;
             text-decoration: none;
@@ -234,13 +248,19 @@ try {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 14px;
+            font-size: 18px;
+        }
+
+        .dashicons {
+            font-family: 'dashicons';
+            font-size: 18px;
+            line-height: 1;
         }
 
         .icon-btn:hover {
@@ -263,14 +283,54 @@ try {
         .icon-kilit:hover { background: #ffcdd2; }
 
         .status-icon {
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 16px;
             margin-left: 8px;
+            background: #f5f5f5 !important;
+            color: #999 !important;
+        }
+
+        .status-icon .dashicons {
+            font-size: 16px;
+        }
+
+        .checkbox-column {
+            width: 40px;
+            text-align: center;
+        }
+
+        .teklif-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .alternatif-teklif-btn {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        .alternatif-teklif-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .alternatif-teklif-btn.active:hover {
+            background: #005a87;
         }
 
         .empty-state {
@@ -301,6 +361,70 @@ try {
             .header h1 {
                 font-size: 24px;
             }
+
+            /* Mobil tablo responsive */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                min-width: 800px;
+                font-size: 13px;
+            }
+
+            .table th,
+            .table td {
+                padding: 8px 6px;
+                white-space: nowrap;
+            }
+
+            .checkbox-column {
+                width: 30px;
+            }
+
+            .teklif-checkbox {
+                width: 14px;
+                height: 14px;
+            }
+
+            .icon-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .status-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 14px;
+            }
+
+            .action-icons {
+                gap: 4px;
+            }
+
+            .alternatif-teklif-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            /* Mobilde bazı sütunları daha kompakt yap */
+            .table th:nth-child(3), /* Açma Tarihi */
+            .table td:nth-child(3) {
+                font-size: 12px;
+            }
+
+            .table th:nth-child(4), /* Ürün Sayısı */
+            .table td:nth-child(4) {
+                font-size: 12px;
+            }
+
+            /* Teklif no linkini daha belirgin yap */
+            .teklif-link {
+                font-size: 14px;
+                font-weight: 600;
+            }
         }
     </style>
 </head>
@@ -328,7 +452,7 @@ try {
             <div class="subtitle"><?php echo htmlspecialchars($firsat_data['PROJE_ADI'] ?? __('Proje adı belirtilmemiş', 'komtera')); ?></div>
 
             <!-- Fırsat Açıklaması -->
-            <div style="margin-top: 16px; padding: 16px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #007cba;">
+            <div style="margin-top: 16px; padding: 16px; background: #f8f9fa; border-radius: 1px; border-left: 1px solid #007cba;">
                 <div style="font-weight: bold; color: #000; font-size: 15px; line-height: 1.5;">
                     <?php echo nl2br(htmlspecialchars($firsat_data['FIRSAT_ACIKLAMA'] ?? __('Açıklama girilmemiş', 'komtera'))); ?>
                 </div>
@@ -337,23 +461,29 @@ try {
 
         <!-- İlişkili Teklifler - Cardların üstünde -->
         <div style="background: #fff; border-radius: 8px; padding: 24px; margin: 24px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; border-left: 4px solid #007cba;">
-            <h2 style="color: #007cba; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #007cba;"><?php echo __('İlişkili Teklifler', 'komtera'); ?></h2>
                 <?php if (!empty($teklif_error)): ?>
                     <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 12px; border-radius: 4px; margin-bottom: 16px;">
                         <strong><?php echo __('Hata', 'komtera'); ?>:</strong> <?php echo htmlspecialchars($teklif_error); ?>
                     </div>
                 <?php endif; ?>
 
-                <!-- Debug bilgisi -->
-                <div style="background: #f8f9fa; border: 1px solid #dee2e6; color: #6c757d; padding: 8px; border-radius: 4px; margin-bottom: 16px; font-size: 12px;">
-                    <strong><?php echo __('Debug', 'komtera'); ?>:</strong> <?php echo __('Fırsat No', 'komtera'); ?>: <?php echo htmlspecialchars($firsat_no); ?> |
-                    <?php echo __('Bulunan Teklif Sayısı', 'komtera'); ?>: <?php echo count($teklifler); ?>
-                </div>
 
                 <?php if (count($teklifler) > 0): ?>
-                    <table class="table">
+                    <!-- Seçili tekliflerle işlem yapma butonu -->
+                    <div style="margin-bottom: 16px;">
+                        <button id="alternatifTeklifBtn" class="alternatif-teklif-btn" onclick="alternatifTeklifYap()">
+                            <span class="dashicons dashicons-admin-tools" style="margin-right: 5px; font-size: 16px; line-height: 1;"></span>
+                            <?php echo __('Seçilileri Alternatifli Teklif Yap', 'komtera'); ?>
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
                         <thead>
                             <tr>
+                                <th class="checkbox-column">
+                                    <input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes(this)" title="<?php echo __('Tümünü Seç', 'komtera'); ?>">
+                                </th>
                                 <th><?php echo __('Teklif No', 'komtera'); ?></th>
                                 <th><?php echo __('Açma Tarihi', 'komtera'); ?></th>
                                 <th><?php echo __('Ürün Sayısı', 'komtera'); ?></th>
@@ -363,8 +493,14 @@ try {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($teklifler as $teklif): ?>
-                                <tr>
+                            <?php foreach ($teklifler as $index => $teklif): ?>
+                                <?php
+                                $anaTeklifClass = ($teklif['TEKLIF_TIPI'] == '1') ? 'ana-teklif' : '';
+                                ?>
+                                <tr class="<?php echo $anaTeklifClass; ?>">
+                                    <td class="checkbox-column">
+                                        <input type="checkbox" class="teklif-checkbox" value="<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>" onchange="updateAlternatifButton()">
+                                    </td>
                                     <td>
                                         <a href="#" class="teklif-link" onclick="TeklifAc('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
                                             <?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>
@@ -393,34 +529,42 @@ try {
                                     <td>
                                         <div class="action-icons">
                                             <button class="icon-btn icon-cogalt" title="<?php echo __('Çoğalt', 'komtera'); ?>" onclick="teklifCogalt('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
-                                                📋
+                                                <span class="dashicons dashicons-admin-page"></span>
                                             </button>
-                                            <button class="icon-btn icon-pdf" title="<?php echo __('PDF İndir', 'komtera'); ?>" onclick="teklifPDF('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
-                                                📄
+                                            <?php if ($teklif['TEKLIF_TIPI'] != '1'): ?>
+                                            <button class="icon-btn icon-ana-teklif" title="<?php echo __('Ana Teklif Yap', 'komtera'); ?>" onclick="anaTeklifYap('<?php echo htmlspecialchars($teklif['TEKLIF_NO']); ?>')">
+                                                <span class="dashicons dashicons-star-filled"></span>
                                             </button>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style="display: flex; align-items: center;">
+                                        <div style="display: flex; align-items: center; gap: 4px;">
                                             <?php
                                             // Satış tipi gösterimi
                                             $satis_tipi = $teklif['SATIS_TIPI'] ?? '';
                                             if ($satis_tipi == '0') {
-                                                echo '<span class="status-icon" style="background: #e3f2fd; color: #1976d2;" title="' . __('İlk Satış', 'komtera') . '">1️⃣</span>';
+                                                echo '<span class="status-icon" title="' . __('İlk Satış', 'komtera') . '"><span class="dashicons dashicons-yes-alt"></span></span>';
                                             } elseif ($satis_tipi == '1') {
-                                                echo '<span class="status-icon" style="background: #fff8e1; color: #f9a825;" title="' . __('Yenileme', 'komtera') . '">🔄</span>';
+                                                echo '<span class="status-icon" title="' . __('Yenileme', 'komtera') . '"><span class="dashicons dashicons-update"></span></span>';
                                             }
                                             ?>
 
                                             <?php if ($teklif['KILIT'] == '1'): ?>
-                                                <span class="status-icon icon-kilit" title="<?php echo __('Kilitli', 'komtera'); ?>">🔒</span>
+                                                <span class="status-icon kilitli" title="<?php echo __('Kilitli', 'komtera'); ?>"><span class="dashicons dashicons-lock"></span></span>
                                             <?php endif; ?>
+
+                                            <!-- PDF Durumu - şimdilik gri, sonra dinamik olacak -->
+                                            <span class="status-icon" title="<?php echo __('PDF Hazır Değil', 'komtera'); ?>">
+                                                <span class="dashicons dashicons-media-text"></span>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
                 <?php else: ?>
                     <div class="empty-state">
                         <?php echo __('Bu fırsatla ilişkili herhangi bir teklif bulunamadı.', 'komtera'); ?>
@@ -607,6 +751,14 @@ try {
             }
         }
 
+        // Ana teklif yapma fonksiyonu
+        function anaTeklifYap(teklifNo) {
+            if (confirm('<?php echo __('Bu teklifi ana teklif olarak ayarlamak istediğinizden emin misiniz?', 'komtera'); ?>\n\n<?php echo __('Teklif No', 'komtera'); ?>: ' + teklifNo)) {
+                alert('<?php echo __('Ana teklif ayarlama işlemi başlatıldı', 'komtera'); ?>: ' + teklifNo);
+                // TODO: Ana teklif yapma işlemi
+            }
+        }
+
         // PDF indirme fonksiyonu
         function teklifPDF(teklifNo) {
             alert('<?php echo __('PDF indiriliyor', 'komtera'); ?>: ' + teklifNo);
@@ -614,9 +766,61 @@ try {
             // window.open('pdf_endpoint.php?teklif_no=' + teklifNo, '_blank');
         }
 
+        // Tüm checkbox'ları seç/kaldır
+        function toggleAllCheckboxes(selectAllCheckbox) {
+            const checkboxes = document.querySelectorAll('.teklif-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            updateAlternatifButton();
+        }
+
+        // Alternatif teklif butonunun durumunu güncelle
+        function updateAlternatifButton() {
+            const checkedBoxes = document.querySelectorAll('.teklif-checkbox:checked');
+            const alternatifBtn = document.getElementById('alternatifTeklifBtn');
+
+            if (checkedBoxes.length > 1) {  // Birden fazla seçim yapıldığında aktif
+                alternatifBtn.classList.add('active');
+                alternatifBtn.innerHTML = '<span class="dashicons dashicons-admin-tools" style="margin-right: 5px; font-size: 16px; line-height: 1;"></span>' +
+                                        '<?php echo __('Seçilileri Alternatifli Teklif Yap', 'komtera'); ?> (' + checkedBoxes.length + ')';
+            } else {
+                alternatifBtn.classList.remove('active');
+                alternatifBtn.innerHTML = '<span class="dashicons dashicons-admin-tools" style="margin-right: 5px; font-size: 16px; line-height: 1;"></span>' +
+                                        '<?php echo __('Seçilileri Alternatifli Teklif Yap', 'komtera'); ?>';
+            }
+
+            // Select all checkbox'ın durumunu güncelle
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const allCheckboxes = document.querySelectorAll('.teklif-checkbox');
+            const allChecked = allCheckboxes.length > 0 && Array.from(allCheckboxes).every(cb => cb.checked);
+            const someChecked = Array.from(allCheckboxes).some(cb => cb.checked);
+
+            selectAllCheckbox.checked = allChecked;
+            selectAllCheckbox.indeterminate = someChecked && !allChecked;
+        }
+
+        // Alternatifli teklif yapma fonksiyonu
+        function alternatifTeklifYap() {
+            const checkedBoxes = document.querySelectorAll('.teklif-checkbox:checked');
+            if (checkedBoxes.length < 2) {
+                alert('<?php echo __('Alternatifli teklif için en az 2 teklif seçmeniz gerekir.', 'komtera'); ?>');
+                return;
+            }
+
+            const teklifNolar = Array.from(checkedBoxes).map(cb => cb.value);
+
+            if (confirm('<?php echo __('Seçili tekliflerle alternatifli teklif yapmak istediğinizden emin misiniz?', 'komtera'); ?>\n\n' +
+                       '<?php echo __('Seçili Teklifler', 'komtera'); ?>: ' + teklifNolar.join(', '))) {
+                alert('<?php echo __('Alternatifli teklif işlemi başlatıldı', 'komtera'); ?>: ' + teklifNolar.join(', '));
+                // TODO: Alternatifli teklif yapma işlemi
+            }
+        }
+
         // Sayfa yüklendiğinde focus için
         document.addEventListener('DOMContentLoaded', function() {
             document.body.style.opacity = '1';
+            updateAlternatifButton();
         });
     </script>
 </body>

@@ -123,7 +123,7 @@ $(function () {
                 }}
         },
         //<span class='ui-icon ui-icon-locked'></span></a>
-        {title: "Irs",align: "center", editable: false, minWidth: 60, sortable: false, dataIndx: "_status_i",filter: {
+        {title: "<?php echo __('İrsaliye', 'komtera'); ?>",align: "center", editable: false, minWidth: 60, sortable: false, dataIndx: "_status_i",filter: {
                         crules: [{condition: 'range'}]
                     },render: function (ui) {
                 if (ui.rowData._status_i=="1") {
@@ -132,7 +132,7 @@ $(function () {
                     return "<a href='#' class='demo_ac'></a>";
                 }}
             },
-        {title: "Fat",align: "center", editable: false, minWidth: 60, sortable: false, dataIndx: "_status_f",filter: {
+        {title: "<?php echo __('Fatura', 'komtera'); ?>",align: "center", editable: false, minWidth: 60, sortable: false, dataIndx: "_status_f",filter: {
                         crules: [{condition: 'range'}]
                     },render: function (ui) {
                 if (ui.rowData._status_f=="1") {
@@ -150,7 +150,7 @@ $(function () {
                         crules: [{condition: 'begin'}]
                     }
             },
-        {title: "Logo Id",align: "center", editable: false, minWidth: 70, sortable: false, dataIndx: "r_LogoId",filter: {
+        {title: "<?php echo __('Logo ID', 'komtera'); ?>",align: "center", editable: false, minWidth: 70, sortable: false, dataIndx: "r_LogoId",filter: {
                 crules: [{condition: 'begin'}]
             }
         },
@@ -164,7 +164,7 @@ $(function () {
         },
         {title: "<?php echo __('waybill_date','komtera'); ?>", editable: false, minWidth: 150, sortable: false, dataIndx: "irsaliyeTarihi"},
         {title: "<?php echo __('invoice_date','komtera'); ?>", editable: false, minWidth: 150, sortable: false, dataIndx: "faturaTarihi"},
-        {title: "DT", align: "center", editable: false, minWidth: 70, sortable: false, dataIndx: "dovizTuru",filter: false},
+        {title: "<?php echo __('Döviz Türü', 'komtera'); ?>", align: "center", editable: false, minWidth: 70, sortable: false, dataIndx: "dovizTuru",filter: false},
         {title: "<?php echo __('exchange_rate','komtera'); ?>",align: "center", editable: false, minWidth: 85, sortable: false, dataIndx: "dovizKuru",filter: false},
         {title: "<?php echo __('warehouse','komtera'); ?>",align: "center", editable: false, minWidth: 70, sortable: false, dataIndx: "ambarKodu",filter: {
                 crules: [{condition: 'range'}]

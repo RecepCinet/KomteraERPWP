@@ -1189,3 +1189,19 @@ msgstr "Yenileme Tarihi"
 #: inc/menu.php:36 erp/_tablolar/kt_yenilemeler_liste_js.php:280
 msgid "yenilemeler"
 msgstr "Yenilemeler"
+
+#: erp/_tablolar/kt_faturalar_js.php:126
+msgid "İrsaliye"
+msgstr "İrsaliye"
+
+#: erp/_tablolar/kt_faturalar_js.php:135
+msgid "Fatura"
+msgstr "Fatura"
+
+#: erp/_tablolar/kt_faturalar_js.php:153
+msgid "Logo ID"
+msgstr "Logo ID"
+
+#: erp/_tablolar/kt_faturalar_js.php:167
+msgid "Döviz Türü"
+msgstr "Döviz Türü"

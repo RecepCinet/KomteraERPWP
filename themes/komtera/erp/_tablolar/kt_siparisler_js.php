@@ -1,4 +1,62 @@
 <script>
+    // Grid State Yönetimi - Dosya adı bazlı namespace
+    var gridPageName = 'kt_siparisler_js';
+    var gridStateKey = 'gridState_' + gridPageName;
+    var originalStateKey = 'originalGridState_' + gridPageName;
+
+    // Grid State Yönetim Fonksiyonları
+    var GridStateManager = {
+        // Orjinal state'i kaydet (sadece ilk kez)
+        saveOriginalState: function(grid) {
+            if (!localStorage.getItem(originalStateKey)) {
+                var originalState = grid.getState();
+                localStorage.setItem(originalStateKey, JSON.stringify(originalState));
+                console.log('Orjinal state kaydedildi:', originalState);
+            }
+        },
+
+        // Mevcut state'i kaydet
+        saveCurrentState: function(grid) {
+            try {
+                grid.saveState();
+                console.log('Tasarım kaydedildi');
+            } catch (e) {
+                console.error('Tasarım kaydedilirken hata:', e);
+            }
+        },
+
+        // State'i yükle
+        loadState: function(grid, refresh = false) {
+            try {
+                grid.loadState({refresh: refresh});
+                console.log('Tasarım yüklendi');
+            } catch (e) {
+                console.error('Tasarım yüklenirken hata:', e);
+            }
+        },
+
+        // Orjinal tasarıma dön
+        restoreOriginal: function(grid) {
+            var originalState = localStorage.getItem(originalStateKey);
+            if (originalState) {
+                try {
+                    // Mevcut state'i temizle
+                    localStorage.removeItem(gridStateKey);
+                    // Orjinal state'i yükle
+                    grid.loadState({state: JSON.parse(originalState), refresh: true});
+                    console.log('Orjinal tasarıma dönüldü');
+                } catch (e) {
+                    console.error('Orjinal state yüklenirken hata:', e);
+                    location.reload(); // Fallback
+                }
+            } else {
+                // Orjinal state yoksa sayfayı yenile
+                localStorage.removeItem(gridStateKey);
+                location.reload();
+            }
+        }
+    };
+
     function Gizle() {
         alert('<?php echo __('tiklama','komtera'); ?>');
         grid.getColumn({title: 'Finans'}).hidden = true;
@@ -309,17 +367,29 @@
                     },
                               {
                             type:'button',
+                            icon: 'ui-icon-disk',
                             label: '<?php echo __('Tasarımı Kaydet','komtera'); ?>',
                             listener: function(){
-                                    grid.saveState();
+                                    GridStateManager.saveCurrentState(this);
                             }
                     },
                         {
                             type:'button',
+                            icon: 'ui-icon-folder-open',
                             label: '<?php echo __('Tasarımı Yükle','komtera'); ?>',
                             listener: function(){
-                                    grid.loadState({refresh: false});
+                                    GridStateManager.loadState(this, false);
                             }
+                    },
+                    {
+                        type:'button',
+                        icon: 'ui-icon-home',
+                        label: '<?php echo __('Orjinal Tasarım','komtera'); ?>',
+                        listener: function(){
+                            if(confirm('<?php echo __('Orjinal tasarıma dönülecek. Emin misiniz?','komtera'); ?>')) {
+                                GridStateManager.restoreOriginal(this);
+                            }
+                        }
                     }
                       
                 ]

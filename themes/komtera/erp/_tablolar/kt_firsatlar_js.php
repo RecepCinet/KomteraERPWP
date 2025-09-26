@@ -2,6 +2,69 @@
     console.log("<?php echo get_user_locale(); ?>");
     console.log("<?php echo get_locale(); ?>");
 
+    // Grid State Yönetimi - Dosya adı bazlı namespace
+    var gridPageName = 'kt_firsatlar_js';
+    var gridStateKey = 'gridState_' + gridPageName;
+    var originalStateKey = 'originalGridState_' + gridPageName;
+
+    // Grid State Yönetim Fonksiyonları
+    var GridStateManager = {
+        // Orjinal state'i kaydet (sadece ilk kez)
+        saveOriginalState: function(grid) {
+            if (!localStorage.getItem(originalStateKey)) {
+                var originalState = grid.getState();
+                localStorage.setItem(originalStateKey, JSON.stringify(originalState));
+                console.log('Orjinal state kaydedildi:', originalState);
+            }
+        },
+
+        // Mevcut state'i kaydet
+        saveCurrentState: function(grid) {
+            try {
+                grid.saveState();
+                console.log('Tasarım kaydedildi');
+                //alert('<?php echo __('Tasarım başarıyla kaydedildi!','komtera'); ?>');
+            } catch (e) {
+                console.error('Tasarım kaydedilirken hata:', e);
+                //alert('<?php echo __('Tasarım kaydedilirken hata oluştu!','komtera'); ?>');
+            }
+        },
+
+        // State'i yükle
+        loadState: function(grid, refresh = false) {
+            try {
+                grid.loadState({refresh: refresh});
+                console.log('Tasarım yüklendi');
+                //alert('<?php echo __('Tasarım başarıyla yüklendi!','komtera'); ?>');
+            } catch (e) {
+                console.error('Tasarım yüklenirken hata:', e);
+                //alert('<?php echo __('Kaydedilmiş tasarım bulunamadı!','komtera'); ?>');
+            }
+        },
+
+        // Orjinal tasarıma dön
+        restoreOriginal: function(grid) {
+            var originalState = localStorage.getItem(originalStateKey);
+            if (originalState) {
+                try {
+                    // Mevcut state'i temizle
+                    localStorage.removeItem(gridStateKey);
+                    // Orjinal state'i yükle
+                    grid.loadState({state: JSON.parse(originalState), refresh: true});
+                    console.log('Orjinal tasarıma dönüldü');
+                } catch (e) {
+                    console.error('Orjinal state yüklenirken hata:', e);
+                    location.reload(); // Fallback
+                }
+            } else {
+                // Orjinal state yoksa sayfayı yenile
+                localStorage.removeItem(gridStateKey);
+                location.reload();
+            }
+        },
+
+    };
+
     $(function () {
         function pqDatePicker(ui) {
             var $this = $(this);
@@ -54,6 +117,11 @@
                 },exportRender: false, style: {'text-color': '#dd0000'}, dataIndx: "FIRSAT_NO", align: "center", editable: false, minWidth: 60, sortable: false,filter: {
                     crules: [{condition: 'contain'}]
                 }},
+            {title: "<?php echo __('Fırsat Açıklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "FIRSAT_ACIKLAMA", filter: {
+                    crules: [{condition: 'contain'}]
+                }
+            }
+            ,
                     
                     {title: "R",render: function (ui) {
                     if (ui.rowData.REGISTER==='1') {
@@ -200,9 +268,6 @@
             },{title: "<?php echo __('Proje Adı','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "PROJE_ADI", filter: {
                     crules: [{condition: 'contain'}]
                 }
-            },{title: "<?php echo __('Fırsat Açıklama','komtera'); ?>", editable: false, minWidth: 250, sortable: true, dataIndx: "FIRSAT_ACIKLAMA", filter: {
-                    crules: [{condition: 'contain'}]
-                }
             },
                 {title: "<?php echo __('Notlar','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "TNOTLAR", filter: {
                     crules: [{condition: 'contain'}]
@@ -301,24 +366,34 @@
                                 label: '<?php echo __('Filtreyi Temizle','komtera'); ?>',
                                 listener: function(){
                                         this.reset({filter: true});
-                                        grid.saveState();
                                 }                        
                     },
                               {
                             type:'button',
+                            icon: 'ui-icon-disk',
                             label: '<?php echo __('Tasarımı Kaydet','komtera'); ?>',
                             listener: function(){
-                                    grid.saveState();
+                                    GridStateManager.saveCurrentState(this);
                             }
                     },
                         {
                             type:'button',
+                            icon: 'ui-icon-folder-open',
                             label: '<?php echo __('Tasarımı Yükle','komtera'); ?>',
                             listener: function(){
-                                    grid.loadState({refresh: false});
+                                    GridStateManager.loadState(this, false);
                             }
+                    },
+                    {
+                        type:'button',
+                        icon: 'ui-icon-home',
+                        label: '<?php echo __('Orjinal Tasarım','komtera'); ?>',
+                        listener: function(){
+                            if(confirm('<?php echo __('Orjinal tasarıma dönülecek. Emin misiniz?','komtera'); ?>')) {
+                                GridStateManager.restoreOriginal(this);
+                            }
+                        }
                     }
-                    
                 ]
             },
             history: function (evt, ui) {
@@ -350,7 +425,7 @@
             colModel: colM,
             postRenderInterval: -1,
             change: function (evt, ui) {
-                //saveChanges can also be called from change event. 
+                //saveChanges can also be called from change event.
             },
             destroy: function () {
                 //clear the interval upon destroy.
@@ -437,10 +512,10 @@
         grid.toggle();
 
        $(window).on('unload', function () {
-           grid.saveState();
+           //grid.saveState();
        });
         grid.on("destroy", function () {
-            this.saveState();
+            //this.saveState();
         })
     });
 
