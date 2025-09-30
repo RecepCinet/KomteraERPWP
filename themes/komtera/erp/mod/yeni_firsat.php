@@ -79,7 +79,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         if (!empty($bayi_kodu)) {
             try {
                 // Bayi seviyesi bilgisini al
-                $seviyeSql = "SELECT TOP 1 CH_KODU FROM aa_erp_kt_bayiler_markaseviyeleri WHERE CH_KODU = :bayi_kodu";
+                $seviyeSql = "SELECT TOP 1 CH_KODU FROM " . getTableName('aa_erp_kt_bayiler_markaseviyeleri') . " WHERE CH_KODU = :bayi_kodu";
                 $seviyeStmt = $conn->prepare($seviyeSql);
                 $seviyeStmt->bindParam(':bayi_kodu', $bayi_kodu);
                 $seviyeStmt->execute();
@@ -89,7 +89,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
                 }
 
                 // Bayi adres ve vade bilgilerini al
-                $bayiSql = "SELECT ADRES1 + ' ' + ADRES2 as bayi_adres, SEHIR as bayi_sehir, ILCE as bayi_ilce, vade FROM aaa_erp_kt_bayiler WHERE CH_KODU = :bayi_kodu";
+                $bayiSql = "SELECT ADRES1 + ' ' + ADRES2 as bayi_adres, SEHIR as bayi_sehir, ILCE as bayi_ilce, vade FROM " . getTableName('aaa_erp_kt_bayiler') . " WHERE CH_KODU = :bayi_kodu";
                 $bayiStmt = $conn->prepare($bayiSql);
                 $bayiStmt->bindParam(':bayi_kodu', $bayi_kodu);
                 $bayiStmt->execute();
@@ -109,7 +109,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         // Bayi yetkili eposta bilgisini al
         if (!empty($bayi_yetkili_id)) {
             try {
-                $bayiYetkiliSql = "SELECT eposta FROM aa_erp_kt_bayiler_yetkililer WHERE id = :bayi_yetkili_id";
+                $bayiYetkiliSql = "SELECT eposta FROM " . getTableName('aa_erp_kt_bayiler_yetkililer') . " WHERE id = :bayi_yetkili_id";
                 $bayiYetkiliStmt = $conn->prepare($bayiYetkiliSql);
                 $bayiYetkiliStmt->bindParam(':bayi_yetkili_id', $bayi_yetkili_id);
                 $bayiYetkiliStmt->execute();
@@ -125,7 +125,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         // Müşteri yetkili eposta bilgisini al
         if (!empty($musteri_yetkili_id)) {
             try {
-                $musteriYetkiliSql = "SELECT eposta FROM aa_erp_kt_musteriler_yetkililer WHERE id = :musteri_yetkili_id";
+                $musteriYetkiliSql = "SELECT eposta FROM " . getTableName('aa_erp_kt_musteriler_yetkililer') . " WHERE id = :musteri_yetkili_id";
                 $musteriYetkiliStmt = $conn->prepare($musteriYetkiliSql);
                 $musteriYetkiliStmt->bindParam(':musteri_yetkili_id', $musteri_yetkili_id);
                 $musteriYetkiliStmt->execute();
@@ -141,7 +141,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         // Marka manager eposta bilgisini al
         if (!empty($accman_id)) {
             try {
-                $accmanSql = "SELECT eposta FROM aa_erp_kt_markalar_managers WHERE id = :accman_id";
+                $accmanSql = "SELECT eposta FROM " . getTableName('aa_erp_kt_markalar_managers') . " WHERE id = :accman_id";
                 $accmanStmt = $conn->prepare($accmanSql);
                 $accmanStmt->bindParam(':accman_id', $accman_id);
                 $accmanStmt->execute();
@@ -204,7 +204,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         // Fırsat numarası oluşturma - son Fırsat No'ya random ekleyerek
         try {
             // Son fırsat numarasını al
-            $lastFirsatSql = "SELECT TOP 1 id FROM aa_erp_kt_firsatlar ORDER BY id DESC";
+            $lastFirsatSql = "SELECT TOP 1 id FROM " . getTableName('aa_erp_kt_firsatlar') . " ORDER BY id DESC";
             $lastFirsatStmt = $conn->query($lastFirsatSql);
             $lastFirsat = $lastFirsatStmt->fetch(PDO::FETCH_ASSOC);
             $firsat_no="F" . ((int)($lastFirsat['id']) + 1);
@@ -303,7 +303,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             error_log("FIRSAT OLUŞTURMA - Hiçbir alan kısaltılmadı, tüm veriler limit içinde.");
         }
 
-        $sql = "INSERT INTO aa_erp_kt_firsatlar (
+        $sql = "INSERT INTO " . getTableName('aa_erp_kt_firsatlar') . " (
             FIRSAT_NO,
             MARKA,
             GELIS_KANALI,
@@ -473,7 +473,7 @@ if (isset($_GET['action'])) {
     header('Content-Type: application/json');
     try {
         if ($_GET['action'] === 'get_markalar') {
-            $sql = "SELECT MARKA FROM aa_erp_kt_fiyat_listesi WHERE MARKA IS NOT NULL GROUP BY MARKA ORDER BY MARKA";
+            $sql = "SELECT MARKA FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE MARKA IS NOT NULL GROUP BY MARKA ORDER BY MARKA";
             $stmt = $conn->query($sql);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($data);
@@ -491,7 +491,7 @@ if (isset($_GET['action'])) {
                 $searchTerm = '%' . $query . '%';
             }
 
-            $sql = "SELECT MARKA FROM aa_erp_kt_fiyat_listesi WHERE MARKA LIKE :query AND MARKA IS NOT NULL GROUP BY MARKA ORDER BY MARKA";
+            $sql = "SELECT MARKA FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE MARKA LIKE :query AND MARKA IS NOT NULL GROUP BY MARKA ORDER BY MARKA";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':query', $searchTerm);
             $stmt->execute();
@@ -501,7 +501,7 @@ if (isset($_GET['action'])) {
         }
 
         if ($_GET['action'] === 'get_bayiler') {
-            $sql = "SELECT b.CH_KODU, b.CH_UNVANI, k.dikkat_listesi, k.kara_liste FROM aaa_erp_kt_bayiler b LEFT JOIN aa_erp_kt_bayiler_kara_liste k ON b.CH_KODU = k.ch_kodu ORDER BY b.CH_UNVANI";
+            $sql = "SELECT b.CH_KODU, b.CH_UNVANI, k.dikkat_listesi, k.kara_liste FROM " . getTableName('aaa_erp_kt_bayiler') . " b LEFT JOIN " . getTableName('aa_erp_kt_bayiler_kara_liste') . " k ON b.CH_KODU = k.ch_kodu ORDER BY b.CH_UNVANI";
             $stmt = $conn->query($sql);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -527,7 +527,7 @@ if (isset($_GET['action'])) {
                 $searchTerm = '%' . $query . '%';
             }
 
-            $sql = "SELECT b.CH_KODU, b.CH_UNVANI, k.dikkat_listesi, k.kara_liste FROM aaa_erp_kt_bayiler b LEFT JOIN aa_erp_kt_bayiler_kara_liste k ON b.CH_KODU = k.ch_kodu WHERE b.CH_UNVANI LIKE :query ORDER BY b.CH_UNVANI";
+            $sql = "SELECT b.CH_KODU, b.CH_UNVANI, k.dikkat_listesi, k.kara_liste FROM " . getTableName('aaa_erp_kt_bayiler') . " b LEFT JOIN " . getTableName('aa_erp_kt_bayiler_kara_liste') . " k ON b.CH_KODU = k.ch_kodu WHERE b.CH_UNVANI LIKE :query ORDER BY b.CH_UNVANI";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':query', $searchTerm);
             $stmt->execute();
@@ -537,7 +537,7 @@ if (isset($_GET['action'])) {
         }
 
         if ($_GET['action'] === 'get_musteriler') {
-            $sql = "SELECT top 100 m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE musteri IS NOT NULL ORDER BY m.musteri";
+            $sql = "SELECT top 100 m.id, m.musteri FROM " . getTableName('aa_erp_kt_musteriler') . " m WHERE musteri IS NOT NULL ORDER BY m.musteri";
             $stmt = $conn->query($sql);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($data);
@@ -555,7 +555,7 @@ if (isset($_GET['action'])) {
                 $searchTerm = '%' . $query . '%';
             }
 
-            $sql = "SELECT top 100 m.id, m.musteri FROM aa_erp_kt_musteriler m WHERE m.musteri LIKE :query AND m.musteri IS NOT NULL ORDER BY m.musteri";
+            $sql = "SELECT top 100 m.id, m.musteri FROM " . getTableName('aa_erp_kt_musteriler') . " m WHERE m.musteri LIKE :query AND m.musteri IS NOT NULL ORDER BY m.musteri";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':query', $searchTerm);
             $stmt->execute();
@@ -569,18 +569,18 @@ if (isset($_GET['action'])) {
             try {
                 if ($bayi_kodu) {
                     // Önce tabloyu kontrol et ve tablo yapısını öğren
-                    $checkSql = "SELECT COUNT(*) as count FROM aa_erp_kt_bayiler_yetkililer WHERE CH_KODU = :bayi_kodu";
+                    $checkSql = "SELECT COUNT(*) as count FROM " . getTableName('aa_erp_kt_bayiler_yetkililer') . " WHERE CH_KODU = :bayi_kodu";
                     $checkStmt = $conn->prepare($checkSql);
                     $checkStmt->bindParam(':bayi_kodu', $bayi_kodu);
                     $checkStmt->execute();
                     $count = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
                     // Tablo yapısını görmek için sample data çek
-                    $sampleSql = "SELECT TOP 3 * FROM aa_erp_kt_bayiler_yetkililer";
+                    $sampleSql = "SELECT TOP 3 * FROM " . getTableName('aa_erp_kt_bayiler_yetkililer') . "";
                     $sampleStmt = $conn->query($sampleSql);
                     $sampleData = $sampleStmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    $sql = "SELECT * FROM aa_erp_kt_bayiler_yetkililer WHERE CH_KODU = :bayi_kodu ORDER BY yetkili";
+                    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_bayiler_yetkililer') . " WHERE CH_KODU = :bayi_kodu ORDER BY yetkili";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':bayi_kodu', $bayi_kodu);
                     $stmt->execute();
@@ -629,11 +629,11 @@ if (isset($_GET['action'])) {
             if ($musteri_id) {
                 try {
                     // Önce sample data görmek için
-                    $sampleSql = "SELECT TOP 3 * FROM aa_erp_kt_musteriler_yetkililer";
+                    $sampleSql = "SELECT TOP 3 * FROM " . getTableName('aa_erp_kt_musteriler_yetkililer') . "";
                     $sampleStmt = $conn->query($sampleSql);
                     $sampleData = $sampleStmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    $sql = "SELECT * FROM aa_erp_kt_musteriler_yetkililer WHERE musteri_id = :musteri_id";
+                    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_musteriler_yetkililer') . " WHERE musteri_id = :musteri_id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':musteri_id', $musteri_id);
                     $stmt->execute();
@@ -683,7 +683,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($bayi_kodu && $yetkili) {
-                    $sql = "INSERT INTO aa_erp_kt_bayiler_yetkililer (CH_KODU, yetkili, telefon, eposta) VALUES (:bayi_kodu, :yetkili, :telefon, :eposta)";
+                    $sql = "INSERT INTO " . getTableName('aa_erp_kt_bayiler_yetkililer') . " (CH_KODU, yetkili, telefon, eposta) VALUES (:bayi_kodu, :yetkili, :telefon, :eposta)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':bayi_kodu', $bayi_kodu);
                     $stmt->bindParam(':yetkili', $yetkili);
@@ -712,7 +712,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($musteri_id && $yetkili) {
-                    $sql = "INSERT INTO aa_erp_kt_musteriler_yetkililer (musteri_id, yetkili, telefon, eposta) VALUES (:musteri_id, :yetkili, :telefon, :eposta)";
+                    $sql = "INSERT INTO " . getTableName('aa_erp_kt_musteriler_yetkililer') . " (musteri_id, yetkili, telefon, eposta) VALUES (:musteri_id, :yetkili, :telefon, :eposta)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':musteri_id', $musteri_id);
                     $stmt->bindParam(':yetkili', $yetkili);
@@ -741,7 +741,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($id && $yetkili) {
-                    $sql = "UPDATE aa_erp_kt_bayiler_yetkililer SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
+                    $sql = "UPDATE " . getTableName('aa_erp_kt_bayiler_yetkililer') . " SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':id', $id);
                     $stmt->bindParam(':yetkili', $yetkili);
@@ -770,7 +770,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($id && $yetkili) {
-                    $sql = "UPDATE aa_erp_kt_musteriler_yetkililer SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
+                    $sql = "UPDATE " . getTableName('aa_erp_kt_musteriler_yetkililer') . " SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':id', $id);
                     $stmt->bindParam(':yetkili', $yetkili);
@@ -796,7 +796,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($id) {
-                    $sql = "DELETE FROM aa_erp_kt_bayiler_yetkililer WHERE id = :id";
+                    $sql = "DELETE FROM " . getTableName('aa_erp_kt_bayiler_yetkililer') . " WHERE id = :id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':id', $id);
 
@@ -819,7 +819,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($id) {
-                    $sql = "DELETE FROM aa_erp_kt_musteriler_yetkililer WHERE id = :id";
+                    $sql = "DELETE FROM " . getTableName('aa_erp_kt_musteriler_yetkililer') . " WHERE id = :id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':id', $id);
 
@@ -897,14 +897,14 @@ if (isset($_GET['action'])) {
                 // Gerçek tablo yapısı: marka, yetkili, telefon, eposta
                 if ($selected_marka) {
                     // Seçili markaya göre filtrele
-                    $sql = "SELECT * FROM aa_erp_kt_markalar_managers WHERE marka = :marka ORDER BY yetkili";
+                    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_markalar_managers') . " WHERE marka = :marka ORDER BY yetkili";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':marka', $selected_marka);
                     $stmt->execute();
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 } else {
                     // Tüm AccMan'leri getir
-                    $sql = "SELECT * FROM aa_erp_kt_markalar_managers ORDER BY marka, yetkili";
+                    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_markalar_managers') . " ORDER BY marka, yetkili";
                     $stmt = $conn->query($sql);
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
@@ -933,7 +933,7 @@ if (isset($_GET['action'])) {
             try {
                 if ($marka && $yetkili) {
                     // Gerçek tablo yapısı: marka, yetkili, telefon, eposta
-                    $sql = "INSERT INTO aa_erp_kt_markalar_managers (marka, yetkili, telefon, eposta) VALUES (:marka, :yetkili, :telefon, :eposta)";
+                    $sql = "INSERT INTO " . getTableName('aa_erp_kt_markalar_managers') . " (marka, yetkili, telefon, eposta) VALUES (:marka, :yetkili, :telefon, :eposta)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':marka', $marka);
                     $stmt->bindParam(':yetkili', $yetkili);
@@ -962,7 +962,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($id && $yetkili) {
-                    $sql = "UPDATE aa_erp_kt_markalar_managers SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
+                    $sql = "UPDATE " . getTableName('aa_erp_kt_markalar_managers') . " SET yetkili = :yetkili, telefon = :telefon, eposta = :eposta WHERE id = :id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':id', $id);
                     $stmt->bindParam(':yetkili', $yetkili);
@@ -988,7 +988,7 @@ if (isset($_GET['action'])) {
 
             try {
                 if ($id) {
-                    $sql = "DELETE FROM aa_erp_kt_markalar_managers WHERE id = :id";
+                    $sql = "DELETE FROM " . getTableName('aa_erp_kt_markalar_managers') . " WHERE id = :id";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':id', $id);
 
@@ -1012,7 +1012,7 @@ if (isset($_GET['action'])) {
             try {
                 if ($selected_marka) {
                     // Seçili markaya göre ve tarih geçmemiş etkinlikleri getir
-                    $sql = "SELECT * FROM aa_erp_kt_etkinlikler
+                    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_etkinlikler') . "
                            WHERE marka = :marka
                            AND (tarih_bit IS NULL OR tarih_bit >= GETDATE())
                            ORDER BY tarih_bas ASC";
@@ -1022,7 +1022,7 @@ if (isset($_GET['action'])) {
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 } else {
                     // Tüm aktif etkinlikleri getir
-                    $sql = "SELECT * FROM aa_erp_kt_etkinlikler
+                    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_etkinlikler') . "
                            WHERE (tarih_bit IS NULL OR tarih_bit >= GETDATE())
                            ORDER BY marka, tarih_bas ASC";
                     $stmt = $conn->query($sql);

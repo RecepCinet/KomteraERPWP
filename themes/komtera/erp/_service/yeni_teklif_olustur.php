@@ -30,7 +30,7 @@ try {
     $firsat_no = $_POST['firsat_no'];
 
     // Fırsat bilgilerini getir
-    $sql = "SELECT * FROM aa_erp_kt_firsatlar WHERE FIRSAT_NO = :firsat_no";
+    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_firsatlar') . " WHERE FIRSAT_NO = :firsat_no";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':firsat_no', $firsat_no);
     $stmt->execute();
@@ -42,7 +42,7 @@ try {
 
     // Yeni teklif numarası oluştur
     $sql = "SELECT MAX(CAST(SUBSTRING(TEKLIF_NO, 2, LEN(TEKLIF_NO) - 1) AS INT)) as max_no
-            FROM aa_erp_kt_teklifler
+            FROM " . getTableName('aa_erp_kt_teklifler') . "
             WHERE TEKLIF_NO LIKE 'T%' AND ISNUMERIC(SUBSTRING(TEKLIF_NO, 2, LEN(TEKLIF_NO) - 1)) = 1";
     $stmt = $conn->query($sql);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -50,7 +50,7 @@ try {
     $yeni_teklif_no = 'T' . $next_no;
 
     // Yeni teklif kaydı oluştur
-    $insert_sql = "INSERT INTO aa_erp_kt_teklifler (
+    $insert_sql = "INSERT INTO " . getTableName('aa_erp_kt_teklifler') . " (
         TEKLIF_NO, X_FIRSAT_NO, BAYI_ADI, BAYI_CHKODU, BAYI_YETKILI_ISIM,
         MUSTERI_ADI, MUSTERI_YETKILI_ISIM, MARKA, PROJE_ADI,
         TEKLIF_TARIHI, GECERLILIK_TARIHI, DURUM, KAYIT_TARIHI, KAYIDI_ACAN,

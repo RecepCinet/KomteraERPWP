@@ -20,9 +20,9 @@ function getDBH() {
 }
 
 $dbh = getDBH();
-$sqlu = "update aa_erp_kt_siparisler set FATURA_BASILDI=1,SIPARIS_DURUM='2',SIPARIS_DURUM_ALT=null WHERE SIPARIS_NO IN (
-select [NO] FROM ARYD_FIS_AKTARIM
-WHERE SONUC=4 AND [NO] IN (select s.SIPARIS_NO from aa_erp_kt_siparisler s WHERE SIPARIS_DURUM='0')
+$sqlu = "update " . getTableName('aa_erp_kt_siparisler') . " set FATURA_BASILDI=1,SIPARIS_DURUM='2',SIPARIS_DURUM_ALT=null WHERE SIPARIS_NO IN (
+select [NO] FROM " . getTableName('ARYD_FIS_AKTARIM') . "
+WHERE SONUC=4 AND [NO] IN (select s.SIPARIS_NO from " . getTableName('aa_erp_kt_siparisler') . " s WHERE SIPARIS_DURUM='0')
 GROUP BY [NO]
 )";
 $stmt = $dbh->prepare($sqlu);
@@ -55,7 +55,7 @@ function updateSingle($pdo, $r){
         $sec_adet=$adet;
     }
     
-    $sql = "update aa_erp_kt_siparisler_urunler set SEC= ?,SEC_ADET = ? where id = ?";
+    $sql = "update " . getTableName('aa_erp_kt_siparisler_urunler') . " set SEC= ?,SEC_ADET = ? where id = ?";
     $stmt = $pdo->prepare($sql);
     $result = $stmt->execute( array($r['SEC'],$sec_adet, $r['id']) );
     if($result == false) {
@@ -65,7 +65,7 @@ function updateSingle($pdo, $r){
 
 function deleteSingle($pdo, $r)
 {
-    $sql = "delete from aa_erp_kt_siparisler_urunler where id = ?";
+    $sql = "delete from " . getTableName('aa_erp_kt_siparisler_urunler') . " where id = ?";
     $stmt = $pdo->prepare($sql);
     $result = $stmt->execute(array( $r['id']));
     if($result == false) {
@@ -135,7 +135,7 @@ else if( isset($_GET["pq_curpage"]) )//paging.
 {
     $pq_curPage = $_GET["pq_curpage"];
     $pq_rPP=$_GET["pq_rpp"];
-    $sql = "Select count(*) from aa_erp_kt_siparisler_urunler";
+    $sql = "Select count(*) from " . getTableName('aa_erp_kt_siparisler_urunler') . "";
     $dbh = getDBH();
     $stmt = $dbh->query($sql);
     $total_Records = $stmt->fetchColumn();
@@ -145,7 +145,7 @@ else if( isset($_GET["pq_curpage"]) )//paging.
         $pq_curPage = ceil($total_Records / $pq_rPP);
         $skip = ($pq_rPP * ($pq_curPage - 1));
     }
-    $sql = "Select * from aa_erp_kt_siparisler_urunler order by id limit OFFSET $skip ROWS FETCH NEXT $pq_rPP ROWS ONLY";
+    $sql = "Select * from " . getTableName('aa_erp_kt_siparisler_urunler') . " order by id limit OFFSET $skip ROWS FETCH NEXT $pq_rPP ROWS ONLY";
     $stmt = $dbh->query($sql);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($products as $i=> &$row)
@@ -157,10 +157,10 @@ else if( isset($_GET["pq_curpage"]) )//paging.
 }
 else{
    $sql = "
-select 
+select
 su.id,
-(select top 1 CASE WHEN tu.B_MALIYET>0 THEN tu.B_MALIYET ELSE tu.O_MALIYET END from aa_erp_kt_teklifler_urunler tu where tu.X_TEKLIF_NO=sip.X_TEKLIF_NO  AnD SKU = su.SKU) AS MALIYET,
-(select top 1 CASE WHEN tu.B_MALIYET>0 THEN tu.B_MALIYET*ADET ELSE tu.O_MALIYET*ADET END from aa_erp_kt_teklifler_urunler tu where tu.X_TEKLIF_NO=sip.X_TEKLIF_NO AnD SKU = su.SKU) AS T_MALIYET,
+(select top 1 CASE WHEN tu.B_MALIYET>0 THEN tu.B_MALIYET ELSE tu.O_MALIYET END from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO=sip.X_TEKLIF_NO  AnD SKU = su.SKU) AS MALIYET,
+(select top 1 CASE WHEN tu.B_MALIYET>0 THEN tu.B_MALIYET*ADET ELSE tu.O_MALIYET*ADET END from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO=sip.X_TEKLIF_NO AnD SKU = su.SKU) AS T_MALIYET,
 su.SIRA,
 sip.X_TEKLIF_NO,
 su.SKU,
@@ -171,16 +171,16 @@ su.TIP,
 su.SURE,
 (su.ADET*su.BIRIM_FIYAT) AS TOPLAM,
 su.LISANS,
-(select top 1 ADET from aaa_erp_kt_stoklar aeks where DEPO_KODU=0 AND SKU=su.SKU order by ADET desc) AS STOK,
-(select top 1 SONUC from ARYD_FIS_AKTARIM WHERE [NO]=su.X_SIPARIS_NO) AS LSONUC,
-(select top 1 MESAJ from ARYD_FIS_AKTARIM WHERE [NO]=su.X_SIPARIS_NO) AS LMESAJ,
+(select top 1 ADET from " . getTableName('aaa_erp_kt_stoklar') . " aeks where DEPO_KODU=0 AND SKU=su.SKU order by ADET desc) AS STOK,
+(select top 1 SONUC from " . getTableName('ARYD_FIS_AKTARIM') . " WHERE [NO]=su.X_SIPARIS_NO) AS LSONUC,
+(select top 1 MESAJ from " . getTableName('ARYD_FIS_AKTARIM') . " WHERE [NO]=su.X_SIPARIS_NO) AS LMESAJ,
 su.SEC,
-(select top 1 SERI_LOT from aaa_erp_kt_stoklar aeks where SKU=su.SKU) AS SLOT,
+(select top 1 SERI_LOT from " . getTableName('aaa_erp_kt_stoklar') . " aeks where SKU=su.SKU) AS SLOT,
 su.SEC_ADET
-from aa_erp_kt_siparisler_urunler su
-INNER JOIN aa_erp_kt_siparisler sip ON sip.SIPARIS_NO = su.X_SIPARIS_NO
---LEFT OUTER JOIN aa_erp_kt_teklifler_urunler tu ON tu.X_TEKLIF_NO = sip.X_TEKLIF_NO
---LEFT OUTER JOIN aaa_erp_kt_stoklar_satis ss ON su.SKU = ss.SKU
+from " . getTableName('aa_erp_kt_siparisler_urunler') . " su
+INNER JOIN " . getTableName('aa_erp_kt_siparisler') . " sip ON sip.SIPARIS_NO = su.X_SIPARIS_NO
+--LEFT OUTER JOIN " . getTableName('aa_erp_kt_teklifler_urunler') . " tu ON tu.X_TEKLIF_NO = sip.X_TEKLIF_NO
+--LEFT OUTER JOIN " . getTableName('aaa_erp_kt_stoklar_satis') . " ss ON su.SKU = ss.SKU
 where X_SIPARIS_NO='$siparis_no'";
     $dbh = getDBH();
     $stmt = $dbh->prepare($sql);

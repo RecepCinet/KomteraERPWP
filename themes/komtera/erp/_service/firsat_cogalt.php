@@ -62,7 +62,7 @@ $arr=Array(
     "REVIZE_TARIHI"
 );
 
-$sqlstring="select BAGLI_FIRSAT_NO from aa_erp_kt_firsatlar where FIRSAT_NO='$firsat_no'";
+$sqlstring="select BAGLI_FIRSAT_NO from " . getTableName('aa_erp_kt_firsatlar') . " where FIRSAT_NO='$firsat_no'";
 $stmt = $conn->query($sqlstring);
 $bagli_firsat_no = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['BAGLI_FIRSAT_NO'];
 
@@ -71,11 +71,11 @@ if ($bagli_firsat_no=="") {
 }
 
 // FLOW Firsati Cogalt
-$dup_id = duplicate_row("aa_erp_kt_firsatlar", "FIRSAT_NO=" , $firsat_no, $arr);
-$query = "UPDATE aa_erp_kt_firsatlar set FIRSAT_ANA=null,BAGLI_FIRSAT_NO='$bagli_firsat_no' where FIRSAT_NO='$firsat_no' ";
+$dup_id = duplicate_row(getTableName('aa_erp_kt_firsatlar'), "FIRSAT_NO=" , $firsat_no, $arr);
+$query = "UPDATE " . getTableName('aa_erp_kt_firsatlar') . " set FIRSAT_ANA=null,BAGLI_FIRSAT_NO='$bagli_firsat_no' where FIRSAT_NO='$firsat_no' ";
 $stmt = $conn->prepare($query);
 $stmt->execute();
-$query = "UPDATE aa_erp_kt_firsatlar set FIRSAT_ANA='1',FIRSAT_NO='F$dup_id',BAGLI_FIRSAT_NO='$bagli_firsat_no' where id = '$dup_id' ";
+$query = "UPDATE " . getTableName('aa_erp_kt_firsatlar') . " set FIRSAT_ANA='1',FIRSAT_NO='F$dup_id',BAGLI_FIRSAT_NO='$bagli_firsat_no' where id = '$dup_id' ";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
@@ -110,12 +110,12 @@ $arr=Array(
     "X_FIRSAT_NO",
 );
 
-$sqlstring="select FIRSAT_NO from aa_erp_kt_firsatlar where BAGLI_FIRSAT_NO='$firsat_no' order by id desc";
+$sqlstring="select FIRSAT_NO from " . getTableName('aa_erp_kt_firsatlar') . " where BAGLI_FIRSAT_NO='$firsat_no' order by id desc";
 $stmt = $conn->query($sqlstring);
 $firsat = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['FIRSAT_NO'];
 
 
-$sqlstring="select * from aa_erp_kt_teklifler where TEKLIF_TIPI=1 AND X_FIRSAT_NO='$firsat_no'";
+$sqlstring="select * from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_TIPI=1 AND X_FIRSAT_NO='$firsat_no'";
 $stmt = $conn->query($sqlstring);
 $teklif = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 
@@ -123,14 +123,14 @@ $teklif = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 
 //echo $teklif['TEKLIF_NO'] . "\n";
 
-$dup_t_id = duplicate_row("aa_erp_kt_teklifler", "TEKLIF_NO=" , $teklif['TEKLIF_NO'], $arr);
+$dup_t_id = duplicate_row(getTableName('aa_erp_kt_teklifler'), "TEKLIF_NO=" , $teklif['TEKLIF_NO'], $arr);
 //echo $dup_t_id;
 
-$query = "UPDATE aa_erp_kt_teklifler set X_FIRSAT_NO='$firsat',TEKLIF_NO='T$dup_t_id' where id = '$dup_t_id' ";
+$query = "UPDATE " . getTableName('aa_erp_kt_teklifler') . " set X_FIRSAT_NO='$firsat',TEKLIF_NO='T$dup_t_id' where id = '$dup_t_id' ";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
-$sqlstring="select * from aa_erp_kt_teklifler_urunler tu where tu.X_TEKLIF_NO = '" . $teklif['TEKLIF_NO'] . "'";
+$sqlstring="select * from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO = '" . $teklif['TEKLIF_NO'] . "'";
 $stmt = $conn->query($sqlstring);
 $urunler = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -151,9 +151,9 @@ $arr=Array(
 );
 
 foreach ($urunler as $urun) {
-    $urun_id = duplicate_row("aa_erp_kt_teklifler_urunler", "X_TEKLIF_NO=",$teklif['TEKLIF_NO'],$arr);
+    $urun_id = duplicate_row(getTableName('aa_erp_kt_teklifler_urunler'), "X_TEKLIF_NO=",$teklif['TEKLIF_NO'],$arr);
     //echo $urun_id;
-    $query = "UPDATE aa_erp_kt_teklifler_urunler set X_TEKLIF_NO='T$dup_t_id' where id = '$urun_id' ";
+    $query = "UPDATE " . getTableName('aa_erp_kt_teklifler_urunler') . " set X_TEKLIF_NO='T$dup_t_id' where id = '$urun_id' ";
     $stmt = $conn->prepare($query);
     $stmt->execute();
 }

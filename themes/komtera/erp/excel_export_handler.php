@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['marka'])) {
     try {
         // Use the same query structure as the original kt_fiyat_listesi.php
         $fields = implode(', ', $columnOrder);
-        $sql = "SELECT $fields FROM aa_erp_kt_fiyat_listesi WHERE marka='$marka'";
+        $sql = "SELECT $fields FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE marka='$marka'";
 
         $stmt = $conn->query($sql);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

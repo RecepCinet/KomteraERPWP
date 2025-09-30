@@ -12,13 +12,12 @@ if ($yil=="2024" || $yil=="2025" || $yil=="2026" || $yil=="2027" || $yil=="2028"
     $norm='ERP_SATIS_ANALIZ_319_20XX';
 }
 
-$sql =<<<DATA
-WITH RankedTekliflerUrunler AS (
+$sql ="WITH RankedTekliflerUrunler AS (
     SELECT
         tu.*,
         ROW_NUMBER() OVER (PARTITION BY tu.X_TEKLIF_NO, tu.SKU ORDER BY tu.id) AS rn
     FROM
-        aa_erp_kt_teklifler_urunler tu
+        " . getTableName('aa_erp_kt_teklifler_urunler') . " tu
 )
 SELECT
     tu.B_LISTE_FIYATI AS BLSFIY,
@@ -36,15 +35,14 @@ SELECT
         ELSE 'Ilk Satis'
         END AS SATIS_TIPI,
     te.TEKLIF_NO,
-    (SELECT TOP 1 seviye FROM aa_erp_kt_bayiler_markaseviyeleri ms WHERE ms.CH_KODU = f.BAYI_CHKODU) AS BayiSeviye
+    (SELECT TOP 1 seviye FROM " . getTableName('aa_erp_kt_bayiler_markaseviyeleri') . " ms WHERE ms.CH_KODU = f.BAYI_CHKODU) AS BayiSeviye
 FROM
     $norm sa
-        LEFT JOIN aa_erp_kt_teklifler te ON sa.TEKLIFNO = te.TEKLIF_NO
-        LEFT JOIN aa_erp_kt_firsatlar f ON f.FIRSAT_NO = te.X_FIRSAT_NO
+        LEFT JOIN " . getTableName('aa_erp_kt_teklifler') . " te ON sa.TEKLIFNO = te.TEKLIF_NO
+        LEFT JOIN " . getTableName('aa_erp_kt_firsatlar') . " f ON f.FIRSAT_NO = te.X_FIRSAT_NO
         LEFT JOIN RankedTekliflerUrunler tu ON tu.X_TEKLIF_NO = sa.TEKLIFNO AND sa.SKU = tu.SKU AND tu.rn = 1
 WHERE
-    Yil = '$yil'
-DATA;
+    Yil = '$yil'";
 
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

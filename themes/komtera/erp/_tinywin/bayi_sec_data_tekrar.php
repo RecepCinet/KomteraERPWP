@@ -16,9 +16,9 @@ if ($gelen == "") {
 }
 //$sql = "Select top 22 * from aa_erp_kt_musteriler where $filter order by musteri";
 $sql = "select top 50 b.CH_KODU,b.CH_UNVANI,k.dikkat_listesi dl,k.kara_liste kl,
-(select top 1 seviye from aa_erp_kt_bayiler_markaseviyeleri bms where bms.marka='$marka' and bms.CH_KODU=b.CH_KODU) as seviye
-from aaa_erp_kt_bayiler b
-LEFT JOIN aa_erp_kt_bayiler_kara_liste k
+(select top 1 seviye from " . getTableName('aa_erp_kt_bayiler_markaseviyeleri') . " bms where bms.marka='$marka' and bms.CH_KODU=b.CH_KODU) as seviye
+from " . getTableName('aaa_erp_kt_bayiler') . " b
+LEFT JOIN " . getTableName('aa_erp_kt_bayiler_kara_liste') . " k
 ON b.CH_KODU = k.ch_kodu
 where $filter
 order by b.CH_UNVANI";

@@ -121,7 +121,7 @@ try {
     }
 
     // Save to database
-    $sql = "INSERT INTO aa_erp_kt_teklif_lisans_dosyalar
+    $sql = "INSERT INTO " . getTableName('aa_erp_kt_teklif_lisans_dosyalar') . "
             (TEKLIF_NO, ORIGINAL_NAME, FILE_NAME, FILE_PATH, FILE_SIZE, FILE_TYPE, UPLOAD_DATE, UPLOADED_BY)
             VALUES (?, ?, ?, ?, ?, ?, GETDATE(), ?)";
 

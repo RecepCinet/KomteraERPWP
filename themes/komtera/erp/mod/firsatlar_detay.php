@@ -15,7 +15,7 @@ if (empty($firsat_no)) {
 // Fetch firsat details
 $firsat_data = null;
 try {
-    $sql = "SELECT TOP 1 * FROM aa_erp_kt_firsatlar
+    $sql = "SELECT TOP 1 * FROM " . getTableName('aa_erp_kt_firsatlar') . "
             WHERE FIRSAT_NO = :firsat_no AND (SIL IS NULL OR SIL <> '1')";
 
     $stmt = $conn->prepare($sql);
@@ -43,7 +43,7 @@ try {
                           t.KILIT,
                           t.TEKLIF_TIPI,
                           t.SATIS_TIPI
-                   FROM aa_erp_kt_teklifler t
+                   FROM " . getTableName('aa_erp_kt_teklifler') . " t
                    WHERE t.X_FIRSAT_NO = :firsat_no AND (t.SIL IS NULL OR t.SIL <> '1')
                    ORDER BY t.YARATILIS_TARIHI DESC, t.YARATILIS_SAATI DESC";
 
@@ -55,7 +55,7 @@ try {
     // Her teklif için ürün sayısını ayrı ayrı al
     foreach ($teklifler_temp as $teklif) {
         $urun_sql = "SELECT COUNT(*) as URUN_SAYISI
-                     FROM aa_erp_kt_teklifler_urunler
+                     FROM " . getTableName('aa_erp_kt_teklifler_urunler') . "
                      WHERE X_TEKLIF_NO = :teklif_no";
         $urun_stmt = $conn->prepare($urun_sql);
         $urun_stmt->bindParam(':teklif_no', $teklif['TEKLIF_NO']);

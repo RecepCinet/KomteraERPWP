@@ -205,7 +205,7 @@ function analyzeSKUChanges($conn, $excelSKUs, $targetMarka) {
     ];
 
     // Get existing SKUs from database for the target marka
-    $sql = "SELECT sku FROM aa_erp_kt_fiyat_listesi WHERE marka = :marka";
+    $sql = "SELECT sku FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE marka = :marka";
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(':marka', $targetMarka);
     $stmt->execute();
@@ -452,7 +452,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
 
                 // STEP 1: DELETE SKUs that exist in DB but not in Excel
                 if (!empty($analysis['toDelete'])) {
-                    $deleteQuery = "DELETE FROM aa_erp_kt_fiyat_listesi WHERE marka = :marka AND sku IN (" .
+                    $deleteQuery = "DELETE FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE marka = :marka AND sku IN (" .
                                   str_repeat('?,', count($analysis['toDelete']) - 1) . "?)";
                     $deleteStmt = $conn->prepare($deleteQuery);
 
@@ -484,7 +484,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
                             }
 
                             if (!empty($updateFields)) {
-                                $updateQuery = "UPDATE aa_erp_kt_fiyat_listesi SET " .
+                                $updateQuery = "UPDATE " . getTableName('aa_erp_kt_fiyat_listesi') . " SET " .
                                              implode(', ', $updateFields) .
                                              " WHERE sku = ? AND marka = ?";
 
@@ -515,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excel_file'])) {
                             $insertPlaceholders = str_repeat('?,', count($insertFields) - 1) . '?';
                             $insertValues = array_values($rowData);
 
-                            $insertQuery = "INSERT INTO aa_erp_kt_fiyat_listesi (" .
+                            $insertQuery = "INSERT INTO " . getTableName('aa_erp_kt_fiyat_listesi') . " (" .
                                          implode(', ', $insertFields) .
                                          ") VALUES ($insertPlaceholders)";
 

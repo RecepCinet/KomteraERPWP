@@ -7,14 +7,14 @@ $teklif_no = $_GET['teklif_no'];
 $f_adet = $_GET['adet'];
 $bayi_seviye=$_GET['bayi_seviye_kod'];
 
-$sql = "select 
+$sql = "select
 CASE WHEN
 REGISTER is null THEN ''
 ELSE
 '_r'
 END AS REGISTER,
 MARKA
-from aa_erp_kt_firsatlar f where FIRSAT_NO=(select X_FIRSAT_NO from aa_erp_kt_teklifler t WHERE TEKLIF_NO='$teklif_no')";
+from " . getTableName('aa_erp_kt_firsatlar') . " f where FIRSAT_NO=(select X_FIRSAT_NO from " . getTableName('aa_erp_kt_teklifler') . " t WHERE TEKLIF_NO='$teklif_no')";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 $register=$data['REGISTER'];
@@ -31,8 +31,8 @@ $adet=$_GET['adet'];
 if ($ozel_maliyet!="") {
     $maliyet=$ozel_maliyet;
 }
-$sql = "select *,(select SERI_LOT from aaa_erp_kt_stoklar where SKU='$sku' and DEPO_KODU='0'
-) as track_type from aa_erp_kt_fiyat_listesi where marka='$marka' AND sku='$sku'
+$sql = "select *,(select SERI_LOT from " . getTableName('aaa_erp_kt_stoklar') . " where SKU='$sku' and DEPO_KODU='0'
+) as track_type from " . getTableName('aa_erp_kt_fiyat_listesi') . " where marka='$marka' AND sku='$sku'
 ";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -49,10 +49,10 @@ $o_maliyet   = $listeFiyati * ( 1 - ( ${"a_iskonto" . $bayi_seviye . $register} 
 $h_satis = $listeFiyatiUpLift * ( 1 - ( ${"s_iskonto" . $bayi_seviye . $register} / 100 ) ) ;
 $sira=1;
 $sql_sira="select top 1 CASE WHEN SIRA is null THEN 1 ELSE SIRA+1 END as SIRA,
-    (select top 1 KILIT from aa_erp_kt_teklifler where TEKLIF_NO='$teklif_no') as FN,
-    (select sum(ADET*B_SATIS_FIYATI) from aa_erp_kt_teklifler_urunler tu where tu.X_TEKLIF_NO ='$teklif_no') AS TT,
-    (select sum(ADET*O_MALIYET) from aa_erp_kt_teklifler_urunler tu where tu.X_TEKLIF_NO ='$teklif_no') AS MM
-from aa_erp_kt_teklifler_urunler
+    (select top 1 KILIT from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_NO='$teklif_no') as FN,
+    (select sum(ADET*B_SATIS_FIYATI) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO ='$teklif_no') AS TT,
+    (select sum(ADET*O_MALIYET) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO ='$teklif_no') AS MM
+from " . getTableName('aa_erp_kt_teklifler_urunler') . "
 where x_TEKLIF_NO='$teklif_no' order by SIRA DESC
 ";
 $stmt2 = $conn->query($sql_sira);
@@ -65,10 +65,10 @@ $mm=$cvp2['MM'];
 if ($marka=="SECHARD") {
 // tekrar toplam aliyoruz urunlerin %20 sini yada %10 unu hesaplayabilmek icin:
 $sql_sira="select top 1 CASE WHEN SIRA is null THEN 1 ELSE SIRA+1 END as SIRA,
-    (select top 1 KILIT from aa_erp_kt_teklifler where TEKLIF_NO='$teklif_no') as FN,
-    (select sum(ADET*B_SATIS_FIYATI) from aa_erp_kt_teklifler_urunler tu where tu.TIP='Licence' and tu.X_TEKLIF_NO ='$teklif_no') AS TT,
-    (select sum(ADET*O_MALIYET) from aa_erp_kt_teklifler_urunler tu where tu.TIP='Licence' and tu.X_TEKLIF_NO ='$teklif_no') AS MM
-from aa_erp_kt_teklifler_urunler
+    (select top 1 KILIT from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_NO='$teklif_no') as FN,
+    (select sum(ADET*B_SATIS_FIYATI) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.TIP='Licence' and tu.X_TEKLIF_NO ='$teklif_no') AS TT,
+    (select sum(ADET*O_MALIYET) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.TIP='Licence' and tu.X_TEKLIF_NO ='$teklif_no') AS MM
+from " . getTableName('aa_erp_kt_teklifler_urunler') . "
 where x_TEKLIF_NO='$teklif_no' and TIP='Licence' order by SIRA DESC
 ";
 $stmt2 = $conn->query($sql_sira);
@@ -126,12 +126,10 @@ if ($marka=="SECHARD") {
 
 
 
-$sqlinsert=<<<SQLS
-INSERT INTO LKS.dbo.aa_erp_kt_teklifler_urunler
+$sqlinsert = "INSERT INTO LKS.dbo." . getTableName('aa_erp_kt_teklifler_urunler') . "
     (slot,X_TEKLIF_NO,SKU,ACIKLAMA,TIP,SURE,ADET, B_LISTE_FIYATI,B_MALIYET,O_MALIYET, ISKONTO, B_SATIS_FIYATI, SIRA)
     VALUES
-    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$f_adet','$listeFiyatiUpLift','$b_maliyet','$o_maliyet','$h_iskonto','$h_satis','$sira' )
-SQLS;
+    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$f_adet','$listeFiyatiUpLift','$b_maliyet','$o_maliyet','$h_iskonto','$h_satis','$sira' )";
 try {
     $stmt = $conn->prepare($sqlinsert);
     $result = $stmt->execute();

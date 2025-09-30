@@ -56,8 +56,8 @@ try {
     echo "7. Testing table creation...\n";
     if (isset($conn)) {
         $create_sql = "
-            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='aa_erp_kt_teklif_dosyalar' AND xtype='U')
-            CREATE TABLE aa_erp_kt_teklif_dosyalar (
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='" . getTableName('aa_erp_kt_teklif_dosyalar') . "' AND xtype='U')
+            CREATE TABLE " . getTableName('aa_erp_kt_teklif_dosyalar') . " (
                 id INT IDENTITY(1,1) PRIMARY KEY,
                 TEKLIF_NO NVARCHAR(50) NOT NULL,
                 ORIGINAL_NAME NVARCHAR(255) NOT NULL,

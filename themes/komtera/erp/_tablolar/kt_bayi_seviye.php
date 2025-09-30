@@ -10,7 +10,7 @@ WHEN bs.seviye = '3' THEN 'GOLD'
 WHEN bs.seviye = '4' THEN 'PLATINUM'
 ELSE ''
 END AS SMETIN
-from aa_erp_kt_bayiler_markaseviyeleri bs LEFT JOIN aaa_erp_kt_bayiler b ON b.CH_KODU = bs.CH_KODU
+from " . getTableName('aa_erp_kt_bayiler_markaseviyeleri') . " bs LEFT JOIN " . getTableName('aaa_erp_kt_bayiler') . " b ON b.CH_KODU = bs.CH_KODU
 ";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

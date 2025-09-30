@@ -32,19 +32,19 @@ $sql = "SELECT
     f.BAYI_ADI,
     f.BAYI_YETKILI_ISIM,
     f.MUSTERI_ADI,
-    (select TOP 1 KOMISYON_F1 from aa_erp_kt_teklifler te where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) FON1,
-	(select TOP 1 KOMISYON_F2 from aa_erp_kt_teklifler te where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) FON2,
-	(select TOP 1 KOMISYON_H from aa_erp_kt_teklifler te where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) HARCAMA
-FROM 
-    LKS.dbo.aa_erp_kt_firsatlar f
-INNER JOIN 
-    aa_erp_kt_teklifler te ON te.X_FIRSAT_NO = f.FIRSAT_NO
-INNER JOIN 
-    aa_erp_kt_siparisler s ON s.X_FIRSAT_NO = f.FIRSAT_NO
-INNER JOIN 
-    aa_erp_kt_teklifler_urunler tu ON tu.X_TEKLIF_NO = te.TEKLIF_NO
-INNER JOIN 
-    (SELECT TOP 1 USD, EUR FROM aa_erp_kur ORDER BY tarih DESC) k ON 1=1
+    (select TOP 1 KOMISYON_F1 from " . getTableName('aa_erp_kt_teklifler') . " te where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) FON1,
+	(select TOP 1 KOMISYON_F2 from " . getTableName('aa_erp_kt_teklifler') . " te where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) FON2,
+	(select TOP 1 KOMISYON_H from " . getTableName('aa_erp_kt_teklifler') . " te where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) HARCAMA
+FROM
+    LKS.dbo." . getTableName('aa_erp_kt_firsatlar') . " f
+INNER JOIN
+    " . getTableName('aa_erp_kt_teklifler') . " te ON te.X_FIRSAT_NO = f.FIRSAT_NO
+INNER JOIN
+    " . getTableName('aa_erp_kt_siparisler') . " s ON s.X_FIRSAT_NO = f.FIRSAT_NO
+INNER JOIN
+    " . getTableName('aa_erp_kt_teklifler_urunler') . " tu ON tu.X_TEKLIF_NO = te.TEKLIF_NO
+INNER JOIN
+    (SELECT TOP 1 USD, EUR FROM " . getTableName('aa_erp_kur') . " ORDER BY tarih DESC) k ON 1=1
 WHERE
     f.DURUM = '1'
     AND f.SIL = '0'
@@ -52,7 +52,7 @@ WHERE
     AND te.TEKLIF_TIPI = 1
     AND f.FIRSAT_NO NOT IN (
         SELECT FIRSAT_NO
-        FROM aa_erp_kt_firsatlar
+        FROM " . getTableName('aa_erp_kt_firsatlar') . "
         WHERE FIRSAT_ANA IS NULL
         AND BAGLI_FIRSAT_NO IS NOT NULL
     )

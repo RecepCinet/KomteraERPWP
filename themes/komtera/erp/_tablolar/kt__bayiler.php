@@ -11,9 +11,9 @@ b.CH_KODU,
 b.VADE,
 k.dikkat_listesi,
 k.kara_liste,
-(select top 1 seviye from aa_erp_kt_bayiler_markaseviyeleri s where s.MARKA='SOPHOS' AND s.CH_KODU=b.CH_KODU) AS SOPHOS,
-(select top 1 seviye from aa_erp_kt_bayiler_markaseviyeleri s where s.MARKA='WATCHGUARD' AND s.CH_KODU=b.CH_KODU) AS WATCHGUARD
-from aaa_erp_kt_bayiler b LEFT JOIN aa_erp_kt_bayiler_kara_liste k
+(select top 1 seviye from " . getTableName('aa_erp_kt_bayiler_markaseviyeleri') . " s where s.MARKA='SOPHOS' AND s.CH_KODU=b.CH_KODU) AS SOPHOS,
+(select top 1 seviye from " . getTableName('aa_erp_kt_bayiler_markaseviyeleri') . " s where s.MARKA='WATCHGUARD' AND s.CH_KODU=b.CH_KODU) AS WATCHGUARD
+from " . getTableName('aaa_erp_kt_bayiler') . " b LEFT JOIN " . getTableName('aa_erp_kt_bayiler_kara_liste') . " k
 ON b.CH_KODU =k.ch_kodu
 WHERE b.CH_KODU like '120%'
 ";

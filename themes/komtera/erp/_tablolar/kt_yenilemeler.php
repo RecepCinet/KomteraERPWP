@@ -5,17 +5,14 @@ ini_set('display_errors', true);
 
 include '../../_conn.php';
 
-$sqlf=<<<DATA
-select CONCAT('''',REPLACE(lisans_tarih_markalar, CHAR(13), '","'),'''') as D from aa_erp_kt_pref
-DATA;
+$sqlf="select CONCAT('''',REPLACE(lisans_tarih_markalar, CHAR(13), '',''),'''') as D from " . getTableName('aa_erp_kt_pref') . "";
 //
 
 $stmt = $conn->query($sqlf);
 $filt = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['D'];
 
 
-$sql=<<<DATA
-SELECT f.id,
+$sql="SELECT f.id,
 f.FIRSAT_NO,
 t.TEKLIF_NO,
 f.MUSTERI_TEMSILCISI,
@@ -23,22 +20,21 @@ f.MARKA,
 f.BAYI_ADI,
 f.BAYI_YETKILI_ISIM,
 f.MUSTERI_ADI
-FROM aa_erp_kt_teklifler t LEFT OUTER JOIN LKS.dbo.aa_erp_kt_firsatlar f
+FROM " . getTableName('aa_erp_kt_teklifler') . " t LEFT OUTER JOIN LKS.dbo." . getTableName('aa_erp_kt_firsatlar') . " f
 ON t.X_FIRSAT_NO = f.FIRSAT_NO
 WHERE f.SIL='0'
 AND t.TEKLIF_TIPI = '1'
-AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
-AND t.TEKLIF_NO IN (SELECT 
+AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from " . getTableName('aa_erp_kt_firsatlar') . " f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
+AND t.TEKLIF_NO IN (SELECT
   LEFT(su.X_SIPARIS_NO, CHARINDEX('-', su.X_SIPARIS_NO) - 1) AS SiparisNo
-FROM 
-  aa_erp_kt_siparisler_urunler su
-WHERE 
+FROM
+  " . getTableName('aa_erp_kt_siparisler_urunler') . " su
+WHERE
   su.YENILEMETARIHI is null
   AND su.id > 32450
-GROUP BY 
+GROUP BY
   LEFT(su.X_SIPARIS_NO, CHARINDEX('-', su.X_SIPARIS_NO) - 1)
-)
-DATA;
+)";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

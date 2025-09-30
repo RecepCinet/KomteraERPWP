@@ -94,7 +94,7 @@ function updateSingle($pdo, $r, $in) {
         $iskonto = "";
     }
 
-    $stmt = $pdo->prepare("select KILIT from aa_erp_kt_teklifler where TEKLIF_NO=(select top 1 X_TEKLIF_NO from aa_erp_kt_teklifler_urunler where id=?)");
+    $stmt = $pdo->prepare("select KILIT from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_NO=(select top 1 X_TEKLIF_NO from " . getTableName('aa_erp_kt_teklifler_urunler') . " where id=?)");
     $stmt->execute(array($r['id']));
     $gelen = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 
@@ -117,7 +117,7 @@ function updateSingle($pdo, $r, $in) {
 
     $sat_tip = $r['SATIS_TIPI'];
 
-    $sql = "update aa_erp_kt_teklifler_urunler set $mcek1 ADET= ?,MEVCUT_LISANS='$mevcut_lisans',SATIS_TIPI='$sat_tip',B_SATIS_FIYATI='$satis_fiyati', B_MALIYET = '$maliyet', ISKONTO = '$iskonto' where id = ?";
+    $sql = "update " . getTableName('aa_erp_kt_teklifler_urunler') . " set $mcek1 ADET= ?,MEVCUT_LISANS='$mevcut_lisans',SATIS_TIPI='$sat_tip',B_SATIS_FIYATI='$satis_fiyati', B_MALIYET = '$maliyet', ISKONTO = '$iskonto' where id = ?";
     echo $sql;
     $stmt = $pdo->prepare($sql);
     $result = $stmt->execute($mcek2);
@@ -128,7 +128,7 @@ function updateSingle($pdo, $r, $in) {
 
 //delete single record from db.
 function deleteSingle($pdo, $r) {
-    $sql = "delete from aa_erp_kt_teklifler_urunler where id = ?";
+    $sql = "delete from " . getTableName('aa_erp_kt_teklifler_urunler') . " where id = ?";
     $stmt = $pdo->prepare($sql);
     $result = $stmt->execute(array($r['id']));
     if ($result == false) {
@@ -190,7 +190,7 @@ if (isset($_GET["pq_add"])) {
 } else if (isset($_GET["pq_curpage"])) {//paging.
     $pq_curPage = $_GET["pq_curpage"];
     $pq_rPP = $_GET["pq_rpp"];
-    $sql = "Select count(*) from aa_erp_kt_teklifler_urunler";
+    $sql = "Select count(*) from " . getTableName('aa_erp_kt_teklifler_urunler') . "";
     $dbh = getDBH();
     $stmt = $dbh->query($sql);
     $total_Records = $stmt->fetchColumn();
@@ -199,7 +199,7 @@ if (isset($_GET["pq_add"])) {
         $pq_curPage = ceil($total_Records / $pq_rPP);
         $skip = ($pq_rPP * ($pq_curPage - 1));
     }
-    $sql = "Select * from aa_erp_kt_teklifler_urunler order by id limit OFFSET $skip ROWS FETCH NEXT $pq_rPP ROWS ONLY";
+    $sql = "Select * from " . getTableName('aa_erp_kt_teklifler_urunler') . " order by id limit OFFSET $skip ROWS FETCH NEXT $pq_rPP ROWS ONLY";
     $stmt = $dbh->query($sql);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($products as $i => &$row) {
@@ -231,10 +231,10 @@ CASE
 WHEN B_MALIYET>0 THEN ( ( B_SATIS_FIYATI - B_MALIYET ) / NULLIF(B_SATIS_FIYATI,0) ) * 100
 ELSE ( ( B_SATIS_FIYATI - O_MALIYET ) / NULLIF(B_SATIS_FIYATI,0) ) * 100
 END AS KARLILIK,
-        (select top 1 1 FROM aa_erp_kt_mcafee_sku_sure s where s.sku=u.SKU) AS MCSURE,
+        (select top 1 1 FROM " . getTableName('aa_erp_kt_mcafee_sku_sure') . " s where s.sku=u.SKU) AS MCSURE,
 	SIRA,
         SATIS_TIPI
-        FROM LKS.dbo.aa_erp_kt_teklifler_urunler u where X_TEKLIF_NO='$teklif_id' order by SIRA";
+        FROM LKS.dbo." . getTableName('aa_erp_kt_teklifler_urunler') . " u where X_TEKLIF_NO='$teklif_id' order by SIRA";
     $dbh = getDBH();
     $stmt = $dbh->prepare($sql);
     $stmt->execute();

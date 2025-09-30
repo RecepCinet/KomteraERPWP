@@ -1,7 +1,7 @@
 <?php
 
 $bayi_seviye = 1;
-$sqls = "select UserLimit,sku,cozum,lisansSuresi,listeFiyati,listeFiyatiUpLift,a_iskonto1,a_iskonto1_r,s_iskonto1,s_iskonto1_r from aaa_erp_kt_sechard_list s where sku='$sku'";
+$sqls = "select UserLimit,sku,cozum,lisansSuresi,listeFiyati,listeFiyatiUpLift,a_iskonto1,a_iskonto1_r,s_iskonto1,s_iskonto1_r from " . getTableName('aaa_erp_kt_sechard_list') . " s where sku='$sku'";
 $stmt = $conn->query($sqls);
 $datas = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 echo $sqls . "\n\n";
@@ -9,7 +9,7 @@ $lisans_suresi = $datas['lisansSuresi'];
 $cozum = $datas['cozum'];
 $user_limit = $datas['UserLimit'];
 $sqlt = "select top 1 UserLimit,sku,cozum,lisansSuresi,listeFiyati,listeFiyatiUpLift,a_iskonto1,a_iskonto1_r,s_iskonto1,s_iskonto1_r
-from aaa_erp_kt_sechard_list s
+from " . getTableName('aaa_erp_kt_sechard_list') . " s
 where cozum='$cozum' and lisansSuresi ='$lisans_suresi' and UserLimit >$user_limit";
 $stmt = $conn->query($sqlt);
 $datat = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
@@ -81,12 +81,10 @@ if ($UserLimit == "0") {
     $a_maliyet = $mmsl * $bol;
 }
 if ($datas['UserLimit'] == "" || $datas['UserLimit'] == 0 || $f_adet == $datas['UserLimit']) {
-    $sqlinsert = <<<SQLS
-INSERT INTO LKS.dbo.aa_erp_kt_teklifler_urunler
+    $sqlinsert = "INSERT INTO LKS.dbo." . getTableName('aa_erp_kt_teklifler_urunler') . "
     (slot,X_TEKLIF_NO,SKU,ACIKLAMA,TIP,SURE,ADET, B_LISTE_FIYATI,B_MALIYET,O_MALIYET, ISKONTO, B_SATIS_FIYATI, SIRA)
     VALUES
-    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$f_adet1','$birim_uplift','$b_maliyet','$a_maliyet','$h_iskonto','$s_maliyet','$sira' )
-SQLS;
+    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$f_adet1','$birim_uplift','$b_maliyet','$a_maliyet','$h_iskonto','$s_maliyet','$sira' )";
     echo $sqlinsert . "\n\n";
     try {
         $stmt = $conn->prepare($sqlinsert);
@@ -105,12 +103,10 @@ if (is_nan($h_iskonto2)) {
     $h_iskonto2='';
 }
 if (1 == 2) {
-    $sqlinsert = <<<SQLS
-INSERT INTO LKS.dbo.aa_erp_kt_teklifler_urunler
+    $sqlinsert = "INSERT INTO LKS.dbo." . getTableName('aa_erp_kt_teklifler_urunler') . "
     (slot,X_TEKLIF_NO,SKU,ACIKLAMA,TIP,SURE,ADET, B_LISTE_FIYATI,B_MALIYET,O_MALIYET, ISKONTO, B_SATIS_FIYATI, SIRA)
     VALUES
-    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$f_adet2','$birim_uplift2','$b_maliyet2','$a_maliyet2','$h_iskonto2','$s_maliyet2','$sira' )
-SQLS;
+    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$f_adet2','$birim_uplift2','$b_maliyet2','$a_maliyet2','$h_iskonto2','$s_maliyet2','$sira' )";
     try {
         $stmt = $conn->prepare($sqlinsert);
         $result = $stmt->execute();
@@ -131,12 +127,10 @@ $toplam_iskonto = (1 - ($toplam_satis_fiyati / $toplam_uplift)) * 100;
 if (is_nan($toplam_iskonto)) {
     $toplam_iskonto='';
 }
-$sqlinsert = <<<SQLS
-INSERT INTO LKS.dbo.aa_erp_kt_teklifler_urunler
+$sqlinsert = "INSERT INTO LKS.dbo." . getTableName('aa_erp_kt_teklifler_urunler') . "
     (slot,X_TEKLIF_NO,SKU,ACIKLAMA,TIP,SURE,ADET, B_LISTE_FIYATI,B_MALIYET,O_MALIYET, ISKONTO, B_SATIS_FIYATI, SIRA)
     VALUES
-    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$toplam_adet','$toplam_uplift','$toplam_maliyet','$toplam_a_maliyet','$toplam_iskonto','$toplam_satis_fiyati','$sira' )
-SQLS;
+    ('$track_type','$teklif_no','$sku','$urunAciklama','$tur','$lisansSuresi','$toplam_adet','$toplam_uplift','$toplam_maliyet','$toplam_a_maliyet','$toplam_iskonto','$toplam_satis_fiyati','$sira' )";
 try {
     $stmt = $conn->prepare($sqlinsert);
     $result = $stmt->execute();

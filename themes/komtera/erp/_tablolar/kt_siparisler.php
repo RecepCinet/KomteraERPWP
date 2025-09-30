@@ -19,17 +19,17 @@ $sql = "select
                    WHEN t.SATIS_TIPI = '1' THEN 'Yenileme'
                    ELSE 'İlk Satış ve Yenileme'
                    END
-           FROM aa_erp_kt_teklifler t
+           FROM " . getTableName('aa_erp_kt_teklifler') . " t
            WHERE t.TEKLIF_TIPI = 1 AND t.X_FIRSAT_NO = f.FIRSAT_NO
        ) AS SATIP,
     inv.DATE_ AS FATTARIHI,
     stuff((
 select ','+convert(varchar(30),su.SKU)
-from aa_erp_kt_siparisler_urunler su where su.X_SIPARIS_NO = s.SIPARIS_NO
+from " . getTableName('aa_erp_kt_siparisler_urunler') . " su where su.X_SIPARIS_NO = s.SIPARIS_NO
 for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as skular,
         stuff((
               select ','+convert(varchar(20),su.LISANS)
-              from aa_erp_kt_siparisler_urunler su where su.X_SIPARIS_NO = s.SIPARIS_NO
+              from " . getTableName('aa_erp_kt_siparisler_urunler') . " su where su.X_SIPARIS_NO = s.SIPARIS_NO
               for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as lisanslar,
 	s.SIPARIS_NO, 
 	s.SIPARIS_DURUM,
@@ -57,22 +57,22 @@ s.PARCA,
 s.KARGO_GONDERI_NO,
 s.KARGO_DURUM,
 f.MUSTERI_TEMSILCISI,
-(select VADE from aa_erp_kt_teklifler t where t.TEKLIF_NO=X_TEKLIF_NO) AS VADE,
+(select VADE from " . getTableName('aa_erp_kt_teklifler') . " t where t.TEKLIF_NO=X_TEKLIF_NO) AS VADE,
 s.CD,s.CT,
-(select SUM(BIRIM_FIYAT*ADET) AS TOPLAM from aa_erp_kt_siparisler_urunler su WHERE X_SIPARIS_NO = s.SIPARIS_NO) as TOPLAM,
+(select SUM(BIRIM_FIYAT*ADET) AS TOPLAM from " . getTableName('aa_erp_kt_siparisler_urunler') . " su WHERE X_SIPARIS_NO = s.SIPARIS_NO) as TOPLAM,
 CASE
-WHEN f.PARA_BIRIMI = 'USD' THEN (select SUM(su.ADET*su.BIRIM_FIYAT) from aa_erp_kt_siparisler_urunler su where s.SIPARIS_NO=su.X_SIPARIS_NO)
-WHEN f.PARA_BIRIMI = 'TRY' THEN (select SUM(su.ADET*su.BIRIM_FIYAT) from aa_erp_kt_siparisler_urunler su where s.SIPARIS_NO=su.X_SIPARIS_NO)/(select top 1 USD from aa_erp_kur k order by tarih desc)
-WHEN f.PARA_BIRIMI = 'EUR' THEN (select SUM(su.ADET*su.BIRIM_FIYAT) from aa_erp_kt_siparisler_urunler su where s.SIPARIS_NO=su.X_SIPARIS_NO)/(select top 1 USD/EUR from aa_erp_kur k order by tarih desc)
+WHEN f.PARA_BIRIMI = 'USD' THEN (select SUM(su.ADET*su.BIRIM_FIYAT) from " . getTableName('aa_erp_kt_siparisler_urunler') . " su where s.SIPARIS_NO=su.X_SIPARIS_NO)
+WHEN f.PARA_BIRIMI = 'TRY' THEN (select SUM(su.ADET*su.BIRIM_FIYAT) from " . getTableName('aa_erp_kt_siparisler_urunler') . " su where s.SIPARIS_NO=su.X_SIPARIS_NO)/(select top 1 USD from " . getTableName('aa_erp_kur') . " k order by tarih desc)
+WHEN f.PARA_BIRIMI = 'EUR' THEN (select SUM(su.ADET*su.BIRIM_FIYAT) from " . getTableName('aa_erp_kt_siparisler_urunler') . " su where s.SIPARIS_NO=su.X_SIPARIS_NO)/(select top 1 USD/EUR from " . getTableName('aa_erp_kur') . " k order by tarih desc)
 ELSE 0
 END AS DLR_TUTAR,
 f.MARKA,
 f.BAYI_ADI,
 f.MUSTERI_ADI,
 f.PARA_BIRIMI,
-(select count(*) as kaunt from aa_erp_kt_siparisler_urunler suuu where TIP='Hardware' and suuu.X_SIPARIS_NO = s.SIPARIS_NO) as HardwareVarmi,
+(select count(*) as kaunt from " . getTableName('aa_erp_kt_siparisler_urunler') . " suuu where TIP='Hardware' and suuu.X_SIPARIS_NO = s.SIPARIS_NO) as HardwareVarmi,
 s.OZEL_KUR
-from aa_erp_kt_siparisler s LEFT JOIN aa_erp_kt_firsatlar f 
+from " . getTableName('aa_erp_kt_siparisler') . " s LEFT JOIN " . getTableName('aa_erp_kt_firsatlar') . " f 
 ON s.X_FIRSAT_NO = f.FIRSAT_NO
 LEFT JOIN LG_319_01_INVOICE inv ON inv.DOCODE=s.SIPARIS_NO";
 

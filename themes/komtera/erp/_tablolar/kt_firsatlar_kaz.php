@@ -31,13 +31,13 @@ $sql = "SELECT f.id,
                    WHEN t.SATIS_TIPI = '1' THEN 'Yenileme'
                    ELSE 'İlk Satış ve Yenileme'
                    END
-           FROM aa_erp_kt_teklifler t
+           FROM " . getTableName('aa_erp_kt_teklifler') . " t
            WHERE t.TEKLIF_TIPI = 1 AND t.X_FIRSAT_NO = f.FIRSAT_NO
        ) AS SATIP,
 f.MARKA_MANAGER,
 f.BAYI_YETKILI_ISIM,
 f.FIRSAT_NO,
-(select top 1 TEKLIF_NO from aa_erp_kt_teklifler where X_FIRSAT_NO = f.FIRSAT_NO and TEKLIF_TIPI = '1' ) as TEKLIF_NO,
+(select top 1 TEKLIF_NO from " . getTableName('aa_erp_kt_teklifler') . " where X_FIRSAT_NO = f.FIRSAT_NO and TEKLIF_TIPI = '1' ) as TEKLIF_NO,
 f.PARA_BIRIMI,
 f.REGISTER,
 f.BASLANGIC_TARIHI,
@@ -50,9 +50,9 @@ WHEN DURUM = '0' THEN 'Açık'
 ELSE ''
 END AS DURUM,
 CASE
-WHEN PARA_BIRIMI = 'USD' THEN (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from aa_erp_kt_teklifler_urunler tu INNER JOIN aa_erp_kt_teklifler te  ON tu.X_TEKLIF_NO = te.TEKLIF_NO  where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO)
-WHEN PARA_BIRIMI = 'TRY' THEN (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from aa_erp_kt_teklifler_urunler tu INNER JOIN aa_erp_kt_teklifler te  ON tu.X_TEKLIF_NO = te.TEKLIF_NO  where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO)/(select top 1 USD from aa_erp_kur k order by tarih desc)
-WHEN PARA_BIRIMI = 'EUR' THEN (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from aa_erp_kt_teklifler_urunler tu INNER JOIN aa_erp_kt_teklifler te  ON tu.X_TEKLIF_NO = te.TEKLIF_NO  where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO)/(select top 1 USD/EUR from aa_erp_kur k order by tarih desc)
+WHEN PARA_BIRIMI = 'USD' THEN (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu INNER JOIN " . getTableName('aa_erp_kt_teklifler') . " te  ON tu.X_TEKLIF_NO = te.TEKLIF_NO  where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO)
+WHEN PARA_BIRIMI = 'TRY' THEN (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu INNER JOIN " . getTableName('aa_erp_kt_teklifler') . " te  ON tu.X_TEKLIF_NO = te.TEKLIF_NO  where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO)/(select top 1 USD from " . getTableName('aa_erp_kur') . " k order by tarih desc)
+WHEN PARA_BIRIMI = 'EUR' THEN (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu INNER JOIN " . getTableName('aa_erp_kt_teklifler') . " te  ON tu.X_TEKLIF_NO = te.TEKLIF_NO  where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO)/(select top 1 USD/EUR from " . getTableName('aa_erp_kur') . " k order by tarih desc)
 ELSE 0
 END AS DLR_TUTAR,
 f.KAYIDI_ACAN,
@@ -61,8 +61,8 @@ f.MARKA,
 f.BAYI_ADI,
 f.BAYI_YETKILI_ISIM,
 f.MUSTERI_ADI
-FROM LKS.dbo.aa_erp_kt_firsatlar f WHERE f.DURUM='1' AND f.SIL='0'
-AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from aa_erp_kt_firsatlar f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)";
+FROM LKS.dbo." . getTableName('aa_erp_kt_firsatlar') . " f WHERE f.DURUM='1' AND f.SIL='0'
+AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from " . getTableName('aa_erp_kt_firsatlar') . " f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)";
 
 if (!empty($date1) && !empty($date2)) {
     $sql .= " AND f.BASLANGIC_TARIHI >= '$date1' AND f.BASLANGIC_TARIHI <= '$date2'";

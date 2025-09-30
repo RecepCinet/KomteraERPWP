@@ -7,14 +7,14 @@ include "../_conn.php";
 
 $url = "select id,
 	   magaza,
-(select VADE from aaa_erp_kt_bayiler b where b.CH_KODU='120.03.01.0472') as vade,
+(select VADE from " . getTableName('aaa_erp_kt_bayiler') . " b where b.CH_KODU='120.03.01.0472') as vade,
 	   concat(adres,' ',sehir) as adres,
 	   sku,
 	   doviz_turu,
 	   adet,
            belge_no,
-	   birim_fiyat 
-from aa_erp_kt_mediamarkt_faturalama
+	   birim_fiyat
+from " . getTableName('aa_erp_kt_mediamarkt_faturalama') . "
 ";
 $stmt = $conn->prepare($url);
 $stmt->execute();
@@ -79,7 +79,7 @@ for ($t = 0; $t < count($data); $t++) {
     $_Adres1 = trim(mb_substr($_Sevk_Adresi, 0, 50));
     $_Adres2 = trim(mb_substr($_Sevk_Adresi, 50, 50));
     $durumm = "99";
-    $sqlinsert = "INSERT INTO LKS.dbo.ARYD_FIS_AKTARIM (MusteriSiparisNo,OZEL_KOD,[SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI]
+    $sqlinsert = "INSERT INTO LKS.dbo." . getTableName('ARYD_FIS_AKTARIM') . " (MusteriSiparisNo,OZEL_KOD,[SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI]
           ,[FIS_DURUMU],[SATIR_ID],[Cari_Vade_Kodu],[Sevk_Adresi],[DOVIZ_TUR],[SevkiyatKime],[Unvan],[Adres1],[Adres2]
           ,SONUC,PROJE_KOD$fatek1)
           values ('$_musteri_belge_no','mediamarkt','$_SIPARISID','$siparis_no','$_CARI_KOD','$_MALZEMEKOD','$_MIKTAR','$_FIYAT','$logo_kullanici'
@@ -100,7 +100,7 @@ for ($t = 0; $t < count($data); $t++) {
     }
     $temp_ch = $magaza;
 }
-$sqlupdate = "update LKS.dbo.ARYD_FIS_AKTARIM set SONUC='0' WHERE SONUC='99'"; //99
+$sqlupdate = "update LKS.dbo." . getTableName('ARYD_FIS_AKTARIM') . " set SONUC='0' WHERE SONUC='99'"; //99
 try {
     $stmt = $conn->prepare($sqlupdate);
     $result = $stmt->execute();

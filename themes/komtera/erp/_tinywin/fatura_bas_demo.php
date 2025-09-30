@@ -11,7 +11,7 @@ $demo_id=$_GET['demo_id'];
 include "../_conn.php";
 include "../_conn_fm.php";
 
-$url = "select * from aa_erp_kt_demolar d where id=:id";
+$url = "select * from " . getTableName('aa_erp_kt_demolar') . " d where id=:id";
 $stmt = $conn->prepare($url);
 $stmt->execute(['id' => $demo_id]);
 $demo = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
@@ -54,7 +54,7 @@ $Ambar="1"; // Demo AMbari!
 $fatek1="";
 $durumm="0";
 
-$sqlinsert = "INSERT INTO LKS.dbo.ARYD_FIS_AKTARIM ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[BIRIM],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI],[SERI_NO]
+$sqlinsert = "INSERT INTO LKS.dbo." . getTableName('ARYD_FIS_AKTARIM') . " ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[BIRIM],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI],[SERI_NO]
           ,[FIS_DURUMU],[SATIR_ID],[Cari_Vade_Kodu],[Sevk_Adresi],[DOVIZKUR],[DOVIZ_TUR],[SevkiyatKime],[Unvan],[KisiBilgi],[Adres1],[Adres2],[MusteriSiparisNo]
           ,[BayiMusteri],[Hizmetmi],[LisansSuresi],[Ambar],SONUC,IPTAL,IRSALIYE_ID,FATURA_ID$fatek1)
           values ('$_SIPARISID','$siparis_no','$_CARI_KOD','$_MALZEMEKOD','ADET','$_MIKTAR','$_FIYAT'

@@ -17,7 +17,7 @@ $teklif_data = null;
 $firsat_data = null;
 try {
     // First get teklif data
-    $sql = "SELECT TOP 1 * FROM aa_erp_kt_teklifler
+    $sql = "SELECT TOP 1 * FROM " . getTableName('aa_erp_kt_teklifler') . "
             WHERE TEKLIF_NO = :teklif_no AND (SIL IS NULL OR SIL <> '1')";
 
     $stmt = $conn->prepare($sql);
@@ -32,7 +32,7 @@ try {
 
     // Get related firsat data if X_FIRSAT_NO exists
     if (!empty($teklif_data['X_FIRSAT_NO'])) {
-        $firsat_sql = "SELECT TOP 1 * FROM aa_erp_kt_firsatlar
+        $firsat_sql = "SELECT TOP 1 * FROM " . getTableName('aa_erp_kt_firsatlar') . "
                        WHERE FIRSAT_NO = :firsat_no AND (SIL IS NULL OR SIL <> '1')";
 
         $firsat_stmt = $conn->prepare($firsat_sql);
@@ -49,7 +49,7 @@ try {
 $teklif_urunler = [];
 $urun_error = '';
 try {
-    $urun_sql = "SELECT * FROM aa_erp_kt_teklifler_urunler
+    $urun_sql = "SELECT * FROM " . getTableName('aa_erp_kt_teklifler_urunler') . "
                  WHERE X_TEKLIF_NO = :teklif_no
                  ORDER BY SATIR_NO";
 
@@ -915,7 +915,7 @@ try {
                         ELSE
                             ((B_SATIS_FIYATI - O_MALIYET) / NULLIF(B_SATIS_FIYATI, 0)) * 100 * (B_SATIS_FIYATI * ADET)
                         END) / NULLIF(SUM(B_SATIS_FIYATI * ADET), 0) as ORTALAMA_KARLILIK
-                    FROM aa_erp_kt_teklifler_urunler
+                    FROM " . getTableName('aa_erp_kt_teklifler_urunler') . "
                     WHERE X_TEKLIF_NO = :teklif_no";
 
                     $summary_stmt = $conn->prepare($summary_sql);

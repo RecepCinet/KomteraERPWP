@@ -14,8 +14,8 @@ if ($gelen == "") {
     $filter = "1=1";
 }
 //$sql = "Select top 22 * from aa_erp_kt_musteriler where $filter order by musteri";
-$sql = "select top 100 b.CH_KODU,b.CH_UNVANI,k.dikkat_listesi dl,k.kara_liste kl from aaa_erp_kt_bayiler b LEFT JOIN aa_erp_kt_bayiler_kara_liste k
-ON b.CH_KODU = k.ch_kodu 
+$sql = "select top 100 b.CH_KODU,b.CH_UNVANI,k.dikkat_listesi dl,k.kara_liste kl from " . getTableName('aaa_erp_kt_bayiler') . " b LEFT JOIN " . getTableName('aa_erp_kt_bayiler_kara_liste') . " k
+ON b.CH_KODU = k.ch_kodu
 where $filter
 order by b.CH_UNVANI";
 

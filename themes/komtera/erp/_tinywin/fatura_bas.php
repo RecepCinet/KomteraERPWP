@@ -25,7 +25,7 @@ include '../../_conn_fm.php';
 
 $siparis_no = $_GET['siparis_no'];
 
-$url = "select * from aa_erp_kt_siparisler where SIPARIS_NO=:siparis_no";
+$url = "select * from " . getTableName('aa_erp_kt_siparisler') . " where SIPARIS_NO=:siparis_no";
 trace($url);
 $stmt = $conn->prepare($url);
 $stmt->execute(['siparis_no' => $siparis_no]);
@@ -42,14 +42,14 @@ trace($s);
 
 $teklif_no=$s['X_TEKLIF_NO'];
 
-$url = "select * from aa_erp_kt_siparisler_urunler where X_SIPARIS_NO=:siparis_no";
+$url = "select * from " . getTableName('aa_erp_kt_siparisler_urunler') . " where X_SIPARIS_NO=:siparis_no";
 trace($url);
 $stmt = $conn->prepare($url);
 $stmt->execute(['siparis_no' => $siparis_no]);
 $su = $stmt->fetchAll(PDO::FETCH_ASSOC);
 trace($su);
 
-$url = "select * from aa_erp_kt_firsatlar where FIRSAT_NO=:firsat_no";
+$url = "select * from " . getTableName('aa_erp_kt_firsatlar') . " where FIRSAT_NO=:firsat_no";
 trace($url);
 $stmt = $conn->prepare($url);
 $stmt->execute(['firsat_no' => $s['X_FIRSAT_NO']]);
@@ -60,14 +60,14 @@ $stmt = $conn2->prepare("select LOGO_kullanici from TF_USERS where kullanici='" 
 $stmt->execute();
 $logo_kullanici = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['LOGO_kullanici'];
 
-$url = "select * from aa_erp_kt_teklifler where TEKLIF_NO=:teklif_no";
+$url = "select * from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_NO=:teklif_no";
 trace($url);
 $stmt = $conn->prepare($url);
 $stmt->execute(['teklif_no' => $teklif_no]);
 $t = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 trace($t);
 
-$url = "select * from aa_erp_kt_teklifler_urunler where X_TEKLIF_NO=:teklif_no";
+$url = "select * from " . getTableName('aa_erp_kt_teklifler_urunler') . " where X_TEKLIF_NO=:teklif_no";
 trace($url);
 $stmt = $conn->prepare($url);
 $stmt->execute(['teklif_no' => $teklif_no]);
@@ -93,7 +93,7 @@ foreach ($su as $key => $satir) {
     $_CARI_KOD = $f['BAYI_CHKODU'];
     $_MALZEMEKOD = $satir["SKU"];
     $Hizmetmi="0";
-            $sqlstring5 = "select TIP from aa_erp_kt_teklifler_urunler where X_TEKLIF_NO='$teklif_no' AND SKU=:sku";
+            $sqlstring5 = "select TIP from " . getTableName('aa_erp_kt_teklifler_urunler') . " where X_TEKLIF_NO='$teklif_no' AND SKU=:sku";
             $stmt = $conn->prepare($sqlstring5);
             $stmt->execute(['sku' => $_MALZEMEKOD]);
             $hizmetmikontrol = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['TIP'];
@@ -204,7 +204,7 @@ foreach ($su as $key => $satir) {
         
         
     } else {        
-        $sqlinsert = "INSERT INTO LKS.dbo.ARYD_FIS_AKTARIM ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[BIRIM],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI],[SERI_NO]
+        $sqlinsert = "INSERT INTO LKS.dbo." . getTableName('ARYD_FIS_AKTARIM') . " ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[BIRIM],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI],[SERI_NO]
           ,[FIS_DURUMU],[SATIR_ID],[Cari_Vade_Kodu],[Sevk_Adresi],[DOVIZKUR],[DOVIZ_TUR],[SevkiyatKime],[Unvan],[KisiBilgi],[Adres1],[Adres2],[MusteriSiparisNo]
           ,[BayiMusteri],[Hizmetmi],[LisansSuresi],[Ambar],SONUC,IPTAL,IRSALIYE_ID,FATURA_ID$fatek1) values ('$_SIPARISID','$siparis_no','$_CARI_KOD','$_MALZEMEKOD','ADET','$_MIKTAR','$_FIYAT'
           ,'$logo_kullanici','$_SERI_NO','$fis_dur','$say','$_VADE','$_Sevk_Adresi','$DOVIZKUR','$DOVIZTUR','$_SevkiyatKime','" . mb_substr($BayiMusteri,0,50) .  "','$KisiBilgi'
@@ -222,14 +222,14 @@ if ($trace === 1) {
     echo "</table>";
     
     //echo "#$DOVIZKUR#";
-    $sqlinsert = "INSERT INTO LKS.dbo.ARYD_FIS_AKTARIM ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[BIRIM],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI],[SERI_NO]
+    $sqlinsert = "INSERT INTO LKS.dbo." . getTableName('ARYD_FIS_AKTARIM') . " ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[BIRIM],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI],[SERI_NO]
           ,[FIS_DURUMU],[SATIR_ID],[Cari_Vade_Kodu],[Sevk_Adresi],[DOVIZKUR],[DOVIZ_TUR],[SevkiyatKime],[Unvan],[KisiBilgi],[Adres1],[Adres2],[MusteriSiparisNo]
           ,[BayiMusteri],[Hizmetmi],[LisansSuresi],[Ambar],SONUC,IPTAL,IRSALIYE_ID,FATURA_ID$fatek1) values ('$_SIPARISID','$siparis_no','$_CARI_KOD','$_MALZEMEKOD','ADET','$_MIKTAR','$_FIYAT'
           ,'$logo_kullanici','$_SERI_NO','$fis_dur','$say','$_VADE','$_Sevk_Adresi','$DOVIZKUR','$DOVIZTUR','$_SevkiyatKime','" . mb_substr($BayiMusteri,0,50) .  "','$KisiBilgi'
           ,'$_Adres1','$_Adres2','$MusteriSiparisNo','','$Hizmetmi','$LisansSuresi','$Ambar','-2','0','0','0'$fatek2)";
     echo $sqlinsert;
 } else {
-    $sqlupdate = "update LKS.dbo.ARYD_FIS_AKTARIM set SONUC='0' WHERE [NO]='$siparis_no'";
+    $sqlupdate = "update LKS.dbo." . getTableName('ARYD_FIS_AKTARIM') . " set SONUC='0' WHERE [NO]='$siparis_no'";
           try {
         $stmt = $conn->prepare($sqlupdate);
         $result = $stmt->execute();

@@ -59,7 +59,7 @@ try {
     $teklif_no = sanitize_text_field($_POST['teklif_no']);
 
     // Get file info before deletion
-    $sql = "SELECT FILE_PATH, FILE_NAME FROM aa_erp_kt_teklif_lisans_dosyalar
+    $sql = "SELECT FILE_PATH, FILE_NAME FROM " . getTableName('aa_erp_kt_teklif_lisans_dosyalar') . "
             WHERE id = ? AND TEKLIF_NO = ? AND (SIL IS NULL OR SIL = 0)";
 
     $stmt = $conn->prepare($sql);
@@ -71,7 +71,7 @@ try {
     }
 
     // Mark as deleted in database (soft delete)
-    $delete_sql = "UPDATE aa_erp_kt_teklif_lisans_dosyalar
+    $delete_sql = "UPDATE " . getTableName('aa_erp_kt_teklif_lisans_dosyalar') . "
                    SET SIL = 1, DELETED_DATE = GETDATE(), DELETED_BY = ?
                    WHERE id = ? AND TEKLIF_NO = ?";
 

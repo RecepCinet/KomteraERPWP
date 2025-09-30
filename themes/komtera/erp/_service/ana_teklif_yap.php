@@ -16,7 +16,7 @@ try {
     }
 
     // Önce bu teklifin hangi fırsata ait olduğunu bul
-    $firsat_sql = "SELECT X_FIRSAT_NO FROM aa_erp_kt_teklifler WHERE TEKLIF_NO = :teklif_no";
+    $firsat_sql = "SELECT X_FIRSAT_NO FROM " . getTableName('aa_erp_kt_teklifler') . " WHERE TEKLIF_NO = :teklif_no";
     $firsat_stmt = $conn->prepare($firsat_sql);
     $firsat_stmt->bindParam(':teklif_no', $teklif_no);
     $firsat_stmt->execute();
@@ -34,7 +34,7 @@ try {
 
     try {
         // 1. Aynı fırsattaki tüm ana teklifleri sıfırla
-        $reset_sql = "UPDATE aa_erp_kt_teklifler
+        $reset_sql = "UPDATE " . getTableName('aa_erp_kt_teklifler') . "
                       SET TEKLIF_TIPI = 0
                       WHERE X_FIRSAT_NO = :firsat_no AND TEKLIF_TIPI = 1";
         $reset_stmt = $conn->prepare($reset_sql);
@@ -42,7 +42,7 @@ try {
         $reset_stmt->execute();
 
         // 2. Seçilen teklifi ana teklif yap
-        $update_sql = "UPDATE aa_erp_kt_teklifler
+        $update_sql = "UPDATE " . getTableName('aa_erp_kt_teklifler') . "
                        SET TEKLIF_TIPI = 1
                        WHERE TEKLIF_NO = :teklif_no";
         $update_stmt = $conn->prepare($update_sql);

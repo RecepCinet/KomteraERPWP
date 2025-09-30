@@ -13,8 +13,8 @@ include '../pqgrid/';
 <?php
 $yil=date("Y");
 
-$sqlstring = <<<DATA
-select MARKA,
+$tableName = getTableName('ERP_SATIS_ANALIZ_319_20XX');
+$sqlstring = "select MARKA,
        sum(case when [AYRAKAM] = '01' then [USD_TUTAR] else 0 end) 'Ocak',
        sum(case when [AYRAKAM] = '02' then [USD_TUTAR] else 0 end) 'Subat',
        sum(case when [AYRAKAM] = '03' then [USD_TUTAR] else 0 end) 'Mart',
@@ -28,10 +28,9 @@ select MARKA,
        sum(case when [AYRAKAM] = '11' then [USD_TUTAR] else 0 end) 'Kasim',
        sum(case when [AYRAKAM] = '12' then [USD_TUTAR] else 0 end) 'Aralik',
        sum([USD_TUTAR]) 'TOPLAM'
-from ERP_SATIS_ANALIZ_319_20XX
+from $tableName
 WHERE Yil=$yil
-group by MARKA
-DATA;
+group by MARKA";
 $stmt = $conn->prepare($sqlstring);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -109,9 +108,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
 </script>
 <?PHP
-$sqlstring = <<<DATA
-
-       select s1.MARKA,
+$tableName1 = getTableName('ERP_SATIS_ANALIZ_319_20XX');
+$tableName2 = getTableName('aaaa_erp_kt_komisyon_raporu_ham');
+$sqlstring = "select s1.MARKA,
        s1.Ocak - COALESCE(s2.Ocak, 0) AS Ocak,
        s1.Subat - COALESCE(s2.Subat, 0) AS Subat,
        s1.Mart - COALESCE(s2.Mart, 0) AS Mart,
@@ -141,7 +140,7 @@ FROM
          SUM(CASE WHEN [AYRAKAM] = '11' THEN [USD_TUTAR] ELSE 0 END) AS Kasim,
          SUM(CASE WHEN [AYRAKAM] = '12' THEN [USD_TUTAR] ELSE 0 END) AS Aralik,
          SUM([USD_TUTAR]) AS TOPLAM
-     FROM ERP_SATIS_ANALIZ_319_20XX
+     FROM $tableName1
      WHERE Yil = $yil
      GROUP BY MARKA) AS s1
         LEFT JOIN
@@ -160,12 +159,10 @@ FROM
          SUM(CASE WHEN MONTH(FATTAR) = 11 THEN COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) ELSE 0 END) AS Kasim,
          SUM(CASE WHEN MONTH(FATTAR) = 12 THEN COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) ELSE 0 END) AS Aralik,
          SUM(COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0)) AS TOPLAM
-     FROM aaaa_erp_kt_komisyon_raporu_ham
+     FROM $tableName2
      WHERE YEAR(FATTAR) = 2025 AND FATTAR IS NOT NULL
      GROUP BY MARKA) AS s2
-    ON s1.MARKA = s2.MARKA
-       
-DATA;
+    ON s1.MARKA = s2.MARKA";
 
 $stmt = $conn->prepare($sqlstring);
 $stmt->execute();
@@ -244,8 +241,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
 </script>
 <?PHP
-$sqlstring = <<<DATA
-select
+$tableName3 = getTableName('aaaa_erp_kt_komisyon_raporu_ham');
+$sqlstring = "select
     MARKA,
     sum(case when month(FATTAR) = 1 then COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) else 0 end) 'Ocak',
      sum(case when month(FATTAR) = 2 then COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) else 0 end) 'Subat',
@@ -260,7 +257,7 @@ select
      sum(case when month(FATTAR) = 11 then COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) else 0 end) 'Kasim',
      sum(case when month(FATTAR) = 12 then COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) else 0 end) 'Aralik',
      sum(COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0)) 'TOPLAM'
-from aaaa_erp_kt_komisyon_raporu_ham
+from $tableName3
 where year(FATTAR)=2025
 group by MARKA
 UNION ALL
@@ -279,10 +276,8 @@ select
      sum(case when month(FATTAR) = 11 then COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) else 0 end) 'Kasim',
      sum(case when month(FATTAR) = 12 then COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0) else 0 end) 'Aralik',
      sum(COALESCE(KOMISYON_F1, 0) + COALESCE(KOMISYON_F2, 0) + COALESCE(KOMISYON_H, 0)) 'TOPLAM'
-from aaaa_erp_kt_komisyon_raporu_ham
-where year(FATTAR)=2025
-       
-DATA;
+from $tableName3
+where year(FATTAR)=2025";
 
 $stmt = $conn->prepare($sqlstring);
 $stmt->execute();

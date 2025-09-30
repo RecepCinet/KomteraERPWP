@@ -13,11 +13,11 @@ die();
 $sql = "-- SQL Server 2017+ (ODBC uyumlu, TEXT -> NVARCHAR(MAX) CAST'leri eklendi)
 WITH latest_kur AS (
     SELECT TOP (1) USD, EUR, tarih
-    FROM aa_erp_kur
+    FROM " . getTableName('aa_erp_kur') . "
     ORDER BY tarih DESC
 ),
 teklif_agg AS (
-    SELECT 
+    SELECT
         t.X_FIRSAT_NO,
 
         -- PDF=1 olan kalemlerin toplamı (TEKLIF_TIPI=1 filtreli)
@@ -30,24 +30,24 @@ teklif_agg AS (
         STRING_AGG(CAST(fl.cozum AS NVARCHAR(MAX)), ',') AS COZUMLER,
 
         -- Teklif numaraları, önce TEKLIF_TIPI
-        STRING_AGG(CAST(t.TEKLIF_NO AS varchar(10)), ',') 
+        STRING_AGG(CAST(t.TEKLIF_NO AS varchar(10)), ',')
             WITHIN GROUP (ORDER BY t.TEKLIF_TIPI DESC, t.TEKLIF_NO) AS TEKLIFLER,
 
         -- SATIS_TIPI için min/max (etiketi türetmekte kullanacağız)
         MIN(CASE WHEN t.SATIS_TIPI = '0' THEN 0 WHEN t.SATIS_TIPI = '1' THEN 1 ELSE 2 END) AS MIN_SAT,
         MAX(CASE WHEN t.SATIS_TIPI = '0' THEN 0 WHEN t.SATIS_TIPI = '1' THEN 1 ELSE 2 END) AS MAX_SAT
-    FROM aa_erp_kt_teklifler t
-    LEFT JOIN aa_erp_kt_teklifler_urunler tu ON tu.X_TEKLIF_NO = t.TEKLIF_NO
-    LEFT JOIN aa_erp_kt_fiyat_listesi fl     ON fl.SKU         = tu.SKU
+    FROM " . getTableName('aa_erp_kt_teklifler') . " t
+    LEFT JOIN " . getTableName('aa_erp_kt_teklifler_urunler') . " tu ON tu.X_TEKLIF_NO = t.TEKLIF_NO
+    LEFT JOIN " . getTableName('aa_erp_kt_fiyat_listesi') . " fl     ON fl.SKU         = tu.SKU
     WHERE t.TEKLIF_TIPI = 1
     GROUP BY t.X_FIRSAT_NO
 )
 
-SELECT 
+SELECT
 top 5
     f.id,
     -- SATIP etiketi
-    CASE 
+    CASE
       WHEN ta.MIN_SAT IS NULL AND ta.MAX_SAT IS NULL THEN NULL
       WHEN ta.MIN_SAT <> ta.MAX_SAT THEN N'İlk Satış ve Yenileme'
       WHEN ta.MAX_SAT = 0 THEN N'İlk Satış'
@@ -104,13 +104,13 @@ top 5
     -- NOTLAR (TEXT -> NVARCHAR(MAX)); DISTINCT/pencere fonksiyonu yok
     n.TNOTLAR
 
-FROM LKS.dbo.aa_erp_kt_firsatlar f
+FROM LKS.dbo." . getTableName('aa_erp_kt_firsatlar') . " f
 LEFT JOIN teklif_agg ta ON ta.X_FIRSAT_NO = f.FIRSAT_NO
 LEFT JOIN latest_kur  k ON 1 = 1
 OUTER APPLY (
     SELECT TOP (1)
            CAST(t.NOTLAR AS NVARCHAR(MAX)) AS TNOTLAR
-    FROM aa_erp_kt_teklifler t
+    FROM " . getTableName('aa_erp_kt_teklifler') . " t
     WHERE t.TEKLIF_TIPI = 1
       AND t.X_FIRSAT_NO = f.FIRSAT_NO
     ORDER BY t.TEKLIF_NO DESC

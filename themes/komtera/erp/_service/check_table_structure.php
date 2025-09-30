@@ -32,7 +32,7 @@ try {
                 IS_NULLABLE,
                 COLUMN_DEFAULT
             FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_NAME = 'aa_erp_kt_firsatlar'
+            WHERE TABLE_NAME = '" . getTableName('aa_erp_kt_firsatlar') . "'
             ORDER BY ORDINAL_POSITION";
 
     $stmt = $conn->query($sql);
@@ -41,7 +41,7 @@ try {
     if (empty($columns)) {
         echo json_encode([
             'success' => false,
-            'message' => 'Tablo bulunamadı: aa_erp_kt_firsatlar'
+            'message' => 'Tablo bulunamadı: ' . getTableName('aa_erp_kt_firsatlar')
         ]);
         exit;
     }

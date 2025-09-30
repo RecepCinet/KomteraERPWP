@@ -38,10 +38,10 @@ try {
                     WHEN tu.B_MALIYET>0 THEN ( ( tu.B_SATIS_FIYATI - tu.B_MALIYET ) / NULLIF(tu.B_SATIS_FIYATI,0) ) * 100
                     ELSE ( ( tu.B_SATIS_FIYATI - tu.O_MALIYET ) / NULLIF(tu.B_SATIS_FIYATI,0) ) * 100
                 END AS KARLILIK,
-                (SELECT TOP 1 1 FROM aa_erp_kt_mcafee_sku_sure s WHERE s.sku=tu.SKU) AS MCSURE,
+                (SELECT TOP 1 1 FROM " . getTableName('aa_erp_kt_mcafee_sku_sure') . " s WHERE s.sku=tu.SKU) AS MCSURE,
                 tu.SIRA,
                 tu.SATIS_TIPI
-            FROM aa_erp_kt_teklifler_urunler tu
+            FROM " . getTableName('aa_erp_kt_teklifler_urunler') . " tu
             WHERE tu.X_TEKLIF_NO = :teklif_no";
 
     if ($page_size !== 'all' && is_numeric($page_size)) {

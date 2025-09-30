@@ -85,8 +85,8 @@ $sechard="and TRY_CONVERT(int, f.wgCategory)>=$bas AND TRY_CONVERT(int, f.wgCate
 }
 
 $sql = "select wgCategory,(CASE WHEN s.GERCEK_STOK>0 THEN 'STOK VAR' ELSE 'STOK YOK' END) as STOK_DURUM,(CASE WHEN s.GERCEK_STOK>0 THEN CONVERT(varchar(10), s.GERCEK_STOK)  ELSE '-' END) as STOK_ADET,f.tur,f.cozum,f.lisansSuresi,f.sku,f.urunAciklama,f.listeFiyati,f.paraBirimi
-from aa_erp_kt_fiyat_listesi f LEFT JOIN aaa_erp_kt_stoklar_satis s
-ON s.SKU = f.sku 
+from " . getTableName('aa_erp_kt_fiyat_listesi') . " f LEFT JOIN " . getTableName('aaa_erp_kt_stoklar_satis') . " s
+ON s.SKU = f.sku
 WHERE ( f.marka='$marka'
 $sechard
 order by f.tur,f.cozum

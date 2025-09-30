@@ -51,8 +51,8 @@ try {
 
     // Create table if not exists
     $create_table_sql = "
-        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='aa_erp_kt_teklif_dosyalar' AND xtype='U')
-        CREATE TABLE aa_erp_kt_teklif_dosyalar (
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='" . getTableName('aa_erp_kt_teklif_dosyalar') . "' AND xtype='U')
+        CREATE TABLE " . getTableName('aa_erp_kt_teklif_dosyalar') . " (
             id INT IDENTITY(1,1) PRIMARY KEY,
             TEKLIF_NO NVARCHAR(50) NOT NULL,
             ORIGINAL_NAME NVARCHAR(255) NOT NULL,
@@ -77,7 +77,7 @@ try {
                 FILE_TYPE as file_type,
                 UPLOAD_DATE as upload_date,
                 UPLOADED_BY as uploaded_by
-            FROM aa_erp_kt_teklif_dosyalar
+            FROM " . getTableName('aa_erp_kt_teklif_dosyalar') . "
             WHERE TEKLIF_NO = ? AND (SIL IS NULL OR SIL = 0)
             ORDER BY UPLOAD_DATE DESC";
 

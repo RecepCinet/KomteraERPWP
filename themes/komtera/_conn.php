@@ -1,4 +1,7 @@
 <?php
+// Include table helper for dynamic table name resolution
+require_once __DIR__ . '/inc/table_helper.php';
+
 function BotMesaj($mesaj) {
     $var = print_r($mesaj, true);
     $url = "http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];

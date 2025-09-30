@@ -30,7 +30,7 @@ try {
                 tu.FIYAT_BIRIM,
                 tu.TOPLAM_MALIYET,
                 tu.SATIS_FIYAT_BIRIM
-            FROM aa_erp_kt_teklifler_urunler tu
+            FROM " . getTableName('aa_erp_kt_teklifler_urunler') . " tu
             WHERE tu.X_TEKLIF_NO = :teklif_no";
 
     if ($page_size !== 'all' && is_numeric($page_size)) {

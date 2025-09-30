@@ -20,7 +20,7 @@ $sql = "SELECT 	id,
 	KARLILIK,
 	TRACK_TYPE,
 	SIRA
-        FROM LKS.dbo.aa_erp_kt_teklifler_urunler where X_TEKLIF_NO='$teklif_id'";
+        FROM LKS.dbo." . getTableName('aa_erp_kt_teklifler_urunler') . " where X_TEKLIF_NO='$teklif_id'";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $response = "{\"data\":" . json_encode($data) . "}";
