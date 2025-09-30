@@ -333,6 +333,56 @@ try {
             background: #005a87;
         }
 
+        /* Yeni Teklif Butonu */
+        .yeni-teklif-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+        }
+
+        .yeni-teklif-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1abc9c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .yeni-teklif-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .yeni-teklif-btn .dashicons {
+            animation: rotate-icon 2s infinite linear;
+        }
+
+        @keyframes rotate-icon {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(90deg); }
+            75% { transform: rotate(90deg); }
+            100% { transform: rotate(90deg); }
+        }
+
+        .yeni-teklif-btn:hover .dashicons {
+            animation: pulse-icon 0.6s ease-in-out;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
         .firsat-cogalt-btn {
             background: #28a745;
             color: white;
@@ -425,6 +475,12 @@ try {
                 font-size: 13px;
             }
 
+            .yeni-teklif-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+                min-width: 150px;
+            }
+
             /* Mobilde bazı sütunları daha kompakt yap */
             .table th:nth-child(3), /* Açma Tarihi */
             .table td:nth-child(3) {
@@ -472,6 +528,14 @@ try {
                 <div style="font-weight: bold; color: #000; font-size: 15px; line-height: 1.5;">
                     <?php echo nl2br(htmlspecialchars($firsat_data['FIRSAT_ACIKLAMA'] ?? __('Açıklama girilmemiş', 'komtera'))); ?>
                 </div>
+            </div>
+
+            <!-- Yeni Teklif Butonu -->
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="yeni-teklif-btn" onclick="yeniTeklifOlustur()" title="<?php echo __('Bu fırsat için yeni teklif oluştur', 'komtera'); ?>">
+                    <span class="dashicons dashicons-plus-alt" style="margin-right: 8px; font-size: 18px; line-height: 1;"></span>
+                    <?php echo __('Yeni Teklif Oluştur', 'komtera'); ?>
+                </button>
             </div>
         </div>
 
@@ -892,6 +956,105 @@ try {
             document.body.style.opacity = '1';
             updateAlternatifButton();
         });
+
+        // Yeni Teklif Oluştur Fonksiyonu
+        function yeniTeklifOlustur() {
+            const firsat_no = '<?php echo htmlspecialchars($firsat_no); ?>';
+
+            // Butonu loading state'e al
+            const btn = document.querySelector('.yeni-teklif-btn');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="dashicons dashicons-update" style="margin-right: 8px; animation: spin 1s linear infinite;"></span><?php echo __('Teklif Oluşturuluyor...', 'komtera'); ?>';
+            btn.disabled = true;
+
+            // AJAX ile yeni teklif oluştur
+            fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/yeni_teklif_olustur.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `firsat_no=${encodeURIComponent(firsat_no)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Başarı mesajı göster
+                    showMessage('<?php echo __('Yeni teklif başarıyla oluşturuldu!', 'komtera'); ?>', 'success');
+
+                    // Teklif detay sayfasına yönlendir
+                    setTimeout(() => {
+                        window.open(`<?php echo admin_url('admin.php'); ?>?page=teklifler_detay&teklif_no=${data.teklif_no}`, '_blank');
+                        // Mevcut sayfayı yenile (yeni teklif listede görünsün)
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showMessage('<?php echo __('Teklif oluşturma hatası:', 'komtera'); ?> ' + (data.error || '<?php echo __('Bilinmeyen hata', 'komtera'); ?>'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('<?php echo __('Bağlantı hatası:', 'komtera'); ?> ' + error.message, 'error');
+            })
+            .finally(() => {
+                // Butonu eski haline döndür
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            });
+        }
+
+        // Spin animasyonu için CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Mesaj gösterme fonksiyonu
+        function showMessage(message, type) {
+            const messageEl = document.createElement('div');
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                border: 1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                font-size: 14px;
+                font-weight: 500;
+                max-width: 400px;
+                word-wrap: break-word;
+            `;
+            messageEl.textContent = message;
+
+            // Close button ekle
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = '×';
+            closeBtn.style.cssText = `
+                float: right;
+                margin-left: 15px;
+                cursor: pointer;
+                font-size: 18px;
+                opacity: 0.8;
+            `;
+            closeBtn.onclick = () => messageEl.remove();
+            messageEl.appendChild(closeBtn);
+
+            document.body.appendChild(messageEl);
+
+            // 5 saniye sonra otomatik kapat
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.remove();
+                }
+            }, 5000);
+        }
     </script>
 </body>
 </html>

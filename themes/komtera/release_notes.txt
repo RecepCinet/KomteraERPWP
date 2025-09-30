@@ -1,4 +1,5 @@
 2025.9
+-Lisans dosyasi ekleme cikarma ekrani eklendi
 -Ozel Kota Dosyasi Eklenme Ozelligi eklendi.
 -Turkce yazilar duzeltildi.
 -Kurlar duzeltildi parity ve hizli cevirme araci eklendi

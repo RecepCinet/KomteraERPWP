@@ -71,7 +71,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $bayi_ilce = '';
         $cn = $user; // Olusturan user name
         $para_birimi = 'USD'; // Varsayılan
-        $vade = 30; // Varsayılan 30 gün - bayiler tablosundan alinacak
+        $vade = '30'; // Varsayılan 30 gün - bayiler tablosundan alinacak
         $marka_manager = $accman; // ACCMan formdan
         $marka_manager_eposta = '';
 
@@ -98,7 +98,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
                     $bayi_adres = $bayiResult['bayi_adres'] ?? '';
                     $bayi_sehir = $bayiResult['bayi_sehir'] ?? '';
                     $bayi_ilce = $bayiResult['bayi_ilce'] ?? '';
-                    $vade = $bayiResult['vade'] ?? 30;
+                    $vade = strval($bayiResult['vade'] ?? '30');
                 }
             } catch (Exception $e) {
                 // Hata durumunda varsayılan değerler kullanılacak
@@ -212,6 +212,97 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
             // Hata durumunda varsayılan yöntem
             // $firsat_no = 'F' . date('Ymd') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
         }
+
+        // Veri uzunluklarını kontrol et ve gerekirse kısalt (GERÇEK TABLO LİMİTLERİ)
+        $fieldLimits = [
+            'firsat_no' => 10,                    // FIRSAT_NO: nvarchar(10)
+            'marka' => 25,                        // MARKA: nvarchar(25)
+            'gelis_kanali' => 20,                 // GELIS_KANALI: nvarchar(20)
+            'olasilik' => 50,                     // OLASILIK: nvarchar(50)
+            'musteri_temsilcisi' => 25,           // MUSTERI_TEMSILCISI: nvarchar(25)
+            'proje_adi' => 150,                   // PROJE_ADI: nvarchar(150)
+            'firsat_aciklama' => 2000000,         // FIRSAT_ACIKLAMA: text (unlimited)
+            'bayi' => 100,                        // BAYI_ADI: nvarchar(100)
+            'bayi_kodu' => 20,                    // BAYI_CHKODU: nvarchar(20)
+            'bayi_yetkili' => 25,                 // BAYI_YETKILI_ISIM: nvarchar(25)
+            'musteri' => 100,                     // MUSTERI_ADI: nvarchar(100)
+            'musteri_yetkili' => 100,             // MUSTERI_YETKILI_ISIM: nvarchar(100)
+            'etkinlik' => 2000000,                // ETKINLIK: text (unlimited)
+            'bayi_yetkili_isim' => 25,            // BAYI_YETKILI_ISIM: nvarchar(25)
+            'bayi_yetkili_telefon' => 11,         // BAYI_YETKILI_TEL: nvarchar(11)
+            'bayi_yetkili_eposta' => 50,          // BAYI_YETKILI_EPOSTA: nvarchar(50)
+            'musteri_yetkili_isim' => 100,        // MUSTERI_YETKILI_ISIM: nvarchar(100)
+            'musteri_yetkili_telefon' => 11,      // MUSTERI_YETKILI_TEL: nvarchar(11)
+            'musteri_yetkili_eposta' => 50,       // MUSTERI_YETKILI_EPOSTA: nvarchar(50)
+            'bayi_adres' => 201,                  // BAYI_ADRES: nvarchar(201)
+            'bayi_sehir' => 20,                   // BAYI_SEHIR: nvarchar(20)
+            'bayi_ilce' => 20,                    // BAYI_ILCE: nvarchar(20)
+            'cn' => 25,                           // CN: nvarchar(25)
+            'para_birimi' => 3,                   // PARA_BIRIMI: nvarchar(3)
+            'vade' => 5,                          // VADE: nvarchar(5)
+            'marka_manager' => 30,                // MARKA_MANAGER: nvarchar(30)
+            'marka_manager_eposta' => 50          // MARKA_MANAGER_EPOSTA: nvarchar(50)
+        ];
+
+        // Verileri kısalt
+        $fieldsToTruncate = [
+            'firsat_no' => &$firsat_no,
+            'marka' => &$marka,
+            'gelis_kanali' => &$gelis_kanali,
+            'olasilik' => &$olasilik,
+            'musteri_temsilcisi' => &$musteri_temsilcisi,
+            'proje_adi' => &$proje_adi,
+            'firsat_aciklama' => &$firsat_aciklama,
+            'bayi' => &$bayi,
+            'bayi_kodu' => &$bayi_kodu,
+            'bayi_yetkili' => &$bayi_yetkili,
+            'musteri' => &$musteri,
+            'musteri_yetkili' => &$musteri_yetkili,
+            'etkinlik' => &$etkinlik,
+            'bayi_yetkili_isim' => &$bayi_yetkili_isim,
+            'bayi_yetkili_telefon' => &$bayi_yetkili_telefon,
+            'bayi_yetkili_eposta' => &$bayi_yetkili_eposta,
+            'musteri_yetkili_isim' => &$musteri_yetkili_isim,
+            'musteri_yetkili_telefon' => &$musteri_yetkili_telefon,
+            'musteri_yetkili_eposta' => &$musteri_yetkili_eposta,
+            'bayi_adres' => &$bayi_adres,
+            'bayi_sehir' => &$bayi_sehir,
+            'bayi_ilce' => &$bayi_ilce,
+            'cn' => &$cn,
+            'para_birimi' => &$para_birimi,
+            'vade' => &$vade,
+            'marka_manager' => &$marka_manager,
+            'marka_manager_eposta' => &$marka_manager_eposta
+        ];
+
+        $truncatedFields = [];
+        $allFieldLengths = [];
+
+        foreach ($fieldsToTruncate as $fieldName => $fieldValue) {
+            $currentLength = mb_strlen($fieldValue);
+            $maxLength = $fieldLimits[$fieldName] ?? 'unlimited';
+            $allFieldLengths[] = "$fieldName: $currentLength karakter (max: $maxLength)";
+
+            if (isset($fieldLimits[$fieldName]) && $currentLength > $fieldLimits[$fieldName]) {
+                $originalLength = $currentLength;
+                $fieldValue = mb_substr($fieldValue, 0, $fieldLimits[$fieldName]);
+                $truncatedFields[] = "$fieldName: $originalLength → " . $fieldLimits[$fieldName] . " karakter";
+
+                // Referans değişkenini güncelle
+                $fieldsToTruncate[$fieldName] = $fieldValue;
+            }
+        }
+
+        // TÜM alan uzunluklarını logla (debug için)
+        error_log("FIRSAT OLUŞTURMA - Tüm alan uzunlukları: " . implode(', ', $allFieldLengths));
+
+        // Eğer kısaltma yapıldıysa log'la
+        if (!empty($truncatedFields)) {
+            error_log("FIRSAT OLUŞTURMA - Alan kısaltması yapıldı: " . implode(', ', $truncatedFields));
+        } else {
+            error_log("FIRSAT OLUŞTURMA - Hiçbir alan kısaltılmadı, tüm veriler limit içinde.");
+        }
+
         $sql = "INSERT INTO aa_erp_kt_firsatlar (
             FIRSAT_NO,
             MARKA,
@@ -312,6 +403,28 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'save_firsat') {
         $stmt->bindParam(':vade', $vade);
         $stmt->bindParam(':marka_manager', $marka_manager);
         $stmt->bindParam(':marka_manager_eposta', $marka_manager_eposta);
+
+        // SQL execute öncesi final parametreleri logla
+        $finalParams = [
+            'firsat_no' => mb_strlen($firsat_no) . ": '" . $firsat_no . "'",
+            'marka' => mb_strlen($marka) . ": '" . $marka . "'",
+            'gelis_kanali' => mb_strlen($gelis_kanali) . ": '" . $gelis_kanali . "'",
+            'olasilik' => mb_strlen($olasilik) . ": '" . $olasilik . "'",
+            'musteri_temsilcisi' => mb_strlen($musteri_temsilcisi) . ": '" . $musteri_temsilcisi . "'",
+            'proje_adi' => mb_strlen($proje_adi) . ": '" . $proje_adi . "'",
+            'firsat_aciklama' => mb_strlen($firsat_aciklama) . ": '" . mb_substr($firsat_aciklama, 0, 50) . (mb_strlen($firsat_aciklama) > 50 ? '...' : '') . "'",
+            'bayi' => mb_strlen($bayi) . ": '" . $bayi . "'",
+            'bayi_kodu' => mb_strlen($bayi_kodu) . ": '" . $bayi_kodu . "'",
+            'bayi_yetkili_telefon' => mb_strlen($bayi_yetkili_telefon) . ": '" . $bayi_yetkili_telefon . "'",
+            'musteri' => mb_strlen($musteri) . ": '" . $musteri . "'",
+            'musteri_yetkili_telefon' => mb_strlen($musteri_yetkili_telefon) . ": '" . $musteri_yetkili_telefon . "'",
+            'etkinlik' => mb_strlen($etkinlik) . ": '" . mb_substr($etkinlik, 0, 30) . (mb_strlen($etkinlik) > 30 ? '...' : '') . "'",
+            'register' => mb_strlen($register) . ": '" . $register . "'",
+            'user' => mb_strlen($user) . ": '" . $user . "'",
+            'vade' => mb_strlen($vade) . ": '" . $vade . "'",
+            'para_birimi' => mb_strlen($para_birimi) . ": '" . $para_birimi . "'"
+        ];
+        error_log("FIRSAT OLUŞTURMA - SQL Execute öncesi final parametreler: " . implode(', ', $finalParams));
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => __('Fırsat başarıyla oluşturuldu.','komtera'), 'firsat_no' => $firsat_no]);
