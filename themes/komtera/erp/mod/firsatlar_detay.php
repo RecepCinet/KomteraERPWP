@@ -759,10 +759,9 @@ try {
     </div>
 
     <script>
-        // Teklif açma fonksiyonu - şimdilik alert göster
+        // Teklif açma fonksiyonu - teklif detay sayfasını aç
         function TeklifAc(teklifNo) {
-            alert('<?php echo __('Teklif detayı', 'komtera'); ?>: ' + teklifNo);
-            // TODO: Teklif detay sayfasını aç
+            window.location.href = 'admin.php?page=teklifler_detay&teklif_no=' + encodeURIComponent(teklifNo);
         }
 
         // Teklif çoğaltma fonksiyonu (daha sonra yapılacak)

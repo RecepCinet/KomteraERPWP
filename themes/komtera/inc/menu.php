@@ -30,6 +30,8 @@ function my_custom_admin_menus_for_roles()
         add_submenu_page('firsatlar', __('Yeni Fırsat', 'komtera'), __('Yeni Fırsat', 'komtera'), 'read','firsatlar_yeni', 'firsatlar_yeni_cb');
         // Gizli sayfa: parent null olduğu için menüde görünmez
         add_submenu_page(null, __('Fırsat Detayı', 'komtera'), __('Fırsat Detayı', 'komtera'), 'read','firsatlar_detay', 'firsatlar_detay_cb');
+        // Gizli sayfa: Teklif Detayı
+        add_submenu_page(null, __('Teklif Detayı', 'komtera'), __('Teklif Detayı', 'komtera'), 'read','teklifler_detay', 'teklifler_detay_cb');
     }
     if (array_key_exists('_orders_',   $ana_yetkiler)) add_menu_page(__('Siparişler', 'komtera'), __('Siparişler', 'komtera'), 'read','siparisler_slug',          'siparisler_cb','dashicons-cart',2.02);
     if (array_key_exists('_demos_',      $ana_yetkiler)) add_menu_page(__('Demolar', 'komtera'), __('Demolar', 'komtera'), 'read','demolar_slug',                   'demolar_cb','dashicons-screenoptions',2.03);
@@ -1963,3 +1965,10 @@ function firsatlar_detay_cb()
     // Sadece PHP dosyasını include et, iframe yok
     include get_template_directory() . '/erp/mod/firsatlar_detay.php';
 }
+
+function teklifler_detay_cb()
+{
+    // Teklif detay sayfasını include et
+    include get_template_directory() . '/erp/mod/teklifler_detay.php';
+}
+?>

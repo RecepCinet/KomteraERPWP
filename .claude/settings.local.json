@@ -40,7 +40,8 @@
       "Bash(del \"C:\\Users\\u\\Documents\\GitHub\\KomteraERPWP\\temp_query.php\")",
       "mcp__playwright__browser_console_messages",
       "mcp__playwright__browser_press_key",
-      "Bash(exit)"
+      "Bash(exit)",
+      "Read(//Users/recepcinet/Desktop/**)"
     ],
     "deny": [],
     "ask": []
