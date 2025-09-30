@@ -176,6 +176,47 @@ try {
             box-shadow: 0 4px 12px rgba(0, 124, 186, 0.2);
         }
 
+        /* File Count Badge Styles */
+        .file-count-btn {
+            position: relative;
+        }
+
+        .file-count-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #d63384;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            min-width: 20px;
+            padding: 0 2px;
+        }
+
+        .file-count-badge.has-files {
+            display: flex !important;
+        }
+
+        .file-count-badge.many-files {
+            background: #dc3545;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         .toolbar-btn.active {
             background: #007cba;
             color: white;
@@ -717,9 +758,10 @@ try {
                             <span><?php echo __('Teklif', 'komtera'); ?><br><?php echo __('Geri Al', 'komtera'); ?></span>
                         </button>
 
-                        <button class="toolbar-btn btn-light" title="<?php echo __('Özel Fiyat Dosyası', 'komtera'); ?>" onclick="ozelFiyatDosyasi()">
+                        <button class="toolbar-btn btn-light file-count-btn" title="<?php echo __('Özel Fiyat Dosyası', 'komtera'); ?>" onclick="ozelFiyatDosyasi()">
                             <span class="icon dashicons dashicons-lightbulb"></span>
                             <span><?php echo __('Özel Fiyat', 'komtera'); ?><br><?php echo __('Dosyası', 'komtera'); ?></span>
+                            <span id="fileCountBadge" class="file-count-badge" style="display: none;">0</span>
                         </button>
                     </div>
 
@@ -1317,18 +1359,40 @@ try {
                     console.log('Debug response:', data);
                     if (data.success) {
                         displayFileList(data.files || []);
+                        updateFileCountBadge(data.files || []);
                     } else {
                         console.error('Server error:', data.error);
                         console.error('Debug info:', data.debug);
                         alert('Debug Error: ' + data.error + '\n\nCheck console for details');
                         displayFileList([]);
+                        updateFileCountBadge([]);
                     }
                 })
                 .catch(error => {
                     console.error('Error loading files:', error);
                     alert('Network Error: ' + error.message);
                     displayFileList([]);
+                    updateFileCountBadge([]);
                 });
+        }
+
+        function updateFileCountBadge(files) {
+            const badge = document.getElementById('fileCountBadge');
+            const count = files.length;
+
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.add('has-files');
+
+                // Add special styling for many files
+                if (count >= 5) {
+                    badge.classList.add('many-files');
+                } else {
+                    badge.classList.remove('many-files');
+                }
+            } else {
+                badge.classList.remove('has-files', 'many-files');
+            }
         }
 
         function displayFileList(files) {
@@ -1543,6 +1607,24 @@ try {
                 }
             };
         });
+
+        // Initialize file count badge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFileCountForBadge();
+        });
+
+        function loadFileCountForBadge() {
+            fetch(`<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/get_ozel_fiyat_files.php?teklif_no=<?php echo urlencode($teklif_no); ?>`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateFileCountBadge(data.files || []);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading file count:', error);
+                });
+        }
     </script>
 </body>
 </html>
