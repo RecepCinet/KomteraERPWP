@@ -1,0 +1,29 @@
+# Lisans Dosyaları için güvenlik
+# Sadece PDF, PNG, JPEG dosyalarına erişime izin ver
+
+<Files ~ "\.(pdf|png|jpg|jpeg)$">
+    Order allow,deny
+    Allow from all
+</Files>
+
+<Files ~ "^\.">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# PHP ve diğer script dosyalarını engelle
+<Files ~ "\.(php|phtml|php3|php4|php5|pl|py|jsp|asp|sh|cgi)$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Directory browsing'i kapat
+Options -Indexes
+
+# Cache headers for better performance
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>

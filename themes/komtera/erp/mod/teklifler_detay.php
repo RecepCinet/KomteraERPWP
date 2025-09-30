@@ -177,7 +177,7 @@ try {
         }
 
         /* File Count Badge Styles */
-        .file-count-btn {
+        .file-count-btn, .license-count-btn {
             position: relative;
         }
 
@@ -466,6 +466,10 @@ try {
             display: none;
             align-items: center;
             justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex !important;
         }
 
         .modal-content {
@@ -775,9 +779,10 @@ try {
 
                     <!-- İşlem Grubu -->
                     <div class="toolbar-group">
-                        <button class="toolbar-btn btn-barcode" title="<?php echo __('Lisans Dosyası', 'komtera'); ?>" onclick="lisansDosyasi()">
+                        <button class="toolbar-btn btn-barcode license-count-btn" title="<?php echo __('Lisans Dosyası', 'komtera'); ?>" onclick="lisansDosyasi()">
                             <span class="icon dashicons dashicons-id-alt"></span>
                             <span><?php echo __('Lisans', 'komtera'); ?><br><?php echo __('Dosyası', 'komtera'); ?></span>
+                            <span id="licenseCountBadge" class="file-count-badge" style="display: none;">0</span>
                         </button>
 
                         <button class="toolbar-btn btn-handshake" title="<?php echo __('Teklif Geri Aç', 'komtera'); ?>" onclick="teklifGeriAc()">
@@ -1022,6 +1027,42 @@ try {
         </div>
     </div>
 
+    <!-- Lisans Dosyası Modal -->
+    <div id="lisansModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="dashicons dashicons-id-alt" style="margin-right: 8px;"></span>
+                    <?php echo __('Lisans Dosyaları', 'komtera'); ?>
+                    <span style="font-size: 14px; font-weight: normal; opacity: 0.8; margin-left: 8px;">
+                        (<?php echo htmlspecialchars($teklif_no); ?>)
+                    </span>
+                </h2>
+                <button class="modal-close" onclick="closeLisansModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Upload Area -->
+                <div class="upload-area" onclick="triggerLisansFileUpload()" ondrop="handleLisansDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <div class="upload-icon">🔐</div>
+                    <div class="upload-text"><?php echo __('Lisans dosyası yüklemek için tıklayın veya sürükleyip bırakın', 'komtera'); ?></div>
+                    <div class="upload-subtitle"><?php echo __('PDF, PNG, JPEG formatları desteklenir (Max: 10MB)', 'komtera'); ?></div>
+                    <div class="upload-progress" id="lisansUploadProgress">
+                        <div class="upload-progress-bar" id="lisansProgressBar"></div>
+                    </div>
+                </div>
+
+                <input type="file" id="lisansFileInput" class="hidden-input" multiple accept=".pdf,.png,.jpg,.jpeg" onchange="handleLisansFileSelect(event)">
+
+                <!-- File List -->
+                <div class="file-list">
+                    <div id="lisansFileListContainer">
+                        <!-- Files will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Toolbar button functions
         function teklifGeriAl() {
@@ -1087,8 +1128,9 @@ try {
         }
 
         function lisansDosyasi() {
-            const url = '<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/lisans_dosyasi.php?teklif_no=<?php echo urlencode($teklif_no); ?>';
-            window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
+            console.log('Lisans Dosyası button clicked');
+            // Show modal instead of opening new window
+            showLisansModal();
         }
 
         function teklifGeriAc() {
@@ -1611,6 +1653,7 @@ try {
         // Initialize file count badge on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadFileCountForBadge();
+            loadLicenseCountForBadge();
         });
 
         function loadFileCountForBadge() {
@@ -1623,6 +1666,274 @@ try {
                 })
                 .catch(error => {
                     console.error('Error loading file count:', error);
+                });
+        }
+
+        // === LISANS DOSYASI MODAL FUNCTIONS ===
+
+        function showLisansModal() {
+            console.log('showLisansModal called');
+            const modal = document.getElementById('lisansModal');
+            console.log('Modal element:', modal);
+            modal.classList.add('show');
+            console.log('Modal classes after add:', modal.className);
+
+            // Add escape key listener
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeLisansModal();
+                }
+            });
+
+            // Add click outside to close
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeLisansModal();
+                }
+            });
+
+            // Auto-hide modal after 10 seconds
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+
+            // Load existing files
+            loadExistingLisansFiles();
+        }
+
+        function closeLisansModal() {
+            const modal = document.getElementById('lisansModal');
+            modal.classList.remove('show');
+        }
+
+        function triggerLisansFileUpload() {
+            document.getElementById('lisansFileInput').click();
+        }
+
+        function handleLisansDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const files = event.dataTransfer.files;
+            handleLisansFileSelect({target: {files: files}});
+        }
+
+        function handleLisansFileSelect(event) {
+            const files = event.target.files;
+
+            if (files.length === 0) return;
+
+            // Validate files
+            for (let file of files) {
+                if (!isValidFile(file)) {
+                    return;
+                }
+            }
+
+            uploadLisansFiles(files);
+        }
+
+        function uploadLisansFiles(files) {
+            const progressContainer = document.getElementById('lisansUploadProgress');
+            const progressBar = document.getElementById('lisansProgressBar');
+
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+
+            // Upload each file
+            Array.from(files).forEach((file, index) => {
+                uploadSingleLisansFile(file, index, files.length);
+            });
+        }
+
+        function uploadSingleLisansFile(file, index, totalFiles) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('teklif_no', '<?php echo htmlspecialchars($teklif_no); ?>');
+
+            fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/upload_lisans_dosya.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Lisans upload response status:', response.status);
+                // Always try to parse JSON, even for error responses
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        throw new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return data;
+                });
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log(`Lisans file uploaded: ${file.name}`);
+
+                    // Update progress
+                    const progress = ((index + 1) / totalFiles) * 100;
+                    document.getElementById('lisansProgressBar').style.width = progress + '%';
+
+                    // If last file, hide progress and reload file list
+                    if (index === totalFiles - 1) {
+                        setTimeout(() => {
+                            document.getElementById('lisansUploadProgress').style.display = 'none';
+                            loadExistingLisansFiles();
+
+                            // Reset file input
+                            document.getElementById('lisansFileInput').value = '';
+
+                            // Show success message
+                            showUploadMessage('<?php echo __('Lisans dosyaları başarıyla yüklendi!', 'komtera'); ?>', 'success');
+                        }, 500);
+                    }
+                } else {
+                    showUploadMessage(`<?php echo __('Upload hatası:', 'komtera'); ?> ${file.name} - ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Lisans upload error:', error);
+
+                let errorMessage = `<?php echo __('Upload hatası:', 'komtera'); ?> ${file.name}`;
+
+                if (error.message.includes('413')) {
+                    errorMessage += ' - <?php echo __('Dosya çok büyük (Server limiti)', 'komtera'); ?>';
+                } else if (error.message.includes('408')) {
+                    errorMessage += ' - <?php echo __('Upload timeout (Yavaş bağlantı)', 'komtera'); ?>';
+                } else if (error.message.includes('502') || error.message.includes('503')) {
+                    errorMessage += ' - <?php echo __('Server hatası (Geçici)', 'komtera'); ?>';
+                } else {
+                    errorMessage += ` - ${error.message}`;
+                }
+
+                showUploadMessage(errorMessage, 'error');
+            });
+        }
+
+        function loadExistingLisansFiles() {
+            fetch(`<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/get_lisans_files.php?teklif_no=<?php echo urlencode($teklif_no); ?>`)
+                .then(response => {
+                    console.log('Lisans files response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Lisans files response:', data);
+                    if (data.success) {
+                        displayLisansFileList(data.files || []);
+                        updateLicenseCountBadge(data.files || []);
+                    } else {
+                        console.error('Server error:', data.error);
+                        console.error('Debug info:', data.debug);
+                        alert('Debug Error: ' + data.error + '\n\nCheck console for details');
+                        displayLisansFileList([]);
+                        updateLicenseCountBadge([]);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading lisans files:', error);
+                    alert('Network Error: ' + error.message);
+                    displayLisansFileList([]);
+                    updateLicenseCountBadge([]);
+                });
+        }
+
+        function updateLicenseCountBadge(files) {
+            const badge = document.getElementById('licenseCountBadge');
+            const count = files.length;
+
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.add('has-files');
+
+                // Add special styling for many files
+                if (count >= 5) {
+                    badge.classList.add('many-files');
+                } else {
+                    badge.classList.remove('many-files');
+                }
+            } else {
+                badge.classList.remove('has-files', 'many-files');
+            }
+        }
+
+        function displayLisansFileList(files) {
+            const container = document.getElementById('lisansFileListContainer');
+
+            if (files.length === 0) {
+                container.innerHTML = '<div class="no-files"><?php echo __('Henüz lisans dosyası yüklenmemiş', 'komtera'); ?></div>';
+                return;
+            }
+
+            container.innerHTML = files.map(file => `
+                <div class="file-item">
+                    <div class="file-icon">
+                        ${file.file_type === 'application/pdf' ? '📄' : '🖼️'}
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">${file.original_name}</div>
+                        <div class="file-meta">
+                            ${formatFileSize(file.file_size)} • ${file.upload_date}
+                            ${file.uploaded_by ? ` • ${file.uploaded_by}` : ''}
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn-download" onclick="downloadLisansFile(${file.id})" title="<?php echo __('İndir', 'komtera'); ?>">
+                            <span class="dashicons dashicons-download"></span>
+                        </button>
+                        <button class="btn-view" onclick="viewLisansFile('${file.file_name}')" title="<?php echo __('Görüntüle', 'komtera'); ?>">
+                            <span class="dashicons dashicons-visibility"></span>
+                        </button>
+                        <button class="btn-delete" onclick="deleteLisansFile(${file.id})" title="<?php echo __('Sil', 'komtera'); ?>">
+                            <span class="dashicons dashicons-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteLisansFile(fileId) {
+            if (!confirm('<?php echo __('Bu lisans dosyasını silmek istediğinizden emin misiniz?', 'komtera'); ?>')) {
+                return;
+            }
+
+            fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/delete_lisans_dosya.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `file_id=${fileId}&teklif_no=<?php echo urlencode($teklif_no); ?>`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadExistingLisansFiles(); // Refresh file list
+                } else {
+                    alert('<?php echo __('Silme hatası:', 'komtera'); ?> ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Delete error:', error);
+                alert('<?php echo __('Silme hatası:', 'komtera'); ?> ' + error.message);
+            });
+        }
+
+        function downloadLisansFile(fileId) {
+            window.open(`<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/download_lisans_dosya.php?file_id=${fileId}&teklif_no=<?php echo urlencode($teklif_no); ?>`, '_blank');
+        }
+
+        function viewLisansFile(fileName) {
+            window.open(`<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/uploads/lisans_dosyalar/${fileName}`, '_blank');
+        }
+
+        function loadLicenseCountForBadge() {
+            fetch(`<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/get_lisans_files.php?teklif_no=<?php echo urlencode($teklif_no); ?>`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateLicenseCountBadge(data.files || []);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading license file count:', error);
                 });
         }
     </script>
