@@ -53,6 +53,7 @@ if ($tablo=="kt_firsatlar_kay") {
 <script src="jsZip-2.5.0/jszip.min.js"></script>
 <script src="js/base64.min.js"></script>
 <script src="js/FileSaver.js"></script>
+<script src="../js/heartbeat-monitor.js"></script>
 <?PHP
 include "_tablolar/" . $tablo . "_js.php";
 ?>
