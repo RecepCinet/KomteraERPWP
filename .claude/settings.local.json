@@ -41,7 +41,8 @@
       "mcp__playwright__browser_console_messages",
       "mcp__playwright__browser_press_key",
       "Bash(exit)",
-      "Read(//Users/recepcinet/Desktop/**)"
+      "Read(//Users/recepcinet/Desktop/**)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []

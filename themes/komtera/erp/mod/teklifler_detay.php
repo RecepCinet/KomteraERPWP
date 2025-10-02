@@ -51,7 +51,7 @@ $urun_error = '';
 try {
     $urun_sql = "SELECT * FROM " . getTableName('aa_erp_kt_teklifler_urunler') . "
                  WHERE X_TEKLIF_NO = :teklif_no
-                 ORDER BY SATIR_NO";
+                 ORDER BY id DESC";
 
     $urun_stmt = $conn->prepare($urun_sql);
     $urun_stmt->bindParam(':teklif_no', $teklif_no);

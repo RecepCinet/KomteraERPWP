@@ -1,6 +1,10 @@
 <?php
+// Error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // JavaScript Enhanced Grid for Teklif Ürünleri
-include dirname(__DIR__) . '/_conn.php';
+include dirname(dirname(__DIR__)) . '/_conn.php';
 
 // Get parameters
 $teklif_no = $_GET['teklif_no'] ?? '';
@@ -39,16 +43,15 @@ try {
                     ELSE ( ( tu.B_SATIS_FIYATI - tu.O_MALIYET ) / NULLIF(tu.B_SATIS_FIYATI,0) ) * 100
                 END AS KARLILIK,
                 (SELECT TOP 1 1 FROM " . getTableName('aa_erp_kt_mcafee_sku_sure') . " s WHERE s.sku=tu.SKU) AS MCSURE,
-                tu.SIRA,
                 tu.SATIS_TIPI
             FROM " . getTableName('aa_erp_kt_teklifler_urunler') . " tu
             WHERE tu.X_TEKLIF_NO = :teklif_no";
 
     if ($page_size !== 'all' && is_numeric($page_size)) {
-        $sql .= " ORDER BY tu.SIRA
+        $sql .= " ORDER BY tu.id DESC
                   OFFSET 0 ROWS FETCH NEXT " . intval($page_size) . " ROWS ONLY";
     } else {
-        $sql .= " ORDER BY tu.SIRA";
+        $sql .= " ORDER BY tu.id DESC";
     }
 
     $stmt = $conn->prepare($sql);
@@ -56,8 +59,14 @@ try {
     $stmt->execute();
     $teklif_urunler = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+} catch (PDOException $e) {
+    $error = 'SQL Error: ' . $e->getMessage() . ' | Code: ' . $e->getCode();
+    http_response_code(500);
+    die($error);
 } catch (Exception $e) {
-    $error = $e->getMessage();
+    $error = 'Error: ' . $e->getMessage();
+    http_response_code(500);
+    die($error);
 }
 
 // Calculate totals

@@ -70,6 +70,11 @@ try {
     $teklif_error = $e->getMessage();
 }
 
+// Debug: Teklif sayısını ekrana bas
+if (empty($teklifler) && empty($teklif_error)) {
+    $teklif_error = "Fırsat NO: $firsat_no - Teklif bulunamadı (getTableName: " . getTableName('aa_erp_kt_teklifler') . ")";
+}
+
 ?><!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -914,6 +919,11 @@ try {
             const checkedBoxes = document.querySelectorAll('.teklif-checkbox:checked');
             const alternatifBtn = document.getElementById('alternatifTeklifBtn');
 
+            // Eğer buton yoksa (henüz DOM'a eklenmemişse) çık
+            if (!alternatifBtn) {
+                return;
+            }
+
             if (checkedBoxes.length > 1) {  // Birden fazla seçim yapıldığında aktif
                 alternatifBtn.classList.add('active');
                 alternatifBtn.innerHTML = '<span class="dashicons dashicons-admin-tools" style="margin-right: 5px; font-size: 16px; line-height: 1;"></span>' +
@@ -926,6 +936,12 @@ try {
 
             // Select all checkbox'ın durumunu güncelle
             const selectAllCheckbox = document.getElementById('selectAll');
+
+            // Eğer checkbox yoksa çık
+            if (!selectAllCheckbox) {
+                return;
+            }
+
             const allCheckboxes = document.querySelectorAll('.teklif-checkbox');
             const allChecked = allCheckboxes.length > 0 && Array.from(allCheckboxes).every(cb => cb.checked);
             const someChecked = Array.from(allCheckboxes).some(cb => cb.checked);
