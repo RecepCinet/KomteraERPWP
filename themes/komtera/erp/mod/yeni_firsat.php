@@ -544,6 +544,25 @@ if (isset($_GET['action'])) {
             exit;
         }
 
+        if ($_GET['action'] === 'get_musteri_id') {
+            $musteri_adi = $_GET['musteri_adi'] ?? '';
+            if ($musteri_adi) {
+                $sql = "SELECT TOP 1 id FROM " . getTableName('aa_erp_kt_musteriler') . " WHERE musteri = :musteri_adi";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':musteri_adi', $musteri_adi);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($result) {
+                    echo json_encode(['success' => true, 'musteri_id' => $result['id']]);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Müşteri bulunamadı']);
+                }
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Müşteri adı belirtilmedi']);
+            }
+            exit;
+        }
+
         if ($_GET['action'] === 'search_musteriler') {
             $query = $_GET['query'] ?? '';
             $mode = $_GET['mode'] ?? 'startswith';

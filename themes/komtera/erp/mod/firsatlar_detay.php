@@ -715,8 +715,13 @@ if (empty($teklifler) && empty($teklif_error)) {
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label"><?php echo __('Bayi Yetkili', 'komtera'); ?></div>
-                    <div class="field-value <?php echo empty($firsat_data['BAYI_YETKILI_ISIM']) ? 'empty' : ''; ?>">
+                    <div class="field-label">
+                        <?php echo __('Bayi Yetkili', 'komtera'); ?>
+                        <button class="edit-icon-btn" onclick="editBayiYetkili(event)" title="<?php echo __('Düzenle', 'komtera'); ?>">
+                            <span class="dashicons dashicons-edit"></span>
+                        </button>
+                    </div>
+                    <div class="field-value">
                         <?php echo htmlspecialchars($firsat_data['BAYI_YETKILI_ISIM'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
@@ -744,14 +749,24 @@ if (empty($teklifler) && empty($teklif_error)) {
             <div class="card">
                 <h2><?php echo __('Müşteri Bilgileri', 'komtera'); ?></h2>
                 <div class="field-group">
-                    <div class="field-label"><?php echo __('Müşteri Adı', 'komtera'); ?></div>
-                    <div class="field-value <?php echo empty($firsat_data['MUSTERI_ADI']) ? 'empty' : ''; ?>">
+                    <div class="field-label">
+                        <?php echo __('Müşteri Adı', 'komtera'); ?>
+                        <button class="edit-icon-btn" onclick="editMusteri(event)" title="<?php echo __('Düzenle', 'komtera'); ?>">
+                            <span class="dashicons dashicons-edit"></span>
+                        </button>
+                    </div>
+                    <div class="field-value">
                         <?php echo htmlspecialchars($firsat_data['MUSTERI_ADI'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label"><?php echo __('Müşteri Yetkili', 'komtera'); ?></div>
-                    <div class="field-value <?php echo empty($firsat_data['MUSTERI_YETKILI_ISIM']) ? 'empty' : ''; ?>">
+                    <div class="field-label">
+                        <?php echo __('Müşteri Yetkili', 'komtera'); ?>
+                        <button class="edit-icon-btn" onclick="editMusteriYetkili(event)" title="<?php echo __('Düzenle', 'komtera'); ?>">
+                            <span class="dashicons dashicons-edit"></span>
+                        </button>
+                    </div>
+                    <div class="field-value">
                         <?php echo htmlspecialchars($firsat_data['MUSTERI_YETKILI_ISIM'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>
                 </div>
@@ -1072,5 +1087,43 @@ if (empty($teklifler) && empty($teklif_error)) {
             }, 5000);
         }
     </script>
+
+    <?php include __DIR__ . '/_firsat_edit_modals.php'; ?>
+
+    <style>
+        .field-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            background: #007cba;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 4px;
+        }
+
+        .edit-icon-btn:hover {
+            background: #005a87;
+            transform: scale(1.1);
+        }
+
+        .edit-icon-btn .dashicons {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            line-height: 1;
+        }
+    </style>
 </body>
 </html>

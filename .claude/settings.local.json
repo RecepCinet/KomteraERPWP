@@ -42,7 +42,11 @@
       "mcp__playwright__browser_press_key",
       "Bash(exit)",
       "Read(//Users/recepcinet/Desktop/**)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(claude-code config get model)",
+      "Bash(claude config set model claude-sonnet-4-20250514)",
+      "Read(//Users/recepcinet/.config/**)",
+      "Bash(claude config list)"
     ],
     "deny": [],
     "ask": []
