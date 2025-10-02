@@ -629,20 +629,10 @@ if (empty($teklifler) && empty($teklif_error)) {
                                     </td>
                                     <td>
                                         <div style="display: flex; align-items: center; gap: 4px;">
-                                            <?php
-                                            // Satış tipi gösterimi
-                                            $satis_tipi = $teklif['SATIS_TIPI'] ?? '';
-                                            if ($satis_tipi == '0') {
-                                                echo '<span class="status-icon" title="' . __('İlk Satış', 'komtera') . '"><span class="dashicons dashicons-yes-alt"></span></span>';
-                                            } elseif ($satis_tipi == '1') {
-                                                echo '<span class="status-icon" title="' . __('Yenileme', 'komtera') . '"><span class="dashicons dashicons-update"></span></span>';
-                                            }
-                                            ?>
-
                                             <?php if ($teklif['KILIT'] == '1') { ?>
                                                 <span class="status-icon kilitli" title="<?php echo __('Kilitli', 'komtera'); ?>"><span class="dashicons dashicons-lock"></span></span>
                                             <?php } else {?>
-                                                <span class="status-icon" title="<?php echo __('Kilitli', 'komtera'); ?>"><span class="dashicons dashicons-unlock"></span></span>
+                                                <span class="status-icon" title="<?php echo __('Kilitli Değil', 'komtera'); ?>"><span class="dashicons dashicons-unlock"></span></span>
                                             <?php } ?>
 
                                             <!-- PDF Durumu - şimdilik gri, sonra dinamik olacak -->
@@ -837,7 +827,12 @@ if (empty($teklifler) && empty($teklif_error)) {
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label"><?php echo __('Etkinlik', 'komtera'); ?></div>
+                    <div class="field-label">
+                        <?php echo __('Etkinlik', 'komtera'); ?>
+                        <button class="edit-icon-btn" onclick="editEtkinlik(event)" title="<?php echo __('Düzenle', 'komtera'); ?>">
+                            <span class="dashicons dashicons-edit"></span>
+                        </button>
+                    </div>
                     <div class="field-value <?php echo empty($firsat_data['ETKINLIK']) ? 'empty' : ''; ?>">
                         <?php echo htmlspecialchars($firsat_data['ETKINLIK'] ?? __('Belirtilmemiş', 'komtera')); ?>
                     </div>

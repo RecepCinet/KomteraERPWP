@@ -246,6 +246,21 @@
 .musteri-item:active {
     background: #e0e0e0;
 }
+
+.etkinlik-item {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.etkinlik-item:hover {
+    background: #f0f0f0;
+}
+
+.etkinlik-item:active {
+    background: #e0e0e0;
+}
 </style>
 
 <script>
@@ -1104,6 +1119,146 @@ function confirmDeleteMusteriYetkili(yetkiliId) {
 
 function cancelDeleteMusteriYetkili(yetkiliId) {
     loadMusteriYetkililer(MUSTERI_ID);
+}
+
+// ============== ETKİNLİK DÜZENLEME ==============
+function editEtkinlik(event) {
+    event.preventDefault();
+
+    const selectedMarka = '<?php echo htmlspecialchars($firsat_data['MARKA'] ?? ''); ?>';
+
+    if (!selectedMarka) {
+        alert('<?php echo __('Marka bilgisi bulunamadı.', 'komtera'); ?>');
+        return;
+    }
+
+    const modalHtml = `
+        <div id="etkinlik-modal" class="modal-overlay" onclick="closeEtkinlikModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3><?php echo __('Etkinlik Seçimi', 'komtera'); ?> (${selectedMarka})</h3>
+                    <button class="modal-close" onclick="closeEtkinlikModal()">&times;</button>
+                </div>
+                <div class="modal-list" id="etkinlik-list">
+                    <div style="text-align: center; padding: 20px;"><?php echo __('Yükleniyor...', 'komtera'); ?></div>
+                </div>
+                <div class="modal-footer">
+                    <div style="font-size: 12px; color: #666; text-align: center;">
+                        * <?php echo __('Sadece aktif etkinlikler gösterilmektedir (tarih geçmemiş)', 'komtera'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    loadEtkinlikler(selectedMarka);
+}
+
+function closeEtkinlikModal(event) {
+    if (event && event.target.id !== 'etkinlik-modal') return;
+    const modal = document.getElementById('etkinlik-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function loadEtkinlikler(marka) {
+    fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/mod/yeni_firsat.php?action=get_etkinlikler&marka=' + encodeURIComponent(marka))
+        .then(r => r.json())
+        .then(response => {
+            console.log('Etkinlik response:', response);
+            if (response.success) {
+                displayEtkinlikler(response.data);
+            } else {
+                document.getElementById('etkinlik-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Hata', 'komtera'); ?>: ' + response.message + '</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Etkinlik AJAX Error:', error);
+            document.getElementById('etkinlik-list').innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Etkinlik listesi yüklenirken hata oluştu.', 'komtera'); ?></div>';
+        });
+}
+
+function displayEtkinlikler(data) {
+    const listDiv = document.getElementById('etkinlik-list');
+
+    if (!Array.isArray(data)) {
+        console.error('Etkinlik data is not an array:', data);
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><?php echo __('Veri formatı hatalı.', 'komtera'); ?></div>';
+        return;
+    }
+
+    if (data.length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><?php echo __('Bu marka için aktif etkinlik bulunamadı.', 'komtera'); ?></div>';
+        return;
+    }
+
+    // Veriyi store'a kaydet
+    etkinliklerData = data;
+
+    let html = '';
+    data.forEach(function(etkinlik, index) {
+        const tarihBas = etkinlik.tarih_bas ? new Date(etkinlik.tarih_bas).toLocaleDateString('tr-TR') : '';
+        const tarihBit = etkinlik.tarih_bit ? new Date(etkinlik.tarih_bit).toLocaleDateString('tr-TR') : '';
+        const dateRange = tarihBas && tarihBit ? `(${tarihBas} - ${tarihBit})` : '';
+
+        // baslik veya etkinlik alanını kullan
+        const etkinlikAdi = etkinlik.baslik || etkinlik.etkinlik || 'N/A';
+
+        html += `
+            <div class="etkinlik-item" onclick="selectEtkinlikByIndex(${index})">
+                <div style="font-weight: 500;">${etkinlikAdi}</div>
+                ${dateRange ? `<div style="font-size: 12px; color: #666; margin-top: 4px;">${dateRange}</div>` : ''}
+            </div>
+        `;
+    });
+
+    listDiv.innerHTML = html;
+}
+
+// Etkinlik data store
+let etkinliklerData = [];
+
+function selectEtkinlikByIndex(index) {
+    const etkinlik = etkinliklerData[index];
+    if (etkinlik) {
+        const etkinlikAdi = etkinlik.baslik || etkinlik.etkinlik || '';
+        selectEtkinlik(etkinlikAdi);
+    }
+}
+
+function selectEtkinlik(etkinlikAdi) {
+    const formData = new FormData();
+    formData.append('firsat_no', FIRSAT_NO);
+    formData.append('field', 'etkinlik');
+    formData.append('etkinlik', etkinlikAdi);
+
+    fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/update_firsat_field.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(async r => {
+        const text = await r.text();
+        console.log('Response text:', text);
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.error('JSON parse error. Response:', text);
+            throw new Error('Sunucudan geçersiz yanıt: ' + text.substring(0, 100));
+        }
+    })
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('<?php echo __('Hata', 'komtera'); ?>: ' + (data.error || data.message || '<?php echo __('Bilinmeyen hata', 'komtera'); ?>'));
+        }
+    })
+    .catch(err => {
+        console.error('Save error:', err);
+        alert('<?php echo __('Kaydetme hatası', 'komtera'); ?>: ' + err.message);
+    });
 }
 
 // ============== BİTİŞ TARİHİ DÜZENLEME ==============

@@ -43,6 +43,9 @@ try {
         ],
         'bitis_tarihi' => [
             'BITIS_TARIHI' => 'bitis_tarihi'
+        ],
+        'etkinlik' => [
+            'ETKINLIK' => 'etkinlik'
         ]
     ];
 
@@ -58,7 +61,8 @@ try {
         'MUSTERI_ADI' => 100,
         'MUSTERI_YETKILI_ISIM' => 100,
         'MUSTERI_YETKILI_TEL' => 11,
-        'MUSTERI_YETKILI_EPOSTA' => 50
+        'MUSTERI_YETKILI_EPOSTA' => 50,
+        'ETKINLIK' => 2000000 // text field, büyük limit
     ];
 
     // POST'tan gelen değerleri al ve trim et
