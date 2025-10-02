@@ -71,21 +71,29 @@ if ($bagli_firsat_no=="") {
 }
 
 // FLOW Firsati Cogalt
+$currentDate = date('Y-m-d');
 $dup_id = duplicate_row(getTableName('aa_erp_kt_firsatlar'), "FIRSAT_NO=" , $firsat_no, $arr);
 $query = "UPDATE " . getTableName('aa_erp_kt_firsatlar') . " set FIRSAT_ANA=null,BAGLI_FIRSAT_NO='$bagli_firsat_no' where FIRSAT_NO='$firsat_no' ";
 $stmt = $conn->prepare($query);
 $stmt->execute();
-$query = "UPDATE " . getTableName('aa_erp_kt_firsatlar') . " set FIRSAT_ANA='1',FIRSAT_NO='F$dup_id',BAGLI_FIRSAT_NO='$bagli_firsat_no' where id = '$dup_id' ";
+$query = "UPDATE " . getTableName('aa_erp_kt_firsatlar') . "
+          SET FIRSAT_ANA='1',
+              FIRSAT_NO='F$dup_id',
+              BAGLI_FIRSAT_NO='$bagli_firsat_no',
+              BASLANGIC_TARIHI='$currentDate',
+              SIL='0'
+          WHERE id = '$dup_id' ";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
 $outstring=$dup_id;
 
 
-// FLOW Ana Teklifi Cogalt
+// FLOW Tüm Teklifleri Cogalt
 
 $arr=Array(
     "KAMPANYA",
+    "KILIT",
     "KOMISYON_F1",
     "KOMISYON_F1_ACIKLAMA",
     "KOMISYON_F2",
@@ -114,48 +122,52 @@ $sqlstring="select FIRSAT_NO from " . getTableName('aa_erp_kt_firsatlar') . " wh
 $stmt = $conn->query($sqlstring);
 $firsat = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['FIRSAT_NO'];
 
-
-$sqlstring="select * from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_TIPI=1 AND X_FIRSAT_NO='$firsat_no'";
+// Tüm teklifleri çoğalt (sadece ana teklif değil)
+$sqlstring="select * from " . getTableName('aa_erp_kt_teklifler') . " where X_FIRSAT_NO='$firsat_no' ORDER BY id ASC";
 $stmt = $conn->query($sqlstring);
-$teklif = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+$teklifler = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-//print_r($teklif);
+$currentDateTime = date('Y-m-d H:i:s');
 
-//echo $teklif['TEKLIF_NO'] . "\n";
+foreach ($teklifler as $teklif) {
+    $dup_t_id = duplicate_row(getTableName('aa_erp_kt_teklifler'), "TEKLIF_NO=" , $teklif['TEKLIF_NO'], $arr);
 
-$dup_t_id = duplicate_row(getTableName('aa_erp_kt_teklifler'), "TEKLIF_NO=" , $teklif['TEKLIF_NO'], $arr);
-//echo $dup_t_id;
-
-$query = "UPDATE " . getTableName('aa_erp_kt_teklifler') . " set X_FIRSAT_NO='$firsat',TEKLIF_NO='T$dup_t_id' where id = '$dup_t_id' ";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-
-$sqlstring="select * from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO = '" . $teklif['TEKLIF_NO'] . "'";
-$stmt = $conn->query($sqlstring);
-$urunler = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$arr=Array(
-    "ACIKLAMA",
-    "ADET",
-    "B_LISTE_FIYATI",
-    "B_MALIYET",
-    "B_SATIS_FIYATI",
-    "ISKONTO",
-    "O_MALIYET",
-    "SATIS_TIPI",
-    "SIRA",
-    "SKU",
-    "SURE",
-    "TIP",
-    "X_TEKLIF_NO"
-);
-
-foreach ($urunler as $urun) {
-    $urun_id = duplicate_row(getTableName('aa_erp_kt_teklifler_urunler'), "X_TEKLIF_NO=",$teklif['TEKLIF_NO'],$arr);
-    //echo $urun_id;
-    $query = "UPDATE " . getTableName('aa_erp_kt_teklifler_urunler') . " set X_TEKLIF_NO='T$dup_t_id' where id = '$urun_id' ";
+    // Yeni teklif numarası, fırsat numarası ve YARATILIS_TARIHI güncellemeleri
+    $query = "UPDATE " . getTableName('aa_erp_kt_teklifler') . "
+              SET X_FIRSAT_NO='$firsat',
+                  TEKLIF_NO='T$dup_t_id',
+                  YARATILIS_TARIHI='$currentDateTime'
+              WHERE id = '$dup_t_id'";
     $stmt = $conn->prepare($query);
     $stmt->execute();
+
+    // Teklif ürünlerini çoğalt
+    $sqlstring="select * from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu where tu.X_TEKLIF_NO = '" . $teklif['TEKLIF_NO'] . "'";
+    $stmt = $conn->query($sqlstring);
+    $urunler = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $arr_urun=Array(
+        "ACIKLAMA",
+        "ADET",
+        "B_LISTE_FIYATI",
+        "B_MALIYET",
+        "B_SATIS_FIYATI",
+        "ISKONTO",
+        "O_MALIYET",
+        "SATIS_TIPI",
+        "SIRA",
+        "SKU",
+        "SURE",
+        "TIP",
+        "X_TEKLIF_NO"
+    );
+
+    foreach ($urunler as $urun) {
+        $urun_id = duplicate_row(getTableName('aa_erp_kt_teklifler_urunler'), "X_TEKLIF_NO=",$teklif['TEKLIF_NO'],$arr_urun);
+        $query = "UPDATE " . getTableName('aa_erp_kt_teklifler_urunler') . " set X_TEKLIF_NO='T$dup_t_id' where id = '$urun_id' ";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+    }
 }
 
     echo json_encode([

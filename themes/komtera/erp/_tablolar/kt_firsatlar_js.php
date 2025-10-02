@@ -276,13 +276,25 @@
         ];
         // URL parametrelerini al
         const urlParams = new URLSearchParams(window.location.search);
-        const date1 = urlParams.get('date1') || '';
-        const date2 = urlParams.get('date2') || '';
-        
+        let date1 = urlParams.get('date1') || localStorage.getItem('firsatlar_date1') || '';
+        let date2 = urlParams.get('date2') || localStorage.getItem('firsatlar_date2') || '';
+
+        // Tarihleri localStorage'a kaydet
+        if (date1) localStorage.setItem('firsatlar_date1', date1);
+        if (date2) localStorage.setItem('firsatlar_date2', date2);
+
         // URL'yi tarih parametreleriyle oluştur
         let dataUrl = "_tablolar/kt_firsatlar.php?dbname=LKS";
         if (date1) dataUrl += "&date1=" + encodeURIComponent(date1);
         if (date2) dataUrl += "&date2=" + encodeURIComponent(date2);
+
+        // URL'i güncelle (refresh yapınca tarihleri korumak için)
+        if (date1 || date2) {
+            const newUrl = new URL(window.location);
+            if (date1) newUrl.searchParams.set('date1', date1);
+            if (date2) newUrl.searchParams.set('date2', date2);
+            window.history.replaceState({}, '', newUrl);
+        }
 
         var dataModelSS = {
             location: "remote",
