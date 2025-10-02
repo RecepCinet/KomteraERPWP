@@ -807,7 +807,12 @@ if (empty($teklifler) && empty($teklif_error)) {
                     </div>
                 </div>
                 <div class="field-group">
-                    <div class="field-label"><?php echo __('Bitiş Tarihi', 'komtera'); ?></div>
+                    <div class="field-label">
+                        <?php echo __('Bitiş Tarihi', 'komtera'); ?>
+                        <button class="edit-icon-btn" onclick="editBitisTarihi(event)" title="<?php echo __('Düzenle', 'komtera'); ?>">
+                            <span class="dashicons dashicons-edit"></span>
+                        </button>
+                    </div>
                     <div class="field-value <?php echo empty($firsat_data['BITIS_TARIHI']) ? 'empty' : ''; ?>">
                         <?php
                         if ($firsat_data['BITIS_TARIHI']) {

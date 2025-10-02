@@ -40,6 +40,9 @@ try {
             'MUSTERI_YETKILI_ISIM' => 'yetkili_isim',
             'MUSTERI_YETKILI_TEL' => 'yetkili_tel',
             'MUSTERI_YETKILI_EPOSTA' => 'yetkili_eposta'
+        ],
+        'bitis_tarihi' => [
+            'BITIS_TARIHI' => 'bitis_tarihi'
         ]
     ];
 

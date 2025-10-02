@@ -1105,4 +1105,96 @@ function confirmDeleteMusteriYetkili(yetkiliId) {
 function cancelDeleteMusteriYetkili(yetkiliId) {
     loadMusteriYetkililer(MUSTERI_ID);
 }
+
+// ============== BİTİŞ TARİHİ DÜZENLEME ==============
+function editBitisTarihi(event) {
+    event.preventDefault();
+
+    const currentDate = '<?php echo $firsat_data['BITIS_TARIHI'] ? (new DateTime($firsat_data['BITIS_TARIHI']))->format('Y-m-d') : ''; ?>';
+
+    const modalHtml = `
+        <div id="bitis-tarihi-modal" class="modal-overlay" onclick="closeBitisTarihiModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 400px;">
+                <div class="modal-header">
+                    <h3><?php echo __('Bitiş Tarihi Düzenle', 'komtera'); ?></h3>
+                    <button class="modal-close" onclick="closeBitisTarihiModal()">&times;</button>
+                </div>
+                <div style="padding: 20px;">
+                    <div class="field-group">
+                        <label for="new-bitis-tarihi" style="display: block; margin-bottom: 8px; font-weight: 500;">
+                            <?php echo __('Bitiş Tarihi', 'komtera'); ?>
+                        </label>
+                        <input type="date" id="new-bitis-tarihi" value="${currentDate}"
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    </div>
+                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                        <button class="btn btn-primary" onclick="saveBitisTarihi()">
+                            <?php echo __('Kaydet', 'komtera'); ?>
+                        </button>
+                        <button class="btn" onclick="closeBitisTarihiModal()"
+                                style="background: #666; color: white;">
+                            <?php echo __('İptal', 'komtera'); ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Focus on date input
+    setTimeout(() => {
+        const input = document.getElementById('new-bitis-tarihi');
+        if (input) input.focus();
+    }, 100);
+}
+
+function closeBitisTarihiModal(event) {
+    if (event && event.target.id !== 'bitis-tarihi-modal') return;
+    const modal = document.getElementById('bitis-tarihi-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function saveBitisTarihi() {
+    const tarihi = document.getElementById('new-bitis-tarihi').value;
+
+    if (!tarihi) {
+        alert('<?php echo __('Lütfen bir tarih seçin.', 'komtera'); ?>');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('firsat_no', FIRSAT_NO);
+    formData.append('field', 'bitis_tarihi');
+    formData.append('bitis_tarihi', tarihi);
+
+    fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/update_firsat_field.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(async r => {
+        const text = await r.text();
+        console.log('Response text:', text);
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.error('JSON parse error. Response:', text);
+            throw new Error('Sunucudan geçersiz yanıt: ' + text.substring(0, 100));
+        }
+    })
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('<?php echo __('Hata', 'komtera'); ?>: ' + (data.error || data.message || '<?php echo __('Bilinmeyen hata', 'komtera'); ?>'));
+        }
+    })
+    .catch(err => {
+        console.error('Save error:', err);
+        alert('<?php echo __('Kaydetme hatası', 'komtera'); ?>: ' + err.message);
+    });
+}
 </script>
