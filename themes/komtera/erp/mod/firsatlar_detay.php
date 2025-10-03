@@ -304,6 +304,11 @@ if (empty($teklifler) && empty($teklif_error)) {
             font-size: 16px;
         }
 
+        .status-icon.pdf-hazir {
+            background: #4caf50 !important;
+            color: white !important;
+        }
+
         .checkbox-column {
             width: 40px;
             text-align: center;
@@ -635,10 +640,16 @@ if (empty($teklifler) && empty($teklif_error)) {
                                                 <span class="status-icon" title="<?php echo __('Kilitli Değil', 'komtera'); ?>"><span class="dashicons dashicons-unlock"></span></span>
                                             <?php } ?>
 
-                                            <!-- PDF Durumu - şimdilik gri, sonra dinamik olacak -->
-                                            <span class="status-icon" title="<?php echo __('PDF Hazır Değil', 'komtera'); ?>">
-                                                <span class="dashicons dashicons-media-text"></span>
-                                            </span>
+                                            <!-- PDF Durumu -->
+                                            <?php if ($teklif['PDF'] == '1'): ?>
+                                                <span class="status-icon pdf-hazir" title="<?php echo __('PDF Hazır', 'komtera'); ?>">
+                                                    <span class="dashicons dashicons-media-text"></span>
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="status-icon" title="<?php echo __('PDF Hazır Değil', 'komtera'); ?>">
+                                                    <span class="dashicons dashicons-media-text"></span>
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
