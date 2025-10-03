@@ -1,0 +1,92 @@
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors",true);
+
+include "../_conn.php";
+
+$url = "select id,
+	   magaza,
+(select VADE from aaa_erp_kt_bayiler b where b.CH_KODU='120.03.01.0472') as vade,
+	   concat(adres,' ',sehir) as adres,
+	   sku,
+	   doviz_turu,
+	   adet,
+	   birim_fiyat 
+from aa_erp_kt_mediamarkt_faturalama
+";
+$stmt = $conn->prepare($url);
+$stmt->execute();
+$data= $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+//print_r($data);
+//
+//die();
+
+$say=0;
+$fatsay=0;
+
+for ($t=0;$t<count($data);$t++) {
+    $say++;
+	
+	$satir=$data[$t];
+	$id=$satir['id'];
+	
+    $_SIPARISID = "472" . $id;
+    $siparis_no = "T472" . $id;
+    $_CARI_KOD = '120.03.01.0472';
+    $_MALZEMEKOD = $satir['sku'];
+    $_MIKTAR = $satir['adet'];
+    $_FIYAT = $satir['birim_fiyat'];
+    $logo_kullanici='BARIŞ ÇORBACI';
+    $fis_dur = "1";                  // en son satir 2 olacak
+
+    //echo $satir['CH_KODU'] . "=" . $sonraki_satir['CH_KODU'] . "\n";
+    if ($t===count($data)-1) {
+        $fis_dur = "2";
+        $fatsay++;
+    }
+
+    $_VADE = $satir['vade'];
+    $_Sevk_Adresi = $satir['adres'];
+    $DOVIZTUR = "0";
+	
+	if ($satir['doviz_turu']==='USD') {
+		$DOVIZTUR="1";
+	}
+	if ($satir['doviz_turu']==='EUR') {
+		$DOVIZTUR="2";
+	}
+	
+    $_SevkiyatKime = "Müşteri";
+    $KisiBilgi = 'baris.corbaci@komtera.com';
+    $_Adres1 = mb_substr($_Sevk_Adresi, 0, 50);
+    $_Adres2 = mb_substr($_Sevk_Adresi, 50, 50);
+    $durumm = "17";
+    $sqlinsert = "INSERT INTO LKS.dbo.ARYD_FIS_AKTARIM ([SIPARISID],[NO],[CARIKOD],[MALZEMEKOD],[MIKTAR],[FIYAT],[SATIS_TEMSILCISI]
+          ,[FIS_DURUMU],[SATIR_ID],[Cari_Vade_Kodu],[Sevk_Adresi],[DOVIZ_TUR],[SevkiyatKime],[KisiBilgi],[Adres1],[Adres2]
+          ,SONUC)
+          values ('$_SIPARISID','$siparis_no','$_CARI_KOD','$_MALZEMEKOD','$_MIKTAR','$_FIYAT','$logo_kullanici'
+          ,'$fis_dur','$say','$_VADE','$_Sevk_Adresi','$DOVIZTUR','$_SevkiyatKime','$KisiBilgi','$_Adres1','$_Adres2'
+          ,'$durumm')";
+		  echo $sqlinsert . "<br />";
+    try {
+        $stmt = $conn->prepare($sqlinsert);
+        //$result = $stmt->execute();
+        //echo ".";
+    } catch (PDOException $e) { 
+        BotMesaj($e->getMessage() . "\n" . $sqlinsert . "\n" . $_GET['user']);
+        die("NOK|Sorun Teknik ekibe aktarilmistir!");
+    }
+    $temp_ch=$_CARI_KOD;
+    $temp_id=$id;
+}
+$sqlupdate = "update LKS.dbo.ARYD_FIS_AKTARIM set SONUC='0' WHERE SONUC='17'";
+try {
+    $stmt = $conn->prepare($sqlupdate);
+    //$result = $stmt->execute();
+} catch (PDOException $e) {
+    BotMesaj($e->getMessage() . "\n" . $sqlupdate  );
+    die("NOK|Sorun Teknik ekibe aktarilmistir!");
+}
+echo $fatsay;
+?>

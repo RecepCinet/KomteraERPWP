@@ -1,0 +1,29 @@
+body,table {
+    font-family: Arial;
+    color: #333333;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+input {
+    font-size: 15px;
+}
+.tt tr {
+    cursor: pointer;
+}
+tr.ss-button {
+    background-color: #FFFFFF;
+}
+tr.ss-button:hover {
+    background-color: #e0e0e0;
+}
+tr.ss-button:nth-of-type(odd):hover {
+    background: #e0e0e0;
+}
+tr.ss-button:nth-of-type(odd) {
+/*    background: #e6f4ff;*/
+    background: #f7f7f7;
+}
+td {
+/*    border-color: #a8c4dc;*/
+    border-color: #d6d6d6;
+}
