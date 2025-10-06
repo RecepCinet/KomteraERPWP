@@ -1,4 +1,7 @@
 <?PHP
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // WordPress integration for user data
 include '../../_conn.php';
 $dir = __DIR__;

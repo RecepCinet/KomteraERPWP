@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(0);
 ini_set("display_errors", false);
 
@@ -83,7 +84,7 @@ $stmt->execute();
 $outstring=$dup_id;
 
 
-// FLOW Tum Teklifleri Cogalt (Ana ve alternatifler)
+// FLOW Ana Teklifi Cogalt
 
 $arr=Array(
 "KAMPANYA",
@@ -132,7 +133,7 @@ foreach ($teklifler as $teklif) {
     $stmt = $conn->query($sqlstring);
     $urunler = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $arr=Array(
+    $arr_urun=Array(
     "ACIKLAMA",
     "ADET",
     "B_LISTE_FIYATI",
@@ -149,7 +150,7 @@ foreach ($teklifler as $teklif) {
     );
 
     foreach ($urunler as $urun) {
-        $urun_id = duplicate_row(getTableName('aa_erp_kt_teklifler_urunler'), "X_TEKLIF_NO=",$teklif['TEKLIF_NO'],$arr);
+        $urun_id = duplicate_row(getTableName('aa_erp_kt_teklifler_urunler'), "X_TEKLIF_NO=",$teklif['TEKLIF_NO'],$arr_urun);
         $query = "UPDATE " . getTableName('aa_erp_kt_teklifler_urunler') . " set X_TEKLIF_NO='T$dup_t_id' where id = '$urun_id' ";
         $stmt = $conn->prepare($query);
         $stmt->execute();

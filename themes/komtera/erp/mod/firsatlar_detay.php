@@ -42,7 +42,8 @@ try {
                           t.YARATILIS_SAATI,
                           t.KILIT,
                           t.TEKLIF_TIPI,
-                          t.SATIS_TIPI
+                          t.SATIS_TIPI,
+                          t.PDF
                    FROM " . getTableName('aa_erp_kt_teklifler') . " t
                    WHERE t.X_FIRSAT_NO = :firsat_no AND (t.SIL IS NULL OR t.SIL <> '1')
                    ORDER BY t.YARATILIS_TARIHI DESC, t.YARATILIS_SAATI DESC";
@@ -874,17 +875,13 @@ if (empty($teklifler) && empty($teklif_error)) {
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
-                            try {
-                                var data = JSON.parse(xhr.responseText);
-                                if (data.success) {
-                                    alert('<?php echo __('İşlem başarılı', 'komtera'); ?>: ' + data.yeni_firsat_no + ' <?php echo __('numaralı fırsat oluşturuldu', 'komtera'); ?>');
-                                    // Yeni fırsata yönlendir
-                                    window.location.href = 'admin.php?page=firsatlar_detay&firsat_no=' + data.yeni_firsat_no;
-                                } else {
-                                    alert('<?php echo __('Hata', 'komtera'); ?>: ' + data.error);
-                                }
-                            } catch (e) {
-                                alert('<?php echo __('JSON parse hatası', 'komtera'); ?>');
+                            var response = xhr.responseText.trim();
+                            if (response.startsWith('F')) {
+                                alert('<?php echo __('İşlem başarılı', 'komtera'); ?>: ' + response + ' <?php echo __('numaralı fırsat oluşturuldu', 'komtera'); ?>');
+                                // Yeni fırsata yönlendir
+                                window.location.href = 'admin.php?page=firsatlar_detay&firsat_no=' + response;
+                            } else {
+                                alert('<?php echo __('Hata', 'komtera'); ?>: ' + response);
                             }
                         } else {
                             alert('<?php echo __('Bağlantı hatası oluştu', 'komtera'); ?>');

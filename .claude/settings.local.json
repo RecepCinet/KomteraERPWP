@@ -46,7 +46,8 @@
       "Bash(claude-code config get model)",
       "Bash(claude config set model claude-sonnet-4-20250514)",
       "Read(//Users/recepcinet/.config/**)",
-      "Bash(claude config list)"
+      "Bash(claude config list)",
+      "Read(//Users/recepcinet/Library/Application Support/JetBrains/PhpStorm2025.2/consoles/db/04118c11-1d27-41cd-99e8-a601444ed904/**)"
     ],
     "deny": [],
     "ask": []

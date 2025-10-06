@@ -1,5 +1,5 @@
 2025.10
--Firsat Detay ekraninda
+-Firsat Detay ekrani eklendi.
 -Firsat Detay ekraninda Bayi yetkilisi, Musteri ve Musteri Yetkilisi degistitebilme ozelligi eklendi.
 -Tablolarda hata yapip canli dataya zarar vermemek icin test_ prefixi eklendi erptest.komtera.com da atest_TABLO ile islem yapiliyor, erp.komtera.com'da ise canli data ile
 
