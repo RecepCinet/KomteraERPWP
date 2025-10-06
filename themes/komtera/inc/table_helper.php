@@ -16,6 +16,11 @@
 function getTableName($tableName) {
     $domain = $_SERVER['HTTP_HOST'] ?? '';
 
+    // aaa_ ile başlayan tablolar LOGO'dan gelen view'lar, prefix ekleme
+    if (strpos($tableName, 'aaa_') === 0) {
+        return $tableName;
+    }
+
     // Test environment - add atest_ prefix
     if ($domain === 'erptest.komtera.com') {
         return 'atest_' . $tableName;
