@@ -3043,7 +3043,7 @@ function submitForm() {
                 jQuery('#alert-container').html(''); // Hata mesajlarını da temizle
                 clearFormData(); // localStorage'ı temizle
                 setTimeout(function() {
-                    window.location.href = '<?php echo admin_url('admin.php?page=firsatlar'); ?>';
+                    window.location.href = '<?php echo admin_url('admin.php?page=firsatlar_detay'); ?>&firsat_no=' + response.firsat_no;
                 }, 2000);
             } else {
                 showAlert(response.message, 'danger');

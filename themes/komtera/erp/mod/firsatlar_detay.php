@@ -71,11 +71,6 @@ try {
     $teklif_error = $e->getMessage();
 }
 
-// Debug: Teklif sayısını ekrana bas
-if (empty($teklifler) && empty($teklif_error)) {
-    $teklif_error = "Fırsat NO: $firsat_no - Teklif bulunamadı (getTableName: " . getTableName('aa_erp_kt_teklifler') . ")";
-}
-
 ?><!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -660,7 +655,9 @@ if (empty($teklifler) && empty($teklif_error)) {
                     </div>
                 <?php else: ?>
                     <div class="empty-state">
-                        <?php echo __('Bu fırsatla ilişkili herhangi bir teklif bulunamadı.', 'komtera'); ?>
+                        <span class="dashicons dashicons-portfolio" style="font-size: 48px; color: #ccc; margin-bottom: 16px;"></span>
+                        <p style="margin: 0; color: #666; font-size: 16px;"><?php echo __('Henüz teklif oluşturulmamış', 'komtera'); ?></p>
+                        <p style="margin: 8px 0 0 0; color: #999; font-size: 14px;"><?php echo __('Yeni bir teklif oluşturmak için yukarıdaki butonu kullanabilirsiniz.', 'komtera'); ?></p>
                     </div>
                 <?php endif; ?>
         </div>
