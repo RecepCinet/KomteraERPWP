@@ -16,8 +16,8 @@
 function getTableName($tableName) {
     $domain = $_SERVER['HTTP_HOST'] ?? '';
 
-    // aaa_ ile başlayan tablolar LOGO'dan gelen view'lar, prefix ekleme
-    if (strpos($tableName, 'aaa_') === 0) {
+    // aaa_ ve aaaa_ ile başlayan tablolar LOGO'dan gelen view'lar, prefix ekleme
+    if (strpos($tableName, 'aaa_') === 0 || strpos($tableName, 'aaaa_') === 0) {
         return $tableName;
     }
 
