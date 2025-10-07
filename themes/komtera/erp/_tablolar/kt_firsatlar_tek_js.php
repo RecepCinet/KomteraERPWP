@@ -57,8 +57,13 @@
         }
     };
 
-    function TeklifAc(teklif) {
-        FileMaker.PerformScriptWithOption("Teklif", "Ac" + "|" + teklif);
+    function TeklifAc(teklifNo) {
+        var url = '<?php echo admin_url('admin.php?page=teklifler_detay&teklif_no='); ?>' + encodeURIComponent(teklifNo);
+        if (window.parent) {
+            window.parent.location.href = url;
+        } else {
+            window.location.href = url;
+        }
     }
     function SiparisAc(teklif) {
         FileMaker.PerformScriptWithOption("Siparis", "Ac" + "|" + teklif);
@@ -247,13 +252,13 @@
             reactive: true,
             scrollModel: {autoFit: true},
             editor: {select: true},
-            // sortModel: {
-            //     type: 'local',
-            //     single: true,
-            //     sorter: [{dataIndx: 'id', dir: 'down'}],
-            //     space: true,
-            //     multiKey: false
-            // },
+            sortModel: {
+                type: 'local',
+                single: false,
+                sorter: [{dataIndx: 'BASLANGIC_TARIHI', dir: 'down'}],
+                space: true,
+                multiKey: true
+            },
             toolbar: {
                 items: [
                     {
