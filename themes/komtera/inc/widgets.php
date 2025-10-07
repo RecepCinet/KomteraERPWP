@@ -24,8 +24,15 @@ if ( current_user_can('administrator') ) {
     include(get_stylesheet_directory() . '/widgets/template.php');
 }
 
+// Ana Widgets
 include( get_stylesheet_directory() . '/widgets/kur.php' );
 include( get_stylesheet_directory() . '/widgets/release_notes.php' );
+
+// Eski gadgets'lardan dönüştürülen widgets
+include( get_stylesheet_directory() . '/widgets/onay_is_atama.php' );
+include( get_stylesheet_directory() . '/widgets/yakinda_kapanacak_firsatlar.php' );
+include( get_stylesheet_directory() . '/widgets/siparis_ozel_sku.php' );
+include( get_stylesheet_directory() . '/widgets/satis_hedefleri.php' );
 
 
 // Gerekirse welcome panelin açık olduğundan emin ol
