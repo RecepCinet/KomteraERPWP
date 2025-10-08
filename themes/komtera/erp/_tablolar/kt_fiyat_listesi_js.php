@@ -230,7 +230,7 @@ $marka= $_GET['marka'];
 //                this.loadState({refresh: false});
 //            },
         };
-        var grid = pq.grid("div#grid_paging", obj);
+        grid = pq.grid("div#grid_paging", obj);
         grid.toggle();
         $(window).on('unload', function () {
             grid.saveState();

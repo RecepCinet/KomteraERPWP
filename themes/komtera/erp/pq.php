@@ -102,6 +102,7 @@ $theme="gray";
 <script src="pqgrid/localize/pq-localize-<?PHP echo substr(get_user_locale(),0,2); ?>.js"></script>
 <script src="pqgrid/pqTouch/pqtouch.min.js"></script>
 <script src="pqgrid/jsZip-2.5.0/jszip.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script src="pqgrid/js/base64.min.js"></script>
 <script src="pqgrid/js/FileSaver.js"></script>
 <script>
@@ -109,16 +110,113 @@ $theme="gray";
         grid.refreshDataAndView();
         //alert("yes");
     }
-    function ExcelKaydet() {
-        blob = grid.exportData({
-            url: "export.php",
-            format: 'xls',
-            nopqdata: true, //applicable for JSON export.
-            render: false
-        });
-        if (typeof blob === "string") {
-            blob = new Blob([blob]);
+    function ExcelKaydet(marka) {
+        if (!marka) {
+            alert('Marka bilgisi eksik!');
+            return;
         }
-        saveAs(blob, new Date().toISOString() + ".xls");
+
+        // Veritabanından veriyi çek
+        $.ajax({
+            url: '_service/export_fiyat_listesi.php?marka=' + encodeURIComponent(marka),
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success && response.data) {
+                    // Excel oluştur - hiç müdahale etme, olduğu gibi bas
+                    var ws = XLSX.utils.json_to_sheet(response.data);
+                    var wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, marka);
+
+                    // Excel dosyasını indir
+                    var filename = marka + '_' + new Date().toISOString().split('T')[0] + '.xlsx';
+                    XLSX.writeFile(wb, filename);
+
+                    alert(response.data.length + ' kayıt export edildi.');
+                } else {
+                    alert('Export hatası: ' + (response.message || 'Veri bulunamadı'));
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Export hatası:', error);
+                alert('Export hatası: ' + error);
+            }
+        });
+    }
+
+    function ExceldenAl(marka) {
+        if (!marka) {
+            alert('Marka bilgisi eksik!');
+            return;
+        }
+
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.xlsx,.xls';
+
+        input.onchange = function(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = e.target.result;
+                    var workbook = XLSX.read(data, {type: 'binary'});
+                    var firstSheetName = workbook.SheetNames[0];
+                    var worksheet = workbook.Sheets[firstSheetName];
+                    var jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+                    // İlk satır başlık, diğerleri veri
+                    if (jsonData.length > 1) {
+                        var headers = jsonData[0];
+                        var rows = jsonData.slice(1);
+
+                        // Excel verilerini hazırla
+                        var records = rows.map(function(row) {
+                            var obj = {};
+                            headers.forEach(function(header, i) {
+                                obj[header] = row[i];
+                            });
+                            return obj;
+                        });
+
+                        // Sunucuya kaydet
+                        $.ajax({
+                            url: '_service/save_fiyat_listesi.php',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                marka: marka,
+                                records: records
+                            }),
+                            success: function(response) {
+                                if (response.success) {
+                                    alert(response.message);
+                                    // Grid'i yenile
+                                    grid.refreshDataAndView();
+                                } else {
+                                    alert('Hata: ' + response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Kayıt hatası:', error);
+                                alert('Kayıt hatası: ' + error);
+                            }
+                        });
+
+                    } else {
+                        alert('Excel dosyası boş veya sadece başlık satırı içeriyor.');
+                    }
+                } catch(err) {
+                    console.error('Import hatası:', err);
+                    alert('Excel dosyası yüklenirken hata oluştu: ' + err.message);
+                }
+            };
+
+            reader.readAsBinaryString(file);
+        };
+
+        input.click();
     }
 </script>

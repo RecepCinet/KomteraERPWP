@@ -1267,11 +1267,20 @@ function fiyat_listesi_cb() {
         }
 
         function exceldenAl() {
+            if (!selectedMarka) {
+                alert('Lütfen önce bir marka seçiniz!');
+                return;
+            }
+
+            if (!confirm('Excel dosyası "' + selectedMarka + '" markasına yüklenecek. Devam etmek istiyor musunuz?')) {
+                return;
+            }
+
             const iframe = document.getElementById('erp_iframe');
             try {
                 const iframeWindow = iframe.contentWindow;
                 if (iframeWindow && iframeWindow.ExceldenAl) {
-                    iframeWindow.ExceldenAl();
+                    iframeWindow.ExceldenAl(selectedMarka);
                 } else {
                     console.error('ExceldenAl fonksiyonu iframe içinde bulunamadı');
                 }
@@ -1281,11 +1290,16 @@ function fiyat_listesi_cb() {
         }
 
         function exceleyeGonder() {
+            if (!selectedMarka) {
+                alert('Lütfen önce bir marka seçiniz!');
+                return;
+            }
+
             const iframe = document.getElementById('erp_iframe');
             try {
                 const iframeWindow = iframe.contentWindow;
                 if (iframeWindow && iframeWindow.ExcelKaydet) {
-                    iframeWindow.ExcelKaydet();
+                    iframeWindow.ExcelKaydet(selectedMarka);
                 } else {
                     console.error('ExcelKaydet fonksiyonu iframe içinde bulunamadı');
                 }
