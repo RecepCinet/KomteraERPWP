@@ -1191,6 +1191,14 @@ function fiyat_listesi_cb() {
         const baseUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php";
         const serviceUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service";
 
+        // Sayfa yüklendiğinde son seçili markayı yükle
+        window.addEventListener('DOMContentLoaded', function() {
+            const lastMarka = localStorage.getItem('fiyat_listesi_son_marka');
+            if (lastMarka) {
+                selectMarka(lastMarka);
+            }
+        });
+
         function showMarkaPopup() {
             document.getElementById('marka_popup').style.display = 'block';
             loadMarkalar();
@@ -1243,6 +1251,11 @@ function fiyat_listesi_cb() {
             selectedMarka = marka;
             updateIframeSrc();
             closeMarkaPopup();
+
+            // localStorage'a kaydet
+            if (marka) {
+                localStorage.setItem('fiyat_listesi_son_marka', marka);
+            }
 
             // Seçili marka göstergesini güncelle
             const display = document.getElementById('selected_marka_display');
@@ -1367,24 +1380,6 @@ function fiyat_listesi_cb() {
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Markalar</span>
                 </div>
 
-                <!-- Excel'den Al Butonu -->
-                <div class="pricelist-button" onclick="exceldenAl()" style="
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        min-width: 90px;
-                        transition: all 0.2s;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                        " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
-                    <span class="dashicons dashicons-upload" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Excel\'den Al','komtera'); ?></span>
-                </div>
-
                 <!-- Excel'e Gönder Butonu -->
                 <div class="pricelist-button" onclick="exceleyeGonder()" style="
                         display: flex;
@@ -1398,9 +1393,27 @@ function fiyat_listesi_cb() {
                         min-width: 90px;
                         transition: all 0.2s;
                         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                        " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#2196f3';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
-                    <span class="dashicons dashicons-download" style="font-size: 24px; color: #2196f3; margin-bottom: 6px;"></span>
+                        " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-upload" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Excel\'e Gönder','komtera'); ?></span>
+                </div>
+
+                <!-- Excel'den Al Butonu -->
+                <div class="pricelist-button" onclick="exceldenAl()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-download" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Excel\'den Al','komtera'); ?></span>
                 </div>
 
                 <!-- Marka Ekle Butonu -->

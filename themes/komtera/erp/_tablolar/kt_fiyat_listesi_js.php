@@ -223,7 +223,7 @@ $marka= $_GET['marka'];
             sortable: true,
             wrap: false, hwrap: false,
             numberCell: {resizable: true, width: 30, title: "#"},
-            title: '<?PHP echo $marka ; ?> - <?php echo __('price_list','komtera'); ?>',
+            title: '<?PHP echo $marka ; ?> - <?php echo __('price_list','komtera'); ?> hiz icin sadece 1000 kayit gosterilmektedir.',
             rowHt: 23,
             resizable: true,
 //            create: function () {
