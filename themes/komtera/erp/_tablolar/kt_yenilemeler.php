@@ -5,7 +5,7 @@ ini_set('display_errors', true);
 
 include '../../_conn.php';
 
-$sqlf="select CONCAT('''',REPLACE(lisans_tarih_markalar, CHAR(13), '',''),'''') as D from " . getTableName('aa_erp_kt_pref') . "";
+$sqlf="select CONCAT('''',REPLACE(lisans_tarih_markalar, CHAR(13), ''','''),'''') as D from " . getTableName('aa_erp_kt_pref') . "";
 //
 
 $stmt = $conn->query($sqlf);

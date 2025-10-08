@@ -7,42 +7,35 @@ $cryp = $_GET['cryp'];
 <script>
 var grid;
 
-function YenilemeAc(id) {
-    FileMaker.PerformScriptWithOption("Yenileme", id);
+function FirsatAc(firsatNo) {
+    var url = '<?php echo admin_url('admin.php?page=firsatlar_detay&firsat_no='); ?>' + encodeURIComponent(firsatNo);
+    if (window.parent) {
+        window.parent.location.href = url;
+    } else {
+        window.location.href = url;
+    }
 }
 
 
 $(function () {
-   
+
     var colM = [
         {title: "Sipariş No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "SIPARIS_NO", filter: {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
-                    return "<a href='#' class='demo_ac'>" + ui.rowData.SIPARIS_NO + "</a>";
-            },
-            postRender: function (ui) {
-                var grid = this,
-                    $cell = grid.getCell(ui);
-                $cell.find(".demo_ac")
-                    .bind("click", function (evt) {
-                        FileMaker.PerformScriptWithOption("Siparis", "Ac" + "|" + ui.rowData.SIPARIS_NO);
-                    });
+                if (ui.rowData.SIPARIS_NO) {
+                    return "<a href='#' onclick='FileMaker.PerformScriptWithOption(\"Siparis\", \"Ac|\" + \"" + ui.rowData.SIPARIS_NO + "\")'>" + ui.rowData.SIPARIS_NO + "</a>";
+                }
             }
         },
         {title: "Fırsat No", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "FIRSAT_NO", filter: {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
-                return "<a href='#' class='demo_ac'>" + ui.rowData.FIRSAT_NO + "</a>";
-            },
-            postRender: function (ui) {
-                var grid = this,
-                    $cell = grid.getCell(ui);
-                $cell.find(".demo_ac")
-                    .bind("click", function (evt) {
-                        FileMaker.PerformScriptWithOption("Firsat", "Ac" + "|" + ui.rowData.FIRSAT_NO );
-                    });
+                if (ui.rowData.FIRSAT_NO) {
+                    return "<a href='#' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>" + ui.rowData.FIRSAT_NO + "</a>";
+                }
             }
         },
 

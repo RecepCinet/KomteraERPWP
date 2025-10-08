@@ -1,19 +1,22 @@
 <script>
 var grid;
 
+function FirsatAc(firsatNo) {
+    var url = '<?php echo admin_url('admin.php?page=firsatlar_detay&firsat_no='); ?>' + encodeURIComponent(firsatNo);
+    if (window.parent) {
+        window.parent.location.href = url;
+    } else {
+        window.location.href = url;
+    }
+}
+
 $(function () {
     var colM = [
             {title: "",style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 40, sortable: false,
                 render: function (ui) {
-                        return "<a href='#' class='demo_ac'><span class='ui-icon ui-icon-zoomin'></span></a>";
-                },
-            postRender: function (ui) {
-                var grid = this,
-                    $cell = grid.getCell(ui);
-                    $cell.find(".demo_ac")
-                    .bind("click", function (evt) {
-                        FileMaker.PerformScriptWithOption ( "POC", "Ac" + "\n" + ui.rowData.FIRSAT_NO );
-                    });
+                    if (ui.rowData.FIRSAT_NO) {
+                        return "<a href='#' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'><span class='ui-icon ui-icon-zoomin'></span></a>";
+                    }
                 }
             },
             {title: "<?php echo __('opportunity','komtera'); ?>", editable: false, minWidth: 70, sortable: true, dataIndx: "FIRSAT_NO"},

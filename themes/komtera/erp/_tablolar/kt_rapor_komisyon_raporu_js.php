@@ -1,6 +1,11 @@
 <script>
-    function TeklifAc(teklif) {
-        FileMaker.PerformScriptWithOption("Teklif", "Ac" + "|" + teklif);
+    function TeklifAc(teklifNo) {
+        var url = '<?php echo admin_url('admin.php?page=teklifler_detay&teklif_no='); ?>' + encodeURIComponent(teklifNo);
+        if (window.parent) {
+            window.parent.location.href = url;
+        } else {
+            window.location.href = url;
+        }
     }
 
     function Odendimi(id, sindiki) {

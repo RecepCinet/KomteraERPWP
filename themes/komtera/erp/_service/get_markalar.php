@@ -7,7 +7,7 @@ include '../../_conn.php';
 header('Content-Type: application/json');
 
 try {
-    $sql = "SELECT MARKA, COUNT(*) as kayit_sayisi FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE MARKA IS NOT NULL AND MARKA != '' GROUP BY MARKA ORDER BY MARKA";
+    $sql = "SELECT MARKA, COUNT(*) as KAYIT_SAYISI FROM " . getTableName('aa_erp_kt_fiyat_listesi') . " WHERE MARKA IS NOT NULL AND MARKA != '' GROUP BY MARKA ORDER BY MARKA";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $markalar = $stmt->fetchAll(PDO::FETCH_ASSOC);

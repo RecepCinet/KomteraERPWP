@@ -57,6 +57,15 @@
         }
     };
 
+    function TeklifAc(teklifNo) {
+        var url = '<?php echo admin_url('admin.php?page=teklifler_detay&teklif_no='); ?>' + encodeURIComponent(teklifNo);
+        if (window.parent) {
+            window.parent.location.href = url;
+        } else {
+            window.location.href = url;
+        }
+    }
+
     function Gizle() {
         alert('<?php echo __('tiklama','komtera'); ?>');
         grid.getColumn({title: 'Finans'}).hidden = true;
@@ -138,26 +147,7 @@
 //    crules: [{condition: 'range'}]
 //    }
 //    },
-            {title: "<?php echo __('Teklif No','komtera'); ?>", exportRender: false, style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 80, sortable: true, dataIndx: "X_TEKLIF_NO", filter: {
-                    crules: [{condition: 'contain'}]
-                },
-                render: function (ui) {
-                    if (ui.rowData.id > 0) {
-                        return "<a href='#' class='demo_ac'>" + ui.rowData.X_TEKLIF_NO + "</a>";
-                    } else {
-                        return "";
-                    }
-                },
-                postRender: function (ui) {
-                    var grid = this,
-                            $cell = grid.getCell(ui);
-                    $cell.find(".demo_ac")
-                            .bind("click", function (evt) {
-                                FileMaker.PerformScriptWithOption("Teklif", "Ac" + "|" + ui.rowData.X_TEKLIF_NO);
-                            });
-                }
-            },
-            {title: "<?php echo __('Sipariş No','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: true, dataIndx: "SIPARIS_NO", filter: {
+            {title: "<?php echo __('Sipariş No','komtera'); ?>", exportRender: false, editable: false, minWidth: 90, sortable: false, dataIndx: "SIPARIS_NO", filter: {
                     crules: [{condition: 'contain'}] //,value: ['Açık']
                 },
                 render: function (ui) {
@@ -174,6 +164,17 @@
                             .bind("click", function (evt) {
                                 FileMaker.PerformScriptWithOption("Siparis", "Ac" + "|" + ui.rowData.SIPARIS_NO);
                             });
+                }
+            },
+            {title: "<?php echo __('Teklif No','komtera'); ?>", exportRender: false, style: {'text-color': '#dd0000'}, align: "center", editable: false, minWidth: 80, sortable: true, dataIndx: "X_TEKLIF_NO", filter: {
+                    crules: [{condition: 'contain'}]
+                },
+                render: function (ui) {
+                    if (ui.rowData.id > 0 && ui.rowData.X_TEKLIF_NO) {
+                        return "<a href='#' onclick='TeklifAc(\"" + ui.rowData.X_TEKLIF_NO + "\")'>" + ui.rowData.X_TEKLIF_NO + "</a>";
+                    } else {
+                        return "";
+                    }
                 }
             },
             {title: "<?php echo __('Satış Tipi','komtera'); ?>", sortable: true, minWidth: 120, dataIndx: "SATIP",
@@ -255,7 +256,7 @@
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('Sipariş Tarihi','komtera'); ?>", minWidth: 80, dataIndx: "CD", dataType: "date", format: 'dd.mm.yy'},
+            {title: "<?php echo __('Sipariş Tarihi','komtera'); ?>", sortable: true, minWidth: 80, dataIndx: "CD", dataType: "date", format: 'dd.mm.yy'},
             {title: "<?php echo __('Sipariş Saati','komtera'); ?>", minWidth: 52, dataIndx: "CT", dataType: "date", format: 'dd.mm.yy H:i:s'},
             {title: "<?php echo __('Bayi','komtera'); ?>", editable: false, minWidth: 220, sortable: true, dataIndx: "BAYI_ADI", filter: {
                     crules: [{condition: 'contain'}]
@@ -299,8 +300,8 @@
             sortModel: {
                 type: 'local',
                 single: true,
-                sorter: [{dataIndx: 'id', dir: 'down'}],
-                space: true,
+                sorter: [{dataIndx: 'SIPARIS_TARIHI', dir: 'down'}],
+                space: false,
                 multiKey: false
             },
             toolbar: {
@@ -479,7 +480,7 @@
             title: '<span style="font-size: 18px;"><b><?php echo __('Siparişler','komtera'); ?></b></span>',
             resizable: false,
             summaryTitle: "",
-            freezeCols: 4,
+            freezeCols: 3,
             rowHt: 23,
             create: function () {
                 this.loadState({refresh: false});

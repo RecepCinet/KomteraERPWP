@@ -1186,6 +1186,142 @@ function araclar_cb()
 function fiyat_listesi_cb() {
     $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=fiyat_listesi';
     ?>
+    <script>
+        let selectedMarka = '';
+        const baseUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php";
+        const serviceUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service";
+
+        function showMarkaPopup() {
+            document.getElementById('marka_popup').style.display = 'block';
+            loadMarkalar();
+        }
+
+        function closeMarkaPopup() {
+            document.getElementById('marka_popup').style.display = 'none';
+        }
+
+        function loadMarkalar() {
+            const container = document.getElementById('marka_list_container');
+
+            fetch(serviceUrl + '/get_markalar.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let html = '';
+
+                        // Marka listesi (kayıt sayısı ile)
+                        data.markalar.forEach(marka => {
+                            html += `<div class="marka-item" onclick="selectMarka('${marka.MARKA}')" style="
+                                padding: 12px 15px;
+                                margin-bottom: 8px;
+                                background: #f8f9fa;
+                                border: 1px solid #dee2e6;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                transition: all 0.2s;
+                                " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#0073aa';" onmouseout="this.style.backgroundColor='#f8f9fa'; this.style.borderColor='#dee2e6';">
+                                <span style="font-weight: 500; color: #333;">${marka.MARKA}</span>
+                                <span style="color: #666; font-size: 12px; background: white; padding: 4px 10px; border-radius: 12px;">${marka.KAYIT_SAYISI} kayıt</span>
+                            </div>`;
+                        });
+
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Marka bulunamadı</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading markalar:', error);
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #f44336;">Hata: Markalar yüklenemedi</div>';
+                });
+        }
+
+        function selectMarka(marka) {
+            selectedMarka = marka;
+            updateIframeSrc();
+            closeMarkaPopup();
+
+            // Seçili marka göstergesini güncelle
+            const display = document.getElementById('selected_marka_display');
+            const text = document.getElementById('selected_marka_text');
+            if (marka) {
+                text.textContent = marka;
+                display.style.display = 'block';
+            } else {
+                display.style.display = 'none';
+            }
+        }
+
+        function updateIframeSrc() {
+            const iframe = document.getElementById('erp_iframe');
+            let url = baseUrl + '?t=fiyat_listesi';
+
+            if (selectedMarka) {
+                url += '&marka=' + encodeURIComponent(selectedMarka);
+            }
+
+            iframe.src = url;
+        }
+
+        function exceldenAl() {
+            const iframe = document.getElementById('erp_iframe');
+            try {
+                const iframeWindow = iframe.contentWindow;
+                if (iframeWindow && iframeWindow.ExceldenAl) {
+                    iframeWindow.ExceldenAl();
+                } else {
+                    console.error('ExceldenAl fonksiyonu iframe içinde bulunamadı');
+                }
+            } catch (e) {
+                console.error('Iframe erişim hatası:', e);
+            }
+        }
+
+        function exceleyeGonder() {
+            const iframe = document.getElementById('erp_iframe');
+            try {
+                const iframeWindow = iframe.contentWindow;
+                if (iframeWindow && iframeWindow.ExcelKaydet) {
+                    iframeWindow.ExcelKaydet();
+                } else {
+                    console.error('ExcelKaydet fonksiyonu iframe içinde bulunamadı');
+                }
+            } catch (e) {
+                console.error('Iframe erişim hatası:', e);
+            }
+        }
+
+        function markaEkle() {
+            if (!selectedMarka) {
+                alert('Lütfen önce bir marka seçiniz');
+                return;
+            }
+
+            const iframe = document.getElementById('erp_iframe');
+            try {
+                const iframeWindow = iframe.contentWindow;
+                if (iframeWindow && iframeWindow.YeniSatirEkle) {
+                    iframeWindow.YeniSatirEkle();
+                } else {
+                    console.error('YeniSatirEkle fonksiyonu iframe içinde bulunamadı');
+                }
+            } catch (e) {
+                console.error('Iframe erişim hatası:', e);
+            }
+        }
+
+        // Popup dışına tıklandığında kapat
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('marka_popup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeMarkaPopup();
+                }
+            });
+        });
+    </script>
     <div class="wrap">
         <!-- Excel style toolbar -->
         <div class="pricelist-toolbar" style="
@@ -1336,102 +1472,6 @@ function fiyat_listesi_cb() {
             </iframe>
         </div>
     </div>
-
-    <script>
-        let selectedMarka = '';
-        const baseUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php";
-        const serviceUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service";
-
-        function showMarkaPopup() {
-            document.getElementById('marka_popup').style.display = 'block';
-            loadMarkalar();
-        }
-
-        function closeMarkaPopup() {
-            document.getElementById('marka_popup').style.display = 'none';
-        }
-
-        function loadMarkalar() {
-            const container = document.getElementById('marka_list_container');
-
-            fetch(serviceUrl + '/get_markalar.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let html = '';
-
-                        // Marka listesi (kayıt sayısı ile)
-                        data.markalar.forEach(marka => {
-                            html += `<div class="marka-item" onclick="selectMarka('${marka.MARKA}')" style="
-                                padding: 12px;
-                                border: 1px solid #ddd;
-                                border-radius: 4px;
-                                margin-bottom: 8px;
-                                cursor: pointer;
-                                background: white;
-                                transition: all 0.2s;
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            " onmouseover="this.style.backgroundColor='#f0f8ff'" onmouseout="this.style.backgroundColor='white'">
-                                <div style="display: flex; align-items: center;">
-                                    <span class="dashicons dashicons-tag" style="margin-right: 8px; color: #666;"></span>
-                                    <span>${marka.MARKA}</span>
-                                </div>
-                                <span style="background: #e3f2fd; color: #1976d2; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">
-                                    ${marka.kayit_sayisi}
-                                </span>
-                            </div>`;
-                        });
-
-                        container.innerHTML = html;
-                    } else {
-                        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #f44336;">Markalar yüklenirken hata oluştu</div>';
-                    }
-                })
-                .catch(error => {
-                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #f44336;">Markalar yüklenirken hata oluştu</div>';
-                });
-        }
-
-        function selectMarka(marka) {
-            selectedMarka = marka;
-            const display = document.getElementById('selected_marka_display');
-            const text = document.getElementById('selected_marka_text');
-
-            text.textContent = marka;
-            display.style.display = 'block';
-
-            // iframe'i güncelle
-            const iframe = document.getElementById('erp_iframe');
-            let newSrc = baseUrl + '?t=fiyat_listesi&marka=' + encodeURIComponent(marka);
-            iframe.src = newSrc;
-
-            closeMarkaPopup();
-        }
-
-        function exceldenAl() {
-            alert('<?php echo __('Excel\'den Al özelliği yakında eklenecek','komtera'); ?>');
-        }
-
-        function exceleyeGonder() {
-            alert('<?php echo __('Excel\'e Gönder özelliği yakında eklenecek','komtera'); ?>');
-        }
-
-        function markaEkle() {
-            const marka = prompt('<?php echo __('Yeni marka adını giriniz:','komtera'); ?>');
-            if (marka && marka.trim()) {
-                alert('<?php echo __('Marka Ekle özelliği yakında eklenecek','komtera'); ?>\n<?php echo __('Eklenecek marka:','komtera'); ?> ' + marka.trim());
-            }
-        }
-
-        // Popup dışına tıklandığında kapat
-        document.getElementById('marka_popup').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeMarkaPopup();
-            }
-        });
-    </script>
 
     <!-- Button Styles -->
     <style>

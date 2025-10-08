@@ -1,18 +1,32 @@
 <script>
 var grid;
 
-function YenilemeAc(id) {
-        FileMaker.PerformScriptWithOption("Yenileme", id);
+function TeklifAc(teklifNo) {
+    var url = '<?php echo admin_url('admin.php?page=teklifler_detay&teklif_no='); ?>' + encodeURIComponent(teklifNo);
+    if (window.parent) {
+        window.parent.location.href = url;
+    } else {
+        window.location.href = url;
+    }
+}
+
+function FirsatAc(firsatNo) {
+    var url = '<?php echo admin_url('admin.php?page=firsatlar_detay&firsat_no='); ?>' + encodeURIComponent(firsatNo);
+    if (window.parent) {
+        window.parent.location.href = url;
+    } else {
+        window.location.href = url;
+    }
 }
 
 $(function () {
-   
+
     var colM = [
         {title: "", align: "center", hidden: false, editable: false, minWidth: 130, sortable: false, dataIndx: "X_SIPARIS_NO",
             render: function (ui) {
-                var out='';
-                    out += '<a href="#" onclick="YenilemeAc(\'' + ui.rowData.TEKLIF_NO + '\');">' + ui.rowData.TEKLIF_NO + '</a>';
-                return out;
+                if (ui.rowData.TEKLIF_NO) {
+                    return "<a href='#' onclick='TeklifAc(\"" + ui.rowData.TEKLIF_NO + "\")'>" + ui.rowData.TEKLIF_NO + "</a>";
+                }
             },
         },
 
@@ -20,15 +34,9 @@ $(function () {
                 crules: [{condition: 'contain'}] //,value: ['Açık']
             },
             render: function (ui) {
-                return "<a href='#' class='demo_ac'>" + ui.rowData.FIRSAT_NO + "</a>";
-            },
-            postRender: function (ui) {
-                var grid = this,
-                    $cell = grid.getCell(ui);
-                $cell.find(".demo_ac")
-                    .bind("click", function (evt) {
-                        FileMaker.PerformScriptWithOption("Firsat", "Ac" + "|" + ui.rowData.FIRSAT_NO );
-                    });
+                if (ui.rowData.FIRSAT_NO) {
+                    return "<a href='#' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>" + ui.rowData.FIRSAT_NO + "</a>";
+                }
             }
         },
 
