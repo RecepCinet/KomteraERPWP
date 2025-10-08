@@ -3,10 +3,12 @@ error_reporting(E_ALL);
 ini_set("display_errors", false);
 
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
 
 $tn=$_GET['tn'];
+$tableName = getTableName('aa_erp_kt_teklifler_urunler');
 
-$stmt = $conn->prepare("select * from aa_erp_kt_teklifler_urunler where X_TEKLIF_NO=:tn");
+$stmt = $conn->prepare("select * from {$tableName} where X_TEKLIF_NO=:tn");
 $stmt->execute(['tn' => $tn]); 
 $gelen = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

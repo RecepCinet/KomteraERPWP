@@ -6,6 +6,7 @@ ini_set('display_erros', true);
 session_start();
 
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
 
 error_reporting(E_ALL);
 ini_set('display_erros', true);
@@ -59,7 +60,8 @@ listeFiyatiUpLift * ( 1 - s_iskonto1_r ) as s_rakam1_r
 
 //$eks="CHARINDEX(marka, '" . $_SESSION['user']['markalar'] . "')>0 AND";
 
-$sql = "select $fields from aa_erp_kt_fiyat_listesi WHERE marka='$marka'";
+$tableName = getTableName('aa_erp_kt_fiyat_listesi');
+$sql = "select $fields from {$tableName} WHERE marka='$marka'";
 
 
 error_reporting(E_ALL);

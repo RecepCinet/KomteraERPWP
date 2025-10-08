@@ -36,12 +36,14 @@ ini_set('display_errors',true);
 include '../_check.php';
 include '../../_conn.php';
 include '../../_conn_fm.php';
+require_once '../../inc/table_helper.php';
 include '../_user.php';
 $user=$_SESSION['user'];
 $gelen = $_GET['data'];
-$string="select 
+$tableName = getTableName('aa_erp_kt_firsatlar');
+$string="select
 *
-    from aa_erp_kt_firsatlar";
+    from {$tableName}";
 $stmt = $conn->query($string);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 ?>

@@ -193,8 +193,10 @@ $theme="gray";
                             success: function(response) {
                                 if (response.success) {
                                     alert(response.message);
-                                    // Grid'i yenile
-                                    grid.refreshDataAndView();
+                                    // Parent window'daki iframe'i yenile
+                                    if (window.parent && window.parent.updateIframeSrc) {
+                                        window.parent.updateIframeSrc();
+                                    }
                                 } else {
                                     alert('Hata: ' + response.message);
                                 }

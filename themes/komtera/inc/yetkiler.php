@@ -139,7 +139,9 @@ add_action('edit_user_profile_update', 'my_save_custom_user_fields');
 add_action('user_register', 'my_save_custom_user_fields');
 function my_profile_brands_config() {
     global $conn;
-    $sql = "select marka from aa_erp_kt_fiyat_listesi where marka is not null group by marka;";
+    require_once get_stylesheet_directory() . '/inc/table_helper.php';
+    $tableName = getTableName('aa_erp_kt_fiyat_listesi');
+    $sql = "select marka from {$tableName} where marka is not null group by marka;";
     try {
         $stmt = $conn->query($sql);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

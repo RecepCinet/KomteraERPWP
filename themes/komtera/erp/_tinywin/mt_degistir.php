@@ -3,6 +3,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors",true);
 include "../_conn.php";
+require_once '../../inc/table_helper.php';
 
 $marka=$_GET['marka'];
 $bayi=$_GET['bayi'];
@@ -19,7 +20,8 @@ if ($bayi!="") {
     $bayieki="and BAYI_CHKODU='$bayi'";
 }
 
-$sqlupdate = "update aa_erp_kt_firsatlar set MUSTERI_TEMSILCISI='$mt2' where DURUM=0 AND MUSTERI_TEMSILCISI = '$mt1' $markaeki $bayieki";
+$tableName = getTableName('aa_erp_kt_firsatlar');
+$sqlupdate = "update {$tableName} set MUSTERI_TEMSILCISI='$mt2' where DURUM=0 AND MUSTERI_TEMSILCISI = '$mt1' $markaeki $bayieki";
 try {
     $stmt = $conn->prepare($sqlupdate);
     $result = $stmt->execute();

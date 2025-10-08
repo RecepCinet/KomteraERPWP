@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
 
 header('Content-Type: application/json');
 
@@ -39,6 +40,8 @@ function parseturkish($value) {
 try {
     $conn->beginTransaction();
 
+    $tableName = getTableName('aa_erp_kt_fiyat_listesi');
+
     $insertedCount = 0;
     $updatedCount = 0;
     $deletedCount = 0;
@@ -54,7 +57,7 @@ try {
     // Veritabanında bu marka için Excel'de olmayan SKU'ları sil
     if (!empty($excelSkus)) {
         $placeholders = str_repeat('?,', count($excelSkus) - 1) . '?';
-        $deleteSql = "DELETE FROM aa_erp_kt_fiyat_listesi WHERE marka = ? AND sku NOT IN ($placeholders)";
+        $deleteSql = "DELETE FROM {$tableName} WHERE marka = ? AND sku NOT IN ($placeholders)";
         $deleteStmt = $conn->prepare($deleteSql);
         $deleteParams = array_merge([$marka], $excelSkus);
         $deleteStmt->execute($deleteParams);
@@ -69,14 +72,14 @@ try {
         }
 
         // SKU ve marka ile kontrol et, var mı?
-        $checkSql = "SELECT COUNT(*) FROM aa_erp_kt_fiyat_listesi WHERE sku = :sku AND marka = :marka";
+        $checkSql = "SELECT COUNT(*) FROM {$tableName} WHERE sku = :sku AND marka = :marka";
         $checkStmt = $conn->prepare($checkSql);
         $checkStmt->execute([':sku' => $sku, ':marka' => $marka]);
         $exists = $checkStmt->fetchColumn() > 0;
 
         if ($exists) {
             // UPDATE
-            $updateSql = "UPDATE aa_erp_kt_fiyat_listesi SET
+            $updateSql = "UPDATE {$tableName} SET
                 urunAciklama = :urunAciklama,
                 tur = :tur,
                 cozum = :cozum,
@@ -137,7 +140,7 @@ try {
             $updatedCount++;
         } else {
             // INSERT
-            $insertSql = "INSERT INTO aa_erp_kt_fiyat_listesi
+            $insertSql = "INSERT INTO {$tableName}
                 (sku, marka, urunAciklama, tur, cozum, lisansSuresi, listeFiyati, listeFiyatiUpLift, paraBirimi, wgCategory, wgUpcCode,
                  a_iskonto4, a_iskonto3, a_iskonto2, a_iskonto1,
                  s_iskonto4, s_iskonto3, s_iskonto2, s_iskonto1,

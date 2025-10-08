@@ -2,9 +2,11 @@
 // MS SQL için: TOP 1 + ORDER BY
 function aa_get_latest_kur(){
     global $conn;
+    require_once get_stylesheet_directory() . '/inc/table_helper.php';
+    $tableName = getTableName('aa_erp_kur');
     $stmt = $conn->prepare("
         SELECT TOP 1 usd, eur, tarih
-        FROM aa_erp_kur
+        FROM {$tableName}
         ORDER BY tarih DESC
     ");
     $stmt->execute();

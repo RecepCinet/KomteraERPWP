@@ -7,9 +7,10 @@
 function siparis_ozel_sku_widget_content() {
     global $wpdb;
     include get_stylesheet_directory() . '/erp/_conn.php';
+    require_once get_stylesheet_directory() . '/inc/table_helper.php';
 
     $sql = "SELECT TOP 25 n.SIPARIS_NO
-            FROM aaa_erp_kt_siparis_icin_gelen_skular n
+            FROM " . getTableName('aaa_erp_kt_siparis_icin_gelen_skular') . " n
             LEFT JOIN " . getTableName('aa_erp_kt_fatura_i') . " fi ON n.SIPARIS_NO = fi.siparisNo
             WHERE fi.siparisNo IS NULL
             AND n.SIPARIS_NO NOT IN ('T77434-1', 'T85942-1', 'T89330-1', 'T117692-1', 'T129014-1')

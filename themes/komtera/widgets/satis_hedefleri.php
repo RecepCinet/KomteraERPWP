@@ -7,6 +7,7 @@
 function satis_hedefleri_widget_content() {
     global $wpdb;
     include get_stylesheet_directory() . '/erp/_conn.php';
+    require_once get_stylesheet_directory() . '/inc/table_helper.php';
 
     $current_user = wp_get_current_user();
 
@@ -70,6 +71,7 @@ function satis_hedefleri_widget_content() {
 
     // Açık siparişleri al
     try {
+        $kurTablosu = getTableName('aa_erp_kur');
         $sql = "SELECT
                 CASE
                     WHEN MONTH(s.CD)>=1 AND MONTH(s.CD)<=3 THEN 1
@@ -80,8 +82,8 @@ function satis_hedefleri_widget_content() {
                 END AS Q,
                 CASE
                     WHEN f.PARA_BIRIMI = 'USD' THEN (su.ADET * su.BIRIM_FIYAT)
-                    WHEN f.PARA_BIRIMI = 'TRY' THEN (su.ADET * su.BIRIM_FIYAT) / (SELECT TOP 1 USD FROM aa_erp_kur k ORDER BY tarih DESC)
-                    WHEN f.PARA_BIRIMI = 'EUR' THEN (su.ADET * su.BIRIM_FIYAT) / (SELECT TOP 1 USD/EUR FROM aa_erp_kur k ORDER BY tarih DESC)
+                    WHEN f.PARA_BIRIMI = 'TRY' THEN (su.ADET * su.BIRIM_FIYAT) / (SELECT TOP 1 USD FROM {$kurTablosu} k ORDER BY tarih DESC)
+                    WHEN f.PARA_BIRIMI = 'EUR' THEN (su.ADET * su.BIRIM_FIYAT) / (SELECT TOP 1 USD/EUR FROM {$kurTablosu} k ORDER BY tarih DESC)
                     ELSE 0
                 END AS DLR_TUTAR
                 FROM " . getTableName('aa_erp_kt_siparisler_urunler') . " AS su

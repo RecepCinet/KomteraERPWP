@@ -1,12 +1,14 @@
 <?php
 session_start();
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
 
 if (!isset($_GET['marka'])) {
     die('Marka parametresi gerekli');
 }
 
 $marka = $_GET['marka'];
+$tableName = getTableName('aa_erp_kt_fiyat_listesi');
 
 // ID hariç tüm kolonları çek - sayısal değerleri Türkçe formatla (virgüllü)
 $sql = "SELECT
@@ -37,7 +39,7 @@ $sql = "SELECT
     FORMAT(s_iskonto3_r, 'N2', 'tr-TR') as s_iskonto3_r,
     FORMAT(s_iskonto2_r, 'N2', 'tr-TR') as s_iskonto2_r,
     FORMAT(s_iskonto1_r, 'N2', 'tr-TR') as s_iskonto1_r
-FROM aa_erp_kt_fiyat_listesi
+FROM {$tableName}
 WHERE marka = :marka
 ORDER BY sku";
 

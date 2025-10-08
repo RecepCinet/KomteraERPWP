@@ -1322,22 +1322,149 @@ function fiyat_listesi_cb() {
         }
 
         function markaEkle() {
-            if (!selectedMarka) {
-                alert('Lütfen önce bir marka seçiniz');
+            document.getElementById('add_marka_modal').style.display = 'block';
+            document.getElementById('new_marka_input').value = '';
+            document.getElementById('marka_warning').style.display = 'none';
+            document.getElementById('new_marka_input').focus();
+        }
+
+        function closeMarkaEkleModal() {
+            document.getElementById('add_marka_modal').style.display = 'none';
+        }
+
+        function checkMarkaInput() {
+            const input = document.getElementById('new_marka_input');
+            const warning = document.getElementById('marka_warning');
+            const value = input.value;
+
+            // Küçük harf var mı kontrol et
+            if (value !== value.toUpperCase()) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        }
+
+        function submitYeniMarka() {
+            const input = document.getElementById('new_marka_input');
+            const marka = input.value.trim();
+
+            if (!marka) {
+                alert('Lütfen marka adı giriniz!');
                 return;
             }
 
-            const iframe = document.getElementById('erp_iframe');
-            try {
-                const iframeWindow = iframe.contentWindow;
-                if (iframeWindow && iframeWindow.YeniSatirEkle) {
-                    iframeWindow.YeniSatirEkle();
-                } else {
-                    console.error('YeniSatirEkle fonksiyonu iframe içinde bulunamadı');
-                }
-            } catch (e) {
-                console.error('Iframe erişim hatası:', e);
+            // Küçük harf kontrolü
+            if (marka !== marka.toUpperCase()) {
+                alert('Hata: Marka adı BÜYÜK HARF olmalıdır!');
+                return;
             }
+
+            // Markayı ekle
+            fetch(serviceUrl + '/add_marka.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({marka: marka})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeMarkaEkleModal();
+                    alert('Marka başarıyla eklendi: ' + marka + '\n\nŞimdi "Excel\'den Al" ile fiyat listesini yükleyebilirsiniz.');
+                    selectMarka(marka);
+                    // Markalar popup'ını aç ve yeni markayı göster
+                    setTimeout(function() {
+                        showMarkaPopup();
+                    }, 300);
+                } else {
+                    alert('Hata: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Marka ekleme hatası:', error);
+                alert('Marka eklenirken hata oluştu: ' + error);
+            });
+        }
+
+        function markaSil() {
+            document.getElementById('delete_marka_modal').style.display = 'block';
+            loadMarkalarForDelete();
+        }
+
+        function closeMarkaSilModal() {
+            document.getElementById('delete_marka_modal').style.display = 'none';
+        }
+
+        function loadMarkalarForDelete() {
+            const container = document.getElementById('delete_marka_list_container');
+            container.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #f3f3f3; border-top: 2px solid #d32f2f; border-radius: 50%; animation: spin 1s linear infinite;"></div><br><br>Markalar yükleniyor...</div>';
+
+            fetch(serviceUrl + '/get_markalar.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.markalar.length > 0) {
+                        let html = '';
+                        data.markalar.forEach(marka => {
+                            html += `<div class="marka-delete-item" onclick="confirmDeleteMarka('${marka.MARKA}', ${marka.KAYIT_SAYISI})" style="
+                                padding: 12px 15px;
+                                margin-bottom: 8px;
+                                background: #fff;
+                                border: 1px solid #ddd;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                transition: all 0.2s;
+                                " onmouseover="this.style.backgroundColor='#ffebee'; this.style.borderColor='#d32f2f';" onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#ddd';">
+                                <span style="font-weight: 500; color: #333;">${marka.MARKA}</span>
+                                <span style="color: #666; font-size: 12px;">${marka.KAYIT_SAYISI} kayıt</span>
+                            </div>`;
+                        });
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Marka bulunamadı</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading markalar:', error);
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #d32f2f;">Hata: Markalar yüklenemedi</div>';
+                });
+        }
+
+        function confirmDeleteMarka(marka, kayitSayisi) {
+            if (confirm(`"${marka}" markasını silmek istediğinize emin misiniz?\n\n${kayitSayisi} adet kayıt silinecektir!\n\nBu işlem geri alınamaz!`)) {
+                deleteMarka(marka);
+            }
+        }
+
+        function deleteMarka(marka) {
+            fetch(serviceUrl + '/delete_marka.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({marka: marka})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Marka başarıyla silindi: ' + marka + '\n\n' + data.deleted + ' kayıt silindi.');
+                    closeMarkaSilModal();
+                    // Eğer silinen marka seçiliyse, seçimi temizle
+                    if (selectedMarka === marka) {
+                        selectedMarka = '';
+                        document.getElementById('selected_marka_display').style.display = 'none';
+                        document.getElementById('erp_iframe').src = '';
+                    }
+                    // Markalar listesini güncelle
+                    loadMarkalar();
+                } else {
+                    alert('Hata: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Marka silme hatası:', error);
+                alert('Marka silinirken hata oluştu: ' + error);
+            });
         }
 
         // Popup dışına tıklandığında kapat
@@ -1434,6 +1561,24 @@ function fiyat_listesi_cb() {
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Marka Ekle</span>
                 </div>
 
+                <!-- Marka Sil Butonu -->
+                <div class="pricelist-button" onclick="markaSil()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#ffebee'; this.style.borderColor='#d32f2f';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-trash" style="font-size: 24px; color: #d32f2f; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Marka Sil</span>
+                </div>
+
                 <!-- Seçili Marka Göstergesi -->
                 <div id="selected_marka_display" style="
                         padding: 12px;
@@ -1485,6 +1630,137 @@ function fiyat_listesi_cb() {
                         <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #f3f3f3; border-top: 2px solid #0073aa; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                         <br><br>Markalar yükleniyor...
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marka Ekle Modal -->
+        <div id="add_marka_modal" style="
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 10001;
+                " onclick="if(event.target === this) closeMarkaEkleModal();">
+            <div style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    border-radius: 8px;
+                    padding: 25px;
+                    max-width: 450px;
+                    width: 90%;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    " onclick="event.stopPropagation();">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #ff9800; padding-bottom: 15px;">
+                    <h3 style="margin: 0; color: #333;"><span class="dashicons dashicons-plus-alt2" style="color: #ff9800;"></span> Yeni Marka Ekle</h3>
+                    <button onclick="closeMarkaEkleModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label for="new_marka_input" style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Marka Adı:</label>
+                    <input type="text"
+                           id="new_marka_input"
+                           oninput="checkMarkaInput()"
+                           onkeypress="if(event.key === 'Enter') submitYeniMarka()"
+                           style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;"
+                           placeholder="Örn: ACRONIS">
+
+                    <div id="marka_warning" style="
+                            display: none;
+                            margin-top: 10px;
+                            padding: 10px;
+                            background: #fff3cd;
+                            border: 1px solid #ffc107;
+                            border-radius: 4px;
+                            color: #856404;
+                            font-size: 13px;
+                            ">
+                        <span class="dashicons dashicons-warning" style="color: #ff9800; font-size: 16px; vertical-align: middle;"></span>
+                        <strong>UYARI:</strong> Marka adı BÜYÜK HARF olmalıdır!
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button onclick="closeMarkaEkleModal()" style="
+                            padding: 10px 20px;
+                            background: #6c757d;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            ">İptal</button>
+                    <button onclick="submitYeniMarka()" style="
+                            padding: 10px 20px;
+                            background: #ff9800;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            font-weight: 500;
+                            ">Ekle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marka Sil Modal -->
+        <div id="delete_marka_modal" style="
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 10001;
+                " onclick="if(event.target === this) closeMarkaSilModal();">
+            <div style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    border-radius: 8px;
+                    padding: 25px;
+                    max-width: 450px;
+                    width: 90%;
+                    max-height: 70vh;
+                    overflow-y: auto;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    " onclick="event.stopPropagation();">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #d32f2f; padding-bottom: 15px;">
+                    <h3 style="margin: 0; color: #333;"><span class="dashicons dashicons-trash" style="color: #d32f2f;"></span> Marka Sil</h3>
+                    <button onclick="closeMarkaSilModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404; font-size: 13px;">
+                    <span class="dashicons dashicons-warning" style="color: #ff9800; font-size: 16px; vertical-align: middle;"></span>
+                    <strong>UYARI:</strong> Silinecek markayı listeden seçiniz. Markaya ait tüm kayıtlar silinecektir!
+                </div>
+
+                <div id="delete_marka_list_container" style="margin-bottom: 15px;">
+                    <div style="text-align: center; padding: 20px; color: #666;">
+                        Markalar yükleniyor...
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end;">
+                    <button onclick="closeMarkaSilModal()" style="
+                            padding: 10px 20px;
+                            background: #6c757d;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            ">İptal</button>
                 </div>
             </div>
         </div>

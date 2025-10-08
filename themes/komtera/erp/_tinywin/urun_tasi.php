@@ -4,15 +4,18 @@ error_reporting(E_ALL);
 ini_set("display_errors", true);
 
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
 
 $yon = $_GET['yon'];
 $sira = $_GET['sira'];
 $id = $_GET['id'];
 $teklif_no = $_GET['teklif_no'];
 
+$tableName = getTableName('aa_erp_kt_teklifler_urunler');
+
 if ($yon === '0') {
     // Yukari tasimak!
-    $sql = "select top 1 id,SIRA from aa_erp_kt_teklifler_urunler where X_TEKLIF_NO='$teklif_no' and SIRA<$sira order by SIRA desc";
+    $sql = "select top 1 id,SIRA from {$tableName} where X_TEKLIF_NO='$teklif_no' and SIRA<$sira order by SIRA desc";
     $stmt = $conn->query($sql);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $sonuc = "";
@@ -23,13 +26,13 @@ if ($yon === '0') {
     }
     if ($sonuc != "") {
         // yukarisi var tasi!
-        $sqlupdate = "update aa_erp_kt_teklifler_urunler set SIRA='$u_sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$id' ";
+        $sqlupdate = "update {$tableName} set SIRA='$u_sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$id' ";
         $stmt = $conn->prepare($sqlupdate);
         $stmt->execute();
         if ($stmt == false) {
             throw new Exception(print_r($stmt->errorInfo(), 1) . PHP_EOL . $sqlupdate);
         }
-        $sqlupdate = "update aa_erp_kt_teklifler_urunler set SIRA='$sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$u_id' ";
+        $sqlupdate = "update {$tableName} set SIRA='$sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$u_id' ";
         $stmt = $conn->prepare($sqlupdate);
         $stmt->execute();
         if ($stmt == false) {
@@ -40,7 +43,7 @@ if ($yon === '0') {
 
 if ($yon === '1') {
     // Yukari tasimak!
-    $sql = "select top 1 id,SIRA from aa_erp_kt_teklifler_urunler where X_TEKLIF_NO='$teklif_no' and SIRA>$sira order by SIRA";
+    $sql = "select top 1 id,SIRA from {$tableName} where X_TEKLIF_NO='$teklif_no' and SIRA>$sira order by SIRA";
     $stmt = $conn->query($sql);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $sonuc = "";
@@ -51,13 +54,13 @@ if ($yon === '1') {
     }
     if ($sonuc != "") {
         // yukarisi var tasi!
-        $sqlupdate = "update aa_erp_kt_teklifler_urunler set SIRA='$u_sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$id' ";
+        $sqlupdate = "update {$tableName} set SIRA='$u_sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$id' ";
         $stmt = $conn->prepare($sqlupdate);
         $stmt->execute();
         if ($stmt == false) {
             throw new Exception(print_r($stmt->errorInfo(), 1) . PHP_EOL . $sqlupdate);
         }
-        $sqlupdate = "update aa_erp_kt_teklifler_urunler set SIRA='$sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$u_id' ";
+        $sqlupdate = "update {$tableName} set SIRA='$sira' WHERE X_TEKLIF_NO='$teklif_no' and id='$u_id' ";
         $stmt = $conn->prepare($sqlupdate);
         $stmt->execute();
         if ($stmt == false) {

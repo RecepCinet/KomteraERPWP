@@ -1,4 +1,5 @@
 2025.10
+-Fiyat Listesi excel import/export
 -Yakinda kapanacak widgetsi eklendi.
 -Onay/Is Atama/Bilgilendirme widgetsi eklendi.
 -Satis Hedefleri widgets eklendi.

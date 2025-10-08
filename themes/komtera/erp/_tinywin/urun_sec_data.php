@@ -1,6 +1,8 @@
 <?PHP
 include '_check.php';
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
+
 $gelen = $_POST['data'];
 $cs=$_POST['cs'];
 $cc=$_POST['cc'];
@@ -12,8 +14,9 @@ if (substr($gelen, 0, 1) == "=") {
     $bas="";
     $gelen= substr($gelen, 1);
 }
+$tableName = getTableName('aa_erp_kt_fiyat_listesi');
 $filter = "MARKA='$marka' AND (SKU like '$bas$gelen%' or urunAciklama like '$bas$gelen%')";
-$sql = "select top 50 * from aa_erp_kt_fiyat_listesi where $filter order by SKU";
+$sql = "select top 50 * from {$tableName} where $filter order by SKU";
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

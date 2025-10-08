@@ -1,6 +1,8 @@
 <?PHP
 include '_check.php';
 include '../../_conn.php';
+require_once '../../inc/table_helper.php';
+
 $gelen = $_POST['data'];
 $cs=$_POST['cs'];
 $cc=$_POST['cc'];
@@ -13,8 +15,9 @@ $filter = "FIRSAT_NO like '' or BAYI_ADI like '$st$gelen%' or MUSTERI_ADI like '
 if ($gelen == "") {
     $filter = "1=1";
 }
+$tableName = getTableName('aa_erp_kt_firsatlar');
 //$sql = "Select top 22 * from aa_erp_kt_musteriler where $filter order by musteri";
-$sql = "select top 50 FIRSAT_NO,BAYI_ADI,MUSTERI_ADI from aa_erp_kt_firsatlar where $filter order by FIRSAT_NO";
+$sql = "select top 50 FIRSAT_NO,BAYI_ADI,MUSTERI_ADI from {$tableName} where $filter order by FIRSAT_NO";
 
 $stmt = $conn->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
