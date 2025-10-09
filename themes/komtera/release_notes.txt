@@ -1,5 +1,5 @@
 2025.10
--Fiyat Listesi excel import/export
+-Fiyat Listesi excel import/export marka ekleme/silme sorunsuz calisiyor.s
 -Yakinda kapanacak widgetsi eklendi.
 -Onay/Is Atama/Bilgilendirme widgetsi eklendi.
 -Satis Hedefleri widgets eklendi.
