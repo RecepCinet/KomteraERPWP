@@ -1970,10 +1970,70 @@ function yenilemeler_cb() {
     $base_src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=';
     ?>
     <div class="wrap">
-        <div style="margin-bottom: 15px; padding: 10px; background: #f1f1f1; border-radius: 5px;">
-            <button class="table-btn active" data-table="yenilemeler" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #0073aa; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-update" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span>Yenilemeler</button>
-            <button class="table-btn" data-table="yenilemeler_liste" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-list-view" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span>Yenilemeler Liste</button>
-            <button class="table-btn" data-table="60gun_liste" style="margin-right: 8px; height: 34px; padding: 0 13px; background: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; vertical-align: top; box-sizing: border-box;"><span class="dashicons dashicons-calendar-alt" style="margin-right: 4px; font-size: 21px; line-height: 1;"></span>60 Gün Liste</button>
+        <!-- Excel style toolbar -->
+        <div class="renewals-toolbar" style="
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 20px 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                ">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <!-- Yenilemeler Butonu -->
+                <div class="renewals-button table-btn active" data-table="yenilemeler" data-icon-color="#1976d2" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: #0073aa;
+                        border: 2px solid #0073aa;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-update" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('Yenilemeler', 'komtera'); ?></span>
+                </div>
+
+                <!-- Yenilemeler Liste Butonu -->
+                <div class="renewals-button table-btn" data-table="yenilemeler_liste" data-icon-color="#9c27b0" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Yenilemeler Liste', 'komtera'); ?></span>
+                </div>
+
+                <!-- 60 Gün Liste Butonu -->
+                <div class="renewals-button table-btn" data-table="60gun_liste" data-icon-color="#ff9800" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff9800'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
+                    <span class="dashicons dashicons-calendar-alt" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('60 Gün Liste', 'komtera'); ?></span>
+                </div>
+            </div>
         </div>
         <div style="position: relative; height: calc(100vh - 180px);">
             <iframe id="erp_iframe"
@@ -1994,13 +2054,35 @@ function yenilemeler_cb() {
                 button.addEventListener('click', function() {
                     const table = this.getAttribute('data-table');
 
-                    // Update button states
+                    // Update button states - Excel style
                     buttons.forEach(btn => {
                         btn.classList.remove('active');
-                        btn.style.background = '#6c757d';
+                        btn.style.background = 'white';
+                        btn.style.border = '1px solid #ccc';
+                        btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                        // Reset icon color from data attribute
+                        const icon = btn.querySelector('.dashicons');
+                        const text = btn.querySelector('span:last-child');
+                        const iconColor = btn.getAttribute('data-icon-color');
+
+                        if (icon && iconColor) {
+                            icon.style.color = iconColor;
+                        }
+                        if (text) {
+                            text.style.color = '#333';
+                        }
                     });
+
+                    // Set active button style
                     this.classList.add('active');
                     this.style.background = '#0073aa';
+                    this.style.border = '2px solid #0073aa';
+                    this.style.boxShadow = '0 2px 4px rgba(0,115,170,0.2)';
+                    const activeIcon = this.querySelector('.dashicons');
+                    const activeText = this.querySelector('span:last-child');
+                    if (activeIcon) activeIcon.style.color = 'white';
+                    if (activeText) activeText.style.color = 'white';
 
                     // Update iframe source
                     iframe.src = baseDir + table;
