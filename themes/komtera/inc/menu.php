@@ -55,8 +55,10 @@ add_action('admin_menu', 'my_custom_admin_menus_for_roles');
 
 function firsatlar_cb()
 {
+    // Get the table parameter from URL, default to 'firsatlar'
+    $selected_table = isset($_GET['table']) ? sanitize_text_field($_GET['table']) : 'firsatlar';
     // Default table, JavaScript will update this dynamically
-    $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=firsatlar';
+    $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=' . $selected_table;
     $locale = get_user_locale(); // Kullanıcının seçtiği locale (tr_TR, en_US, etc.)
     $lang = substr($locale, 0, 2); // İlk iki harf (tr, en, etc.)
     ?>
@@ -110,101 +112,106 @@ function firsatlar_cb()
                 </div>
 
                 <!-- Fırsat Türü Butonları -->
-                <div id="firsat_buttons" class="opportunity-button table-btn active" data-table="firsatlar" style="
+                <div id="firsat_buttons" class="opportunity-button table-btn <?php echo ($selected_table === 'firsatlar') ? 'active' : ''; ?>" data-table="firsatlar" data-icon-color="#0073aa" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: #0073aa;
-                        border: 2px solid #0073aa;
+                        background: <?php echo ($selected_table === 'firsatlar') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'firsatlar') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
-                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                        box-shadow: <?php echo ($selected_table === 'firsatlar') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-unlock" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('Açık Fırsatlar', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-unlock" style="font-size: 24px; color: <?php echo ($selected_table === 'firsatlar') ? 'white' : '#0073aa'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'firsatlar') ? 'white' : '#333'; ?> !important;"><?php echo __('Açık Fırsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_tek" style="
+                <div class="opportunity-button table-btn <?php echo ($selected_table === 'firsatlar_tek') ? 'active' : ''; ?>" data-table="firsatlar_tek" data-icon-color="#ff9800" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === 'firsatlar_tek') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'firsatlar_tek') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
+                        box-shadow: <?php echo ($selected_table === 'firsatlar_tek') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-media-document" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Açık Ana Teklifler', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-media-document" style="font-size: 24px; color: <?php echo ($selected_table === 'firsatlar_tek') ? 'white' : '#ff9800'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'firsatlar_tek') ? 'white' : '#333'; ?>;"><?php echo __('Açık Ana Teklifler', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_kaz" style="
+                <div class="opportunity-button table-btn <?php echo ($selected_table === 'firsatlar_kaz') ? 'active' : ''; ?>" data-table="firsatlar_kaz" data-icon-color="#4caf50" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === 'firsatlar_kaz') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'firsatlar_kaz') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
+                        box-shadow: <?php echo ($selected_table === 'firsatlar_kaz') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-yes-alt" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Kazanılan', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-yes-alt" style="font-size: 24px; color: <?php echo ($selected_table === 'firsatlar_kaz') ? 'white' : '#4caf50'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'firsatlar_kaz') ? 'white' : '#333'; ?>;"><?php echo __('Kazanılan', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_kay" style="
+                <div class="opportunity-button table-btn <?php echo ($selected_table === 'firsatlar_kay') ? 'active' : ''; ?>" data-table="firsatlar_kay" data-icon-color="#f44336" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === 'firsatlar_kay') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'firsatlar_kay') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
+                        box-shadow: <?php echo ($selected_table === 'firsatlar_kay') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#ffebee'; this.style.borderColor='#f44336'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-dismiss" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Kaybedilen Fırsatlar', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-dismiss" style="font-size: 24px; color: <?php echo ($selected_table === 'firsatlar_kay') ? 'white' : '#f44336'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'firsatlar_kay') ? 'white' : '#333'; ?>;"><?php echo __('Kaybedilen Fırsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar2" style="
+                <div class="opportunity-button table-btn <?php echo ($selected_table === 'firsatlar2') ? 'active' : ''; ?>" data-table="firsatlar2" data-icon-color="#9c27b0" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === 'firsatlar2') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'firsatlar2') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
+                        box-shadow: <?php echo ($selected_table === 'firsatlar2') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Tüm Fırsatlar', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: <?php echo ($selected_table === 'firsatlar2') ? 'white' : '#9c27b0'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'firsatlar2') ? 'white' : '#333'; ?>;"><?php echo __('Tüm Fırsatlar', 'komtera'); ?></span>
                 </div>
 
-                <div class="opportunity-button table-btn" data-table="firsatlar_yanfir" style="
+                <div class="opportunity-button table-btn <?php echo ($selected_table === 'firsatlar_yanfir') ? 'active' : ''; ?>" data-table="firsatlar_yanfir" data-icon-color="#ff5722" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === 'firsatlar_yanfir') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'firsatlar_yanfir') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
+                        box-shadow: <?php echo ($selected_table === 'firsatlar_yanfir') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff5722'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-networking" style="font-size: 24px; color: #ff5722; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Yan Fırsatlar', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-networking" style="font-size: 24px; color: <?php echo ($selected_table === 'firsatlar_yanfir') ? 'white' : '#ff5722'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'firsatlar_yanfir') ? 'white' : '#333'; ?>;"><?php echo __('Yan Fırsatlar', 'komtera'); ?></span>
                 </div>
             </div>
         </div>
@@ -319,21 +326,13 @@ function firsatlar_cb()
                         b.classList.remove('active');
                         b.style.border = '1px solid #ccc';
                         b.style.background = 'white';
-                        b.style.boxShadow = 'none';
-                        // İkon ve yazı rengini sıfırla - her butonun orijinal rengine döndür
-                        const spans = b.querySelectorAll('span');
-                        if (spans.length >= 2) {
-                            // İkonun orijinal rengini data attribute'tan al veya table'a göre belirle
-                            const tableName = b.getAttribute('data-table');
-                            let originalColor = '#333';
-                            if (tableName === 'firsatlar') originalColor = '#0073aa';
-                            else if (tableName === 'firsatlar_tek') originalColor = '#ff9800';
-                            else if (tableName === 'firsatlar_kaz') originalColor = '#4caf50';
-                            else if (tableName === 'firsatlar_kay') originalColor = '#f44336';
-                            else if (tableName === 'firsatlar2') originalColor = '#9c27b0';
-                            else if (tableName === 'firsatlar_yanfir') originalColor = '#ff5722';
+                        b.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
 
-                            spans[0].style.color = originalColor; // İkon
+                        // İkon ve yazı rengini sıfırla - data-icon-color'dan al
+                        const spans = b.querySelectorAll('span');
+                        const iconColor = b.getAttribute('data-icon-color');
+                        if (spans.length >= 2 && iconColor) {
+                            spans[0].style.color = iconColor; // İkon
                             spans[1].style.color = '#333'; // Yazı
                         }
                     });
@@ -347,6 +346,11 @@ function firsatlar_cb()
                         spans[0].style.color = 'white'; // İkon
                         spans[1].style.color = 'white'; // Yazı
                     }
+
+                    // Update URL with table parameter
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('table', tableName);
+                    window.history.pushState({}, '', url);
 
                     // iframe src'sini güncelle
                     let newSrc = `${baseDir}?t=${tableName}`;
@@ -1968,6 +1972,8 @@ function fiyat_listesi_cb() {
 }
 function yenilemeler_cb() {
     $base_src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=';
+    // Get the table parameter from URL, default to 'yenilemeler'
+    $selected_table = isset($_GET['table']) ? sanitize_text_field($_GET['table']) : 'yenilemeler';
     ?>
     <div class="wrap">
         <!-- Excel style toolbar -->
@@ -1981,63 +1987,63 @@ function yenilemeler_cb() {
                 ">
             <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
                 <!-- Yenilemeler Butonu -->
-                <div class="renewals-button table-btn active" data-table="yenilemeler" data-icon-color="#1976d2" style="
+                <div class="renewals-button table-btn <?php echo ($selected_table === 'yenilemeler') ? 'active' : ''; ?>" data-table="yenilemeler" data-icon-color="#1976d2" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: #0073aa;
-                        border: 2px solid #0073aa;
+                        background: <?php echo ($selected_table === 'yenilemeler') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'yenilemeler') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
-                        box-shadow: 0 2px 4px rgba(0,115,170,0.2);
+                        box-shadow: <?php echo ($selected_table === 'yenilemeler') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-update" style="font-size: 24px; color: white; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: white !important;"><?php echo __('Yenilemeler', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-update" style="font-size: 24px; color: <?php echo ($selected_table === 'yenilemeler') ? 'white' : '#1976d2'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'yenilemeler') ? 'white' : '#333'; ?> !important;"><?php echo __('Yenilemeler', 'komtera'); ?></span>
                 </div>
 
                 <!-- Yenilemeler Liste Butonu -->
-                <div class="renewals-button table-btn" data-table="yenilemeler_liste" data-icon-color="#9c27b0" style="
+                <div class="renewals-button table-btn <?php echo ($selected_table === 'yenilemeler_liste') ? 'active' : ''; ?>" data-table="yenilemeler_liste" data-icon-color="#9c27b0" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === 'yenilemeler_liste') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === 'yenilemeler_liste') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        box-shadow: <?php echo ($selected_table === 'yenilemeler_liste') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Yenilemeler Liste', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-list-view" style="font-size: 24px; color: <?php echo ($selected_table === 'yenilemeler_liste') ? 'white' : '#9c27b0'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === 'yenilemeler_liste') ? 'white' : '#333'; ?>;"><?php echo __('Yenilemeler Liste', 'komtera'); ?></span>
                 </div>
 
                 <!-- 60 Gün Liste Butonu -->
-                <div class="renewals-button table-btn" data-table="60gun_liste" data-icon-color="#ff9800" style="
+                <div class="renewals-button table-btn <?php echo ($selected_table === '60gun_liste') ? 'active' : ''; ?>" data-table="60gun_liste" data-icon-color="#ff9800" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         padding: 12px;
-                        background: white;
-                        border: 1px solid #ccc;
+                        background: <?php echo ($selected_table === '60gun_liste') ? '#0073aa' : 'white'; ?>;
+                        border: <?php echo ($selected_table === '60gun_liste') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
                         cursor: pointer;
                         min-width: 90px;
                         transition: all 0.2s;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        box-shadow: <?php echo ($selected_table === '60gun_liste') ? '0 2px 4px rgba(0,115,170,0.2)' : '0 1px 3px rgba(0,0,0,0.1)'; ?>;
                         " onmouseover="if(!this.classList.contains('active')) { this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff9800'; }" onmouseout="if(!this.classList.contains('active')) { this.style.backgroundColor='white'; this.style.borderColor='#ccc'; }">
-                    <span class="dashicons dashicons-calendar-alt" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
-                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('60 Gün Liste', 'komtera'); ?></span>
+                    <span class="dashicons dashicons-calendar-alt" style="font-size: 24px; color: <?php echo ($selected_table === '60gun_liste') ? 'white' : '#ff9800'; ?>; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: <?php echo ($selected_table === '60gun_liste') ? 'white' : '#333'; ?>;"><?php echo __('60 Gün Liste', 'komtera'); ?></span>
                 </div>
             </div>
         </div>
         <div style="position: relative; height: calc(100vh - 180px);">
             <iframe id="erp_iframe"
-                    src="<?php echo esc_url($base_src . 'yenilemeler'); ?>"
+                    src="<?php echo esc_url($base_src . $selected_table); ?>"
                     width="100%"
                     height="100%"
                     style="border:1px solid #ccc; position:absolute; top:0; left:0;">
@@ -2083,6 +2089,11 @@ function yenilemeler_cb() {
                     const activeText = this.querySelector('span:last-child');
                     if (activeIcon) activeIcon.style.color = 'white';
                     if (activeText) activeText.style.color = 'white';
+
+                    // Update URL with table parameter
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('table', table);
+                    window.history.pushState({}, '', url);
 
                     // Update iframe source
                     iframe.src = baseDir + table;
