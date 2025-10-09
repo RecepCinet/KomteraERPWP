@@ -24,6 +24,7 @@ FROM " . getTableName('aa_erp_kt_teklifler') . " t LEFT OUTER JOIN LKS.dbo." . g
 ON t.X_FIRSAT_NO = f.FIRSAT_NO
 WHERE f.SIL='0'
 AND t.TEKLIF_TIPI = '1'
+AND t.yenileme_log is null
 AND f.FIRSAT_NO NOT IN (select FIRSAT_NO from " . getTableName('aa_erp_kt_firsatlar') . " f where f.FIRSAT_ANA is null AND f.BAGLI_FIRSAT_NO is not NULL)
 AND t.TEKLIF_NO IN (SELECT
   LEFT(su.X_SIPARIS_NO, CHARINDEX('-', su.X_SIPARIS_NO) - 1) AS SiparisNo

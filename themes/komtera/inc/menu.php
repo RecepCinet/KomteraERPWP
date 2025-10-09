@@ -1262,7 +1262,7 @@ function fiyat_listesi_cb() {
             const text = document.getElementById('selected_marka_text');
             if (marka) {
                 text.textContent = marka;
-                display.style.display = 'block';
+                display.style.display = 'flex';
             } else {
                 display.style.display = 'none';
             }
@@ -1475,7 +1475,84 @@ function fiyat_listesi_cb() {
                 }
             });
         });
+
+        function showHelpModal() {
+            document.getElementById('help_modal').style.display = 'block';
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help_modal').style.display = 'none';
+        }
+
+        // ESC ile help modal'ı kapat
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('help_modal').style.display === 'block') {
+                closeHelpModal();
+            }
+        });
     </script>
+    <style>
+        .help-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .help-modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 70%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .help-modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 20px;
+            cursor: pointer;
+        }
+
+        .help-modal-close:hover,
+        .help-modal-close:focus {
+            color: #000;
+        }
+
+        .help-modal h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .help-modal h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .help-modal ul {
+            line-height: 1.8;
+        }
+
+        .help-modal code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
     <div class="wrap">
         <!-- Excel style toolbar -->
         <div class="pricelist-toolbar" style="
@@ -1579,19 +1656,49 @@ function fiyat_listesi_cb() {
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Marka Sil</span>
                 </div>
 
+                <!-- Spacer Sol -->
+                <div style="flex: 1;"></div>
+
                 <!-- Seçili Marka Göstergesi -->
                 <div id="selected_marka_display" style="
-                        padding: 12px;
+                        display: none;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 12px 15px;
                         background: #e8f5e8;
                         border: 1px solid #4caf50;
                         border-radius: 6px;
                         color: #2e7d32;
                         font-weight: bold;
                         font-size: 13px;
-                        display: none;
+                        height: 70px;
+                        width: 200px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        box-sizing: border-box;
                         ">
-                    <span class="dashicons dashicons-yes" style="margin-right: 5px;"></span>
+                    <span class="dashicons dashicons-yes" style="margin-right: 8px; font-size: 20px;"></span>
                     <span id="selected_marka_text">Tüm Markalar</span>
+                </div>
+
+                <!-- Spacer Sağ -->
+                <div style="flex: 1;"></div>
+
+                <!-- Yardım Butonu (En Sağda) -->
+                <div class="pricelist-button" onclick="showHelpModal()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 12px;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        min-width: 90px;
+                        transition: all 0.2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#2196f3';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
+                    <span class="dashicons dashicons-editor-help" style="font-size: 24px; color: #2196f3; margin-bottom: 6px;"></span>
+                    <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;"><?php echo __('Yardım','komtera'); ?></span>
                 </div>
             </div>
         </div>
@@ -1762,6 +1869,64 @@ function fiyat_listesi_cb() {
                             font-size: 14px;
                             ">İptal</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div id="help_modal" class="help-modal" onclick="if(event.target===this) closeHelpModal()">
+            <div class="help-modal-content">
+                <span class="help-modal-close" onclick="closeHelpModal()">&times;</span>
+                <h2><?php echo __('Fiyat Listesi Yardım','komtera'); ?></h2>
+
+                <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+                    <strong style="color: #856404; display: flex; align-items: center; margin-bottom: 8px;">
+                        <span class="dashicons dashicons-warning" style="color: #ff9800; font-size: 20px; margin-right: 8px;"></span>
+                        <?php echo __('Önemli Not','komtera'); ?>
+                    </strong>
+                    <p style="margin: 0; color: #856404; line-height: 1.6;">
+                        <?php echo __('Excel uyuşmazlıklarını engellemek için, markayı buradan export edin, o Excel içine yapıştırın, düzenleyin, silin, ekleyin, sonra o Excel\'i import edin.','komtera'); ?>
+                    </p>
+                </div>
+
+                <h3><?php echo __('Sayfa Hakkında','komtera'); ?></h3>
+                <p><?php echo __('Bu sayfa seçilen markanın fiyat listesini görüntülemek ve yönetmek için kullanılır.','komtera'); ?></p>
+
+                <h3><?php echo __('Butonlar','komtera'); ?></h3>
+                <ul>
+                    <li><strong><?php echo __('Markalar','komtera'); ?>:</strong> <?php echo __('Marka listesini görüntülemek ve bir marka seçmek için kullanılır.','komtera'); ?></li>
+                    <li><strong><?php echo __('Excel\'e Gönder','komtera'); ?>:</strong> <?php echo __('Seçili markanın fiyat listesini Excel dosyası olarak indirir.','komtera'); ?></li>
+                    <li><strong><?php echo __('Excel\'den Al','komtera'); ?>:</strong> <?php echo __('Excel dosyasından seçili markaya fiyat listesi yükler.','komtera'); ?></li>
+                    <li><strong><?php echo __('Marka Ekle','komtera'); ?>:</strong> <?php echo __('Sisteme yeni bir marka ekler.','komtera'); ?></li>
+                    <li><strong><?php echo __('Marka Sil','komtera'); ?>:</strong> <?php echo __('Seçili markayı ve tüm kayıtlarını siler.','komtera'); ?></li>
+                </ul>
+
+                <h3><?php echo __('Grid Özellikleri','komtera'); ?></h3>
+                <ul>
+                    <li><strong><?php echo __('Sayfalama','komtera'); ?>:</strong> <?php echo __('Sayfa başına 100, 1000 veya 10000 kayıt görüntüleyebilirsiniz. Büyük veri setleri için hızlı yükleme sağlar.','komtera'); ?></li>
+                    <li><strong><?php echo __('Filtreleme','komtera'); ?>:</strong> <?php echo __('Her kolon başlığının altında filtreleme alanları bulunur. SKU, ürün açıklaması, tip vb. alanlara göre filtreleme yapabilirsiniz.','komtera'); ?></li>
+                    <li><strong><?php echo __('Sıralama','komtera'); ?>:</strong> <?php echo __('Kolon başlıklarına tıklayarak artan veya azalan sıralama yapabilirsiniz.','komtera'); ?></li>
+                    <li><strong><?php echo __('Sabit Kolon','komtera'); ?>:</strong> <?php echo __('SKU kolonu sabit tutulmuştur, yatay kaydırma sırasında her zaman görünür.','komtera'); ?></li>
+                </ul>
+
+                <h3><?php echo __('Kolonlar','komtera'); ?></h3>
+                <ul>
+                    <li><strong>SKU:</strong> <?php echo __('Ürün stok kodu','komtera'); ?></li>
+                    <li><strong><?php echo __('Açıklama','komtera'); ?>:</strong> <?php echo __('Ürün açıklaması','komtera'); ?></li>
+                    <li><strong><?php echo __('Tip','komtera'); ?>:</strong> <?php echo __('Ürün tipi (Hardware ürünler sarı arka plan ile gösterilir)','komtera'); ?></li>
+                    <li><strong><?php echo __('Çözüm','komtera'); ?>:</strong> <?php echo __('Ürün çözüm kategorisi','komtera'); ?></li>
+                    <li><strong><?php echo __('Süre','komtera'); ?>:</strong> <?php echo __('Lisans süresi','komtera'); ?></li>
+                    <li><strong><?php echo __('Fiyat','komtera'); ?>:</strong> <?php echo __('Liste fiyatı','komtera'); ?></li>
+                    <li><strong>UpLift:</strong> <?php echo __('UpLift fiyatı','komtera'); ?></li>
+                    <li><strong>PB:</strong> <?php echo __('Para birimi','komtera'); ?></li>
+                </ul>
+
+                <h3><?php echo __('İpuçları','komtera'); ?></h3>
+                <ul>
+                    <li><?php echo __('SKU filtresinde "begin" koşulu kullanılır, başlangıç karakterlerini yazarak arama yapabilirsiniz.','komtera'); ?></li>
+                    <li><?php echo __('Açıklama filtresinde "contain" koşulu kullanılır, herhangi bir kelime ile arama yapabilirsiniz.','komtera'); ?></li>
+                    <li><?php echo __('Kolon genişliklerini sürükleyerek ayarlayabilirsiniz.','komtera'); ?></li>
+                    <li><?php echo __('Marka ekleme sırasında marka adı BÜYÜK HARF olmalıdır.','komtera'); ?></li>
+                </ul>
             </div>
         </div>
 

@@ -13,25 +13,26 @@ function FirsatAc(firsatNo) {
     }
 }
 
-function listeden_cikar(t) {
-    if (confirm("<?php echo $cryp . ' ' . __('confirm_log_add_remove_order','komtera'); ?>")) {
-        GonderGelsin(t);
-        grid.refreshDataAndView();
-    } else {
-        console.log("<?php echo __('cancelled','komtera'); ?>");
-    }
-}
+function listeden_cikar(teklifNo) {
+    if (confirm("<?php echo __('Bu kaydı listeden çıkarmak istediğinizden emin misiniz?','komtera'); ?>")) {
+        const serviceUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/yenileme_listeden_cikar.php";
 
-function GonderGelsin(t) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://172.16.84.214/_engines/yenileme_listeden_cikar.php?teklif_no=" + t + "&kim=<?php echo $cryp; ?>");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            console.log("<?php echo __('response','komtera'); ?>:", xhr.responseText);
-        }
-    };
-    xhr.send();
+        fetch(serviceUrl + '?teklif_no=' + encodeURIComponent(teklifNo))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || "<?php echo __('Başarıyla listeden çıkarıldı.','komtera'); ?>");
+                    grid.refreshDataAndView();
+                } else {
+                    alert("<?php echo __('Hata','komtera'); ?>: " + (data.message || "<?php echo __('İşlem başarısız.','komtera'); ?>"));
+                    console.error('Error:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                alert("<?php echo __('İstek gönderilirken hata oluştu.','komtera'); ?>");
+            });
+    }
 }
 
 $(function () {

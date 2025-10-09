@@ -64,23 +64,23 @@ $marka= $_GET['marka'];
 //        }
 
         var colM = [
-            {title: "SKU", editable: true, width: 140, dataIndx: "sku",
+            {title: "SKU", editable: true, width: 180, dataIndx: "sku",
                 filter: {
                     crules: [{condition: 'begin'}],
                     groupIndx: "SKU"
                 }
             },
-            {title: "<?php echo __('description','komtera'); ?>", width: 490, dataIndx: "urunAciklama",
+            {title: "<?php echo __('description','komtera'); ?>", width: 590, dataIndx: "urunAciklama",
                 filter: {
                     crules: [{condition: 'contain'}],
                     groupIndx: "urunAciklama"
                 }
             },
-            {title: "<?php echo __('brand','komtera'); ?>", width: 130, dataIndx: "marka",
-                filter: {
-                    crules: [{condition: 'range'}]
-                }
-            },
+            //{title: "<?php //echo __('brand','komtera'); ?>//", width: 130, dataIndx: "marka",
+            //    filter: {
+            //        crules: [{condition: 'range'}]
+            //    }
+            //},
             {title: "<?php echo __('type','komtera'); ?>", width: 130, dataIndx: "tur",
                 render: function (ui) {
                     if (ui.cellData == 'Hardware') {
@@ -91,12 +91,12 @@ $marka= $_GET['marka'];
                     crules: [{condition: 'range'}],
                 }
             },
-            {title: "<?php echo __('solution','komtera'); ?>", width: 130, dataIndx: "cozum",
+            {title: "<?php echo __('solution','komtera'); ?>", width: 160, dataIndx: "cozum",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('duration','komtera'); ?>", align: 'center', width: 90, dataIndx: "lisansSuresi",
+            {title: "<?php echo __('duration','komtera'); ?>", align: 'center', width: 130, dataIndx: "lisansSuresi",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
@@ -129,48 +129,17 @@ $marka= $_GET['marka'];
             dataType: "JSON",
             method: "GET",
             url: "_tablolar/kt_fiyat_listesi.php?dbname=LKS&marka=<?PHP echo $marka; ?>",
-            getData: function (dataJSON) {
-                var data = dataJSON.data;
-                return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
+            getData: function (response) {
+                return {
+                    curPage: response.curPage,
+                    totalRecords: response.totalRecords,
+                    data: response.data
+                };
             }
         };
 
         var obj = {
             trackModel: {on: true},
-//            toolbar: {
-//                items: [
-////                    { 
-////                        type: 'select',                         
-////                        cls: "marka_ne",
-////                        listener: filterhandler,
-////                        options: [
-////                            //<?PHP
-//                            $out="";
-//                            for ($t=0;$t<count($marka_hepsi);$t++) {
-//                                if ($t>0) {
-//                                    $out .= ",";
-//                                }
-//                                $out .= '{ "' . $marka_hepsi[$t]['marka'] . '": "' . $marka_hepsi[$t]['marka'] . '" }';
-//                            }
-//                            echo $out;                            
-//                            ?>////
-////                        ]
-////                    },
-//                    {
-//                       type: 'button',
-//                       label: "Export",
-//                       icon: 'ui-icon-arrowthickstop-1-s',
-//                       listener: function () {
-//                           this.exportData({
-//                               url: "export.php",
-//                               format: "xlsx",
-//                               nopqdata: true, //applicable for JSON export.
-//                               render: true
-//                           });
-//                       }
-//                   }
-//                ]
-//            },
             menuIcon: true,
             collapsible: {on: false, toggle: false},
             reactive: true,
@@ -218,12 +187,12 @@ $marka= $_GET['marka'];
                 type: "remote",
                 rPP: 1000,
                 strRpp: "{0}",
-                rPPOptions: [1000]
+                rPPOptions: [100, 1000, 10000]
             },
             sortable: true,
             wrap: false, hwrap: false,
-            numberCell: {resizable: true, width: 30, title: "#"},
-            title: '<?PHP echo $marka ; ?> - <?php echo __('price_list','komtera'); ?> hiz icin sadece 1000 kayit gosterilmektedir.',
+            numberCell: {resizable: true, width: 55, title: "#"},
+            title: '<?PHP echo $marka ; ?> - <?php echo __('price_list','komtera'); ?>',
             rowHt: 23,
             resizable: true,
 //            create: function () {
@@ -237,6 +206,6 @@ $marka= $_GET['marka'];
         });
         grid.on("destroy", function () {
             this.saveState();
-        })
+        });
     });
 </script>

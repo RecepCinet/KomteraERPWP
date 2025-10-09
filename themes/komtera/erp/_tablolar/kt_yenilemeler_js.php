@@ -19,6 +19,28 @@ function FirsatAc(firsatNo) {
     }
 }
 
+function listeden_cikar(teklifNo) {
+    if (confirm("<?php echo __('Bu kaydı listeden çıkarmak istediğinizden emin misiniz?','komtera'); ?>")) {
+        const serviceUrl = "<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/yenileme_listeden_cikar.php";
+
+        fetch(serviceUrl + '?teklif_no=' + encodeURIComponent(teklifNo))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || "<?php echo __('Başarıyla listeden çıkarıldı.','komtera'); ?>");
+                    grid.refreshDataAndView();
+                } else {
+                    alert("<?php echo __('Hata','komtera'); ?>: " + (data.message || "<?php echo __('İşlem başarısız.','komtera'); ?>"));
+                    console.error('Error:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                alert("<?php echo __('İstek gönderilirken hata oluştu.','komtera'); ?>");
+            });
+    }
+}
+
 $(function () {
 
     var colM = [
@@ -37,6 +59,15 @@ $(function () {
                 if (ui.rowData.FIRSAT_NO) {
                     return "<a href='#' onclick='FirsatAc(\"" + ui.rowData.FIRSAT_NO + "\")'>" + ui.rowData.FIRSAT_NO + "</a>";
                 }
+            }
+        },
+
+        {title: "<?php echo __('Listeden Çıkar','komtera'); ?>", exportRender: false, editable: false, minWidth: 110, sortable: false, dataIndx: "TEKLIF_NO", filter: false,
+            render: function (ui) {
+                if (ui.rowData.TEKLIF_NO) {
+                    return "<a href='#' onclick='listeden_cikar(\"" + ui.rowData.TEKLIF_NO + "\"); return false;' style='color: #d32f2f; font-weight: bold;'><?php echo __('Listeden Çıkar','komtera'); ?></a>";
+                }
+                return '';
             }
         },
 

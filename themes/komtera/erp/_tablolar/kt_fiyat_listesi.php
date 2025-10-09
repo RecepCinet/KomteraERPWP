@@ -13,6 +13,11 @@ ini_set('display_erros', true);
 
 $marka= $_GET['marka'];
 
+// Paging parametreleri
+$pq_curpage = isset($_GET['pq_curpage']) ? (int)$_GET['pq_curpage'] : 1;
+$pq_rpp = isset($_GET['pq_rpp']) ? (int)$_GET['pq_rpp'] : 10000;
+$offset = ($pq_curpage - 1) * $pq_rpp;
+
 $fields="sku,
 urunAciklama,
 marka,
@@ -61,8 +66,14 @@ listeFiyatiUpLift * ( 1 - s_iskonto1_r ) as s_rakam1_r
 //$eks="CHARINDEX(marka, '" . $_SESSION['user']['markalar'] . "')>0 AND";
 
 $tableName = getTableName('aa_erp_kt_fiyat_listesi');
-$sql = "select $fields from {$tableName} WHERE marka='$marka'";
 
+// Toplam kayıt sayısını al
+$countSql = "SELECT COUNT(*) as total FROM {$tableName} WHERE marka='$marka'";
+$countStmt = $conn->query($countSql);
+$totalRecords = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+// Sayfalanmış veriyi al
+$sql = "SELECT $fields FROM {$tableName} WHERE marka='$marka' ORDER BY sku OFFSET $offset ROWS FETCH NEXT $pq_rpp ROWS ONLY";
 
 error_reporting(E_ALL);
 ini_set('display_erros', true);
@@ -74,12 +85,18 @@ try {
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Hata: " . $e->getMessage();
+    exit;
 }
 
-$response = "{\"data\":" . json_encode($data) . "}";
+$response = [
+    'curPage' => $pq_curpage,
+    'totalRecords' => $totalRecords,
+    'data' => $data
+];
+
 if (isset($_GET['callback'])) {
-    echo $_GET['callback'] . '(' . $response . ')';
+    echo $_GET['callback'] . '(' . json_encode($response) . ')';
 } else {
-    echo $response;
+    echo json_encode($response);
 }
 ?>
