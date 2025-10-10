@@ -40,6 +40,54 @@ try {
         $firsat_stmt->execute();
         $firsat_data = $firsat_stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // Get customer risk/credit information from LOGO
+    $risk_data = null;
+    $bayi_chkodu = $firsat_data['BAYI_CHKODU'] ?? $teklif_data['BAYI_CHKODU'] ?? null;
+
+    if (!empty($bayi_chkodu)) {
+        try {
+            // Query LOGO database for customer credit information
+            // LOGO typically stores this in LG_XXX_CLCARD view where XXX is company number
+            // Trying common company numbers: 001, 002, 003
+            $risk_sql = "SELECT TOP 1
+                            CODE as CARI_KOD,
+                            DEFINITION_ as CARI_ADI,
+                            CREDITLIMIT as RISK_LIMITI,
+                            (SELECT SUM(DEBIT - CREDIT)
+                             FROM LKS.dbo.LG_001_01_CLFLINE
+                             WHERE CLIENTREF = CLCARD.LOGICALREF) as BAKIYE
+                        FROM LKS.dbo.LG_001_CLCARD CLCARD
+                        WHERE CODE = :bayi_chkodu";
+
+            $risk_stmt = $conn->prepare($risk_sql);
+            $risk_stmt->bindParam(':bayi_chkodu', $bayi_chkodu);
+            $risk_stmt->execute();
+            $risk_data = $risk_stmt->fetch(PDO::FETCH_ASSOC);
+
+            // If not found in 001, try 002
+            if (!$risk_data) {
+                $risk_sql = "SELECT TOP 1
+                                CODE as CARI_KOD,
+                                DEFINITION_ as CARI_ADI,
+                                CREDITLIMIT as RISK_LIMITI,
+                                (SELECT SUM(DEBIT - CREDIT)
+                                 FROM LKS.dbo.LG_002_01_CLFLINE
+                                 WHERE CLIENTREF = CLCARD.LOGICALREF) as BAKIYE
+                            FROM LKS.dbo.LG_002_CLCARD CLCARD
+                            WHERE CODE = :bayi_chkodu";
+
+                $risk_stmt = $conn->prepare($risk_sql);
+                $risk_stmt->bindParam(':bayi_chkodu', $bayi_chkodu);
+                $risk_stmt->execute();
+                $risk_data = $risk_stmt->fetch(PDO::FETCH_ASSOC);
+            }
+        } catch (Exception $e) {
+            // Log error but don't break the page
+            error_log("Risk limit query error: " . $e->getMessage());
+            $risk_data = null;
+        }
+    }
 } catch (Exception $e) {
     echo '<div style="padding: 40px; text-align: center; color: #d32f2f;">' . __('Veri çekme hatası', 'komtera') . ': ' . htmlspecialchars($e->getMessage()) . '</div>';
     exit;
@@ -721,7 +769,7 @@ try {
                         }
                         echo $satis_tipi_text;
                         ?>
-                        | <?php echo __('Marka', 'komtera'); ?>: <?php echo htmlspecialchars($teklif_data['MARKA'] ?? __('Belirtilmemiş', 'komtera')); ?>
+                        | <?php echo __('Marka', 'komtera'); ?>: <?php echo htmlspecialchars($firsat_data['MARKA'] ?? $teklif_data['MARKA'] ?? __('Belirtilmemiş', 'komtera')); ?>
                         | <?php echo __('Oluşturma', 'komtera'); ?>:
                         <?php
                         if ($teklif_data['YARATILIS_TARIHI']) {
@@ -742,14 +790,43 @@ try {
                     </div>
 
                     <div class="status-info">
-                        <span class="status-badge status-platinum">
-                            <span>🏆</span> PLATINUM
-                        </span>
-                        <div class="risk-box">
-                            <div class="risk-title">Risk Limit</div>
-                            <div class="risk-limit-value">$100,000</div>
-                            <div class="risk-current-value">$4,919,643</div>
+                        <?php
+                        // Bayi seviyesi göster (fırsattan al)
+                        $bayi_seviye = $firsat_data['MARKA_BAYI_SEVIYE'] ?? '';
+                        if (!empty($bayi_seviye)) {
+                            echo '<span class="status-badge status-platinum">';
+                            echo '<span>🏆</span> ' . htmlspecialchars(strtoupper($bayi_seviye));
+                            echo '</span>';
+                        }
+                        ?>
+                        <?php
+                        // Risk limit bilgisi göster - LOGO'dan çekilen verilerle
+                        if ($risk_data && isset($risk_data['RISK_LIMITI'])):
+                            $risk_limit = floatval($risk_data['RISK_LIMITI'] ?? 0);
+                            $bakiye = floatval($risk_data['BAKIYE'] ?? 0);
+                            $kalan = $risk_limit - $bakiye;
+
+                            // Renk belirle
+                            $color_class = '';
+                            if ($kalan < 0) {
+                                $color_class = 'style="border-color: #d32f2f;"'; // Kırmızı - limit aşıldı
+                            } else if ($kalan < $risk_limit * 0.2) {
+                                $color_class = 'style="border-color: #f57c00;"'; // Turuncu - %80'i doldu
+                            }
+                        ?>
+                        <div class="risk-box" <?php echo $color_class; ?>>
+                            <div class="risk-title"><?php echo __('Risk Limit', 'komtera'); ?></div>
+                            <div class="risk-limit-value">
+                                <?php echo number_format($risk_limit, 2, ',', '.'); ?> ₺
+                            </div>
+                            <div class="risk-current-value">
+                                <?php echo __('Bakiye', 'komtera'); ?>: <?php echo number_format($bakiye, 2, ',', '.'); ?> ₺
+                            </div>
+                            <div style="font-size: 12px; color: <?php echo $kalan < 0 ? '#d32f2f' : '#666'; ?>; margin-top: 4px;">
+                                <?php echo __('Kalan', 'komtera'); ?>: <?php echo number_format($kalan, 2, ',', '.'); ?> ₺
+                            </div>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 

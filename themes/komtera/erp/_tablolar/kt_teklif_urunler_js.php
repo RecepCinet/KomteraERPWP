@@ -187,8 +187,8 @@ if (!empty($teklif_id)) {
     var grid;
     $(function () {
         var colM = [
-            {title: "<?php echo __('id','komtera'); ?>", hidden: true, editable: false, minWidth: 50, sortable: false, dataIndx: "id"},
-            {title: "s", align: "center", formatter: "number", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA"},
+            // {title: "<?php echo __('id','komtera'); ?>", hidden: true, editable: false, minWidth: 50, sortable: false, dataIndx: "id"},
+            // {title: "s", align: "center", formatter: "number", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA"},
             {title: "ti", hidden: true, editable: false, minWidth: 50, sortable: false, dataIndx: "X_TEKLIF_NO"},
             {title: "", summary: {type: "", edit: true}, align: "center", hidden: false, editable: false, minWidth: 50, sortable: false, dataIndx: "id",
                 render: function (ui) {
@@ -203,10 +203,10 @@ if (!empty($teklif_id)) {
                 }
             },
 
-            {title: "<?php echo __('slot','komtera'); ?>", hidden: false, editable: true, minWidth: 50, sortable: false, dataIndx: "TRACK_TYPE"},
             {title: "<?php echo __('SKU','komtera'); ?>",styleHead: {'height': '150px'}, hidden: false, editable: true, minWidth: 110, sortable: false, dataIndx: "SKU"},
             {title: "<?php echo __('Açıklama','komtera'); ?>", hidden: false, editable: true, minWidth: 255, sortable: false, dataIndx: "ACIKLAMA"},
             //{title: "MS", hidden: false, editable: true, minWidth: 55, sortable: false, dataIndx: "MCSURE"},
+            {title: "<?php echo __('slot','komtera'); ?>", hidden: false, editable: true, minWidth: 50, sortable: false, dataIndx: "TRACK_TYPE"},
             {title: "<?php echo __('tip','komtera'); ?>", hidden: false, editable: false, minWidth: 65, sortable: false, dataIndx: "TIP"},
             {title: "<?php echo __('satis_tipi','komtera'); ?>", style: {"background": "#C2E7D1"}, hidden: true, editable: true, minWidth: 95, sortable: false, dataIndx: "SATIS_TIPI",
             render: function (ui) {
@@ -299,6 +299,7 @@ if (!empty($teklif_id)) {
             }
         };
         var obj = {
+            freezeCols: 3,
             menuIcon: false,
             trackModel: {on: true},
             collapsible: {on: false, toggle: false},
