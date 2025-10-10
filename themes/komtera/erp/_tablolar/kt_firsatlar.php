@@ -53,7 +53,7 @@ for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as skular,
     for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as Cozumler,
 
 stuff((
-        select ' '+convert(varchar(10),TEKLIF_NO)
+        select ','+convert(varchar(10),TEKLIF_NO)
         from " . getTableName('aa_erp_kt_teklifler') . " where X_FIRSAT_NO=f.FIRSAT_NO order by TEKLIF_TIPI desc
         for xml path (''), type).value('.','nvarchar(max)'),1,1,'') as Teklifler,
 (select SUM(tu.ADET*tu.B_SATIS_FIYATI) from " . getTableName('aa_erp_kt_teklifler_urunler') . " tu INNER JOIN " . getTableName('aa_erp_kt_teklifler') . " te ON tu.X_TEKLIF_NO = te.TEKLIF_NO where te.PDF=1 AND te.TEKLIF_TIPI=1 AND te.X_FIRSAT_NO=f.FIRSAT_NO) as TUTAR,

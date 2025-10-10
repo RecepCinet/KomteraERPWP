@@ -142,7 +142,7 @@
                             if (i > 0) {
                                 out = out + " , ";
                             }
-                            out = out + "<a href='#' class='acac' onclick='TeklifAc(\"" + tek[i] + "\")'>" + tek[i] + "</a>";
+                            out = out + "<a href='#' class='acac' onclick='TeklifAc(\"" + tek[i].trim() + "\")'>" + tek[i] + "</a>";
                             //out = out + "<a href='#' class='demo_ac' onclick='TeklifAc(\"" + tek[i] + "\")'><span class='ui-icon ui-icon-zoomin'></span></a>" + tek[i];
                         }
                         return out;
@@ -543,7 +543,9 @@
 
     // Teklif detay sayfasını açma fonksiyonu
     function TeklifAc(teklifNo) {
+        console.log('TeklifAc called with:', teklifNo);
         var url = '<?php echo admin_url('admin.php?page=teklifler_detay&teklif_no='); ?>' + encodeURIComponent(teklifNo);
+        console.log('URL:', url);
         if (window.parent) {
             window.parent.location.href = url;
         } else {
