@@ -135,16 +135,27 @@
     }
 </script>
 <?PHP
-$teklif_id = $_GET['teklif_id'];
+$teklif_id = $_GET['teklif_no'] ?? $_GET['teklif_id'] ?? '';
+error_log("kt_teklif_urunler_js.php - teklif_id: " . $teklif_id);
+error_log("kt_teklif_urunler_js.php - GET: " . print_r($_GET, true));
 $izin = "true";
-$stmt = $conn->prepare("select top 1 KILIT,SATIS_TIPI from aa_erp_kt_teklifler where TEKLIF_NO=:teklif_no");
-$stmt->execute(['teklif_no' => $teklif_id]);
-$gelen = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
-if ($gelen['KILIT'] === "1") {
-    $izin = "false";
+$gelen = ['KILIT' => '', 'SATIS_TIPI' => ''];
+if (!empty($teklif_id)) {
+    $stmt = $conn->prepare("select top 1 KILIT,SATIS_TIPI from aa_erp_kt_teklifler where TEKLIF_NO=:teklif_no");
+    $stmt->execute(['teklif_no' => $teklif_id]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (!empty($result)) {
+        $gelen = $result[0];
+        if ($gelen['KILIT'] === "1") {
+            $izin = "false";
+        }
+    }
 }
 
-?>
+?><script>
+    console.log("kt_teklif_urunler_js.php - teklif_id:", "<?php echo $teklif_id; ?>");
+    console.log("kt_teklif_urunler_js.php - Data URL:", "_tablolar/kt_teklif_urunler.php?dbname=LKS&teklif_no=<?PHP echo $teklif_id; ?>");
+</script>
 <script>
     function UrunDuzenle(teklif_no, id) {
         FileMaker.PerformScriptWithOption("Teklif", "urun_duzenle" + "\n" + id + "\n" + teklif_no);
@@ -282,7 +293,7 @@ if ($gelen['KILIT'] === "1") {
                 dataType: "JSON",
                 method: "GET",
                 recIndx: "id",
-                url: "_tablolar/kt_teklif_urunler.php?dbname=LKS&teklif_id=<?PHP echo $teklif_id; ?>",
+                url: "_tablolar/kt_teklif_urunler.php?dbname=LKS&teklif_no=<?PHP echo $teklif_id; ?>",
             getData: function (response) {
                 return {data: response.data};
             }
@@ -361,13 +372,6 @@ if ($gelen['KILIT'] === "1") {
             },
             editable: true,
             summaryTitle: "",
-            pageModel: {
-                format: "#,###",
-                type: "local",
-                rPP: 1000,
-                strRpp: "{0}",
-                rPPOptions: [100, 1000, 10000]
-            },
             sortable: false,
             //wrap: false, hwrap: false,
             //numberCell: {show: false, resizable: true, width: 30, title: "#"},

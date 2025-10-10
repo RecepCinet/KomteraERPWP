@@ -1,24 +1,42 @@
 <?PHP
 
-error_reporting(0);
-ini_set("display_errors", false);
+// Temporarily enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set("display_errors", true);
+
+// Include table helper for getTableName function
+require_once dirname(__DIR__, 2) . '/inc/table_helper.php';
+
+// Include DB connection
+require_once dirname(__DIR__) . '/_conn.php';
 
 function getDBH() {
-    $serverName = "172.16.85.76";
-    try {
-        $options = array(
-            "CharacterSet" => "UTF-8"
-        );
-        $conn = new PDO("sqlsrv:server=$serverName; Database=LKS", "crm", "!!!Crm!!!", $options);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (Exception $e) {
-        echo "!---MS SQL Baglanti Sorunu!---<br />" . PHP_EOL;
-        die(print_r($e->getMessage()));
+    global $conn;
+
+    // If connection already exists from _conn.php, use it
+    if (isset($conn) && $conn instanceof PDO) {
+        return $conn;
     }
 
+    // Otherwise create new connection
+    $serverName = "172.16.85.76,1433";
+    $database = "LKS";
+    $username = "crm";
+    $password = "!!!Crm!!!";
 
-
-    return $conn;
+    $dsn = "sqlsrv:Server=$serverName;Database=$database;Encrypt=1;TrustServerCertificate=1";
+    try {
+        $conn = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]);
+        return $conn;
+    } catch (PDOException $e) {
+        error_log("DB Connection Error: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Database connection failed', 'message' => $e->getMessage()]);
+        exit;
+    }
 }
 
 //for mapping of boolean values to TINYINT column in db.
@@ -208,7 +226,15 @@ if (isset($_GET["pq_add"])) {
     $sb = "{\"totalRecords\":" . $total_Records . ",\"curPage\":" . $pq_curPage . ",\"data\":" . json_encode($products) . "}";
     $response = $sb;
 } else {
-    $teklif_id = $_GET['teklif_id'];
+    $teklif_id = $_GET['teklif_no'] ?? $_GET['teklif_id'] ?? '';
+    error_log("kt_teklif_urunler.php - teklif_id: " . $teklif_id);
+    error_log("kt_teklif_urunler.php - GET: " . print_r($_GET, true));
+
+    // Test getTableName function
+    $testTableName = getTableName('aa_erp_kt_teklifler_urunler');
+    error_log("kt_teklif_urunler.php - Table name test: " . $testTableName);
+    error_log("kt_teklif_urunler.php - HTTP_HOST: " . ($_SERVER['HTTP_HOST'] ?? 'NOT SET'));
+
     $sql = "SELECT 	id,
         X_TEKLIF_NO,
 	SKU,

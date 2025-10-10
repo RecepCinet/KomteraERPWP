@@ -348,7 +348,7 @@ try {
         /* Iframe for product grid */
         .product-iframe {
             width: 100%;
-            height: 600px;
+            height: 300px;
             border: 1px solid #e0e0e0;
             border-radius: 4px;
             background: #fff;
@@ -436,7 +436,7 @@ try {
             }
 
             .product-iframe {
-                height: 400px;
+                height: 250px;
             }
         }
 
@@ -890,7 +890,7 @@ try {
                 <iframe
                     id="productGrid"
                     class="product-iframe"
-                    src="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/erp/_tinywin/kt_teklif_urunler_js.php?teklif_no=<?php echo urlencode($teklif_no); ?>&standalone=1"
+                    src="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/erp/tablo_render.php?t=teklif_urunler&teklif_no=<?php echo urlencode($teklif_no); ?>"
                     frameborder="0"
                     title="<?php echo __('Teklif Ürünleri Grid', 'komtera'); ?>">
                 </iframe>
