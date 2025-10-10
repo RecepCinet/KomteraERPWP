@@ -17,10 +17,22 @@
                     grid.showLoading();
                 },
                 success: function (changes) {
-                    //commit the changes.                
+                    //commit the changes.
                     grid.commit({type: 'add', rows: changes.addList});
                     grid.commit({type: 'update', rows: changes.updateList});
                     grid.commit({type: 'delete', rows: changes.deleteList});
+
+                    // Refresh parent page to update summary calculations after a delay
+                    // Give time for database to commit changes
+                    setTimeout(function() {
+                        try {
+                            if (window.parent && window.parent !== window) {
+                                window.parent.location.reload();
+                            }
+                        } catch(e) {
+                            console.log('Could not refresh parent page:', e);
+                        }
+                    }, 1000); // Wait 1 second for DB to update
                 },
                 complete: function () {
                     grid.hideLoading();
@@ -141,12 +153,13 @@ error_log("kt_teklif_urunler_js.php - GET: " . print_r($_GET, true));
 $izin = "true";
 $gelen = ['KILIT' => '', 'SATIS_TIPI' => ''];
 if (!empty($teklif_id)) {
-    $stmt = $conn->prepare("select top 1 KILIT,SATIS_TIPI from aa_erp_kt_teklifler where TEKLIF_NO=:teklif_no");
+    $stmt = $conn->prepare("select top 1 KILIT,SATIS_TIPI from " . getTableName('aa_erp_kt_teklifler') . " where TEKLIF_NO=:teklif_no");
     $stmt->execute(['teklif_no' => $teklif_id]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (!empty($result)) {
         $gelen = $result[0];
-        if ($gelen['KILIT'] === "1") {
+        // Use loose comparison to handle both integer and string types
+        if ($gelen['KILIT'] == 1) {
             $izin = "false";
         }
     }
@@ -154,6 +167,8 @@ if (!empty($teklif_id)) {
 
 ?><script>
     console.log("kt_teklif_urunler_js.php - teklif_id:", "<?php echo $teklif_id; ?>");
+    console.log("kt_teklif_urunler_js.php - KILIT value:", <?php echo json_encode($gelen['KILIT']); ?>, " (type: <?php echo gettype($gelen['KILIT']); ?>)");
+    console.log("kt_teklif_urunler_js.php - izin:", "<?php echo $izin; ?>");
     console.log("kt_teklif_urunler_js.php - Data URL:", "_tablolar/kt_teklif_urunler.php?dbname=LKS&teklif_no=<?PHP echo $teklif_id; ?>");
 </script>
 <script>

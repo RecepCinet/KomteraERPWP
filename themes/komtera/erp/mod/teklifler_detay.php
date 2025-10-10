@@ -131,8 +131,8 @@ try {
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 0;
             padding: 20px;
         }
 
@@ -396,7 +396,8 @@ try {
         /* Iframe for product grid */
         .product-iframe {
             width: 100%;
-            height: 300px;
+            height: 600px;
+            min-height: 400px;
             border: 1px solid #e0e0e0;
             border-radius: 4px;
             background: #fff;
@@ -776,7 +777,13 @@ try {
                             $tarih = new DateTime($teklif_data['YARATILIS_TARIHI']);
                             echo $tarih->format('d.m.Y');
                             if ($teklif_data['YARATILIS_SAATI']) {
-                                echo ' ' . $teklif_data['YARATILIS_SAATI'];
+                                // Saat formatını HH:MM olarak göster (saniyesiz)
+                                $saat = $teklif_data['YARATILIS_SAATI'];
+                                // Eğer saat 09:17:29.2033333 formatındaysa, sadece HH:MM al
+                                if (strlen($saat) > 5) {
+                                    $saat = substr($saat, 0, 5); // İlk 5 karakter: HH:MM
+                                }
+                                echo ' ' . $saat;
                             }
                         }
                         ?>
@@ -832,21 +839,39 @@ try {
 
                 <!-- Toolbar Buttons -->
                 <div class="toolbar">
-                    <!-- Güvenlik & Sistem Grubu -->
+                    <!-- Kilit Grubu - EN BAŞTA -->
                     <div class="toolbar-group">
-                        <button class="toolbar-btn btn-security" title="<?php echo __('Teklif Geri Al', 'komtera'); ?>" onclick="teklifGeriAl()">
-                            <span class="icon dashicons dashicons-lock"></span>
-                            <span><?php echo __('Teklif', 'komtera'); ?><br><?php echo __('Geri Al', 'komtera'); ?></span>
-                        </button>
+                        <?php if ($teklif_data['KILIT'] == '1'): ?>
+                            <!-- Teklif kilitli - Kilidi aç butonu göster -->
+                            <button class="toolbar-btn btn-handshake" title="<?php echo __('Teklif Kilidini Aç', 'komtera'); ?>" onclick="teklifKilitle(0)">
+                                <span class="icon dashicons dashicons-unlock"></span>
+                                <span><?php echo __('Kilidi', 'komtera'); ?><br><?php echo __('Aç', 'komtera'); ?></span>
+                            </button>
+                        <?php else: ?>
+                            <!-- Teklif açık - Kilitle butonu göster -->
+                            <button class="toolbar-btn" style="background: #dc3545; color: white;" title="<?php echo __('Teklifi Kilitle', 'komtera'); ?>" onclick="teklifKilitle(1)">
+                                <span class="icon dashicons dashicons-lock"></span>
+                                <span><?php echo __('Teklifi', 'komtera'); ?><br><?php echo __('Kilitle', 'komtera'); ?></span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
 
+                    <!-- Dosya Grubu -->
+                    <div class="toolbar-group">
                         <button class="toolbar-btn btn-light file-count-btn" title="<?php echo __('Özel Fiyat Dosyası', 'komtera'); ?>" onclick="ozelFiyatDosyasi()">
                             <span class="icon dashicons dashicons-lightbulb"></span>
                             <span><?php echo __('Özel Fiyat', 'komtera'); ?><br><?php echo __('Dosyası', 'komtera'); ?></span>
                             <span id="fileCountBadge" class="file-count-badge" style="display: none;">0</span>
                         </button>
+
+                        <button class="toolbar-btn btn-barcode license-count-btn" title="<?php echo __('Lisans Dosyası', 'komtera'); ?>" onclick="lisansDosyasi()">
+                            <span class="icon dashicons dashicons-id-alt"></span>
+                            <span><?php echo __('Lisans', 'komtera'); ?><br><?php echo __('Dosyası', 'komtera'); ?></span>
+                            <span id="licenseCountBadge" class="file-count-badge" style="display: none;">0</span>
+                        </button>
                     </div>
 
-                    <!-- PDF & Doküman Grubu -->
+                    <!-- PDF Grubu -->
                     <div class="toolbar-group">
                         <button class="toolbar-btn btn-pdf" title="<?php echo __('PDF Teklif', 'komtera'); ?>" onclick="pdfTeklif()">
                             <span class="icon dashicons dashicons-media-document"></span>
@@ -856,17 +881,6 @@ try {
 
                     <!-- İşlem Grubu -->
                     <div class="toolbar-group">
-                        <button class="toolbar-btn btn-barcode license-count-btn" title="<?php echo __('Lisans Dosyası', 'komtera'); ?>" onclick="lisansDosyasi()">
-                            <span class="icon dashicons dashicons-id-alt"></span>
-                            <span><?php echo __('Lisans', 'komtera'); ?><br><?php echo __('Dosyası', 'komtera'); ?></span>
-                            <span id="licenseCountBadge" class="file-count-badge" style="display: none;">0</span>
-                        </button>
-
-                        <button class="toolbar-btn btn-handshake" title="<?php echo __('Teklif Geri Aç', 'komtera'); ?>" onclick="teklifGeriAc()">
-                            <span class="icon dashicons dashicons-unlock"></span>
-                            <span><?php echo __('Teklif Geri', 'komtera'); ?><br><?php echo __('Aç', 'komtera'); ?></span>
-                        </button>
-
                         <button class="toolbar-btn btn-handshake" title="<?php echo __('Sipariş Getir', 'komtera'); ?>" onclick="siparisGetir()">
                             <span class="icon dashicons dashicons-cart"></span>
                             <span><?php echo __('Sipariş', 'komtera'); ?><br><?php echo __('Getir', 'komtera'); ?></span>
@@ -977,6 +991,10 @@ try {
             <div class="product-section">
                 <div class="section-header">
                     <h2 class="section-title"><?php echo __('Teklif Özeti', 'komtera'); ?></h2>
+                    <button onclick="location.reload()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;" title="<?php echo __('Hesaplamaları Yenile', 'komtera'); ?>">
+                        <span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px;"></span>
+                        <?php echo __('Yenile', 'komtera'); ?>
+                    </button>
                 </div>
 
                 <?php
@@ -1210,14 +1228,39 @@ try {
             showLisansModal();
         }
 
-        function teklifGeriAc() {
-            if (!confirm('<?php echo __('Teklifi geri açmak istediğinizden emin misiniz?', 'komtera'); ?>')) {
+        /**
+         * Unified function to lock/unlock teklif
+         * @param {number} lockStatus - 0 = unlock, 1 = lock
+         */
+        function teklifKilitle(lockStatus) {
+            // Determine action text
+            const isLocking = lockStatus === 1;
+            const actionText = isLocking ? '<?php echo __('kilitlemek', 'komtera'); ?>' : '<?php echo __('kilidini açmak', 'komtera'); ?>';
+            const confirmMsg = isLocking
+                ? '<?php echo __('Teklifi kilitlemek istediğinizden emin misiniz?', 'komtera'); ?>'
+                : '<?php echo __('Teklif kilidini açmak istediğinizden emin misiniz?', 'komtera'); ?>';
+
+            if (!confirm(confirmMsg)) {
                 return;
             }
 
-            // AJAX call to unlock teklif
+            // Show loading state
+            const btn = event.target.closest('.toolbar-btn');
+            const originalContent = btn.innerHTML;
+            const loadingText = isLocking
+                ? '<span class="icon dashicons dashicons-lock"></span><span><?php echo __('Kilitleniyor', 'komtera'); ?></span>'
+                : '<span class="icon dashicons dashicons-unlock"></span><span><?php echo __('Açılıyor', 'komtera'); ?></span>';
+            btn.innerHTML = loadingText;
+            btn.disabled = true;
+
+            // Determine service URL
+            const serviceUrl = isLocking
+                ? '<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/teklif_lock.php'
+                : '<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/teklif_unlock.php';
+
+            // AJAX call to lock/unlock teklif
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/teklif_unlock.php', true);
+            xhr.open('POST', serviceUrl, true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
@@ -1225,16 +1268,29 @@ try {
                         try {
                             const data = JSON.parse(xhr.responseText);
                             if (data.success) {
-                                alert('<?php echo __('Teklif başarıyla geri açıldı.', 'komtera'); ?>');
-                                location.reload();
+                                // First reload the iframe to refresh grid with new editable state
+                                const iframe = document.getElementById('productGrid');
+                                const iframeSrc = iframe.src;
+                                iframe.src = iframeSrc.split('?')[0] + '?teklif_no=<?php echo urlencode($teklif_no); ?>&refresh=' + new Date().getTime();
+
+                                // Then reload the page after a short delay to show the new lock state
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 500);
                             } else {
                                 alert('<?php echo __('Hata:', 'komtera'); ?> ' + data.error);
+                                btn.innerHTML = originalContent;
+                                btn.disabled = false;
                             }
                         } catch (e) {
                             alert('<?php echo __('İşlem sırasında bir hata oluştu.', 'komtera'); ?>');
+                            btn.innerHTML = originalContent;
+                            btn.disabled = false;
                         }
                     } else {
                         alert('<?php echo __('Bağlantı hatası oluştu.', 'komtera'); ?>');
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
                     }
                 }
             };

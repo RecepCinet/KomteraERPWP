@@ -7,3 +7,5 @@ yeni ve bu surumde biz seninle: wordpress frameworku icinde
 1-themes/komtera
 2-plugins/komtera
 
+getTableName('aa_erp_kt_teklifler')
+tablolari development ortaminda atest_ prefixi ekleyerek kullaniyoruz
