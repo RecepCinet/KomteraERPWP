@@ -1,5 +1,7 @@
 2025.10
--Fiyat Listesi excel import/export marka ekleme/silme sorunsuz calisiyor.s
+-Teklif Detay sayfasina teklif urun satiri edit etm eeklendi.
+-Teklif Detay sayfasina Komisyon ve Hizmet Detayları eklendi.
+-Fiyat Listesi excel import/export marka ekleme/silme sorunsuz calisiyor.
 -Yakinda kapanacak widgetsi eklendi.
 -Onay/Is Atama/Bilgilendirme widgetsi eklendi.
 -Satis Hedefleri widgets eklendi.
