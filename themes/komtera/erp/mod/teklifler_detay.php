@@ -31,6 +31,7 @@ try {
     }
 
     // Get related firsat data if X_FIRSAT_NO exists
+    $firsat_data = null;
     if (!empty($teklif_data['X_FIRSAT_NO'])) {
         $firsat_sql = "SELECT TOP 1 * FROM " . getTableName('aa_erp_kt_firsatlar') . "
                        WHERE FIRSAT_NO = :firsat_no AND (SIL IS NULL OR SIL <> '1')";
@@ -41,50 +42,26 @@ try {
         $firsat_data = $firsat_stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Get customer risk/credit information from LOGO
+    // Get customer risk/credit information from aaa_erp_kt_bayiler view
     $risk_data = null;
-    $bayi_chkodu = $firsat_data['BAYI_CHKODU'] ?? $teklif_data['BAYI_CHKODU'] ?? null;
+    $bayi_chkodu = $firsat_data['BAYI_CHKODU'] ?? null;
 
     if (!empty($bayi_chkodu)) {
         try {
-            // Query LOGO database for customer credit information
-            // LOGO typically stores this in LG_XXX_CLCARD view where XXX is company number
-            // Trying common company numbers: 001, 002, 003
+            // Query aaa_erp_kt_bayiler view for LIMIT and BAKIYE
+            // NOT: View olduğu için getTableName kullanmıyoruz, direkt aaa_erp_kt_bayiler
             $risk_sql = "SELECT TOP 1
-                            CODE as CARI_KOD,
-                            DEFINITION_ as CARI_ADI,
-                            CREDITLIMIT as RISK_LIMITI,
-                            (SELECT SUM(DEBIT - CREDIT)
-                             FROM LKS.dbo.LG_001_01_CLFLINE
-                             WHERE CLIENTREF = CLCARD.LOGICALREF) as BAKIYE
-                        FROM LKS.dbo.LG_001_CLCARD CLCARD
-                        WHERE CODE = :bayi_chkodu";
+                            [LIMIT] as RISK_LIMITI,
+                            BAKIYE as BAKIYE
+                        FROM aaa_erp_kt_bayiler
+                        WHERE CH_KODU = :bayi_chkodu";
 
             $risk_stmt = $conn->prepare($risk_sql);
             $risk_stmt->bindParam(':bayi_chkodu', $bayi_chkodu);
             $risk_stmt->execute();
             $risk_data = $risk_stmt->fetch(PDO::FETCH_ASSOC);
-
-            // If not found in 001, try 002
-            if (!$risk_data) {
-                $risk_sql = "SELECT TOP 1
-                                CODE as CARI_KOD,
-                                DEFINITION_ as CARI_ADI,
-                                CREDITLIMIT as RISK_LIMITI,
-                                (SELECT SUM(DEBIT - CREDIT)
-                                 FROM LKS.dbo.LG_002_01_CLFLINE
-                                 WHERE CLIENTREF = CLCARD.LOGICALREF) as BAKIYE
-                            FROM LKS.dbo.LG_002_CLCARD CLCARD
-                            WHERE CODE = :bayi_chkodu";
-
-                $risk_stmt = $conn->prepare($risk_sql);
-                $risk_stmt->bindParam(':bayi_chkodu', $bayi_chkodu);
-                $risk_stmt->execute();
-                $risk_data = $risk_stmt->fetch(PDO::FETCH_ASSOC);
-            }
         } catch (Exception $e) {
-            // Log error but don't break the page
-            error_log("Risk limit query error: " . $e->getMessage());
+            // Silently fail - don't show error to user
             $risk_data = null;
         }
     }
@@ -533,6 +510,25 @@ try {
             transition: transform 0.3s ease;
         }
 
+        /* Large Modal - Ürün Ekle */
+        .modal-content-large {
+            max-width: 95%;
+            width: 95%;
+            max-height: 95vh;
+        }
+
+        /* Medium Modal - SKU ile Ekle */
+        .modal-content-medium {
+            max-width: 600px;
+            width: 90%;
+        }
+
+        /* Small/Default Modal */
+        .modal-content-small {
+            max-width: 500px;
+            width: 90%;
+        }
+
         .modal-overlay.show .modal-content {
             transform: scale(1);
         }
@@ -807,30 +803,26 @@ try {
                         }
                         ?>
                         <?php
-                        // Risk limit bilgisi göster - LOGO'dan çekilen verilerle
-                        if ($risk_data && isset($risk_data['RISK_LIMITI'])):
+                        // Risk limit bilgisi göster - sadece LIMIT ve BAKIYE
+                        if (!empty($risk_data)):
                             $risk_limit = floatval($risk_data['RISK_LIMITI'] ?? 0);
                             $bakiye = floatval($risk_data['BAKIYE'] ?? 0);
-                            $kalan = $risk_limit - $bakiye;
-
-                            // Renk belirle
-                            $color_class = '';
-                            if ($kalan < 0) {
-                                $color_class = 'style="border-color: #d32f2f;"'; // Kırmızı - limit aşıldı
-                            } else if ($kalan < $risk_limit * 0.2) {
-                                $color_class = 'style="border-color: #f57c00;"'; // Turuncu - %80'i doldu
-                            }
                         ?>
-                        <div class="risk-box" <?php echo $color_class; ?>>
+                        <div class="risk-box">
                             <div class="risk-title"><?php echo __('Risk Limit', 'komtera'); ?></div>
-                            <div class="risk-limit-value">
-                                <?php echo number_format($risk_limit, 2, ',', '.'); ?> ₺
-                            </div>
-                            <div class="risk-current-value">
-                                <?php echo __('Bakiye', 'komtera'); ?>: <?php echo number_format($bakiye, 2, ',', '.'); ?> ₺
-                            </div>
-                            <div style="font-size: 12px; color: <?php echo $kalan < 0 ? '#d32f2f' : '#666'; ?>; margin-top: 4px;">
-                                <?php echo __('Kalan', 'komtera'); ?>: <?php echo number_format($kalan, 2, ',', '.'); ?> ₺
+                            <div style="display: flex; justify-content: space-between; gap: 20px;">
+                                <div style="flex: 1;">
+                                    <div style="font-size: 11px; color: #666; margin-bottom: 4px;">Limit</div>
+                                    <div style="font-size: 16px; font-weight: bold; color: #2196F3;">
+                                        <?php echo number_format($risk_limit, 2, ',', '.'); ?> ₺
+                                    </div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 11px; color: #666; margin-bottom: 4px;">Bakiye</div>
+                                    <div style="font-size: 16px; font-weight: bold; color: #f57c00;">
+                                        <?php echo number_format($bakiye, 2, ',', '.'); ?> ₺
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <?php endif; ?>
@@ -948,13 +940,31 @@ try {
         <div class="content-grid">
             <!-- Product Section with Grid -->
             <div class="product-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <?php echo __('Teklif Ürünleri', 'komtera'); ?>
-                        <span style="font-size: 16px; color: #666; font-weight: normal; margin-left: 8px;">
-                            (<?php echo count($teklif_urunler); ?> <?php echo __('ürün', 'komtera'); ?>)
-                        </span>
-                    </h2>
+                <div class="section-header" style="flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 16px; flex: 1;">
+                        <h2 class="section-title" style="margin: 0;">
+                            <?php echo __('Teklif Ürünleri', 'komtera'); ?>
+                            <span style="font-size: 16px; color: #666; font-weight: normal; margin-left: 8px;">
+                                (<?php echo count($teklif_urunler); ?> <?php echo __('ürün', 'komtera'); ?>)
+                            </span>
+                        </h2>
+
+                        <!-- Ürün Ekleme Butonları -->
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="urunEkle()" style="padding: 8px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;" title="<?php echo __('Ürün Ekle', 'komtera'); ?>">
+                                <span class="dashicons dashicons-plus-alt" style="font-size: 16px; width: 16px; height: 16px;"></span>
+                                <?php echo __('Ürün Ekle', 'komtera'); ?>
+                            </button>
+                            <button onclick="skuIleEkle()" style="padding: 8px 12px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;" title="<?php echo __('SKU ile Ekle', 'komtera'); ?>">
+                                <span class="dashicons dashicons-search" style="font-size: 16px; width: 16px; height: 16px;"></span>
+                                <?php echo __('SKU ile Ekle', 'komtera'); ?>
+                            </button>
+                            <button onclick="komteraUrunuEkle()" style="padding: 8px 12px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;" title="<?php echo __('Komtera Ürünü Ekle', 'komtera'); ?>">
+                                <span class="dashicons dashicons-products" style="font-size: 16px; width: 16px; height: 16px;"></span>
+                                <?php echo __('Komtera Ürünü', 'komtera'); ?>
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Grid Controls -->
                     <div style="display: flex; gap: 8px; align-items: center;">
@@ -1066,11 +1076,11 @@ try {
                             <div style="font-size: 16px; font-weight: bold;"><?php echo number_format($summary['TOPLAM_MALIYET'] ?? 0, 2, ',', '.') . ' ₺'; ?></div>
                         </div>
                         <div>
-                            <div style="font-size: 12px; color: #666; margin-bottom: 4px;"><?php echo __('Komisyon', 'komtera'); ?></div>
+                            <div style="font-size: 12px; color: #666; margin-bottom: 4px;"><?php echo __('Toplam Komisyon', 'komtera'); ?></div>
                             <div style="font-size: 16px; font-weight: bold;">
                                 <?php
-                                $komisyon = ($teklif_data['KOMISYON_F1'] ?? 0) + ($teklif_data['KOMISYON_F2'] ?? 0) + ($teklif_data['KOMISYON_F3'] ?? 0);
-                                echo number_format($komisyon, 2, ',', '.') . ' ₺';
+                                $toplam_komisyon = ($teklif_data['KOMISYON_F1'] ?? 0) + ($teklif_data['KOMISYON_F2'] ?? 0) + ($teklif_data['KOMISYON_F3'] ?? 0) + ($teklif_data['KOMISYON_H'] ?? 0);
+                                echo number_format($toplam_komisyon, 2, ',', '.') . ' ₺';
                                 ?>
                             </div>
                         </div>
@@ -1079,6 +1089,77 @@ try {
                             <div style="font-size: 16px; font-weight: bold;">
                                 <?php echo $teklif_data['TEKLIF_SURE'] ?? 30; ?> <?php echo __('gün', 'komtera'); ?>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Komisyon Detayları -->
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #007cba;">
+                    <h3 style="color: #007cba; font-size: 16px; margin-bottom: 16px;"><?php echo __('Komisyon ve Hizmet Detayları', 'komtera'); ?></h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                        <!-- Fon Harcama -->
+                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #dc3545;">
+                            <div style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px;"><?php echo __('Fon Harcama', 'komtera'); ?></div>
+                            <div style="font-size: 18px; font-weight: bold; color: #dc3545;">
+                                <?php echo number_format($teklif_data['KOMISYON_H'] ?? 0, 2, ',', '.') . ' ₺'; ?>
+                            </div>
+                            <?php if (!empty($teklif_data['KOMISYON_H_ACIKLAMA'])): ?>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px; font-style: italic;">
+                                    <?php echo htmlspecialchars($teklif_data['KOMISYON_H_ACIKLAMA']); ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Fon Ayırma -->
+                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #28a745;">
+                            <div style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px;"><?php echo __('Fon Ayırma', 'komtera'); ?></div>
+                            <div style="font-size: 18px; font-weight: bold; color: #28a745;">
+                                <?php echo number_format($teklif_data['KOMISYON_F1'] ?? 0, 2, ',', '.') . ' ₺'; ?>
+                            </div>
+                            <?php if (!empty($teklif_data['KOMISYON_F1_ACIKLAMA'])): ?>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px; font-style: italic;">
+                                    <?php echo htmlspecialchars($teklif_data['KOMISYON_F1_ACIKLAMA']); ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Partner Kurulum -->
+                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                            <div style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px;"><?php echo __('Partner Kurulum', 'komtera'); ?></div>
+                            <div style="font-size: 18px; font-weight: bold; color: #17a2b8;">
+                                <?php echo number_format($teklif_data['KOMISYON_F2'] ?? 0, 2, ',', '.') . ' ₺'; ?>
+                            </div>
+                            <?php if (!empty($teklif_data['KOMISYON_F2_ACIKLAMA'])): ?>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px; font-style: italic;">
+                                    <?php echo htmlspecialchars($teklif_data['KOMISYON_F2_ACIKLAMA']); ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Fon 3 (Komtera Kurulum/Bakım) -->
+                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #ffc107;">
+                            <div style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px;"><?php echo __('Komtera Kurulum/Bakım', 'komtera'); ?></div>
+                            <div style="font-size: 18px; font-weight: bold; color: #f57c00;">
+                                <?php echo number_format($teklif_data['KOMISYON_F3'] ?? 0, 2, ',', '.') . ' ₺'; ?>
+                            </div>
+                            <?php if (!empty($teklif_data['KOMISYON_F3_ACIKLAMA'])): ?>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px; font-style: italic;">
+                                    <?php echo htmlspecialchars($teklif_data['KOMISYON_F3_ACIKLAMA']); ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Komtera Hizmetleri -->
+                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #6c757d;">
+                            <div style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px;"><?php echo __('Komtera Hizmetleri', 'komtera'); ?></div>
+                            <div style="font-size: 18px; font-weight: bold; color: #495057;">
+                                <?php echo number_format($teklif_data['KOMTERA_HIZMET_BEDELI'] ?? 0, 2, ',', '.') . ' ₺'; ?>
+                            </div>
+                            <?php if (!empty($teklif_data['KOMTERA_HIZMET_ADI'])): ?>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px; font-style: italic;">
+                                    <?php echo htmlspecialchars($teklif_data['KOMTERA_HIZMET_ADI']); ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -1157,6 +1238,144 @@ try {
             </div>
         </div>
     </div>
+
+    <!-- Ürün Ekle Modal - LARGE -->
+    <div id="urunEkleModal" class="modal-overlay">
+        <div class="modal-content modal-content-large">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="dashicons dashicons-plus-alt" style="margin-right: 8px;"></span>
+                    <?php echo __('Ürün Ekle', 'komtera'); ?>
+                    <span style="font-size: 14px; font-weight: normal; opacity: 0.8; margin-left: 8px;">
+                        (<?php echo htmlspecialchars($teklif_no); ?>)
+                    </span>
+                </h2>
+                <button class="modal-close" onclick="closeUrunEkleModal()">×</button>
+            </div>
+            <div class="modal-body" style="padding: 16px;">
+                <!-- ParamQuery Grid will be loaded here -->
+                <div id="urunEkleGrid" style="width: 100%; height: calc(95vh - 150px);"></div>
+
+                <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e0e0e0; padding-top: 16px;">
+                    <button onclick="closeUrunEkleModal()" style="padding: 10px 24px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        <?php echo __('İptal', 'komtera'); ?>
+                    </button>
+                    <button onclick="urunEkleModalKaydet()" style="padding: 10px 24px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        <span class="dashicons dashicons-yes" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;"></span>
+                        <?php echo __('Seçili Ürünleri Ekle', 'komtera'); ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SKU ile Ekle Modal - MEDIUM -->
+    <div id="skuEkleModal" class="modal-overlay">
+        <div class="modal-content modal-content-medium">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="dashicons dashicons-search" style="margin-right: 8px;"></span>
+                    <?php echo __('SKU ile Ürün Ekle', 'komtera'); ?>
+                </h2>
+                <button class="modal-close" onclick="closeSkuEkleModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">
+                        <?php echo __('SKU Kodları', 'komtera'); ?>
+                    </label>
+                    <textarea id="skuListInput"
+                              rows="12"
+                              placeholder="<?php echo __('Her satıra bir SKU kodu girin...', 'komtera'); ?>"
+                              style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-family: monospace; font-size: 13px; resize: vertical;"
+                    ></textarea>
+                    <div style="font-size: 12px; color: #666; margin-top: 6px;">
+                        <?php echo __('Örnek: Her satıra bir SKU kodu yazın', 'komtera'); ?>
+                    </div>
+                </div>
+
+                <div id="skuSearchResults" style="margin-top: 16px; max-height: 300px; overflow-y: auto; display: none;">
+                    <!-- SKU search results will appear here -->
+                </div>
+
+                <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e0e0e0; padding-top: 16px;">
+                    <button onclick="closeSkuEkleModal()" style="padding: 10px 24px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        <?php echo __('İptal', 'komtera'); ?>
+                    </button>
+                    <button onclick="skuListeAra()" style="padding: 10px 24px; background: #17a2b8; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        <span class="dashicons dashicons-search" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;"></span>
+                        <?php echo __('SKU Ara ve Ekle', 'komtera'); ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Komtera Ürünü Ekle Modal - DEFAULT -->
+    <div id="komteraUrunModal" class="modal-overlay">
+        <div class="modal-content modal-content-medium">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="dashicons dashicons-products" style="margin-right: 8px;"></span>
+                    <?php echo __('Komtera Ürünleri', 'komtera'); ?>
+                </h2>
+                <button class="modal-close" onclick="closeKomteraUrunModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #333;">
+                        <?php echo __('Ürün Seçin', 'komtera'); ?>
+                    </label>
+                    <div id="komteraUrunList" style="display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Komtera products will be loaded here -->
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(1)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 1</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(2)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 2</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(3)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 3</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(4)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 4</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(5)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 5</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(6)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 6</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                        <div class="komtera-product-item" onclick="selectKomteraProduct(7)" style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-weight: 600; color: #007cba;">Komtera Ürün 7</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Açıklama...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e0e0e0; padding-top: 16px;">
+                    <button onclick="closeKomteraUrunModal()" style="padding: 10px 24px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        <?php echo __('İptal', 'komtera'); ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .komtera-product-item:hover {
+            border-color: #007cba !important;
+            background: #f0f8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 124, 186, 0.15);
+        }
+    </style>
 
     <script>
         // Toolbar button functions
@@ -1374,6 +1593,188 @@ try {
                 alert('<?php echo __('Not eklendi:', 'komtera'); ?> ' + not);
                 // TODO: Add note to teklif
             }
+        }
+
+        // Product Addition Button Functions
+        function urunEkle() {
+            showUrunEkleModal();
+        }
+
+        function skuIleEkle() {
+            showSkuEkleModal();
+        }
+
+        function komteraUrunuEkle() {
+            showKomteraUrunModal();
+        }
+
+        // Ürün Ekle Modal Functions
+        function showUrunEkleModal() {
+            const modal = document.getElementById('urunEkleModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+                // Initialize ParamQuery grid here
+                initUrunEkleGrid();
+            }, 10);
+        }
+
+        function closeUrunEkleModal() {
+            const modal = document.getElementById('urunEkleModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function initUrunEkleGrid() {
+            // TODO: Initialize ParamQuery grid with product data
+            // This will be implemented based on the file you'll provide
+            console.log('Initializing Ürün Ekle Grid...');
+        }
+
+        function urunEkleModalKaydet() {
+            // TODO: Save selected products to teklif
+            console.log('Saving selected products...');
+            // After save, close modal and reload
+            closeUrunEkleModal();
+            location.reload();
+        }
+
+        // SKU ile Ekle Modal Functions
+        function showSkuEkleModal() {
+            const modal = document.getElementById('skuEkleModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        function closeSkuEkleModal() {
+            const modal = document.getElementById('skuEkleModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                // Clear textarea
+                document.getElementById('skuListInput').value = '';
+                document.getElementById('skuSearchResults').style.display = 'none';
+            }, 300);
+        }
+
+        function skuListeAra() {
+            const skuInput = document.getElementById('skuListInput').value.trim();
+            if (!skuInput) {
+                alert('<?php echo __('Lütfen en az bir SKU kodu girin.', 'komtera'); ?>');
+                return;
+            }
+
+            // Parse SKU list (one per line)
+            const skuList = skuInput.split('\n')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+
+            if (skuList.length === 0) {
+                alert('<?php echo __('Geçerli SKU kodu bulunamadı.', 'komtera'); ?>');
+                return;
+            }
+
+            console.log('Searching for SKUs:', skuList);
+
+            // Show loading
+            const resultsDiv = document.getElementById('skuSearchResults');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = '<div style="text-align: center; padding: 20px;"><span class="dashicons dashicons-update" style="animation: spin 1s linear infinite;"></span> <?php echo __('SKU kodları aranıyor...', 'komtera'); ?></div>';
+
+            // TODO: Make API call to search SKUs and add to teklif
+            fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/sku_search_add.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    teklif_no: '<?php echo htmlspecialchars($teklif_no); ?>',
+                    sku_list: skuList
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultsDiv.innerHTML = `
+                        <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px; border-radius: 6px;">
+                            <strong><?php echo __('Başarılı!', 'komtera'); ?></strong><br>
+                            ${data.added_count} <?php echo __('ürün eklendi.', 'komtera'); ?>
+                        </div>
+                    `;
+                    // Close modal and reload after 2 seconds
+                    setTimeout(() => {
+                        closeSkuEkleModal();
+                        location.reload();
+                    }, 2000);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 6px;">
+                            <strong><?php echo __('Hata:', 'komtera'); ?></strong><br>
+                            ${data.error || '<?php echo __('SKU arama sırasında bir hata oluştu.', 'komtera'); ?>'}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('SKU search error:', error);
+                resultsDiv.innerHTML = `
+                    <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 6px;">
+                        <strong><?php echo __('Hata:', 'komtera'); ?></strong><br>
+                        <?php echo __('SKU arama sırasında bir hata oluştu.', 'komtera'); ?>
+                    </div>
+                `;
+            });
+        }
+
+        // Komtera Ürünü Modal Functions
+        function showKomteraUrunModal() {
+            const modal = document.getElementById('komteraUrunModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        function closeKomteraUrunModal() {
+            const modal = document.getElementById('komteraUrunModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function selectKomteraProduct(productId) {
+            console.log('Selected Komtera product:', productId);
+
+            // TODO: Add Komtera product to teklif
+            // Make API call to add product
+            fetch('<?php echo esc_js(get_stylesheet_directory_uri()); ?>/erp/_service/add_komtera_product.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    teklif_no: '<?php echo htmlspecialchars($teklif_no); ?>',
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeKomteraUrunModal();
+                    location.reload();
+                } else {
+                    alert('<?php echo __('Hata:', 'komtera'); ?> ' + (data.error || '<?php echo __('Ürün eklenirken bir hata oluştu.', 'komtera'); ?>'));
+                }
+            })
+            .catch(error => {
+                console.error('Add product error:', error);
+                alert('<?php echo __('Ürün eklenirken bir hata oluştu.', 'komtera'); ?>');
+            });
         }
 
         // Modal Functions
@@ -1737,6 +2138,24 @@ try {
         document.getElementById('ozelFiyatModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeOzelFiyatModal();
+            }
+        });
+
+        document.getElementById('urunEkleModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeUrunEkleModal();
+            }
+        });
+
+        document.getElementById('skuEkleModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeSkuEkleModal();
+            }
+        });
+
+        document.getElementById('komteraUrunModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeKomteraUrunModal();
             }
         });
 
