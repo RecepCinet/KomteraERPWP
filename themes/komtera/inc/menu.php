@@ -79,7 +79,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -97,7 +97,7 @@ function firsatlar_cb()
                         display: flex;
                         align-items: center;
                         gap: 10px;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -116,7 +116,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'firsatlar') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'firsatlar') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -133,7 +133,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'firsatlar_tek') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'firsatlar_tek') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -150,7 +150,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'firsatlar_kaz') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'firsatlar_kaz') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -167,7 +167,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'firsatlar_kay') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'firsatlar_kay') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -184,7 +184,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'firsatlar2') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'firsatlar2') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -201,7 +201,7 @@ function firsatlar_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'firsatlar_yanfir') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'firsatlar_yanfir') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -426,7 +426,7 @@ function siparisler_cb()
                         display: flex;
                         align-items: center;
                         gap: 10px;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -445,7 +445,7 @@ function siparisler_cb()
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: #0073aa;
                         border: 2px solid #0073aa;
                         border-radius: 6px;
@@ -1002,7 +1002,7 @@ function araclar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -1021,7 +1021,7 @@ function araclar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -1039,7 +1039,7 @@ function araclar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -1058,7 +1058,7 @@ function araclar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -1077,7 +1077,7 @@ function araclar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -1096,7 +1096,7 @@ function araclar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -1575,7 +1575,7 @@ function fiyat_listesi_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -1593,7 +1593,7 @@ function fiyat_listesi_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -1611,7 +1611,7 @@ function fiyat_listesi_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -1629,7 +1629,7 @@ function fiyat_listesi_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -1647,7 +1647,7 @@ function fiyat_listesi_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -1692,7 +1692,7 @@ function fiyat_listesi_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: white;
                         border: 1px solid #ccc;
                         border-radius: 6px;
@@ -1851,7 +1851,7 @@ function fiyat_listesi_cb() {
                     <button onclick="closeMarkaSilModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
                 </div>
 
-                <div style="margin-bottom: 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404; font-size: 13px;">
+                <div style="margin-bottom: 15px; padding: 8px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404; font-size: 13px;">
                     <span class="dashicons dashicons-warning" style="color: #ff9800; font-size: 16px; vertical-align: middle;"></span>
                     <strong>UYARI:</strong> Silinecek markayı listeden seçiniz. Markaya ait tüm kayıtlar silinecektir!
                 </div>
@@ -1991,7 +1991,7 @@ function yenilemeler_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'yenilemeler') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'yenilemeler') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -2009,7 +2009,7 @@ function yenilemeler_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === 'yenilemeler_liste') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === 'yenilemeler_liste') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -2027,7 +2027,7 @@ function yenilemeler_cb() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: 12px;
+                        padding: 8px;
                         background: <?php echo ($selected_table === '60gun_liste') ? '#0073aa' : 'white'; ?>;
                         border: <?php echo ($selected_table === '60gun_liste') ? '2px solid #0073aa' : '1px solid #ccc'; ?>;
                         border-radius: 6px;
@@ -2173,19 +2173,19 @@ function ayarlar_cb()
             background: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
+            padding: 10px;
+            margin: 15px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         ">
             <!-- Settings Buttons -->
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
 
                 <!-- Marka Bazlı Bayi Seviyeleri -->
                 <div class="settings-button" onclick="loadModule('marka_bazli_bayi_seviyeleri')" style="
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2193,8 +2193,8 @@ function ayarlar_cb()
                     min-width: 90px;
                     transition: all 0.2s;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                " onmouseover="this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
-                    <span class="dashicons dashicons-building" style="font-size: 24px; color: #0073aa; margin-bottom: 10px;"></span>
+                " onmouseover="if(!this.classList.contains('active-module')){this.style.backgroundColor='#e3f2fd'; this.style.borderColor='#1976d2';}" onmouseout="if(!this.classList.contains('active-module')){this.style.backgroundColor='white'; this.style.borderColor='#ccc';}">
+                    <span class="dashicons dashicons-building" style="font-size: 24px; color: #0073aa; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333; height: 24px; line-height: 1.3; display: flex; align-items: center;">Marka Bazlı<br>Bayi Seviyeleri</span>
                 </div>
 
@@ -2203,7 +2203,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2211,8 +2211,8 @@ function ayarlar_cb()
                     min-width: 90px;
                     transition: all 0.2s;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                " onmouseover="this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
-                    <span class="dashicons dashicons-calendar-alt" style="font-size: 24px; color: #4caf50; margin-bottom: 6px;"></span>
+                " onmouseover="if(!this.classList.contains('active-module')){this.style.backgroundColor='#e8f5e8'; this.style.borderColor='#4caf50';}" onmouseout="if(!this.classList.contains('active-module')){this.style.backgroundColor='white'; this.style.borderColor='#ccc';}">
+                    <span class="dashicons dashicons-calendar-alt" style="font-size: 24px; color: #4caf50; margin-bottom: 4px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Etkinlikler</span>
                 </div>
 
@@ -2221,7 +2221,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2230,7 +2230,7 @@ function ayarlar_cb()
                     transition: all 0.2s;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                 " onmouseover="this.style.backgroundColor='#fff3e0'; this.style.borderColor='#ff9800';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
-                    <span class="dashicons dashicons-megaphone" style="font-size: 24px; color: #ff9800; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-megaphone" style="font-size: 24px; color: #ff9800; margin-bottom: 4px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Kampanyalar</span>
                 </div>
 
@@ -2239,7 +2239,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2248,7 +2248,7 @@ function ayarlar_cb()
                     transition: all 0.2s;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                 " onmouseover="this.style.backgroundColor='#f3e5f5'; this.style.borderColor='#9c27b0';" onmouseout="this.style.backgroundColor='white'; this.style.borderColor='#ccc';">
-                    <span class="dashicons dashicons-edit-page" style="font-size: 24px; color: #9c27b0; margin-bottom: 6px;"></span>
+                    <span class="dashicons dashicons-edit-page" style="font-size: 24px; color: #9c27b0; margin-bottom: 4px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Teklif Notu</span>
                 </div>
 
@@ -2257,7 +2257,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2275,7 +2275,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2293,7 +2293,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2311,7 +2311,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2329,7 +2329,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2347,7 +2347,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2365,7 +2365,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2383,7 +2383,7 @@ function ayarlar_cb()
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    padding: 12px;
+                    padding: 8px;
                     background: white;
                     border: 1px solid #ccc;
                     border-radius: 6px;
@@ -2400,7 +2400,7 @@ function ayarlar_cb()
         </div>
 
         <!-- Content Area -->
-        <div id="content-area" style="position: relative; height: calc(100vh - 280px); padding: 40px; text-align: center; color: #666; font-size: 16px;">
+        <div id="content-area" style="position: relative; height: calc(100vh - 280px); padding: 0; text-align: center; color: #666; font-size: 16px;">
 <?php echo __('Bir ayar modülü seçin','komtera'); ?>
         </div>
     </div>
@@ -2409,6 +2409,23 @@ function ayarlar_cb()
         function loadModule(moduleName) {
             var contentArea = document.getElementById('content-area');
             contentArea.innerHTML = '<div style="padding: 40px; text-align: center;"><div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #0073aa; border-radius: 50%; animation: spin 1s linear infinite;"></div><br><br>Yükleniyor...</div>';
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.settings-button').forEach(function(btn) {
+                btn.classList.remove('active-module');
+                btn.style.background = 'white';
+                btn.style.border = '1px solid #ccc';
+            });
+
+            // Add active class to clicked button
+            event.currentTarget.classList.add('active-module');
+            event.currentTarget.style.background = '#e8f5e9';
+            event.currentTarget.style.border = '2px solid #4caf50';
+
+            // Update URL with module parameter
+            const url = new URL(window.location.href);
+            url.searchParams.set('module', moduleName);
+            window.history.pushState({}, '', url);
 
             // AJAX request to load module content
             var xhr = new XMLHttpRequest();
@@ -2427,6 +2444,40 @@ function ayarlar_cb()
 
             xhr.send('action=load_settings_module&module=' + encodeURIComponent(moduleName) + '&nonce=<?php echo wp_create_nonce("load_module_nonce"); ?>');
         }
+
+        // Load module from URL on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const module = urlParams.get('module');
+            if (module) {
+                // Find and highlight the button for this module
+                const buttons = document.querySelectorAll('.settings-button');
+                buttons.forEach(function(btn) {
+                    const onclick = btn.getAttribute('onclick');
+                    if (onclick && onclick.includes(module)) {
+                        btn.classList.add('active-module');
+                        btn.style.background = '#e8f5e9';
+                        btn.style.border = '2px solid #4caf50';
+                    }
+                });
+
+                // Load the module without triggering onclick
+                var contentArea = document.getElementById('content-area');
+                contentArea.innerHTML = '<div style="padding: 40px; text-align: center;"><div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #0073aa; border-radius: 50%; animation: spin 1s linear infinite;"></div><br><br>Yükleniyor...</div>';
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', ajaxurl, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        contentArea.innerHTML = xhr.responseText;
+                    }
+                };
+
+                xhr.send('action=load_settings_module&module=' + encodeURIComponent(module) + '&nonce=<?php echo wp_create_nonce("load_module_nonce"); ?>');
+            }
+        });
     </script>
 
     <style>

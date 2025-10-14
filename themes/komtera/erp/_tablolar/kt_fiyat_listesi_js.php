@@ -70,7 +70,7 @@ $marka= $_GET['marka'];
                     groupIndx: "SKU"
                 }
             },
-            {title: "<?php echo __('description','komtera'); ?>", width: 590, dataIndx: "urunAciklama",
+            {title: "Ürün Açıklaması", width: 430, dataIndx: "urunAciklama",
                 filter: {
                     crules: [{condition: 'contain'}],
                     groupIndx: "urunAciklama"
@@ -81,7 +81,7 @@ $marka= $_GET['marka'];
             //        crules: [{condition: 'range'}]
             //    }
             //},
-            {title: "<?php echo __('type','komtera'); ?>", width: 130, dataIndx: "tur",
+            {title: "Tür", width: 130, dataIndx: "tur",
                 render: function (ui) {
                     if (ui.cellData == 'Hardware') {
                         return {style: {"background": "red"}};
@@ -91,19 +91,19 @@ $marka= $_GET['marka'];
                     crules: [{condition: 'range'}],
                 }
             },
-            {title: "<?php echo __('solution','komtera'); ?>", width: 160, dataIndx: "cozum",
+            {title: "Çözüm", width: 260, dataIndx: "cozum",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('duration','komtera'); ?>", align: 'center', width: 130, dataIndx: "lisansSuresi",
+            {title: "Lisans Süre", align: 'center', width: 130, dataIndx: "lisansSuresi",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
             },
-            {title: "<?php echo __('price','komtera'); ?>",format: "#.###,00", align: 'right', width: 90, dataIndx: "listeFiyati"},
+            {title: "Liste ",format: "#.###,00", align: 'right', width: 90, dataIndx: "listeFiyati"},
             {title: "UpLift",format: "#.###,00", align: 'right', width: 90, dataIndx: "listeFiyatiUpLift"},
-            {title: "PB", align: 'center', width: 70, dataIndx: "paraBirimi",
+            {title: "Para Birimi", align: 'center', width: 70, dataIndx: "paraBirimi",
                 filter: {
                     crules: [{condition: 'range'}]
                 }
@@ -157,7 +157,7 @@ $marka= $_GET['marka'];
             scrollModel: {autoFit: false},
             showHeader: true,
             showTitle: true,
-            //groupModel: {on: true},
+            groupModel: {on: true, collapsed: [true], menuIcon: false},
             showToolbar: true,
             showTop: true,
             stripeRows: true,

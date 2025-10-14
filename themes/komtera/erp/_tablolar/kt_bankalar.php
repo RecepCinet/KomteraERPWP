@@ -1,23 +1,16 @@
-<?PHP
-
+<?php
 error_reporting(E_ALL);
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 
 session_start();
 
 include '../../_conn.php';
 require_once '../../inc/table_helper.php';
 
-// Tek bir kampanya getir (ID parametresi varsa)
+// Tek bir banka kaydı getir (ID parametresi varsa)
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = (int)$_GET['id'];
-    $sql = "SELECT *,
-        CASE
-            WHEN k.tarih_bit < GETDATE() THEN 'Bitti'
-            ELSE 'Devam'
-        END AS BITTI
-    FROM " . getTableName('aa_erp_kt_kampanyalar') . " k
-    WHERE k.id = :id";
+    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_bankalar') . " WHERE id = :id";
 
     try {
         $stmt = $conn->prepare($sql);
@@ -29,14 +22,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         exit;
     }
 } else {
-    // Tüm kampanyaları getir
-    $sql = "SELECT *,
-        CASE
-            WHEN k.tarih_bit < GETDATE() THEN 'Bitti'
-            ELSE 'Devam'
-        END AS BITTI
-    FROM " . getTableName('aa_erp_kt_kampanyalar') . " k
-    ORDER BY k.tarih_bit DESC";
+    // Tüm banka kayıtlarını getir
+    $sql = "SELECT * FROM " . getTableName('aa_erp_kt_bankalar') . " ORDER BY kur, sira";
 
     try {
         $stmt = $conn->query($sql);

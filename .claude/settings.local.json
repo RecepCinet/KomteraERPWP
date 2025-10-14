@@ -48,7 +48,10 @@
       "Read(//Users/recepcinet/.config/**)",
       "Bash(claude config list)",
       "Read(//Users/recepcinet/Library/Application Support/JetBrains/PhpStorm2025.2/consoles/db/04118c11-1d27-41cd-99e8-a601444ed904/**)",
-      "Read(//c/Users/r/Desktop/**)"
+      "Read(//c/Users/r/Desktop/**)",
+      "Bash(powershell:*)",
+      "Read(//c/Users/utopia/Documents/ShareX/Screenshots/**)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

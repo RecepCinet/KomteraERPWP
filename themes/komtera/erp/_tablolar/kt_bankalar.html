@@ -1,9 +1,9 @@
 <style>
 div.pq-grid{
-	box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
-	margin-bottom: 12px;
-	font-family:Arial;
-	font-size:9px;
+	/*box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);*/
+	margin-bottom: 11px;
+	font-family: Consolas;
+	font-size: 12px;
 }
 div.pq-toolbar button
 {
@@ -23,8 +23,19 @@ button.delete_btn
     background-color:pink;
 }
 
-/* Modal Styles */
-#kampanya_modal {
+/* Para Birimi Renklendirme */
+.currency-usd {
+    background-color: #e8f5e9 !important;
+}
+.currency-try {
+    background-color: #fff3e0 !important;
+}
+.currency-eur {
+    background-color: #ffebee !important;
+}
+
+/* Banka Ekle Modal */
+#banka_modal {
     display: none;
     position: fixed;
     z-index: 10000;
@@ -35,7 +46,7 @@ button.delete_btn
     background-color: rgba(0,0,0,0.5);
 }
 
-#kampanya_modal_content {
+#banka_modal_content {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 0;
@@ -46,7 +57,7 @@ button.delete_btn
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-#kampanya_modal_header {
+#banka_modal_header {
     padding: 15px 20px;
     background: #f8f9fa;
     border-bottom: 1px solid #dee2e6;
@@ -56,13 +67,13 @@ button.delete_btn
     align-items: center;
 }
 
-#kampanya_modal_header h2 {
+#banka_modal_header h2 {
     margin: 0;
     font-size: 18px;
     color: #333;
 }
 
-#kampanya_modal_close {
+#banka_modal_close {
     color: #aaa;
     font-size: 28px;
     font-weight: bold;
@@ -70,11 +81,11 @@ button.delete_btn
     line-height: 20px;
 }
 
-#kampanya_modal_close:hover {
+#banka_modal_close:hover {
     color: #000;
 }
 
-#kampanya_modal_body {
+#banka_modal_body {
     padding: 20px;
 }
 
@@ -107,16 +118,7 @@ button.delete_btn
     box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.1);
 }
 
-.date-row {
-    display: flex;
-    gap: 15px;
-}
-
-.date-row .form-group {
-    flex: 1;
-}
-
-#kampanya_modal_footer {
+#banka_modal_footer {
     padding: 15px 20px;
     background: #f8f9fa;
     border-top: 1px solid #dee2e6;
@@ -155,50 +157,48 @@ button.delete_btn
 }
 </style>
 
-<div id="grid_kampanyalar"></div>
+<div id="grid_bankalar"></div>
 
-<!-- Kampanya Modal -->
-<div id="kampanya_modal">
-    <div id="kampanya_modal_content">
-        <div id="kampanya_modal_header">
-            <h2>Kampanya</h2>
-            <span id="kampanya_modal_close">&times;</span>
+<!-- Banka Modal -->
+<div id="banka_modal">
+    <div id="banka_modal_content">
+        <div id="banka_modal_header">
+            <h2>Banka</h2>
+            <span id="banka_modal_close">&times;</span>
         </div>
-        <div id="kampanya_modal_body">
-            <form id="kampanya_form">
-                <input type="hidden" id="kampanya_id" name="id">
+        <div id="banka_modal_body">
+            <form id="banka_form">
+                <input type="hidden" id="banka_id" name="id">
 
                 <div class="form-group">
-                    <label for="kampanya_marka">Kampanya Marka</label>
-                    <input type="text" id="kampanya_marka" name="marka" required>
+                    <label for="banka_sira">Sıra</label>
+                    <input type="number" id="banka_sira" name="sira" required min="1">
                 </div>
 
                 <div class="form-group">
-                    <label for="kampanya_baslik">Başlık</label>
-                    <input type="text" id="kampanya_baslik" name="baslik" required>
+                    <label for="banka_adi">Banka Adı</label>
+                    <input type="text" id="banka_adi" name="banka" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="kampanya_kodu">KOD</label>
-                    <input type="text" id="kampanya_kodu" name="kodu" required>
+                    <label for="banka_iban">IBAN</label>
+                    <input type="text" id="banka_iban" name="iban" required>
                 </div>
 
-                <div class="date-row">
-                    <div class="form-group">
-                        <label for="kampanya_tarih_bas">Başlangıç</label>
-                        <input type="date" id="kampanya_tarih_bas" name="tarih_bas" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="kampanya_tarih_bit">Bitiş</label>
-                        <input type="date" id="kampanya_tarih_bit" name="tarih_bit" required>
-                    </div>
+                <div class="form-group">
+                    <label for="banka_kur">Para Birimi</label>
+                    <select id="banka_kur" name="kur" required>
+                        <option value="">Seçiniz</option>
+                        <option value="USD">USD</option>
+                        <option value="TRY">TRY</option>
+                        <option value="EUR">EUR</option>
+                    </select>
                 </div>
             </form>
         </div>
-        <div id="kampanya_modal_footer">
-            <button class="modal-btn modal-btn-cancel" onclick="closeKampanyaModal()">Vazgeç</button>
-            <button class="modal-btn modal-btn-save" onclick="saveKampanya()">Tamam</button>
+        <div id="banka_modal_footer">
+            <button class="modal-btn modal-btn-cancel" onclick="closeBankaModal()">Vazgeç</button>
+            <button class="modal-btn modal-btn-save" onclick="saveBanka()">Tamam</button>
         </div>
     </div>
 </div>

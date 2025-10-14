@@ -1,0 +1,56 @@
+<style>
+div.pq-grid{
+	/*box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);*/
+	margin-bottom: 11px;
+	font-family: Consolas;
+	font-size: 12px;
+}
+div.pq-toolbar button
+{
+    margin:0px 5px;
+}
+
+.hedef-toolbar {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.hedef-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.hedef-btn-save {
+    background: #4caf50;
+    color: white;
+}
+
+.hedef-btn-save:hover {
+    background: #45a049;
+}
+
+.hedef-btn-cancel {
+    background: #f44336;
+    color: white;
+}
+
+.hedef-btn-cancel:hover {
+    background: #da190b;
+}
+</style>
+
+<div id="grid_marka_hedefler"></div>
+
+<div class="hedef-toolbar">
+    <button class="hedef-btn hedef-btn-cancel" onclick="geriAl()">Geri Al</button>
+    <button class="hedef-btn hedef-btn-save" onclick="tumunuKaydet()">Kaydet</button>
+</div>

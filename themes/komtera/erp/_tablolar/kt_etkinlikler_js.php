@@ -2,77 +2,191 @@
 var grid;
 
 function sil(ff) {
-        if (confirm('<?php echo __('urun_silmek_emin_misiniz','komtera'); ?>')) {
-            $.get("../_engines/tekil_getir.php?cmd=etkinlik_sil&id=" + ff, function (data) {
-                refreshDV();
-            });
-        } else {
-            //
-        }
+    if (confirm('Bu etkinliği silmek istediğinizden emin misiniz?')) {
+        $.ajax({
+            url: '_service/delete_etkinlik.php?id=' + ff,
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    grid.refreshDataAndView();
+                    alert(response.message || 'Etkinlik başarıyla silindi.');
+                } else {
+                    alert(response.message || 'Etkinlik silinirken hata oluştu.');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Etkinlik silinirken hata oluştu: ' + error);
+            }
+        });
     }
-function EtkinlikAc(id) {
-        FileMaker.PerformScriptWithOption("Etkinlik", "Edit" + "|" + id);
 }
 
-$(function () {
-   
-    var colM = [
-        {title: "<?php echo __('Marka','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "marka",filter: { 
-                        crules: [{condition: 'range'}]
-                    }
-            },
-        {title: "<?php echo __('Başlık','komtera'); ?>", align: "left", editable: false, minWidth: 176, sortable: true, dataIndx: "baslik",filter: { 
-                        crules: [{condition: 'contain'}]
-                    }
-            },
-        {title: "<?php echo __('kodu','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "kodu",filter: { 
-                   crules: [{condition: 'contain'}]
-               }
-           }
-        ,
-        {title: "<?php echo __('baslangic','komtera'); ?>", align: "center", editable: false, minWidth: 80, sortable: true, dataIndx: "tarih_bas"},
-        {title: "<?php echo __('bitis','komtera'); ?>", align: "center", editable: false, minWidth: 80, sortable: true, dataIndx: "tarih_bit",
-        filter: {
-                        crules: [{condition: 'range'}]
-                    },
-                     render: function (ui) {
-                if (ui.cellData == 'AUTHORIZED') {
-                    return { style: { "background": "white" } };
+function EtkinlikAc(id) {
+    // AJAX ile etkinlik bilgilerini getir
+    $.ajax({
+        url: '_tablolar/kt_etkinlikler.php?id=' + id,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.data && response.data.length > 0) {
+                var etkinlik = response.data[0];
+
+                // Form alanlarını doldur
+                $('#etkinlik_id').val(etkinlik.id);
+                $('#etkinlik_marka').val(etkinlik.marka);
+                $('#etkinlik_baslik').val(etkinlik.baslik);
+                $('#etkinlik_kodu').val(etkinlik.kodu);
+
+                // Tarihleri formatla (YYYY-MM-DD formatına çevir)
+                if (etkinlik.tarih_bas) {
+                    var tarihBas = etkinlik.tarih_bas.split(' ')[0]; // "2025-05-06 00:00:00.000" -> "2025-05-06"
+                    $('#etkinlik_tarih_bas').val(tarihBas);
                 }
-                if (ui.cellData == 'SILVER') {
-                    return { style: { "background": "gray" , "color": "white" } };
+                if (etkinlik.tarih_bit) {
+                    var tarihBit = etkinlik.tarih_bit.split(' ')[0];
+                    $('#etkinlik_tarih_bit').val(tarihBit);
                 }
-                if (ui.cellData == 'GOLD') {
-                    return { style: { "background": "yellow" } };
-                }
-                if (ui.cellData == 'PLATINUM') {
-                    return { style: { "background": "blue" , "color": "white" } };
-                }
-            },
+
+                // Modal'ı aç
+                $('#etkinlik_modal').show();
+            }
         },
-        {title: "<?php echo __('Durum','komtera'); ?>", align: "center", editable: false, minWidth: 60, sortable: true, dataIndx: "BITTI",
-                filter: { 
-                   crules: [{condition: 'range'}]
-               }
+        error: function() {
+            alert('Etkinlik bilgileri yüklenirken hata oluştu.');
+        }
+    });
+}
+
+function closeEtkinlikModal() {
+    $('#etkinlik_modal').hide();
+    $('#etkinlik_form')[0].reset();
+}
+
+function saveEtkinlik() {
+    var formData = {
+        id: $('#etkinlik_id').val(),
+        marka: $('#etkinlik_marka').val(),
+        baslik: $('#etkinlik_baslik').val(),
+        kodu: $('#etkinlik_kodu').val(),
+        tarih_bas: $('#etkinlik_tarih_bas').val(),
+        tarih_bit: $('#etkinlik_tarih_bit').val()
+    };
+
+    $.ajax({
+        url: '_service/update_etkinlik.php',
+        method: 'POST',
+        data: formData,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                closeEtkinlikModal();
+                grid.refreshDataAndView();
+                alert(response.message || 'Etkinlik başarıyla güncellendi.');
+            } else {
+                alert(response.message || 'Etkinlik güncellenirken hata oluştu.');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Etkinlik güncellenirken hata oluştu: ' + error);
+        }
+    });
+}
+
+function yeniEtkinlikEkle() {
+    var newRow = {
+        marka: '',
+        baslik: 'Yeni Etkinlik',
+        kodu: '',
+        tarih_bas: new Date().toISOString().split('T')[0],
+        tarih_bit: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0]
+    };
+
+    $.ajax({
+        url: '_service/insert_etkinlik.php',
+        method: 'POST',
+        data: newRow,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                grid.refreshDataAndView();
+            } else {
+                alert(response.message || 'Yeni etkinlik eklenirken hata oluştu.');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Yeni etkinlik eklenirken hata oluştu: ' + error);
+        }
+    });
+}
+
+// Modal dışına tıklandığında kapat
+$(document).on('click', function(event) {
+    if (event.target.id === 'etkinlik_modal') {
+        closeEtkinlikModal();
+    }
+});
+
+// X butonuna tıklandığında kapat
+$(document).ready(function() {
+    $('#etkinlik_modal_close').on('click', function() {
+        closeEtkinlikModal();
+    });
+});
+
+$(function () {
+    var colM = [
+        {title: "Marka", width: 120, dataIndx: "marka",
+            filter: {
+                crules: [{condition: 'range'}]
+            }
+        },
+        {title: "Başlık", width: 300, dataIndx: "baslik",
+            filter: {
+                crules: [{condition: 'contain'}]
+            }
+        },
+        {title: "Kodu", width: 150, dataIndx: "kodu",
+            filter: {
+                crules: [{condition: 'contain'}]
+            }
+        },
+        {title: "Başlangıç", align: "center", width: 100, dataIndx: "tarih_bas"},
+        {title: "Bitiş", align: "center", width: 100, dataIndx: "tarih_bit",
+            filter: {
+                crules: [{condition: 'range'}]
+            }
+        },
+        {title: "Durum", align: "center", width: 100, dataIndx: "BITTI",
+            filter: {
+                crules: [{condition: 'range'}]
             },
-              {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
-                render: function (ui) {
-                    var out='';
-                if (ui.rowData.id!== undefined) {
+            render: function (ui) {
+                if (ui.cellData == 'Bitti') {
+                    return { style: { "background": "#ffebee", "color": "#c62828", "font-weight": "500" } };
+                } else {
+                    return { style: { "background": "#e8f5e9", "color": "#2e7d32", "font-weight": "500" } };
+                }
+            }
+        },
+        {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
+            render: function (ui) {
+                var out = '';
+                if (ui.rowData.id !== undefined) {
                     out += '<a href="#" onclick="EtkinlikAc(' + ui.rowData.id + ');"> <span class="ui-icon ui-icon-pencil" style="color: rgb(255, 0, 0);"></span> </a>';
                 }
-                        return out;
-                },
-            },
-              {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
-                render: function (ui) {
-                    var out='';
-                if (ui.rowData.id!== undefined) {
+                return out;
+            }
+        },
+        {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
+            render: function (ui) {
+                var out = '';
+                if (ui.rowData.id !== undefined) {
                     out += '<a href="#" onclick="sil(' + ui.rowData.id + ');"> <span class="ui-icon ui-icon-close" style="color: rgb(255, 0, 0);"></span> </a>';
                 }
-                        return out;
-                },
+                return out;
             }
+        }
     ];
     var dataModelSS = {
         location: "remote",
@@ -86,116 +200,69 @@ $(function () {
     };
 
     var obj = {
-        menuIcon: false,
         trackModel: { on: true },
+        menuIcon: true,
         collapsible: {on: false, toggle: false},
         reactive: true,
-        scrollModel: { autoFit: true },            
-        editor: { select: true },
         sortModel: {
-                type: 'local',
-                single: true,
-                sorter: [{ dataIndx: 'tarih_bit', dir: 'down' }],
-                space: true,
-                multiKey: false
-            },
-             toolbar: {
-                items: [
-                {
-                        type: 'button',
-                        label: "<?php echo __('Yenile','komtera'); ?>",                   
-                        listener: function () {
-                            grid.refreshDataAndView();
-                        }
-                } , {
-                        type: 'checkbox',
-                        value: false,
-                        label: '<?php echo __('Satır Kaydır','komtera'); ?>',
-                        listener: function (evt) {                            
-                            this.option('wrap', evt.target.checked);
-                            this.refresh();
-                        }
-                    }
-            ]
-            },
-            history: function (evt, ui) {
-                var $tb = this.toolbar(), 
-                    $undo = $tb.find("button:contains('Undo')"), 
-                    $redo = $tb.find("button:contains('Redo')");
-
-                if (ui.canUndo != null) {
-                    $undo.button("option", { disabled: !ui.canUndo });
-                }
-                if (ui.canRedo != null) {
-                    $redo.button("option", "disabled", !ui.canRedo);
-                }
-                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
-                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
-            },
+            type: 'local',
+            single: true,
+            sorter: [{ dataIndx: 'BITTI', dir: 'down' }, { dataIndx: 'tarih_bit', dir: 'down' }],
+            space: true,
+            multiKey: false
+        },
         roundCorners: false,
         rowBorders: true,
-        //selectionModel: { type: 'cell' },
+        selectionModel: { type: 'cell' },
         stripeRows: true,
-        scrollModel: {autoFit: false},            
+        scrollModel: {autoFit: false},
         showHeader: true,
         showTitle: true,
-        groupModel: {on: false}, // , dataIndx: ["BAYI"]
-        showToolbar: false,
-        showTop: false,        
-        width: 1200, height: 400,
-        dataModel: dataModelSS,
-        colModel: colM,
-        postRenderInterval: -1,
-        change: function (evt, ui) {
-                //saveChanges can also be called from change event. 
-            },
-            destroy: function () {
-                //clear the interval upon destroy.
-                clearInterval(interval);
-            },
-            
-            // ROW Komple:
-        rowInit: function (ui) {
-            if (ui.rowData.BITTI == "<?php echo __('Bitti','komtera'); ?>") {
-                return { 
-                    style: { "background": "#FFEEEE" } //can also return attr (for attributes) and cls (for css classes) properties.
-                };
+        groupModel: {
+            on: true,
+            dataIndx: ['BITTI'],
+            menuIcon: false,
+            collapsed: function(ui) {
+                // "Bitti" grupları kapalı, "Devam" grupları açık
+                return ui.group === 'Bitti';
             }
         },
-        load: function (evt, ui) {
-                var grid = this,
-                    data = grid.option('dataModel').data;
-                grid.widget().pqTooltip(); //attach a tooltip.
-                //validate the whole data.
-                grid.isValid({ data: data });
-            },
-        //freezeCols: 2,
+        showToolbar: true,
+        showTop: true,
+        width: 'flex',
+        height: 'flex',
+        maxHeight: 600,
+        toolbar: {
+            items: [
+                {
+                    type: 'button',
+                    label: 'Ekle',
+                    icon: 'ui-icon-plus',
+                    listener: function() {
+                        yeniEtkinlikEkle();
+                    }
+                }
+            ]
+        },
+        dataModel: dataModelSS,
+        colModel: colM,
+        freezeCols: 1,
         filterModel: {
-                on: true,
-                header: true,
-                mode: "AND",
-                hideRows: false,
-                type: 'local',
-                menuIcon: true
-            },
-        editable: true,
-//        pageModel: {
-//            format: "#,###",
-//            type: "local",
-//            rPP: 100,
-//            strRpp: "{0}",
-//            rPPOptions: [100, 1000, 10000]
-//        },
-
+            on: true,
+            header: true,
+            mode: "AND",
+            hideRows: false,
+            type: 'local',
+            menuIcon: false
+        },
+        editable: false,
         sortable: true,
-        rowHt: 19,
-        wrap: false, hwrap: false,
-        numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<?php echo __('Logo Etkinlikler','komtera'); ?>',
-        resizable: true,
-//        create: function () {
-//                        this.loadState({refresh: false});
-//        },
+        rowHt: 23,
+        wrap: false,
+        hwrap: false,
+        numberCell: {resizable: true, width: 55, title: "#"},
+        title: 'Etkinlikler',
+        resizable: true
     };
     grid = pq.grid("div#grid_etkinlikler", obj);
     grid.toggle();

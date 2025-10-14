@@ -2,81 +2,186 @@
 var grid;
 
 function sil(ff) {
-    if (confirm('<?php echo __('confirm_delete_product','komtera'); ?>')) {
-        $.get("../_engines/tekil_getir.php?cmd=kampanya_sil&id=" + ff, function (data) {
-            refreshDV();
+    if (confirm('Bu kampanyayı silmek istediğinizden emin misiniz?')) {
+        $.ajax({
+            url: '_service/delete_kampanya.php?id=' + ff,
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    grid.refreshDataAndView();
+                    alert(response.message || 'Kampanya başarıyla silindi.');
+                } else {
+                    alert(response.message || 'Kampanya silinirken hata oluştu.');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Kampanya silinirken hata oluştu: ' + error);
+            }
         });
-    } else {
-        //
     }
 }
-    
- function KampanyaAc(id) {
-    FileMaker.PerformScriptWithOption("Kampanya", "Edit" + "|" + id);
-}
-    
-$(function () {
-   
-    var colM = [
-        {title: "<?php echo __('brand','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "id",filter: { 
-                        crules: [{condition: 'range'}]
-                    }
-            },
-        {title: "<?php echo __('title','komtera'); ?>", align: "left", editable: false, minWidth: 155, sortable: true, dataIndx: "baslik",filter: { 
-                        crules: [{condition: 'contain'}]
-                    }
-            },
-        {title: "<?php echo __('code','komtera'); ?>", editable: false, minWidth: 120, sortable: true, dataIndx: "kodu",filter: { 
-                   crules: [{condition: 'contain'}]
-               }
-           }
-        ,
-        {title: "<?php echo __('start','komtera'); ?>", align: "center", editable: false, minWidth: 90, sortable: true, dataIndx: "tarih_bas"},
-        {title: "<?php echo __('end','komtera'); ?>", align: "center", editable: false, minWidth: 90, sortable: true, dataIndx: "tarih_bit",
-        filter: {
-                        crules: [{condition: 'range'}]
-                    },
-                     render: function (ui) {
-                if (ui.cellData == 'AUTHORIZED') {
-                    return { style: { "background": "white" } };
+
+function KampanyaAc(id) {
+    $.ajax({
+        url: '_tablolar/kt_kampanyalar.php?id=' + id,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.data && response.data.length > 0) {
+                var kampanya = response.data[0];
+                $('#kampanya_id').val(kampanya.id);
+                $('#kampanya_marka').val(kampanya.marka);
+                $('#kampanya_baslik').val(kampanya.baslik);
+                $('#kampanya_kodu').val(kampanya.kodu);
+
+                if (kampanya.tarih_bas) {
+                    var tarihBas = kampanya.tarih_bas.split(' ')[0];
+                    $('#kampanya_tarih_bas').val(tarihBas);
                 }
-                if (ui.cellData == 'SILVER') {
-                    return { style: { "background": "gray" , "color": "white" } };
+                if (kampanya.tarih_bit) {
+                    var tarihBit = kampanya.tarih_bit.split(' ')[0];
+                    $('#kampanya_tarih_bit').val(tarihBit);
                 }
-                if (ui.cellData == 'GOLD') {
-                    return { style: { "background": "yellow" } };
-                }
-                if (ui.cellData == 'PLATINUM') {
-                    return { style: { "background": "blue" , "color": "white" } };
-                }
-            },
+
+                $('#kampanya_modal').show();
+            }
         },
-        {title: "<?php echo __('status','komtera'); ?>", align: "center", editable: false, minWidth: 60, sortable: true, dataIndx: "BITTI",
-                filter: { 
-                   crules: [{condition: 'range'}]
-               }
+        error: function() {
+            alert('Kampanya bilgileri yüklenirken hata oluştu.');
+        }
+    });
+}
+
+function closeKampanyaModal() {
+    $('#kampanya_modal').hide();
+    $('#kampanya_form')[0].reset();
+}
+
+function saveKampanya() {
+    var formData = {
+        id: $('#kampanya_id').val(),
+        marka: $('#kampanya_marka').val(),
+        baslik: $('#kampanya_baslik').val(),
+        kodu: $('#kampanya_kodu').val(),
+        tarih_bas: $('#kampanya_tarih_bas').val(),
+        tarih_bit: $('#kampanya_tarih_bit').val()
+    };
+
+    $.ajax({
+        url: '_service/update_kampanya.php',
+        method: 'POST',
+        data: formData,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                closeKampanyaModal();
+                grid.refreshDataAndView();
+                alert(response.message || 'Kampanya başarıyla güncellendi.');
+            } else {
+                alert(response.message || 'Kampanya güncellenirken hata oluştu.');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Kampanya güncellenirken hata oluştu: ' + error);
+        }
+    });
+}
+
+function yeniKampanyaEkle() {
+    var newRow = {
+        marka: '',
+        baslik: 'Yeni Kampanya',
+        kodu: '',
+        tarih_bas: new Date().toISOString().split('T')[0],
+        tarih_bit: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0]
+    };
+
+    $.ajax({
+        url: '_service/insert_kampanya.php',
+        method: 'POST',
+        data: newRow,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                grid.refreshDataAndView();
+            } else {
+                alert(response.message || 'Yeni kampanya eklenirken hata oluştu.');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Yeni kampanya eklenirken hata oluştu: ' + error);
+        }
+    });
+}
+
+$(document).on('click', function(event) {
+    if (event.target.id === 'kampanya_modal') {
+        closeKampanyaModal();
+    }
+});
+
+$(document).ready(function() {
+    $('#kampanya_modal_close').on('click', function() {
+        closeKampanyaModal();
+    });
+});
+
+$(function () {
+    var colM = [
+        {title: "Marka", width: 120, dataIndx: "marka",
+            filter: {
+                crules: [{condition: 'range'}]
+            }
+        },
+        {title: "Başlık", width: 300, dataIndx: "baslik",
+            filter: {
+                crules: [{condition: 'contain'}]
+            }
+        },
+        {title: "Kodu", width: 150, dataIndx: "kodu",
+            filter: {
+                crules: [{condition: 'contain'}]
+            }
+        },
+        {title: "Başlangıç", align: "center", width: 100, dataIndx: "tarih_bas"},
+        {title: "Bitiş", align: "center", width: 100, dataIndx: "tarih_bit",
+            filter: {
+                crules: [{condition: 'range'}]
+            }
+        },
+        {title: "Durum", align: "center", width: 100, dataIndx: "BITTI",
+            filter: {
+                crules: [{condition: 'range'}]
             },
-              {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
-                render: function (ui) {
-                    var out='';
-                if (ui.rowData.id!== undefined) {
+            render: function (ui) {
+                if (ui.cellData == 'Bitti') {
+                    return { style: { "background": "#ffebee", "color": "#c62828", "font-weight": "500" } };
+                } else {
+                    return { style: { "background": "#e8f5e9", "color": "#2e7d32", "font-weight": "500" } };
+                }
+            }
+        },
+        {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
+            render: function (ui) {
+                var out = '';
+                if (ui.rowData.id !== undefined) {
                     out += '<a href="#" onclick="KampanyaAc(' + ui.rowData.id + ');"> <span class="ui-icon ui-icon-pencil" style="color: rgb(255, 0, 0);"></span> </a>';
                 }
-                        return out;
-                },
+                return out;
             }
-            ,
-             {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
-                render: function (ui) {
-                    var out='';
-                if (ui.rowData.id!== undefined) {
+        },
+        {title: "", align: "center", hidden: false, editable: false, minWidth: 30, sortable: false, dataIndx: "SIRA",
+            render: function (ui) {
+                var out = '';
+                if (ui.rowData.id !== undefined) {
                     out += '<a href="#" onclick="sil(' + ui.rowData.id + ');"> <span class="ui-icon ui-icon-close" style="color: rgb(255, 0, 0);"></span> </a>';
                 }
-                        return out;
-                },
+                return out;
             }
-            
+        }
     ];
+
     var dataModelSS = {
         location: "remote",
         dataType: "JSON",
@@ -84,122 +189,76 @@ $(function () {
         recIndx: "id",
         url: "_tablolar/kt_kampanyalar.php?dbname=LKS",
         getData: function (response) {
-                    return { data: response.data };
+            return { data: response.data };
         }
     };
 
     var obj = {
-        menuIcon: false,
         trackModel: { on: true },
+        menuIcon: true,
         collapsible: {on: false, toggle: false},
         reactive: true,
-        scrollModel: { autoFit: true },            
-        editor: { select: true },
         sortModel: {
-                type: 'local',
-                single: true,
-                sorter: [{ dataIndx: 'tarih_bit', dir: 'down' }],
-                space: true,
-                multiKey: false
-            },
-             toolbar: {
-                items: [
-                {
-                        type: 'button',
-                        label: "<?php echo __('Yenile','komtera'); ?>",                   
-                        listener: function () {
-                            grid.refreshDataAndView();
-                        }
-                } , {
-                        type: 'checkbox',
-                        value: false,
-                        label: '<?php echo __('Satırları Kaydır','komtera'); ?>',
-                        listener: function (evt) {                            
-                            this.option('wrap', evt.target.checked);
-                            this.refresh();
-                        }
-                    }
-            ]
-            },
-            history: function (evt, ui) {
-                var $tb = this.toolbar(), 
-                    $undo = $tb.find("button:contains('Undo')"), 
-                    $redo = $tb.find("button:contains('Redo')");
-
-                if (ui.canUndo != null) {
-                    $undo.button("option", { disabled: !ui.canUndo });
-                }
-                if (ui.canRedo != null) {
-                    $redo.button("option", "disabled", !ui.canRedo);
-                }
-                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
-                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
-            },
+            type: 'local',
+            single: true,
+            sorter: [{ dataIndx: 'BITTI', dir: 'down' }, { dataIndx: 'tarih_bit', dir: 'down' }],
+            space: true,
+            multiKey: false
+        },
         roundCorners: false,
         rowBorders: true,
-        //selectionModel: { type: 'cell' },
+        selectionModel: { type: 'cell' },
         stripeRows: true,
-        scrollModel: {autoFit: false},            
+        scrollModel: {autoFit: false},
         showHeader: true,
         showTitle: true,
-        groupModel: {on: false}, // , dataIndx: ["BAYI"]
-        showToolbar: false,
-        showTop: false,        
-        width: 1200, height: 400,
-        dataModel: dataModelSS,
-        colModel: colM,
-        postRenderInterval: -1,
-        change: function (evt, ui) {
-                //saveChanges can also be called from change event. 
-            },
-            destroy: function () {
-                //clear the interval upon destroy.
-                clearInterval(interval);
-            },
-            
-            // ROW Komple:
-        rowInit: function (ui) {
-            if (ui.rowData.BITTI == "Bitti") {
-                return { 
-                    style: { "background": "#FFEEEE" } //can also return attr (for attributes) and cls (for css classes) properties.
-                };
+        groupModel: {
+            on: true,
+            dataIndx: ['BITTI'],
+            menuIcon: false,
+            collapsed: function(ui) {
+                // "Bitti" grupları kapalı, "Devam" grupları açık
+                return ui.group === 'Bitti';
             }
         },
-        load: function (evt, ui) {
-                var grid = this,
-                    data = grid.option('dataModel').data;
-                grid.widget().pqTooltip(); //attach a tooltip.
-                //validate the whole data.
-                grid.isValid({ data: data });
-            },
-        //freezeCols: 2,
+        showToolbar: true,
+        showTop: true,
+        width: 'flex',
+        height: 'flex',
+        maxHeight: 600,
+        toolbar: {
+            items: [
+                {
+                    type: 'button',
+                    label: 'Ekle',
+                    icon: 'ui-icon-plus',
+                    listener: function() {
+                        yeniKampanyaEkle();
+                    }
+                }
+            ]
+        },
+        dataModel: dataModelSS,
+        colModel: colM,
+        freezeCols: 1,
         filterModel: {
-                on: true,
-                header: true,
-                mode: "AND",
-                hideRows: false,
-                type: 'local',
-                menuIcon: true
-            },
-        editable: true,
-//        pageModel: {
-//            format: "#,###",
-//            type: "local",
-//            rPP: 100,
-//            strRpp: "{0}",
-//            rPPOptions: [100, 1000, 10000]
-//        },
-
+            on: true,
+            header: true,
+            mode: "AND",
+            hideRows: false,
+            type: 'local',
+            menuIcon: false
+        },
+        editable: false,
         sortable: true,
-        rowHt: 19,
-        wrap: false, hwrap: false,
-        numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: 'LOGO - Bayi Listesi',
-        resizable: true,
-//        create: function () {
-//                        this.loadState({refresh: false});
-//        },
+        rowHt: 23,
+        wrap: false,
+        hwrap: false,
+        numberCell: {resizable: true, width: 55, title: "#"},
+        title: 'Kampanyalar',
+        resizable: true
     };
+
     grid = pq.grid("div#grid_kampanyalar", obj);
     grid.toggle();
     $(window).on('unload', function () {
@@ -208,6 +267,5 @@ $(function () {
     grid.on("destroy", function () {
         this.saveState();
     })
-    
 });
 </script>

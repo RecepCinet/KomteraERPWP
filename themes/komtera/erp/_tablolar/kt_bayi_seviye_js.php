@@ -1,49 +1,42 @@
 <script>
-function Edit(chkodu,marka) {
-    FileMaker.PerformScriptWithOption ( "Ayar", "bayi_seviye_edit" + "|" + chkodu + "|" + marka );
-}
-
 var grid;
 
 $(function () {
     var colM = [
-        {title: "<?php echo __('marka','komtera'); ?>", editable: false, minWidth: 110, sortable: true, dataIndx: "MARKA",filter: { 
-                        crules: [{condition: 'range'}]
-                    }
-            },
-        {title: "<?php echo __('ch_kodu','komtera'); ?>", align: "center", editable: false, minWidth: 85, sortable: true, dataIndx: "CH_KODU",filter: { 
-                        crules: [{condition: 'contain'}]
-                    }
-            },
-        {title: "<?php echo __('unvan','komtera'); ?>", editable: false, minWidth: 300, sortable: true, dataIndx: "CH_UNVANI",filter: { 
-                   crules: [{condition: 'contain'}]
-               }
-           }
-        ,
-        {title: "", align: "center", editable: false, minWidth: 40, sortable: true, dataIndx: "SEVIYE",
-            render: function (ui) {
-                return "<a href='#' class='demo_ac' onclick='Edit(\"" + ui.rowData.CH_KODU + "\",\"" + ui.rowData.MARKA + "\")'><span class='ui-icon ui-icon-pencil'></span></a>";
+        {title: "Marka", width: 130, dataIndx: "MARKA",
+            filter: {
+                crules: [{condition: 'range'}]
             }
         },
-        {title: "SK", align: "center", editable: false, minWidth: 40, sortable: true, dataIndx: "SEVIYE"},
-        {title: "<?php echo __('seviye','komtera'); ?>", editable: false, minWidth:95, sortable: true, dataIndx: "SMETIN",
-        filter: { 
-                        crules: [{condition: 'range'}]
-                    },
-                     render: function (ui) {
+        {title: "CH Kodu", align: "center", width: 120, dataIndx: "CH_KODU",
+            filter: {
+                crules: [{condition: 'contain'}]
+            }
+        },
+        {title: "Ünvan", width: 400, dataIndx: "CH_UNVANI",
+            filter: {
+                crules: [{condition: 'contain'}]
+            }
+        },
+        {title: "Seviye Kodu", align: "center", width: 90, dataIndx: "SEVIYE"},
+        {title: "Seviye", width: 120, dataIndx: "SMETIN",
+            filter: {
+                crules: [{condition: 'range'}]
+            },
+            render: function (ui) {
                 if (ui.cellData == 'AUTHORIZED') {
-                    return { style: { "background": "white" } };
+                    return { style: { "background": "white", "color": "#333" } };
                 }
                 if (ui.cellData == 'SILVER') {
-                    return { style: { "background": "gray" , "color": "white" } };
+                    return { style: { "background": "#c0c0c0", "color": "white", "font-weight": "500" } };
                 }
                 if (ui.cellData == 'GOLD') {
-                    return { style: { "background": "yellow" } };
+                    return { style: { "background": "#ffd700", "color": "#333", "font-weight": "500" } };
                 }
                 if (ui.cellData == 'PLATINUM') {
-                    return { style: { "background": "blue" , "color": "white" } };
+                    return { style: { "background": "#2196F3", "color": "white", "font-weight": "500" } };
                 }
-            },
+            }
         }
     ];
     var dataModelSS = {
@@ -58,116 +51,48 @@ $(function () {
     };
 
     var obj = {
-        menuIcon: false,
         trackModel: { on: true },
+        menuIcon: true,
         collapsible: {on: false, toggle: false},
         reactive: true,
-        scrollModel: { autoFit: true },            
-        editor: { select: true },
         sortModel: {
-                type: 'local',
-                single: true,
-                sorter: [{ dataIndx: 'sku', dir: 'up' }],
-                space: true,
-                multiKey: false
-            },
-             toolbar: {
-                items: [
-                {
-                        type: 'button',
-                        label: "<?php echo __('yenile','komtera'); ?>",                   
-                        listener: function () {
-                            grid.refreshDataAndView();
-                        }
-                } , {
-                        type: 'checkbox',
-                        value: false,
-                        label: '<?php echo __('satir_kaydir','komtera'); ?>',
-                        listener: function (evt) {                            
-                            this.option('wrap', evt.target.checked);
-                            this.refresh();
-                        }
-                    }
-            ]
-            },
-            history: function (evt, ui) {
-                var $tb = this.toolbar(), 
-                    $undo = $tb.find("button:contains('Undo')"), 
-                    $redo = $tb.find("button:contains('Redo')");
-
-                if (ui.canUndo != null) {
-                    $undo.button("option", { disabled: !ui.canUndo });
-                }
-                if (ui.canRedo != null) {
-                    $redo.button("option", "disabled", !ui.canRedo);
-                }
-                $undo.button("option", { label: '<?php echo __('Geri Al','komtera'); ?>' + ' (' + ui.num_undo + ')' });
-                $redo.button("option", { label: '<?php echo __('Yinele','komtera'); ?>' + ' (' + ui.num_redo + ')' });
-            },
+            type: 'local',
+            single: true,
+            sorter: [{ dataIndx: 'MARKA', dir: 'up' }],
+            space: true,
+            multiKey: false
+        },
         roundCorners: false,
         rowBorders: true,
-        //selectionModel: { type: 'cell' },
+        selectionModel: { type: 'cell' },
         stripeRows: true,
-        scrollModel: {autoFit: false},            
+        scrollModel: {autoFit: false},
         showHeader: true,
         showTitle: true,
-        groupModel: {on: false}, // , dataIndx: ["BAYI"]
-        showToolbar: false,
-        showTop: false,        
-        width: 1200, height: 400,
+        groupModel: {on: true, collapsed: [true], menuIcon: false},
+        showToolbar: true,
+        showTop: true,
+        width: 1200,
+        height: 400,
         dataModel: dataModelSS,
         colModel: colM,
-        postRenderInterval: -1,
-        change: function (evt, ui) {
-                //saveChanges can also be called from change event. 
-            },
-            destroy: function () {
-                //clear the interval upon destroy.
-                clearInterval(interval);
-            },
-            
-            // ROW Komple:
-        rowInit: function (ui) {
-            if (ui.rowData.type == 'Bug') {
-                return { 
-                    style: { "background": "#FFEEEE" } //can also return attr (for attributes) and cls (for css classes) properties.
-                };
-            }
-        },
-        load: function (evt, ui) {
-                var grid = this,
-                    data = grid.option('dataModel').data;
-                grid.widget().pqTooltip(); //attach a tooltip.
-                //validate the whole data.
-                grid.isValid({ data: data });
-            },
-        //freezeCols: 2,
+        freezeCols: 1,
         filterModel: {
-                on: true,
-                header: true,
-                mode: "AND",
-                hideRows: false,
-                type: 'local',
-                menuIcon: true
-            },
-        editable: true,
-//        pageModel: {
-//            format: "#,###",
-//            type: "local",
-//            rPP: 100,
-//            strRpp: "{0}",
-//            rPPOptions: [100, 1000, 10000]
-//        },
-
+            on: true,
+            header: true,
+            mode: "AND",
+            hideRows: false,
+            type: 'local',
+            menuIcon: false
+        },
+        editable: false,
         sortable: true,
-        rowHt: 19,
-        wrap: false, hwrap: false,
-        numberCell: {show: false, resizable: true, width: 30, title: "#"},
-        title: '<?php echo __('logo_bayi_listesi','komtera'); ?>',
-        resizable: true,
-//        create: function () {
-//                        this.loadState({refresh: false});
-//        },
+        rowHt: 23,
+        wrap: false,
+        hwrap: false,
+        numberCell: {resizable: true, width: 55, title: "#"},
+        title: 'Marka Bazlı Bayi Seviyeleri',
+        resizable: true
     };
     grid = pq.grid("div#grid_bayi_seviye", obj);
     grid.toggle();
