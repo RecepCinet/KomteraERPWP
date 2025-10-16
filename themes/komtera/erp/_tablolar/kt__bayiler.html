@@ -1,0 +1,178 @@
+<style>
+div.pq-grid{
+	box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
+	margin-bottom: 12px;
+	font-family:Arial;
+	font-size:12px;
+}
+div.pq-toolbar button
+{
+    margin:0px 5px;
+}
+button.delete_btn
+{
+    margin:-3px 0px;
+    height:30px;
+}
+.pq-row-delete
+{
+    text-decoration:line-through;
+}
+.pq-row-delete > .pq-grid-cell
+{
+    background-color:pink;
+}
+
+/* Bayi Detay Modal */
+.bayi-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.bayi-modal-overlay.active {
+    display: flex;
+}
+
+.bayi-modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 700px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+
+.bayi-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #e0e0e0;
+    background: #f8f8f8;
+}
+
+.bayi-modal-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.bayi-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bayi-modal-close:hover {
+    color: #333;
+}
+
+.bayi-modal-body {
+    padding: 20px;
+}
+
+.bayi-info-section {
+    margin-bottom: 20px;
+}
+
+.bayi-info-row {
+    display: flex;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.bayi-info-label {
+    min-width: 120px;
+    font-weight: 600;
+    color: #666;
+}
+
+.bayi-info-value {
+    flex: 1;
+    color: #333;
+}
+
+.bayi-checkboxes {
+    display: flex;
+    gap: 30px;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.bayi-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bayi-section-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 15px 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    color: #555;
+}
+
+.bayi-marka-list {
+    margin: 10px 0;
+}
+
+.bayi-marka-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: #fafafa;
+    border-radius: 4px;
+}
+
+.bayi-contact-list {
+    margin: 10px 0;
+}
+
+.bayi-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: #fafafa;
+    border-radius: 4px;
+}
+</style>
+<div id="grid__bayiler"></div>
+
+<!-- Bayi Detay Modal -->
+<div id="bayi-detail-modal" class="bayi-modal-overlay">
+    <div class="bayi-modal-content">
+        <div class="bayi-modal-header">
+            <div class="bayi-modal-title">Bayi Detayları</div>
+            <button class="bayi-modal-close" onclick="closeBayiModal()">&times;</button>
+        </div>
+        <div class="bayi-modal-body" id="bayi-detail-content">
+            <p style="text-align: center; color: #999;">Yükleniyor...</p>
+        </div>
+    </div>
+</div>
