@@ -4,25 +4,26 @@ var grid;
 $(function () {
    
     var colM = [
-        {title: "Detay", editable: false, minWidth: 80, sortable: false,
-            render: function (ui) {
-                return "<button type='button' class='bayi_detail_btn' style='height: 23px;'>Detay</button>";
-            },
-            postRender: function (ui) {
-                var grid = this,
-                    $cell = grid.getCell(ui);
-                $cell.find(".bayi_detail_btn")
-                    .button({ icons: { primary: 'ui-icon-search'} })
-                    .bind("click", function (evt) {
-                        openBayiDetailModal(ui.rowData);
-                    });
-            }
-        },
+//        {title: "Detay", editable: false, minWidth: 80, sortable: true,
+//            render: function (ui) {
+//                return "<button type='button' class='delete_btn' style='height: 23px;'>Detay</button>";
+//            },
+//            postRender: function (ui) {
+//                var grid = this,
+//                    $cell = grid.getCell(ui);
+//                $cell.find(".delete_btn")
+//                    .button({ icons: { primary: 'ui-icon-zoomin'} })
+//                    .bind("click", function (evt) {
+//                        FileMaker.PerformScriptWithOption ( "Ticket", "Ac" + "\n" + ui.rowData.id );
+//                        //window.location.replace("fmp://172.16.80.214/Komtera2021?script=TicketAc&param=" + ui.rowData.id);
+//                    });
+//            }
+//        },
         {title: "<?php echo __('ch_unvani','komtera'); ?>", editable: false, minWidth: 380, sortable: true, dataIndx: "CH_UNVANI",filter: { 
                         crules: [{condition: 'contain'}]
                     }
             },
-        {title: "<?php echo __('Cari Kodu','komtera'); ?>", editable: false, minWidth: 160, sortable: true, dataIndx: "CH_KODU",filter: {
+        {title: "<?php echo __('Cari Kodu','komtera'); ?>", editable: false, minWidth: 130, sortable: true, dataIndx: "CH_KODU",filter: {
                         crules: [{condition: 'contain'}]
                     }
             },
@@ -178,70 +179,6 @@ $(function () {
     grid.on("destroy", function () {
         this.saveState();
     })
-
-});
-
-// Bayi Detay Modal Fonksiyonları
-function openBayiDetailModal(rowData) {
-    var html = '';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Cari Ünvanı:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.CH_UNVANI || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Cari Kodu:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.CH_KODU || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Adres 1:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.ADRES1 || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Adres 2:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.ADRES2 || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Şehir:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.SEHIR || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Vade:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.VADE || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Bayi Durumu:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.BAYI || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Vergi No:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.VERGI_NO || '-') + '</div>';
-    html += '</div>';
-
-    html += '<div class="bayi-info-row">';
-    html += '<div class="bayi-info-label">Vergi Dairesi:</div>';
-    html += '<div class="bayi-info-value">' + (rowData.VERGI_DAIRESI || '-') + '</div>';
-    html += '</div>';
-
-    $('#bayi-detail-content').html(html);
-    $('#bayi-detail-modal').addClass('active');
-}
-
-function closeBayiDetailModal() {
-    $('#bayi-detail-modal').removeClass('active');
-}
-
-// Modal dışına tıklanınca kapat
-$(document).on('click', '.bayi-modal-overlay', function(e) {
-    if ($(e.target).hasClass('bayi-modal-overlay')) {
-        closeBayiDetailModal();
-    }
+    
 });
 </script>

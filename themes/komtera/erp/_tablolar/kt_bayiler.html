@@ -2,7 +2,7 @@
 div.pq-grid{
 	box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.75);
 	margin-bottom: 12px;
-	font-family:Arial;
+	font-family:Arial;	
 	font-size:12px;
 }
 div.pq-toolbar button
@@ -16,111 +16,11 @@ button.delete_btn
 }
 .pq-row-delete
 {
-    text-decoration:line-through;
+    text-decoration:line-through;         
 }
 .pq-row-delete > .pq-grid-cell
 {
-    background-color:pink;
+    background-color:pink;   
 }
-
-/* Bayi Detay Modal */
-.bayi-modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-}
-
-.bayi-modal-overlay.active {
-    display: flex;
-}
-
-.bayi-modal-content {
-    background: white;
-    border-radius: 8px;
-    padding: 0;
-    max-width: 650px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.4);
-}
-
-.bayi-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 25px;
-    border-bottom: 2px solid #e0e0e0;
-    background: #f8f8f8;
-}
-
-.bayi-modal-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-}
-
-.bayi-modal-close {
-    background: none;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: #999;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-}
-
-.bayi-modal-close:hover {
-    color: #333;
-}
-
-.bayi-modal-body {
-    padding: 25px;
-}
-
-.bayi-info-row {
-    display: flex;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 12px;
-}
-
-.bayi-info-label {
-    min-width: 140px;
-    font-weight: 600;
-    color: #666;
-    font-size: 13px;
-}
-
-.bayi-info-value {
-    flex: 1;
-    color: #333;
-    font-size: 14px;
-}
-</style>
+</style> 
 <div id="grid_bayiler"></div>
-
-<!-- Bayi Detay Modal -->
-<div id="bayi-detail-modal" class="bayi-modal-overlay">
-    <div class="bayi-modal-content">
-        <div class="bayi-modal-header">
-            <div class="bayi-modal-title">Bayi Detayları</div>
-            <button class="bayi-modal-close" onclick="closeBayiDetailModal()">&times;</button>
-        </div>
-        <div class="bayi-modal-body" id="bayi-detail-content">
-            <p style="text-align: center; color: #999;">Yükleniyor...</p>
-        </div>
-    </div>
-</div>

@@ -2150,7 +2150,7 @@ function stoklar_cb()       {
     <?php
 }
 function bayiler_cb()       {
-    $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=_bayiler';
+    $src = get_stylesheet_directory_uri() . '/erp/tablo_render.php?t=bayisec2';
     ?>
     <div class="wrap">
         <div style="position: relative; height: calc(100vh - 140px);">
