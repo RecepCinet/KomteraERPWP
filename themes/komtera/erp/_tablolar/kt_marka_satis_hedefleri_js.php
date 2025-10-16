@@ -65,28 +65,28 @@ $(function () {
         {title: "Marka", width: 150, dataIndx: "marka", editable: false},
         {title: "Q1", width: 150, dataIndx: "q1", align: "right", editable: true,
             dataType: "float",
-            format: '#,###.00',
+            format: '#,###',
             editor: {
                 type: 'textbox'
             }
         },
         {title: "Q2", width: 150, dataIndx: "q2", align: "right", editable: true,
             dataType: "float",
-            format: '#,###.00',
+            format: '#,###',
             editor: {
                 type: 'textbox'
             }
         },
         {title: "Q3", width: 150, dataIndx: "q3", align: "right", editable: true,
             dataType: "float",
-            format: '#,###.00',
+            format: '#,###',
             editor: {
                 type: 'textbox'
             }
         },
         {title: "Q4", width: 150, dataIndx: "q4", align: "right", editable: true,
             dataType: "float",
-            format: '#,###.00',
+            format: '#,###',
             editor: {
                 type: 'textbox'
             }

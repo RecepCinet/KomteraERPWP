@@ -51,7 +51,8 @@
       "Read(//c/Users/r/Desktop/**)",
       "Bash(powershell:*)",
       "Read(//c/Users/utopia/Documents/ShareX/Screenshots/**)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

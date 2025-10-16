@@ -12,7 +12,7 @@ if ($gelen=="") {
     $filter="1=1";
 }
 //$sql = "Select top 22 * from aa_erp_kt_musteriler where $filter order by musteri";
-$sql="select top 50
+$sql="select top 100
 id,
 musteri,
 (select count(id) from aa_erp_kt_musteriler_yetkililer where musteri_id=m.id ) as ys,

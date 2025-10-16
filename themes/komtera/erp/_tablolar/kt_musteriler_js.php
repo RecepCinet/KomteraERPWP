@@ -6,26 +6,38 @@
 
         var colM = [
             {title: "ID", hidden: true, editable: false, minWidth: 180, sortable: true, dataIndx: "id", filter: {
+                    crules: [{condition: 'begin'}]
+                }
+            },
+            {title: "<?php echo __('Müşteri','komtera'); ?>", editable: false, minWidth: 370, sortable: true, dataIndx: "musteri", filter: {
+                    crules: [{condition: 'begin'}]
+                }
+            },
+            {title: "<?php echo __('Adres','komtera'); ?>", editable: false, minWidth: 480, sortable: true, dataIndx: "adres", filter: {
                     crules: [{condition: 'contain'}]
                 }
             },
-            {title: "<?php echo __('Müşteri','komtera'); ?>", editable: false, minWidth: 458, sortable: true, dataIndx: "musteri", filter: {
-                    crules: [{condition: 'contain'}]
+            {title: "<?php echo __('Şehir','komtera'); ?>", editable: false, minWidth: 150, sortable: true, dataIndx: "sehir", filter: {
+                    crules: [{condition: 'begin'}]
                 }
             },
-            {title: "", editable: false, minWidth: 50, sortable: true,
-                render: function (ui) {
-                    return "<a href='#' class='delete_btn'><?php echo __('Detay','komtera'); ?></a>";
-                },
-                postRender: function (ui) {
-                    var grid = this,
-                    $cell = grid.getCell(ui);
-                    $cell.find(".delete_btn")
-                        .bind("click", function (evt) {
-                        FileMaker.PerformScriptWithOption ( "Musteri", "Ac" + "\n" + ui.rowData.id );
-                    });
+            {title: "<?php echo __('Posta Kodu','komtera'); ?>", editable: false, minWidth: 100, sortable: true, dataIndx: "posta_kodu", filter: {
+                    crules: [{condition: 'begin'}]
                 }
             }
+            //{title: "", editable: false, minWidth: 80, sortable: false,
+            //    render: function (ui) {
+            //        return "<a href='#' class='delete_btn'><?php //echo __('Detay','komtera'); ?>//</a>";
+            //    },
+            //    postRender: function (ui) {
+            //        var grid = this,
+            //        $cell = grid.getCell(ui);
+            //        $cell.find(".delete_btn")
+            //            .bind("click", function (evt) {
+            //            FileMaker.PerformScriptWithOption ( "Musteri", "Ac" + "\n" + ui.rowData.id );
+            //        });
+            //    }
+            //}
         ];
         var dataModelSS = {
             location: "remote",
@@ -48,7 +60,6 @@
             sortModel: {
                 type: 'local',
                 single: true,
-                sorter: [{dataIndx: 'sku', dir: 'up'}],
                 space: true,
                 multiKey: false
             },
@@ -108,17 +119,14 @@
                 on: true,
                 header: true,
                 mode: "AND",
-                hideRows: false,
                 type: 'local',
                 menuIcon: true
             },
             editable: true,
             pageModel: {
-                format: "#,###",
                 type: "local",
-                rPP: 12,
-                strRpp: "{0}",
-                rPPOptions: [12]
+                rPP: 100,
+                rPPOptions: [50, 100, 200, 500]
             },
 
             sortable: true,

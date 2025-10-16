@@ -1133,6 +1133,21 @@ function araclar_cb()
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         contentArea.innerHTML = xhr.responseText;
+
+                        // Script taglarını çalıştır
+                        var scripts = contentArea.querySelectorAll('script');
+                        scripts.forEach(function(oldScript) {
+                            var newScript = document.createElement('script');
+                            if (oldScript.src) {
+                                newScript.src = oldScript.src;
+                            } else {
+                                newScript.textContent = oldScript.textContent;
+                            }
+                            if (oldScript.type) {
+                                newScript.type = oldScript.type;
+                            }
+                            oldScript.parentNode.replaceChild(newScript, oldScript);
+                        });
                     } else {
                         contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;"><?php echo __('Modül yüklenirken hata oluştu','komtera'); ?></div>';
                     }
@@ -2252,7 +2267,8 @@ function ayarlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Teklif Notu</span>
                 </div>
 
-                <!-- Teklif Reklamı -->
+                <!-- Teklif Reklamı - Geçici olarak kaldırıldı -->
+                <!--
                 <div class="settings-button" onclick="loadModule('teklif_reklami')" style="
                     display: flex;
                     flex-direction: column;
@@ -2269,6 +2285,7 @@ function ayarlar_cb()
                     <span class="dashicons dashicons-format-image" style="font-size: 24px; color: #f44336; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Teklif Reklamı</span>
                 </div>
+                -->
 
                 <!-- Bankalar -->
                 <div class="settings-button" onclick="loadModule('bankalar')" style="
@@ -2360,7 +2377,8 @@ function ayarlar_cb()
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Müşteri Temsilcisi<br>Değiştir</span>
                 </div>
 
-                <!-- Sophos Cari Kod EDI Eşleşmesi -->
+                <!-- Sophos Cari Kod EDI Eşleşmesi - Geçici olarak kaldırıldı -->
+                <!--
                 <div class="settings-button" onclick="loadModule('sophos_cari_kod_edi_eslesmesi')" style="
                     display: flex;
                     flex-direction: column;
@@ -2377,6 +2395,7 @@ function ayarlar_cb()
                     <span class="dashicons dashicons-networking" style="font-size: 24px; color: #607d8b; margin-bottom: 6px;"></span>
                     <span style="font-size: 11px; text-align: center; font-weight: 500; color: #333;">Sophos Cari Kod<br>EDI Eşleşmesi</span>
                 </div>
+                -->
 
                 <!-- TL Faturalanmayacak Markalar -->
                 <div class="settings-button" onclick="loadModule('tl_faturalanmayacak_markalar')" style="
@@ -2436,6 +2455,21 @@ function ayarlar_cb()
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         contentArea.innerHTML = xhr.responseText;
+
+                        // Script taglarını çalıştır
+                        var scripts = contentArea.querySelectorAll('script');
+                        scripts.forEach(function(oldScript) {
+                            var newScript = document.createElement('script');
+                            if (oldScript.src) {
+                                newScript.src = oldScript.src;
+                            } else {
+                                newScript.textContent = oldScript.textContent;
+                            }
+                            if (oldScript.type) {
+                                newScript.type = oldScript.type;
+                            }
+                            oldScript.parentNode.replaceChild(newScript, oldScript);
+                        });
                     } else {
                         contentArea.innerHTML = '<div style="padding: 40px; text-align: center; color: #f44336;"><?php echo __('Modül yüklenirken hata oluştu','komtera'); ?></div>';
                     }
@@ -2562,9 +2596,14 @@ function handle_load_settings_module() {
         $file_path = get_stylesheet_directory() . '/erp/mod/' . $module . '.php';
         if (file_exists($file_path)) {
             ob_start();
-            include $file_path;
-            $content = ob_get_clean();
-            echo $content;
+            try {
+                include $file_path;
+                $content = ob_get_clean();
+                echo $content;
+            } catch (Exception $e) {
+                ob_end_clean();
+                echo '<div style="padding: 40px; text-align: center; color: red;">Hata: ' . esc_html($e->getMessage()) . '</div>';
+            }
         } else {
             echo '<div style="padding: 40px; text-align: center; color: #666;">' . __('Modül bulunamadı: ','komtera') . esc_html($module) . '</div>';
         }
@@ -2573,6 +2612,127 @@ function handle_load_settings_module() {
     }
 
     wp_die();
+}
+
+// AJAX handler for saving marka hedefleri
+add_action('wp_ajax_save_marka_hedefleri', 'handle_save_marka_hedefleri');
+
+function handle_save_marka_hedefleri() {
+    global $wpdb;
+
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'save_marka_hedefleri')) {
+        wp_send_json_error('Güvenlik hatası');
+        return;
+    }
+
+    $data = json_decode(stripslashes($_POST['data']), true);
+
+    if (!$data) {
+        wp_send_json_error('Geçersiz veri');
+        return;
+    }
+
+    require_once get_stylesheet_directory() . '/inc/table_helper.php';
+    $table_name = getTableName('aa_erp_kt_mt_hedefler');
+
+    try {
+        foreach ($data as $row) {
+            $wpdb->update(
+                $table_name,
+                [
+                    'q1' => floatval($row['q1']),
+                    'q2' => floatval($row['q2']),
+                    'q3' => floatval($row['q3']),
+                    'q4' => floatval($row['q4'])
+                ],
+                ['id' => intval($row['id'])],
+                ['%f', '%f', '%f', '%f'],
+                ['%d']
+            );
+        }
+        wp_send_json_success('Veriler kaydedildi');
+    } catch (Exception $e) {
+        wp_send_json_error('Kayıt hatası: ' . $e->getMessage());
+    }
+}
+
+// AJAX handler for saving teklif notu - MSSQL (DEBUG)
+add_action('wp_ajax_save_teklif_notu', 'handle_save_teklif_notu');
+
+function handle_save_teklif_notu() {
+    $debug = [];
+    $debug['post_data'] = $_POST;
+
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'save_teklif_notu')) {
+        $debug['nonce_error'] = 'Nonce geçersiz';
+        $debug['nonce_received'] = $_POST['nonce'] ?? 'yok';
+        wp_send_json_error($debug);
+        return;
+    }
+
+    $value = isset($_POST['value']) ? $_POST['value'] : '';
+    $debug['value'] = $value;
+
+    // MSSQL bağlantısı
+    require_once get_stylesheet_directory() . '/erp/_conn.php';
+    require_once get_stylesheet_directory() . '/inc/table_helper.php';
+
+    // Global $conn değişkenini kullan
+    global $conn;
+
+    if (!$conn) {
+        wp_send_json_error('Veritabanı bağlantısı yok');
+        return;
+    }
+
+    $table_name = getTableName('aa_erp_kt_values');
+    $debug['table_name'] = $table_name;
+
+    try {
+        // Önce kayıt var mı kontrol et
+        $check_sql = "SELECT COUNT(*) as cnt FROM [$table_name] WHERE [key] = :key";
+        $debug['check_sql'] = $check_sql;
+
+        $stmt = $conn->prepare($check_sql);
+        $stmt->execute(['key' => 'teklif_notu']);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $exists = $result['cnt'] ?? 0;
+        $debug['exists'] = $exists;
+
+        if ($exists > 0) {
+            // UPDATE
+            $update_sql = "UPDATE [$table_name] SET [value] = :value WHERE [key] = :key";
+            $debug['sql'] = $update_sql;
+            $debug['action'] = 'UPDATE';
+
+            $stmt = $conn->prepare($update_sql);
+            $stmt->execute([
+                'value' => $value,
+                'key' => 'teklif_notu'
+            ]);
+        } else {
+            // INSERT
+            $insert_sql = "INSERT INTO [$table_name] ([key], [value]) VALUES (:key, :value)";
+            $debug['sql'] = $insert_sql;
+            $debug['action'] = 'INSERT';
+
+            $stmt = $conn->prepare($insert_sql);
+            $stmt->execute([
+                'key' => 'teklif_notu',
+                'value' => $value
+            ]);
+        }
+
+        $debug['success'] = true;
+        wp_send_json_success($debug);
+
+    } catch (PDOException $e) {
+        $debug['error'] = $e->getMessage();
+        $debug['success'] = false;
+        wp_send_json_error($debug);
+    }
 }
 
 // AJAX handler for loading tools modules

@@ -1,4 +1,10 @@
 2025.10
+-
+-Ayarlar Kismi - Bankalar eklendi.
+-Ayarlar Kismi - Teklif Notu eklendi.
+-Ayarlar Kismi - Kampanyalar eklendi.
+-Ayarlar Kismi - Etkinlikler eklendi.
+-Ayarlar Kismi - Marka Bazli Bayi Seviyeleri eklendi.
 -Teklif Detay sayfasina teklif urun satiri edit etm eeklendi.
 -Teklif Detay sayfasina Komisyon ve Hizmet Detayları eklendi.
 -Fiyat Listesi excel import/export marka ekleme/silme sorunsuz calisiyor.

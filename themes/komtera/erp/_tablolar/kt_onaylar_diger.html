@@ -1,0 +1,431 @@
+<style>
+.diger-onaylar-container {
+    padding: 15px;
+    background: #f5f5f5;
+    min-height: 100vh;
+}
+
+.diger-onaylar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.diger-onaylar-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.diger-onaylar-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    padding: 6px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-save {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-save:hover {
+    background: #45a049;
+}
+
+.btn-reset {
+    background: #f44336;
+    color: white;
+}
+
+.btn-reset:hover {
+    background: #da190b;
+}
+
+.btn-new {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-new:hover {
+    background: #0b7dda;
+}
+
+.diger-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 15px;
+}
+
+.diger-card {
+    background: white;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-left: 3px solid #2196F3;
+}
+
+.diger-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.diger-card.modified {
+    border-left-color: #FF9800;
+    background: #fffbf0;
+}
+
+.diger-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.diger-card-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #2196F3;
+    font-family: monospace;
+}
+
+.diger-card-actions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.btn-delete-card {
+    padding: 4px 8px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background 0.2s;
+}
+
+.btn-delete-card:hover {
+    background: #da190b;
+}
+
+.diger-card-id {
+    font-size: 10px;
+    color: #999;
+    background: #f0f0f0;
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+.diger-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.diger-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.diger-field-label {
+    font-size: 11px;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.diger-field-input,
+.diger-field-textarea {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.diger-field-textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.diger-field-input:focus,
+.diger-field-textarea:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.diger-field-input.modified,
+.diger-field-textarea.modified {
+    border-color: #FF9800;
+    background: #fffbf0;
+}
+
+.user-input-group {
+    display: flex;
+    gap: 5px;
+    align-items: stretch;
+}
+
+.user-input-group input {
+    flex: 1;
+}
+
+.btn-select-user {
+    padding: 6px 10px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.btn-select-user:hover {
+    background: #0b7dda;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-cancel {
+    background: #999;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #777;
+}
+
+.user-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.user-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.user-item:hover {
+    background: #f9f9f9;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-item-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.user-item-email {
+    font-size: 12px;
+    color: #999;
+}
+
+.user-search {
+    margin-bottom: 15px;
+}
+
+.user-search input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.user-search input:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 30px;
+    font-size: 14px;
+    color: #666;
+}
+
+.no-data {
+    text-align: center;
+    padding: 30px;
+    font-size: 14px;
+    color: #999;
+    background: white;
+    border-radius: 6px;
+}
+
+.diger-stats {
+    font-size: 12px;
+    color: #999;
+    margin-left: 10px;
+}
+</style>
+
+<div class="diger-onaylar-container">
+    <div class="diger-onaylar-header">
+        <div style="display: flex; align-items: center;">
+            <h2>Diğer Onaylar</h2>
+            <span class="diger-stats" id="card-stats"></span>
+        </div>
+        <div class="diger-onaylar-actions">
+            <button class="btn-action btn-new" onclick="openNewRecordModal()">+ Yeni</button>
+            <button class="btn-action btn-reset" onclick="resetChanges()">Geri Al</button>
+            <button class="btn-action btn-save" onclick="saveAllChanges()">Kaydet</button>
+        </div>
+    </div>
+
+    <div id="diger-cards-container" class="diger-cards-grid">
+        <div class="loading-spinner">Yükleniyor...</div>
+    </div>
+
+    <!-- Modal for New Record -->
+    <div id="new-record-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Yeni Onay Kaydı</div>
+                <button class="modal-close" onclick="closeNewRecordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="diger-field-group">
+                    <label class="diger-field-label">Key (Anahtar) *</label>
+                    <input type="text" id="new-key" class="diger-field-input" placeholder="ornek_key">
+                </div>
+                <div class="diger-field-group">
+                    <label class="diger-field-label">Açıklama</label>
+                    <textarea id="new-aciklama" class="diger-field-textarea" placeholder="Bu key'in açıklaması..."></textarea>
+                </div>
+                <div class="diger-field-group">
+                    <label class="diger-field-label">Kullanıcı</label>
+                    <div class="user-input-group">
+                        <input type="text" id="new-kullanici" class="diger-field-input" placeholder="Kullanıcı">
+                        <button class="btn-select-user" onclick="openUserSelectionModal('new')">Seç</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-cancel" onclick="closeNewRecordModal()">İptal</button>
+                <button class="btn-action btn-save" onclick="saveNewRecord()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for User Selection -->
+    <div id="user-selection-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Kullanıcı Seçimi</div>
+                <button class="modal-close" onclick="closeUserSelectionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-search">
+                    <input type="text" id="user-search-input" placeholder="Kullanıcı adı ile ara..." onkeyup="filterUserList()">
+                </div>
+                <div class="user-list" id="user-list">
+                    <div class="loading-spinner">Kullanıcılar yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

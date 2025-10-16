@@ -1,0 +1,659 @@
+<style>
+.kar-oranlari-container {
+    padding: 15px;
+    background: #f5f5f5;
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+}
+
+.kar-oranlari-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.kar-oranlari-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.kar-header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.kar-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kar-filter-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.kar-filter-select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    background: white;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.kar-filter-select:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.kar-stats {
+    font-size: 12px;
+    color: #999;
+    margin-left: 10px;
+}
+
+.kar-oranlari-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    padding: 6px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-save {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-save:hover {
+    background: #45a049;
+}
+
+.btn-reset {
+    background: #f44336;
+    color: white;
+}
+
+.btn-reset:hover {
+    background: #da190b;
+}
+
+.btn-new {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-new:hover {
+    background: #0b7dda;
+}
+
+.kar-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+}
+
+.kar-card.new-card {
+    border-left-color: #4CAF50;
+    background: #f0fff4;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-cancel {
+    background: #999;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #777;
+}
+
+.kar-card {
+    background: white;
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-left: 3px solid #2196F3;
+}
+
+.kar-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.kar-card.modified {
+    border-left-color: #FF9800;
+    background: #fffbf0;
+}
+
+.kar-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.kar-card-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #2196F3;
+}
+
+.kar-card-subtitle {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+}
+
+.kar-card-id {
+    font-size: 10px;
+    color: #999;
+    background: #f0f0f0;
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+.kar-card-actions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.btn-delete-card {
+    padding: 4px 8px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background 0.2s;
+}
+
+.btn-delete-card:hover {
+    background: #da190b;
+}
+
+.kar-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.kar-info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.kar-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.kar-field-label {
+    font-size: 10px;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.kar-field-input {
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+}
+
+.kar-field-input:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.kar-field-input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.kar-field-input.modified {
+    border-color: #FF9800;
+    background: #fffbf0;
+}
+
+.kar-onay-section {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 8px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.kar-onay-title {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 30px;
+    font-size: 14px;
+    color: #666;
+}
+
+.no-data {
+    text-align: center;
+    padding: 30px;
+    font-size: 14px;
+    color: #999;
+    background: white;
+    border-radius: 6px;
+}
+
+.kar-summary-table {
+    background: white;
+    border-radius: 6px;
+    overflow: visible;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.kar-summary-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.kar-summary-table thead {
+    background: #f5f5f5;
+}
+
+.kar-summary-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.kar-summary-table th.text-right {
+    text-align: right;
+}
+
+.kar-summary-table th.text-center {
+    text-align: center;
+}
+
+.kar-summary-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+}
+
+.kar-summary-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.kar-summary-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.kar-summary-table td {
+    padding: 10px 12px;
+    color: #333;
+}
+
+.kar-summary-table td.text-right {
+    text-align: right;
+    font-family: monospace;
+}
+
+.kar-summary-table td.text-center {
+    text-align: center;
+}
+
+.kar-summary-table .marka-col {
+    font-weight: 600;
+    color: #2196F3;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.kar-summary-table .marka-col:hover {
+    background: #e3f2fd;
+    text-decoration: underline;
+}
+
+.kar-summary-table .id-col {
+    color: #999;
+    font-size: 11px;
+}
+
+.btn-delete-row {
+    background: none;
+    border: none;
+    color: #f44336;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    border-radius: 3px;
+}
+
+.btn-delete-row:hover {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.bayi-input-group {
+    display: flex;
+    gap: 5px;
+    align-items: stretch;
+}
+
+.bayi-input-group input {
+    flex: 1;
+}
+
+.btn-select-bayi {
+    padding: 6px 10px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.btn-select-bayi:hover {
+    background: #0b7dda;
+}
+
+.bayi-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.bayi-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.bayi-item:hover {
+    background: #f9f9f9;
+}
+
+.bayi-item:last-child {
+    border-bottom: none;
+}
+
+.bayi-item-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.bayi-item-code {
+    font-size: 12px;
+    color: #999;
+}
+
+.bayi-search {
+    margin-bottom: 15px;
+}
+
+.bayi-search input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.bayi-search input:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+</style>
+
+<div class="kar-oranlari-container">
+    <div class="kar-oranlari-header">
+        <div class="kar-header-left">
+            <h2>Kar Oranları</h2>
+            <div class="kar-filter-group">
+                <label class="kar-filter-label">Marka:</label>
+                <select id="marka-filter" class="kar-filter-select" onchange="filterByMarka()">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+            <span class="kar-stats" id="card-stats"></span>
+        </div>
+        <div class="kar-oranlari-actions">
+            <button class="btn-action btn-new" onclick="openNewRecordModal()">+ Yeni</button>
+            <button class="btn-action btn-reset" onclick="resetChanges()">Geri Al</button>
+            <button class="btn-action btn-save" onclick="saveAllChanges()">Kaydet</button>
+        </div>
+    </div>
+
+    <div id="kar-cards-container" class="kar-cards-grid">
+        <div class="loading-spinner">Yükleniyor...</div>
+    </div>
+
+    <!-- Modal for New Record -->
+    <div id="new-record-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Yeni Kar Oranı Kaydı</div>
+                <button class="modal-close" onclick="closeNewRecordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="kar-field-group">
+                    <label class="kar-field-label">Marka *</label>
+                    <select id="new-marka" class="kar-field-input">
+                        <option value="">Marka seçiniz...</option>
+                    </select>
+                </div>
+                <div class="kar-info-row">
+                    <div class="kar-field-group" style="flex: 0 0 auto; width: 80px;">
+                        <label class="kar-field-label">Seviye</label>
+                        <select id="new-seviye" class="kar-field-input">
+                            <option value="">-</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div class="kar-field-group" style="flex: 1;">
+                        <label class="kar-field-label">Bayi CH Kodu</label>
+                        <div class="bayi-input-group">
+                            <input type="text" id="new-bayi-ch" class="kar-field-input" placeholder="CH Kodu">
+                            <button class="btn-select-bayi" onclick="openBayiSelectionModal('new')">Seç</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="kar-onay-section">
+                    <div class="kar-onay-title">1. Onay</div>
+                    <div class="kar-field-group">
+                        <label class="kar-field-label">Oran (%)</label>
+                        <input type="number" id="new-onay1-oran" class="kar-field-input" value="0">
+                    </div>
+                    <div class="kar-field-group">
+                        <label class="kar-field-label">Kullanıcı</label>
+                        <div class="bayi-input-group">
+                            <input type="text" id="new-onay1-mail" class="kar-field-input" placeholder="Kullanıcı">
+                            <button class="btn-select-bayi" onclick="openUserSelectionModal('new', 'onay1_mail')">Seç</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="kar-onay-section">
+                    <div class="kar-onay-title">2. Onay</div>
+                    <div class="kar-field-group">
+                        <label class="kar-field-label">Oran (%)</label>
+                        <input type="number" id="new-onay2-oran" class="kar-field-input" value="0">
+                    </div>
+                    <div class="kar-field-group">
+                        <label class="kar-field-label">Kullanıcı</label>
+                        <div class="bayi-input-group">
+                            <input type="text" id="new-onay2-mail" class="kar-field-input" placeholder="Kullanıcı">
+                            <button class="btn-select-bayi" onclick="openUserSelectionModal('new', 'onay2_mail')">Seç</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-cancel" onclick="closeNewRecordModal()">İptal</button>
+                <button class="btn-action btn-save" onclick="saveNewRecord()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Bayi Selection -->
+    <div id="bayi-selection-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Bayi Seçimi</div>
+                <button class="modal-close" onclick="closeBayiSelectionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="bayi-search">
+                    <input type="text" id="bayi-search-input" placeholder="Bayi adı veya kodu ile ara..." onkeyup="filterBayiList()">
+                </div>
+                <div class="bayi-list" id="bayi-list">
+                    <div class="loading-spinner">Bayiler yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for User Selection -->
+    <div id="user-selection-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Kullanıcı Seçimi</div>
+                <button class="modal-close" onclick="closeUserSelectionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="bayi-search">
+                    <input type="text" id="user-search-input" placeholder="Kullanıcı adı ile ara..." onkeyup="filterUserList()">
+                </div>
+                <div class="bayi-list" id="user-list">
+                    <div class="loading-spinner">Kullanıcılar yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
